@@ -1,10 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Constant/ColorGlobal.dart';
 
-class  ContactUs extends StatelessWidget {
-
+class ContactUs extends StatelessWidget {
   _callMe() async {
+    Map<Permission, PermissionStatus> permissions =
+        await [Permission.phone].request();
+    if (permissions[Permission.phone] != PermissionStatus.granted) {
+      openAppSettings();
+      return;
+    }
     // Android
     const uri = 'tel:+971 55 1086104';
     if (await canLaunch(uri)) {
@@ -19,15 +27,18 @@ class  ContactUs extends StatelessWidget {
       }
     }
   }
+
   _sendMail() async {
     // Android and iOS
-    const uri = 'mailto:recaluaechapter@gmail.com?subject=Recal UAE Chapter&body=Greetings';
+    const uri =
+        'mailto:recaluaechapter@gmail.com?subject=Recal UAE Chapter&body=Greetings';
     if (await canLaunch(uri)) {
       await launch(uri);
     } else {
       throw 'Could not launch $uri';
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
@@ -52,7 +63,8 @@ class  ContactUs extends StatelessWidget {
                 Container(
                     width: width,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [Color(0xff3AAFFA), Color(0xff374ABE)],
+                      gradient: LinearGradient(
+                        colors: [Color(0xff3AAFFA), Color(0xff374ABE)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -62,20 +74,20 @@ class  ContactUs extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 8.0, 0.0),
                       child: Column(
-                        children:<Widget>[
+                        children: <Widget>[
                           Center(
                             child: Image(
                               image: AssetImage('assets/images/telephone.png'),
-                              height: width/4,
-                              width: width/3,
+                              height: width / 4,
+                              width: width / 3,
                             ),
                           ),
-                          SizedBox(height : width/12),
+                          SizedBox(height: width / 12),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               GestureDetector(
-                                onTap: _sendMail,
+                            onTap: Platform.isAndroid ?   _sendMail : null,
                                 child: Row(
                                   children: <Widget>[
                                     IconButton(
@@ -95,7 +107,7 @@ class  ContactUs extends StatelessWidget {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: _callMe,
+                            onTap: Platform.isAndroid ?   _callMe : null,
                                 child: Row(
                                   children: <Widget>[
                                     IconButton(
@@ -116,21 +128,20 @@ class  ContactUs extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: width/6),
+                          SizedBox(height: width / 6),
                         ],
                       ),
-                    )
-                ),
+                    )),
                 Container(
-                  transform: Matrix4.translationValues(0.0, -width/6+12.0, 0.0),
+                  transform:
+                      Matrix4.translationValues(0.0, -width / 6 + 12.0, 0.0),
                   child: Container(
-                    width: width-24,
+                    width: width - 24,
                     height: width,
                     decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0)
-                    ),
-                    child : Padding(
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 10, 8.0, 10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,12 +163,16 @@ class  ContactUs extends StatelessWidget {
                               filled: true,
                               fillColor: Colors.white70,
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                                borderSide: BorderSide(color: Color(0xFF3AAFFA), width: 2),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12.0)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFF3AAFFA), width: 2),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                                borderSide: BorderSide(color: Color(0xFF3AAFFA), width: 2),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12.0)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFF3AAFFA), width: 2),
                               ),
                             ),
                           ),
@@ -181,7 +196,6 @@ class  ContactUs extends StatelessWidget {
               ],
             ),
           ),
-        )
-    );
+        ));
   }
 }

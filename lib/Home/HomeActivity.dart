@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/svg.dart';
+//import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../Constant/ColorGlobal.dart';
 import '../Constant/Constant.dart';
@@ -219,11 +219,11 @@ class _HomeActivityState extends State<HomeActivity> {
                               child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: width / 10,
-                                child: SvgPicture.asset(
-                                  'assets/icons/Social.svg',
+child: Image.asset(
+'assets/images/network.png',
                                   color: ColorGlobal.blueColor,
-                                  height: width / 12,
-                                  width: width / 12,
+                                height: width / 10,
+                                width: width / 10,
                                 ),
                               ),
                               elevation: 20,
@@ -261,8 +261,8 @@ class _HomeActivityState extends State<HomeActivity> {
                               child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: width / 10,
-                                child: SvgPicture.asset(
-                                  'assets/icons/Employment.svg',
+child: Image.asset(
+'assets/images/application.png',
                                   color: ColorGlobal.blueColor,
                                   height: width / 10,
                                   width: width / 10,
@@ -302,12 +302,12 @@ class _HomeActivityState extends State<HomeActivity> {
                               child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: width / 10,
-                                child: SvgPicture.asset(
-                                  'assets/icons/scholarship.svg',
+                                child: Image.asset(
+'assets/images/scholarship.png',
                                   color: ColorGlobal.blueColor,
                                   height: width / 10,
                                   width: width / 10,
-                                ),
+                                  ),
                               ),
                               elevation: 20,
                               shape: RoundedRectangleBorder(

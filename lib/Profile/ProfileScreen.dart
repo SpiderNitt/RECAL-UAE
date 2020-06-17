@@ -2,7 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+//import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/Constant.dart';
@@ -60,21 +60,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: ColorGlobal.whiteColor,
           appBar: AppBar(
             backgroundColor: ColorGlobal.whiteColor,
-            actions: <Widget>[
-            IconButton(
-              icon: Container(
-                child: SvgPicture.asset(
-                  "assets/icons/Logout.svg",
-                  color: ColorGlobal.textColor,
-                ),
-                height: 20,
-              ),
-              onPressed: () {
-                _deleteUserDetails();
-                _onLogoutPressed();
-              },
-            )
-          ],
+//            actions: <Widget>[
+//            IconButton(
+//              icon: Container(
+//child: Image.asset(
+//                  "assets/icons/Logout.svg",
+//                  color: ColorGlobal.textColor,
+//                ),
+//                height: 20,
+//              ),
+//              onPressed: () {
+//                _deleteUserDetails();
+//                _onLogoutPressed();
+//              },
+//            )
+//          ],
             title: Text('Profile',style: TextStyle(color: ColorGlobal.textColor),),
           ),
           body: SingleChildScrollView(

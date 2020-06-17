@@ -16,7 +16,7 @@ class SplashScreenState extends State<ImageSplashScreen> {
   String userID;
 
   startTime() async {
-    var _duration = new Duration(seconds: 5);
+  var _duration = new Duration(seconds:   1);
     return new Timer(_duration, navigationPage);
   }
   Future <Null> _getUserDetails() async {
