@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 //import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/ColorGlobal.dart';
 import '../Constant/Constant.dart';
 
@@ -14,6 +15,9 @@ class HomeActivity extends StatefulWidget {
 }
 
 class _HomeActivityState extends State<HomeActivity> {
+
+  Future<String> name;
+
   static List<String> _events = [
     "Social",
     "Events",
@@ -34,7 +38,6 @@ class _HomeActivityState extends State<HomeActivity> {
     for (int i = 1; i < 7; i++) {
       if (_members[i].length > s.length) s = _members[i];
     }
-    print(s);
     return s;
   }
 
@@ -55,7 +58,20 @@ class _HomeActivityState extends State<HomeActivity> {
       ..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
   }
+  Future<String> _fetchUserName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String name = prefs.getString("name")==null ? "+9,q": prefs.getString("name");
+    return name;
+  }
 
+  @override
+  void initState()  {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      name = _fetchUserName();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -133,12 +149,14 @@ class _HomeActivityState extends State<HomeActivity> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
+                      AutoSizeText(
                         "RECAL UAE CHAPTER",
                         style: GoogleFonts.lato(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: ColorGlobal.whiteColor),
+                            color: ColorGlobal.whiteColor
+                        ),
+                        maxLines: 1,
                       ),
                     ],
                   ),
@@ -189,12 +207,25 @@ class _HomeActivityState extends State<HomeActivity> {
                                     color: ColorGlobal.whiteColor
                                         .withOpacity(0.9)),
                               ),
-                              Text(
-                                "MADHAV AGGARWAL",
-                                style: GoogleFonts.lato(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorGlobal.whiteColor),
+                              FutureBuilder<String>(
+                                future: name,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return AutoSizeText(
+                                      "${snapshot.data}",
+                                      style: GoogleFonts.lato(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorGlobal.whiteColor
+                                      ),
+                                      maxLines: 1,
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return Text("${snapshot.error}");
+                                  }
+                                  // By default, show a loading spinner.
+                                  return CircularProgressIndicator();
+                                },
                               ),
                             ],
                           ),

@@ -20,7 +20,6 @@ class SignUpState extends State<SignUp> {
   var top = FractionalOffset.topCenter;
   var bottom = FractionalOffset.bottomCenter;
   double width = 400.0;
-  double widthIcon = 200.0;
   TextEditingController name = new TextEditingController();
   TextEditingController email = new TextEditingController();
   TextEditingController password = new TextEditingController();
@@ -33,22 +32,51 @@ class SignUpState extends State<SignUp> {
     Colors.lightGreen,
     Colors.redAccent,
   ];
+  static Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        maxLines: 1,
+        textDirection: TextDirection.ltr)
+      ..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
+  }
 
-  @override
+    @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration(milliseconds: 200), () {
       setState(() {
-        width = 190.0;
+        width = _textSize("Have an account?",
+            TextStyle(
+              fontSize: 14,
+              letterSpacing: 1,
+              color:
+              ColorGlobal.whiteColor.withOpacity(0.9),
+              fontWeight: FontWeight.w400,
+            )
+        ).width + 50;
       });
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final screenWidth = size.width;
+    final screenHeight = size.height;
     final bool keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    final accountSize = _textSize("Have an account?",
+        TextStyle(
+          fontSize: 14,
+          letterSpacing: 1,
+          color:
+          ColorGlobal.whiteColor.withOpacity(0.9),
+          fontWeight: FontWeight.w400,
+        )
+    ).width + 50;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorGlobal.whiteColor,
@@ -240,8 +268,7 @@ class SignUpState extends State<SignUp> {
                             duration: Duration(milliseconds: 300),
                           ));
                       setState(() {
-                        width = 400;
-                        widthIcon = 0;
+                        width = screenWidth;
                       });
                     },
                     child: AnimatedContainer(
@@ -261,7 +288,6 @@ class SignUpState extends State<SignUp> {
 //                          margin: EdgeInsets.only(right: 8,top: 15),
                                   child: Text(
                                     "Have an account?",
-                                    textAlign: TextAlign.end,
                                     style: TextStyle(
                                       fontSize: 14,
                                       letterSpacing: 1,
@@ -276,7 +302,6 @@ class SignUpState extends State<SignUp> {
 //                          margin: EdgeInsets.only(right: 8,top: 15),
                                   child: Text(
                                     "Sign In",
-                                    textAlign: TextAlign.end,
                                     style: TextStyle(
                                       fontSize: 16,
                                       letterSpacing: 1,
@@ -294,6 +319,7 @@ class SignUpState extends State<SignUp> {
                             child: Icon(
                               Icons.arrow_forward_ios,
                               color: ColorGlobal.whiteColor,
+                              size: 30,
                             ),
                           ),
                         ],

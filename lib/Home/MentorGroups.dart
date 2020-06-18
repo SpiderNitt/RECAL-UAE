@@ -1,19 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:iosrecal/Constant/Constant.dart';
 import './MentorList.dart';
 
-void main() => runApp(MentorGroups());
-
-class MentorGroups extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        home: MentorGroupsPage(),
-        routes: {
-          '/mentorList': (context) => MentorList(),
-        }
-    );
-  }
-}
 class MentorGroupsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -24,7 +12,7 @@ class MentorGroupsPage extends StatelessWidget {
             leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  // Do something
+                  Navigator.pop(context);
                 }
             ),
             expandedHeight: 250.0,
@@ -92,7 +80,7 @@ class MentorGroupsPage extends StatelessWidget {
                           color: Color(0x88000000),
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/mentorList');
+                          Navigator.pushNamed(context,MENTOR_LIST_SCREEN);
                           // Do something
                         }
                     ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:iosrecal/Home/MentorList.dart';
 import 'Home/LinkedInProfiles.dart';
 import 'Home/MentorGroups.dart';
 import 'Home/EmploymentSupport.dart';
@@ -31,11 +32,11 @@ void main()  {
               HOME_PAGE: (BuildContext context) => new HomePage(),
               IMAGE_SPLASH: (BuildContext context) => new ImageSplashScreen(),
               PROFILE_SCREEN: (BuildContext context) => new ProfileScreen(),
-                SOCIAL_BUSINESS: (BuildContext context) => new SocialPage(),
+              SOCIAL_BUSINESS: (BuildContext context) => new SocialPage(),
               EMPLOYMENT_SUPPORT: (BuildContext context) => new EmploymentSupport(),
-              MENTOR_GROUPS: (BuildContext context) => new MentorGroups(),
+              MENTOR_GROUPS: (BuildContext context) => new MentorGroupsPage(),
+              MENTOR_LIST_SCREEN: (BuildContext context) => new MentorList(),
               MEMBER_LINKEDIN: (BuildContext context) => new LinkedIn(),
-
             }
         ));
   });

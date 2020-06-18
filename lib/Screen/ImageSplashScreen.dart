@@ -13,7 +13,7 @@ class ImageSplashScreen extends StatefulWidget {
 
 class SplashScreenState extends State<ImageSplashScreen> {
   SharedPreferences sharedPreferences;
-  String userID;
+  String email;
 
   startTime() async {
   var _duration = new Duration(seconds:   1);
@@ -21,18 +21,19 @@ class SplashScreenState extends State<ImageSplashScreen> {
   }
   Future <Null> _getUserDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String id = prefs.getString("userID")==null ? "none": prefs.getString("userID");
+    String id = prefs.getString("email")==null ? "+9,q": prefs.getString("email");
     print("splash: " + id);
-    if(id!="none")
+    if(id!="+9,q")
     setState(() {
-      userID=id;
+      email=id;
     });
   }
 
   void navigationPage() async {
     await _getUserDetails();
-    print("nav page: $userID");
-    if(userID==null)
+    print("nav page: $email");
+
+    if(email==null)
     Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
     else {
 //      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeActivity()));

@@ -1,5 +1,9 @@
+import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
+import '../models/User.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Home/HomeActivity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,10 +11,9 @@ import '../Constant/Constant.dart';
 import '../Profile/ProfileScreen.dart';
 import '../Constant/ColorGlobal.dart';
 import '../Constant/TextField.dart';
+import 'package:http/http.dart' as http;
 
 import 'SignUp.dart';
-
-
 
 class Login extends StatefulWidget {
   @override
@@ -22,13 +25,23 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   var top = FractionalOffset.topCenter;
   var bottom = FractionalOffset.bottomCenter;
-  double width = 220.0;
-  double widthIcon = 200.0;
-  TextEditingController email = new TextEditingController();
-  TextEditingController password = new TextEditingController();
+  double width = _textSize(
+          "Don't have an account?",
+          TextStyle(
+            fontSize: 14,
+            letterSpacing: 1,
+            color: ColorGlobal.whiteColor.withOpacity(0.9),
+            fontWeight: FontWeight.w400,
+          )).width +
+      50;
+  TextEditingController email =
+      new TextEditingController(text: "someone@gmail.com");
+  TextEditingController password =
+      new TextEditingController(text: "o84HWLLJ5pmd");
 
   FocusNode emailFocus = new FocusNode();
   FocusNode passwordFocus = new FocusNode();
+  List<String> result = new List<String>();
 
   getDisposeController() {
     email.clear();
@@ -42,7 +55,7 @@ class LoginState extends State<Login> {
     // TODO: implement initState
     super.initState();
     print("LOGIN");
-    getDisposeController();
+//    getDisposeController();
   }
 
   @override
@@ -58,44 +71,122 @@ class LoginState extends State<Login> {
   ];
   Future<bool> _onBackPressed() {
     return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit the App'),
-        actions: <Widget>[
-          new GestureDetector(
-            onTap: () => Navigator.of(context).pop(false),
-            child: FlatButton(
-              color: Colors.green,
-              child: Text("NO"),
-            ),
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit the App'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () => Navigator.of(context).pop(false),
+                child: FlatButton(
+                  color: Colors.green,
+                  child: Text("NO"),
+                ),
+              ),
+              new GestureDetector(
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).pop(true);
+                },
+                child: FlatButton(
+                  color: Colors.red,
+                  child: Text("YES"),
+                ),
+              ),
+            ],
           ),
-          new GestureDetector(
-            onTap: () {
-              Navigator.of(context, rootNavigator: true).pop(true);
-            },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("YES"),
-            ),
-          ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 
-  _saveUserDetails() async {
+  _loginDialog(String show, String again, int flag) {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: Text('Login Check'),
+            content: new Text(show),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () {
+                  flag != 1
+                      ? Navigator.of(context).pop(false)
+                      : Navigator.pushReplacementNamed(context, HOME_PAGE);
+                },
+                child: FlatButton(
+                  color: Colors.green,
+                  child: Text(again),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
+  static _saveUserDetails(String email, String name) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("Login:  ${prefs.getString("userID")}");
-    prefs.setString("userID", email.text);
-    print("login save ${prefs.getString("userID")}");
+    print("Login email:  ${prefs.getString("email")}");
+    print("Login name:  ${prefs.getString("name")}");
+    prefs.setString("email", email);
+    prefs.setString("name", name);
+
+    print("login save ${prefs.getString("name")}");
+  }
+
+  static Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        maxLines: 1,
+        textDirection: TextDirection.ltr)
+      ..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
+  }
+
+  static loginUser(String email, String password) async {
+    var url = "https://delta.nitt.edu/recal-uae/api/auth/login/";
+    var body = {'email': email, 'password': password};
+    await http
+        .post(
+      url,
+      body: body,
+    )
+        .then((_response) {
+      User user = new User();
+      ResponseBody responseBody = new ResponseBody();
+      print('Response body: ${_response.body}');
+
+      if (_response.statusCode == 200) {
+        responseBody = ResponseBody.fromJson(json.decode(_response.body));
+        if (responseBody.status_code == 200) {
+          user = User.fromJson(json.decode(responseBody.data));
+          _saveUserDetails(user.email, user.name);
+          return [user.name, 1];
+        } else {
+          print(responseBody.data);
+          return [responseBody.data, 0];
+        }
+      } else {
+        print('Server error');
+        return ["Server Error", 0];
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final screenWidth = size.width;
+    final screenHeight = size.height;
     final bool keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    final accountSize = _textSize(
+            "Don't have an account?",
+            TextStyle(
+              fontSize: 14,
+              letterSpacing: 1,
+              color: ColorGlobal.whiteColor.withOpacity(0.9),
+              fontWeight: FontWeight.w400,
+            )).width +
+        50;
+    print(width);
 
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -108,9 +199,9 @@ class LoginState extends State<Login> {
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.only(),
-                    height: size.height-90,
+                    height: size.height - 90,
                     decoration: BoxDecoration(
-                      color:  ColorGlobal.whiteColor,
+                      color: ColorGlobal.whiteColor,
 //                  gradient: new LinearGradient(
 //                    colors: [
 //                      ColorGlobal.colorPrimaryDark.withOpacity(0.7),
@@ -185,7 +276,6 @@ class LoginState extends State<Login> {
                             focusNode: passwordFocus,
                           ),
                         ),
-
                         Container(
                           alignment: Alignment.center,
                           color: Colors.transparent,
@@ -196,13 +286,51 @@ class LoginState extends State<Login> {
                             bottom: (10),
                           ),
                           //child: AuthButton(),
-                          child:   InkWell(
-                            onTap: () {
-                              if(email.text!="") {
-                                _saveUserDetails();
-                                Navigator.pushReplacementNamed(context, HOME_PAGE);
+                          child: InkWell(
+                            onTap: () async {
+                              if (email.text != "" && password.text != "") {
+                                var url =
+                                    "https://delta.nitt.edu/recal-uae/api/auth/login/";
+                                var body = {
+                                  'email': email.text,
+                                  'password': password.text
+                                };
+                                await http.post(
+                                  url,
+                                  body: body,
+                                ).then((_response) {
+                                  User user = new User();
+                                  ResponseBody responseBody = new ResponseBody();
+                                  print('Response body: ${_response.body}');
+
+                                  if (_response.statusCode == 200) {
+                                    responseBody = ResponseBody.fromJson(
+                                        json.decode(_response.body));
+                                    print(json.encode(responseBody.data));
+                                    if (responseBody.status_code == 200) {
+                                      user = User.fromJson(json.decode(
+                                          json.encode(responseBody.data)));
+                                      _saveUserDetails(user.email, user.name);
+                                      _loginDialog(
+                                          "Login Success", "Proceed", 1);
+                                    } else {
+                                      print(responseBody.data);
+                                      _loginDialog(
+                                          responseBody.data, "Try again", 0);
+                                    }
+                                  } else {
+                                    print("server error");
+                                    _loginDialog(
+                                        "Server Error", "Try again", 0);
+                                  }
+                                });
                               }
-                              },
+                              else {
+                                _loginDialog(
+                                    "Enter all fields", "Try again", 2);
+
+                              }
+                            },
                             child: Container(
                               margin: EdgeInsets.only(
                                 top: (30),
@@ -293,16 +421,14 @@ class LoginState extends State<Login> {
                                     duration: Duration(milliseconds: 300),
                                     child: SignUp()))
                             .then((value) {
-                          Future.delayed(Duration(milliseconds: 300), () {
+                          Future.delayed(Duration(milliseconds: 200), () {
                             setState(() {
-                              width = 220;
-                              widthIcon = 200;
+                              width = accountSize;
                             });
                           });
                         });
                         setState(() {
-                          width = 360.0;
-                          widthIcon = 0;
+                          width = screenWidth - 20;
                         });
                       },
                       child: AnimatedContainer(
@@ -316,10 +442,10 @@ class LoginState extends State<Login> {
                               child: Icon(
                                 Icons.arrow_back_ios,
                                 color: ColorGlobal.whiteColor,
+                                size: 30,
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(left: 10),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -328,12 +454,12 @@ class LoginState extends State<Login> {
 //                          margin: EdgeInsets.only(right: 8,top: 15),
                                     child: Text(
                                       "Don't have an account?",
-                                      textAlign: TextAlign.end,
+                                      textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontSize: 14,
                                         letterSpacing: 1,
-                                        color:
-                                            ColorGlobal.whiteColor.withOpacity(0.9),
+                                        color: ColorGlobal.whiteColor
+                                            .withOpacity(0.9),
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
@@ -341,15 +467,17 @@ class LoginState extends State<Login> {
                                   SizedBox(height: 5),
                                   Container(
 //                          margin: EdgeInsets.only(right: 8,top: 15),
-                                    child: Text(
+                                    child: AutoSizeText(
                                       "Sign Up",
                                       textAlign: TextAlign.end,
                                       style: TextStyle(
                                         fontSize: 16,
                                         letterSpacing: 1,
-                                        color: ColorGlobal.whiteColor.withOpacity(0.9),
+                                        color: ColorGlobal.whiteColor
+                                            .withOpacity(0.9),
                                         fontWeight: FontWeight.w600,
                                       ),
+                                      maxLines: 1,
                                     ),
                                   ),
                                 ],
@@ -377,4 +505,3 @@ class LoginState extends State<Login> {
     );
   }
 }
-

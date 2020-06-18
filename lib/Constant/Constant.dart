@@ -2,7 +2,7 @@
      ANIMATED_SPALSH='/AnimatedSplashScreen', LOGIN_SCREEN='/Login', PROFILE_SCREEN = '/Profile',
      HOME_SCREEN='/HomeScreen', SOCIAL_BUSINESS = '/HomeScreen/SocialBusiness',EMPLOYMENT_SUPPORT='/HomeScreen/EmploymentSupport',
      PAY_SCREEN='/PayScreen', CONTACT_US_SCREEN='/ContactUsScreen', MEMBER_LINKEDIN='/HomeScreen/EmploymentSupport/LinkedIn',
-     MENTOR_GROUPS='/MentorGroups', MENTOR_LIST_SCREEN='/MentorList';
+     MENTOR_GROUPS='/HomeScreen/MentorGroups', MENTOR_LIST_SCREEN='/HomeScreen/MentorGroups/MentorList';
 
 
 

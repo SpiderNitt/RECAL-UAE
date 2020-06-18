@@ -12,7 +12,12 @@ class MentorList extends StatelessWidget {
               appBar: AppBar(
                 title: Text('Employment Support'),
                 backgroundColor: const Color(0xFF3AAFFA),
-
+                leading: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }
+                ),
               ),
               body: Column(
                 children: <Widget>[

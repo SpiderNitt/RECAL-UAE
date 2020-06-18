@@ -41,6 +41,8 @@ dependencies:
   transparent_image: ^1.0.0
   google_fonts: ^0.3.8
   auto_size_text: ^2.1.0
+  http: ^0.12.1
+
 
 dev_dependencies:
   flutter_test:

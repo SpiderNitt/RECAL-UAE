@@ -2,7 +2,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/Constant.dart';
@@ -17,10 +16,19 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   int _unfinished=2;
+  Future <dynamic> user;
+
+  Future<dynamic> _fetchPrimaryDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String name = prefs.getString("name")==null ? "+9,q": prefs.getString("name");
+    String email= prefs.getString("email")==null ? "+9,q": prefs.getString("email");
+    return {"name": name, "email":email};
+  }
 
   _deleteUserDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("userID", null);
+    prefs.setString("email", null);
+    prefs.setString("name", null);
   }
   Future<bool> _onLogoutPressed() {
     return showDialog(
@@ -51,7 +59,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ) ??
         false;
   }
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    user = _fetchPrimaryDetails();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,21 +73,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: ColorGlobal.whiteColor,
           appBar: AppBar(
             backgroundColor: ColorGlobal.whiteColor,
-//            actions: <Widget>[
-//            IconButton(
-//              icon: Container(
-//child: Image.asset(
-//                  "assets/icons/Logout.svg",
-//                  color: ColorGlobal.textColor,
-//                ),
-//                height: 20,
-//              ),
-//              onPressed: () {
-//                _deleteUserDetails();
-//                _onLogoutPressed();
-//              },
-//            )
-//          ],
+            actions: <Widget>[
+            IconButton(
+              padding: EdgeInsets.only(right: 20),
+              icon: Icon(Icons.exit_to_app,size: 30,color: ColorGlobal.textColor,),
+              onPressed: () {
+                _deleteUserDetails();
+                _onLogoutPressed();
+              },
+            )
+          ],
             title: Text('Profile',style: TextStyle(color: ColorGlobal.textColor),),
           ),
           body: SingleChildScrollView(
@@ -109,35 +117,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(height: 10,),
                     Center(
                       child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              child: Text(
-                                "Madhav Aggarwal",
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  letterSpacing: 1,
-                                  color: ColorGlobal.textColor.withOpacity(0.9),
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Container(
-                              child: Text(
-                                "BTech CSE, 2022",
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  letterSpacing: 1,
-                                  color:
-                                  ColorGlobal.textColor.withOpacity(0.6),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
+                        child: FutureBuilder<dynamic>(
+                          future: user,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Column(
+                                children: <Widget>[
+                                  Container(
+                                    child: Text(
+                                      "${snapshot.data["name"]}",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        letterSpacing: 1,
+                                        color: ColorGlobal.textColor.withOpacity(0.9),
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Container(
+                                    child: Text(
+                                      "${snapshot.data["email"]}",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        letterSpacing: 1,
+                                        color:
+                                        ColorGlobal.textColor.withOpacity(0.6),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+
+                            } else if (snapshot.hasError) {
+                              return Text("${snapshot.error}");
+                            }
+                            // By default, show a loading spinner.
+                            return CircularProgressIndicator();
+                          },
                         ),
                       ),
                     ),
