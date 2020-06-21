@@ -1,13 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/PositionModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../Constant/ColorGlobal.dart';
-import '../Constant/ColorGlobal.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Constant/ColorGlobal.dart';
 
 class OpenPositions extends StatefulWidget {
@@ -54,13 +53,11 @@ class _OpenPositionsState extends State<OpenPositions> {
   }
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    String uri;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           title: Text('Open Positions'),
-          backgroundColor: const Color(0xFF3AAFFA),
         ),
         body: Center(
           child: Padding(
@@ -94,15 +91,23 @@ class _OpenPositionsState extends State<OpenPositions> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 8.0),
-                        Text(
-                          positions[index].description,
-                          style: TextStyle(
-                            color: ColorGlobal.textColor,
-                            fontSize: 16.0,
+                        SizedBox(height: 12.0),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                positions[index].description,
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: ColorGlobal.textColor,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(height: 8.0),
+                        SizedBox(height: 12.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
@@ -111,11 +116,17 @@ class _OpenPositionsState extends State<OpenPositions> {
                               children: <Widget>[
                                 Icon(Icons.call, color: ColorGlobal.color2),
                                 SizedBox(width: 4.0),
-                                Text(positions[index].contact,
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: ColorGlobal.textColor,
-                                    ))
+                                GestureDetector(
+                                  onTap: () {
+                                    uri = "tel://" + positions[index].contact;
+                                    launch(uri);
+                                  },
+                                    child: Text(positions[index].contact,
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: ColorGlobal.textColor,
+                                      )),
+                                )
                               ],
                             ),
                           ],

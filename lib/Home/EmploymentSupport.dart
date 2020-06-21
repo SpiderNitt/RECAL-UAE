@@ -274,7 +274,7 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                               ),
                               onTap: () {
-//                                Navigator.pushNamed(context,SOCIAL_BUSINESS);
+                                Navigator.pushNamed(context,SEEK_GUIDANCE);
                               },
                             ),
                             GestureDetector(

@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../Constant/ColorGlobal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 class WriteAdmin extends StatefulWidget {
@@ -34,12 +35,39 @@ class _WriteAdminState extends State<WriteAdmin> {
           json.decode(response.body));
       if (responseBody.status_code == 200){
         print("worked!");
+        Fluttertoast.showToast(
+            msg: "Message sent",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
         return true;
       }else {
         print(responseBody.data);
+        Fluttertoast.showToast(
+            msg: "An error occured. Please try again",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
       }
     } else {
       print('Server error');
+      Fluttertoast.showToast(
+          msg: "An error occured. Please try again",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
     }
   }
 
