@@ -49,12 +49,23 @@ class LoginState extends State<Login> {
     emailFocus.unfocus();
     passwordFocus.unfocus();
   }
+  _deleteUserDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("email", null);
+    prefs.setString("name", null);
+    prefs.setString("user_id", null);
+    prefs.setString("cookie", null);
+  }
 
   @override
   void initState() {
     // TODO: implement initState
+    email = TextEditingController(text: "someone@gmail.com");
+    password = TextEditingController(text: "o84HWLLJ5pmd");
     super.initState();
     print("LOGIN");
+    _deleteUserDetails();
+
 //    getDisposeController();
   }
 
@@ -172,7 +183,7 @@ class LoginState extends State<Login> {
           String rawCookie = _response.headers['set-cookie'];
           String cookie = rawCookie.substring(0, rawCookie.indexOf(';'));
           print(cookie);
-          user = User.fromJson(json.decode(responseBody.data));
+          user = User.fromLogin(json.decode(responseBody.data));
           var userId = user.user_id;
           _saveUserDetails(user.email, user.name, userId.toString(), cookie);
           return [user.name, 1];
@@ -327,9 +338,10 @@ class LoginState extends State<Login> {
                                         json.decode(_response.body));
                                     print(json.encode(responseBody.data));
                                     if (responseBody.status_code == 200) {
-                                      user = User.fromJson(json.decode(
+                                      user = User.fromLogin(json.decode(
                                           json.encode(responseBody.data)));
                                       var userId = user.user_id;
+
                                       _saveUserDetails(user.email, user.name, userId.toString(), cookie);
                                       _loginDialog(
                                           "Login Success", "Proceed", 1);
@@ -423,103 +435,103 @@ class LoginState extends State<Login> {
               ),
             ),
           ),
-          bottomNavigationBar: Container(
-            color: ColorGlobal.whiteColor,
-            height: 70,
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () {
-                        getDisposeController();
-                        Navigator.push(
-                                context,
-                                PageTransition(
-                                    type: PageTransitionType.rightToLeft,
-                                    duration: Duration(milliseconds: 300),
-                                    child: SignUp()))
-                            .then((value) {
-                          Future.delayed(Duration(milliseconds: 200), () {
-                            setState(() {
-                              width = accountSize;
-                            });
-                          });
-                        });
-                        setState(() {
-                          width = screenWidth - 20;
-                        });
-                      },
-                      child: AnimatedContainer(
-                        height: 65.0,
-                        width: width,
-                        duration: Duration(milliseconds: 500),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(left: 10),
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                color: ColorGlobal.whiteColor,
-                                size: 30,
-                              ),
-                            ),
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-//                          margin: EdgeInsets.only(right: 8,top: 15),
-                                    child: Text(
-                                      "Don't have an account?",
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        letterSpacing: 1,
-                                        color: ColorGlobal.whiteColor
-                                            .withOpacity(0.9),
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Container(
-//                          margin: EdgeInsets.only(right: 8,top: 15),
-                                    child: AutoSizeText(
-                                      "Sign Up",
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        letterSpacing: 1,
-                                        color: ColorGlobal.whiteColor
-                                            .withOpacity(0.9),
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      maxLines: 1,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        curve: Curves.linear,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(40),
-                            topLeft: Radius.circular(40),
-                          ),
-                          color: ColorGlobal.colorPrimary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+//          bottomNavigationBar: Container(
+//            color: ColorGlobal.whiteColor,
+//            height: 70,
+//            child: Column(
+//              children: <Widget>[
+//                Row(
+//                  mainAxisAlignment: MainAxisAlignment.end,
+//                  children: <Widget>[
+//                    InkWell(
+//                      onTap: () {
+//                        getDisposeController();
+//                        Navigator.push(
+//                                context,
+//                                PageTransition(
+//                                    type: PageTransitionType.rightToLeft,
+//                                    duration: Duration(milliseconds: 300),
+//                                    child: SignUp()))
+//                            .then((value) {
+//                          Future.delayed(Duration(milliseconds: 200), () {
+//                            setState(() {
+//                              width = accountSize;
+//                            });
+//                          });
+//                        });
+//                        setState(() {
+//                          width = screenWidth - 20;
+//                        });
+//                      },
+//                      child: AnimatedContainer(
+//                        height: 65.0,
+//                        width: width,
+//                        duration: Duration(milliseconds: 500),
+//                        child: Row(
+//                          children: <Widget>[
+//                            Container(
+//                              margin: EdgeInsets.only(left: 10),
+//                              child: Icon(
+//                                Icons.arrow_back_ios,
+//                                color: ColorGlobal.whiteColor,
+//                                size: 30,
+//                              ),
+//                            ),
+//                            Container(
+//                              child: Column(
+//                                mainAxisAlignment: MainAxisAlignment.center,
+//                                crossAxisAlignment: CrossAxisAlignment.start,
+//                                children: <Widget>[
+//                                  Container(
+////                          margin: EdgeInsets.only(right: 8,top: 15),
+//                                    child: Text(
+//                                      "Don't have an account?",
+//                                      textAlign: TextAlign.start,
+//                                      style: TextStyle(
+//                                        fontSize: 14,
+//                                        letterSpacing: 1,
+//                                        color: ColorGlobal.whiteColor
+//                                            .withOpacity(0.9),
+//                                        fontWeight: FontWeight.w400,
+//                                      ),
+//                                    ),
+//                                  ),
+//                                  SizedBox(height: 5),
+//                                  Container(
+////                          margin: EdgeInsets.only(right: 8,top: 15),
+//                                    child: AutoSizeText(
+//                                      "Sign Up",
+//                                      textAlign: TextAlign.end,
+//                                      style: TextStyle(
+//                                        fontSize: 16,
+//                                        letterSpacing: 1,
+//                                        color: ColorGlobal.whiteColor
+//                                            .withOpacity(0.9),
+//                                        fontWeight: FontWeight.w600,
+//                                      ),
+//                                      maxLines: 1,
+//                                    ),
+//                                  ),
+//                                ],
+//                              ),
+//                            ),
+//                          ],
+//                        ),
+//                        curve: Curves.linear,
+//                        decoration: BoxDecoration(
+//                          borderRadius: BorderRadius.only(
+//                            bottomLeft: Radius.circular(40),
+//                            topLeft: Radius.circular(40),
+//                          ),
+//                          color: ColorGlobal.colorPrimary,
+//                        ),
+//                      ),
+//                    ),
+//                  ],
+//                ),
+//              ],
+//            ),
+//          ),
         ),
       ),
     );
