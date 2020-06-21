@@ -61,12 +61,12 @@ Future< MentorModel> createRequest(String body ) async{
 
 }
 
-class WriteMentorScreen extends StatefulWidget {
+class SeekGuidanceScreen extends StatefulWidget {
   @override
   WriteMentorScreenState createState() => new WriteMentorScreenState();
 }
 
-class WriteMentorScreenState extends State<WriteMentorScreen> {
+class WriteMentorScreenState extends State<SeekGuidanceScreen> {
   Future<bool> _onBackPressed() {
     Navigator.pop(context);
   }
