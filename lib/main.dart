@@ -14,6 +14,7 @@ import 'Constant/Constant.dart';
 import 'Constant/Constant.dart';
 import 'Constant/Constant.dart';
 import 'Home/MarketSurvey.dart';
+import 'Home/SeekGuidance.dart';
 import 'Home/WriteResume.dart';
 import 'Home/LinkedInProfiles.dart';
 import 'Home/MentorGroups.dart';
