@@ -44,16 +44,14 @@ class User {
       email: json['email'],
       year_of_graduation : json['year_of_graduation'],
       mobile_no : json['mobile_no'],
-        organization : json['organization'] ,
-        position : json[' position '],
-        gender: json['gender'],
-        is_registered: json['is_registered'],
-        linkedIn_link: json['linkedIn_link'],
-        branch: json['branch'],
-        emirate: json['emirate'],
-        profile_pic: json['profile_pic'],
-
-
+      organization : json['organization'] ,
+      position : json['position'],
+      gender: json['gender'],
+      is_registered: json['is_registered'],
+      linkedIn_link: json['linkedIn_link'],
+      branch: json['branch'],
+      emirate: json['emirate'],
+      profile_pic: json['profile_pic'],
     );
   }
 }

@@ -16,7 +16,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 class EditProfileScreen extends StatefulWidget {
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
@@ -25,10 +24,11 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   File _image;
   final picker = ImagePicker();
-  List<int> color = new List<int>.generate(9, (i)=> 0);
+  List<int> color = new List<int>.generate(9, (i) => 0);
   User user;
-  int flag=0;
-  String previous="",after="";
+  int flag = 0;
+  int dialog = 0;
+  String previous = "", after = "";
 
   TextEditingController name;
   TextEditingController email;
@@ -55,7 +55,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
     Navigator.of(context).maybePop();
   }
-
 
   Future<Null> getImageGallery() async {
     Map<Permission, PermissionStatus> permissions =
@@ -153,7 +152,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
               new GestureDetector(
-                onTap: () => Navigator.of(context).pop(true),
+                onTap: () {
+                  if (flag == 1) {
+                    after = name.text +
+                        email.text +
+                        DropDown.branch +
+                        DropDown.year.toString() +
+                        phone.text +
+                        organization.text +
+                        position.text +
+                        DropDown.emirate +
+                        DropDown.gender;
+                    print(previous);
+                    print(after);
+                    if (previous == after)
+                      Navigator.of(context).pop();
+                    else {
+                      _postUserDetails();
+                    }
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
                 child: FlatButton(
                   color: Colors.red,
                   child: Text("YES"),
@@ -164,6 +184,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ) ??
         false;
   }
+
+  _userDialog(String show, String again, int flag) {
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+            builder: (context) {
+          if(flag==1) {
+            Future.delayed(Duration(milliseconds: 2000), () {
+              Navigator.pop(context);
+            });
+          }
+              return AlertDialog(
+                title: Text('Edit Profile'),
+                content: new Text(show),
+                actions: flag!=1 ? <Widget>[
+                  new GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: FlatButton(
+                      color: Colors.green,
+                      child: Text(again),
+                    ),
+                  ),
+                ] : null,
+              );
+            }) ??
+        false;
+  }
+
   _nameListener() {
 //    print("${name.text + email.text + branch.text + year.text + phone.text + organization.text + position.text}");
     List<int> list = color;
@@ -186,13 +236,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
 
     setState(() {
-      color: list;
+      color:
+      list;
     });
   }
-  Future <dynamic> _getUserDetails() async {
+
+  Future<dynamic> _getUserDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int user_id =  prefs.getInt("user_id") == null ? -1 : prefs.getInt("user_id");
-    String cookie = prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+    String user_id =
+        prefs.getString("user_id") == null ? -1 : prefs.getString("user_id");
+    String cookie =
+        prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
 
     print("USERID Profile: $user_id");
     print("cookie profile: $cookie");
@@ -201,35 +255,39 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     var uri = Uri.parse(url);
     uri = uri.replace(query: "user_id=$user_id");
 
-    await http.get(
-      uri,
-      headers: {'Cookie': cookie}
-    ).then((_response) {
+    await http.get(uri, headers: {'Cookie': cookie}).then((_response) {
       print(_response.statusCode);
       print(_response.body);
       if (_response.statusCode == 200) {
         ResponseBody responseBody =
-        ResponseBody.fromJson(json.decode(_response.body));
+            ResponseBody.fromJson(json.decode(_response.body));
         print(json.encode(responseBody.data));
         if (responseBody.status_code == 200) {
-          user = User.fromProfile(json.decode(
-              json.encode(responseBody.data)));
+          user = User.fromProfile(json.decode(json.encode(responseBody.data)));
           print(user.organization);
 
-
           setState(() {
-            flag=1;
+            flag = 1;
             name = new TextEditingController(text: user.name);
             email = new TextEditingController(text: user.email);
             branch = new TextEditingController(text: user.branch);
-            year = new TextEditingController(text: "${user.year_of_graduation}");
+            year =
+                new TextEditingController(text: "${user.year_of_graduation}");
             phone = new TextEditingController(text: user.mobile_no);
-            organization = new TextEditingController(text: user.organization );
-            position = new TextEditingController(text: user.position);
+            organization = new TextEditingController(text: user.organization);
             gender = new TextEditingController(text: user.gender);
             emirate = new TextEditingController(text: user.emirate);
+            position = new TextEditingController(text: user.position);
 
-            previous = name.text + email.text + branch.text + year.text.toString() + phone.text + organization.text + position.text + emirate.text + gender.text;
+            previous = name.text +
+                email.text +
+                branch.text +
+                year.text.toString() +
+                phone.text +
+                organization.text +
+                position.text +
+                emirate.text +
+                gender.text;
           });
           name.addListener(_nameListener);
           email.addListener(_nameListener);
@@ -240,86 +298,108 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           position.addListener(_nameListener);
           gender.addListener(_nameListener);
           emirate.addListener(_nameListener);
-          DropDown.gender =  gender.text;
-          DropDown.emirate  = emirate.text;
-          DropDown.year =  int.parse(year.text);
-          DropDown.branch =  branch.text;
-        }
-        else {
+
+          DropDown.gender = gender.text;
+          DropDown.emirate = emirate.text;
+          DropDown.year = int.parse(year.text);
+          DropDown.branch = branch.text;
+        } else {
           setState(() {
-            flag=2;
+            flag = 2;
           });
           print("${responseBody.data}");
         }
-      }
-      else {
+      } else {
         setState(() {
-          flag=2;
+          flag = 2;
         });
         print("Server error");
       }
     }).catchError((error) {
-      flag=2;
+      flag = 2;
       print(error);
     });
   }
+
   _postUserDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int user_id =  prefs.getInt("user_id") == null ? -1 : prefs.getInt("user_id");
-    String cookie = prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+    String user_id = prefs.getString("user_id") == null
+        ? "+9,q"
+        : prefs.getString("user_id");
+    String cookie =
+        prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
 
     print("USERID Profile: $user_id");
     print("cookie profile: $cookie");
-    print("branch emirate year gender ${DropDown.branch} ${DropDown.emirate} ${DropDown.year} ${DropDown.gender}");
-    var url =
-        "https://delta.nitt.edu/recal-uae/api/users/update/";
+    print(
+        "branch emirate year gender ${DropDown.branch} ${DropDown.emirate} ${DropDown.year.toString()} ${DropDown.gender}");
+    var url = "https://delta.nitt.edu/recal-uae/api/users/update/";
     var body = {
-      'id' : user_id,
-      'email': email.text,
-      'name' : name.text,
-      'year' : DropDown.year,
-      'mobile_no' : phone.text,
-      'organization' : organization.text,
-      'position' : position.text,
-      'gender': DropDown.gender,
-      'branch' : DropDown.branch,
-      'emirate' : DropDown.emirate
+      "id": user_id.toString(),
+      "email": email.text,
+      "name": name.text,
+      "year": DropDown.year.toString(),
+      "mobile_no": phone.text,
+      "organization": organization.text,
+      "position": position.text,
+      "gender": DropDown.gender,
+      "branch": DropDown.branch,
+      "emirate": DropDown.emirate,
+      "is_admin": "1",
+      "linkedIn": " ",
     };
     await http.post(
       url,
       body: body,
-      headers: {'Cookie': cookie},
+      headers: {
+        "Cookie": cookie,
+      },
     ).then((_response) {
+      print(_response);
       ResponseBody responseBody = new ResponseBody();
+
       if (_response.statusCode == 200) {
+        responseBody = ResponseBody.fromJson(json.decode(_response.body));
 
-//        responseBody = ResponseBody.fromJson(
-//            json.decode(_response.body));
-
-//        print(json.encode(responseBody.data));
-//        if (responseBody.status_code == 200) {
-//          user = User.fromLogin(json.decode(
-//              json.encode(responseBody.data)));
-//          print("${responseBody.status_code}");
-//          Navigator.pop(context);
-//        } else {
-//          print("${responseBody.status_code}");
-//        }
+        print(json.encode(responseBody.data));
+        if (responseBody.status_code == 200) {
+          FocusManager.instance.primaryFocus.unfocus();
+          _userDialog("Details updated successfully", "Okay", 1);
+          Future.delayed(Duration(milliseconds: 2000), () {
+            Navigator.pop(context);
+          });
+        } else if (responseBody.status_code == 500) {
+          print(responseBody.data);
+          var response = json.decode(json.encode(responseBody.data));
+          String exception = response["exception_message"];
+          setState(() {
+            dialog = 1;
+          });
+          _userDialog("Please provide unique details", "Try again", 0);
+        } else {
+          print("${responseBody.status_code}");
+          setState(() {
+            dialog = 1;
+          });
+          _userDialog("Error saving details", "Try again", 0);
+        }
       } else {
+        setState(() {
+          dialog = 1;
+        });
+        _userDialog("Server error, could not save details", "Try again", 0);
         print("server error");
       }
     });
   }
-
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _getUserDetails();
-
-
   }
+
   void dispose() {
     super.dispose();
     name.dispose();
@@ -339,7 +419,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final height = MediaQuery.of(context).size.height;
 
     return WillPopScope(
-      onWillPop: _onBackPressed,
       child: SafeArea(
         child: Scaffold(
             appBar: AppBar(
@@ -353,10 +432,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   icon: Icon(Icons.check),
                   iconSize: 30,
                   onPressed: () {
-                    if(flag==1) {
-                      after = name.text + email.text + DropDown.branch +
-                          DropDown.year.toString() + phone.text +
-                          organization.text + position.text + DropDown.emirate +
+                    if (flag == 1) {
+                      after = name.text +
+                          email.text +
+                          DropDown.branch +
+                          DropDown.year.toString() +
+                          phone.text +
+                          organization.text +
+                          position.text +
+                          DropDown.emirate +
                           DropDown.gender;
                       print(previous);
                       print(after);
@@ -365,8 +449,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       else {
                         _postUserDetails();
                       }
-                    }
-                    else {
+                    } else {
                       Navigator.pop(context);
                     }
                   },
@@ -379,189 +462,214 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 style: TextStyle(color: ColorGlobal.textColor),
               ),
             ),
-            body: flag==0 ? Center(child: CircularProgressIndicator()) :
-            (flag==2 ?  Center(child: Text("Error please try again")) :
-            SingleChildScrollView(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Center(
-                      child: Column(
-                        children: <Widget>[
-                          new GestureDetector(
-                            onTap: () {
-                              _settingModalBottomSheet(context);
-                            },
-                            child: _image == null
-                                ? new Container(
-                                    height: 120,
-                                    width: 120,
-                                    decoration: new BoxDecoration(
-                                      color: ColorGlobal.colorPrimaryDark,
-                                      image: new DecorationImage(
-                                        image: new AssetImage(
-                                            'assets/images/spiderlogo.png'),
-                                        fit: BoxFit.contain,
-                                      ),
-                                      border: Border.all(
-                                          color: ColorGlobal.colorPrimaryDark,
-                                          width: 2),
-                                      borderRadius: new BorderRadius.all(
-                                          const Radius.circular(60.0)),
+            body: flag == 0
+                ? Center(child: CircularProgressIndicator())
+                : (flag == 2
+                    ? Center(child: Text("Error please try again"))
+                    : SingleChildScrollView(
+                        child: Container(
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Center(
+                                child: Column(
+                                  children: <Widget>[
+                                    new GestureDetector(
+                                      onTap: () {
+                                        _settingModalBottomSheet(context);
+                                      },
+                                      child: _image == null
+                                          ? new Container(
+                                              height: 120,
+                                              width: 120,
+                                              decoration: new BoxDecoration(
+                                                color: ColorGlobal
+                                                    .colorPrimaryDark,
+                                                image: new DecorationImage(
+                                                  image: new AssetImage(
+                                                      'assets/images/spiderlogo.png'),
+                                                  fit: BoxFit.contain,
+                                                ),
+                                                border: Border.all(
+                                                    color: ColorGlobal
+                                                        .colorPrimaryDark,
+                                                    width: 2),
+                                                borderRadius:
+                                                    new BorderRadius.all(
+                                                        const Radius.circular(
+                                                            60.0)),
+                                              ),
+                                            )
+                                          : new Container(
+                                              width: 120.0,
+                                              height: 120.0,
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                      color: ColorGlobal
+                                                          .textColor),
+                                                  image: DecorationImage(
+                                                      fit: BoxFit.cover,
+                                                      image:
+                                                          FileImage(_image)))),
                                     ),
-                                  )
-                                : new Container(
-                                    width: 120.0,
-                                    height: 120.0,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            color: ColorGlobal.textColor),
-                                        image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: FileImage(_image)))),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                _settingModalBottomSheet(context);
-                              },
-                              child: Text(
-                                "Change Profile Photo",
-                                style: TextStyle(
-                                    color: ColorGlobal.blueColor,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                              child: ShowDetailTextWidget(
-                            hintText: 'Name',
-                            controller: name,
-                            color: color[0] == 0
-                                ? Colors.red
-                                : ColorGlobal.blueColor,
-                          )),
-                          Container(
-                              child: ShowDetailTextWidget(
-                                hintText: 'Organization',
-                                controller: organization,
-                                color: color[5] == 0
-                                    ? Colors.red
-                                    : ColorGlobal.blueColor,
-                              )),
-                          Container(
-                              child: ShowDetailTextWidget(
-                                hintText: 'Position',
-                                controller: position,
-                                color: color[6] == 0
-                                    ? Colors.red
-                                    : ColorGlobal.blueColor,
-                              )),
-                          Row (
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Expanded(
-                                child: Container (
-                                  child: DropDown(select: 0,hint: branch.text,),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Center(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          _settingModalBottomSheet(context);
+                                        },
+                                        child: Text(
+                                          "Change Profile Photo",
+                                          style: TextStyle(
+                                              color: ColorGlobal.blueColor,
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                flex: 2,
                               ),
-                              Expanded(
-                                child: Container(
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                        child: ShowDetailTextWidget(
+                                      hintText: 'Name',
+                                      controller: name,
+                                      color: color[0] == 0
+                                          ? Colors.red
+                                          : ColorGlobal.blueColor,
+                                    )),
+                                    Container(
+                                        child: ShowDetailTextWidget(
+                                      hintText: 'Organization',
+                                      controller: organization,
+                                      color: color[5] == 0
+                                          ? Colors.red
+                                          : ColorGlobal.blueColor,
+                                    )),
+                                    Container(
+                                        child: ShowDetailTextWidget(
+                                      hintText: 'Position',
+                                      controller: position,
+                                      color: color[6] == 0
+                                          ? Colors.red
+                                          : ColorGlobal.blueColor,
+                                    )),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Container(
+                                            child: DropDown(
+                                              select: 0,
+                                              hint: branch.text,
+                                            ),
+                                          ),
+                                          flex: 2,
+                                        ),
+                                        Expanded(
+                                          child: Container(),
+                                          flex: 1,
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                            child: DropDown(
+                                              select: 1,
+                                              hint: year.text,
+                                            ),
+                                          ),
+                                          flex: 3,
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          "Profile Information:",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Container(
+                                        child: ShowDetailTextWidget(
+                                      hintText: 'Email',
+                                      controller: email,
+                                      color: color[1] == 0
+                                          ? Colors.red
+                                          : ColorGlobal.blueColor,
+                                    )),
+                                    Container(
+                                      child: ShowDetailTextWidget(
+                                        hintText: 'Phone Number',
+                                        controller: phone,
+                                        type: 'phone',
+                                        color: color[4] == 0
+                                            ? Colors.red
+                                            : ColorGlobal.blueColor,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Container(
+                                            child: DropDown(
+                                              select: 2,
+                                              hint: emirate.text,
+                                            ),
+                                          ),
+                                          flex: 2,
+                                        ),
+                                        Expanded(
+                                          child: Container(),
+                                          flex: 1,
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                            child: DropDown(
+                                              select: 3,
+                                              hint: gender.text,
+                                            ),
+                                          ),
+                                          flex: 2,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                flex: 1,
-                              ),
-
-                              Expanded(
-                                child: Container (
-                                child: DropDown(select: 1,hint: year.text,),
-                              ),
-                                flex: 3,
                               ),
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Text("Profile Information:",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),textAlign: TextAlign.start,),
-                            ],
-                          ),
-                          SizedBox(height: 5,),
-                          Container(
-                              child: ShowDetailTextWidget(
-                                hintText: 'Email',
-                                controller: email,
-                                color: color[1] == 0
-                                    ? Colors.red
-                                    : ColorGlobal.blueColor,
-                              )),
-                          Container(
-                            child: ShowDetailTextWidget(
-                              hintText: 'Phone Number',
-                              controller: phone,
-                              type: 'phone',
-                              color: color[4] == 0
-                                  ? Colors.red
-                                  : ColorGlobal.blueColor,
-                            ),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Container (
-                                  child: DropDown(select: 2,hint: emirate.text,),
-                                ),
-                                flex: 2,
-                              ),
-                              Expanded(
-                                child: Container(
-                                ),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                child: Container (
-                                  child: DropDown(select: 3,hint: gender.text,),
-                                ),
-                                flex: 2,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ))),
+                        ),
+                      ))),
       ),
     );
   }
 }
+
 class Gender {
   String name;
   int index;
   Gender({this.name, this.index});
 }
-class DropDown extends StatefulWidget {
 
+class DropDown extends StatefulWidget {
   final int select;
   final String hint;
   static String branch;
@@ -569,8 +677,6 @@ class DropDown extends StatefulWidget {
   static String emirate;
   static String gender;
   DropDown({Key key, this.select, this.hint}) : super(key: key);
-
-
 
   @override
   _DropDownState createState() => _DropDownState();
@@ -601,39 +707,39 @@ class _DropDownState extends State<DropDown> {
     ),
   ];
   getId(String value) {
-    for(int i=0;i<4;i++) {
-      if(gList[i].name==value)
-        return gList[i].index;
+    for (int i = 0; i < 4; i++) {
+      if (gList[i].name == value) return gList[i].index;
     }
   }
-  List <int> all = new List<int>();
+
+  List<int> all = new List<int>();
 
   List<int> getYears() {
     all = new List<int>();
-    for(var i=2019;i>=1964;i--)
-      all.add(i);
+    for (var i = 2019; i >= 1964; i--) all.add(i);
     return all;
   }
-  List <String> getBranches() {
+
+  List<String> getBranches() {
     return [
-      'CSE',
-      'ECE',
-      'EEE',
-      'MECH',
-      'PROD',
-      'ICE',
-      'CHEM',
-      'CIVIL',
-      'META',
-      'ARCHI',
-      'PhD/MSc/MS',
-      'M.DOMS',
-      'MCA',
-      'MTECH'
+      "CSE",
+      "ECE",
+      "EEE",
+      "MECH",
+      "PROD",
+      "ICE",
+      "CHEM",
+      "CIVIL",
+      "META",
+      "ARCHI",
+      "PhD/MSc/MS",
+      "M.DOMS",
+      "MCA",
+      "MTECH"
     ];
   }
 
-  List <String> getEmirates() {
+  List<String> getEmirates() {
     return [
       "Umm Al Quwain",
       "Sharjah",
@@ -645,14 +751,12 @@ class _DropDownState extends State<DropDown> {
     ];
   }
 
-
-
   @override
   Widget build(BuildContext context) {
 //    print('${widget.select}\n');
 //    print(_branch);
 //    print(all);
-    if(widget.select==0) {
+    if (widget.select == 0) {
       return DropdownButtonHideUnderline(
         child: new InputDecorator(
           decoration: InputDecoration(
@@ -669,7 +773,10 @@ class _DropDownState extends State<DropDown> {
             labelStyle: TextStyle(color: ColorGlobal.blueColor),
           ),
           child: DropdownButton<String>(
-            hint: AutoSizeText(widget.hint,style: TextStyle(color: Colors.black,fontSize: 15.0),),
+            hint: AutoSizeText(
+              widget.hint,
+              style: TextStyle(color: Colors.black, fontSize: 15.0),
+            ),
             icon: Icon(Icons.arrow_drop_down),
             value: _branch,
             isExpanded: true,
@@ -681,7 +788,6 @@ class _DropDownState extends State<DropDown> {
                 _branch = newValue;
                 DropDown.branch = newValue;
               });
-
             },
             items: getBranches().map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
@@ -692,8 +798,7 @@ class _DropDownState extends State<DropDown> {
           ),
         ),
       );
-    }
-    else if (widget.select==1) {
+    } else if (widget.select == 1) {
       return DropdownButtonHideUnderline(
         child: InputDecorator(
           decoration: InputDecoration(
@@ -710,30 +815,30 @@ class _DropDownState extends State<DropDown> {
             labelStyle: TextStyle(color: ColorGlobal.blueColor),
           ),
           child: DropdownButton<int>(
-            hint: AutoSizeText(widget.hint,style: TextStyle(color: Colors.black,fontSize: 15.0)),
+            hint: AutoSizeText(widget.hint,
+                style: TextStyle(color: Colors.black, fontSize: 15.0)),
             value: _year,
-           icon: Icon(Icons.arrow_drop_down),
-           iconSize: 18,
-           isExpanded: true,
-           elevation: 10,
-           style: TextStyle(color: Colors.black,fontSize: 15.0),
-           onChanged: (int newValue) {
-             setState(() {
-               _year = newValue;
-               DropDown.year = newValue;
-             });
-           },
-           items: getYears().map<DropdownMenuItem<int>>((int value) {
-             return DropdownMenuItem<int>(
-               value: value,
-               child: Text("$value"),
-             );
-           }).toList(),
+            icon: Icon(Icons.arrow_drop_down),
+            iconSize: 18,
+            isExpanded: true,
+            elevation: 10,
+            style: TextStyle(color: Colors.black, fontSize: 15.0),
+            onChanged: (int newValue) {
+              setState(() {
+                _year = newValue;
+                DropDown.year = newValue;
+              });
+            },
+            items: getYears().map<DropdownMenuItem<int>>((int value) {
+              return DropdownMenuItem<int>(
+                value: value,
+                child: Text("$value"),
+              );
+            }).toList(),
           ),
         ),
       );
-    }
-    else if(widget.select==2) {
+    } else if (widget.select == 2) {
       return DropdownButtonHideUnderline(
         child: InputDecorator(
           decoration: InputDecoration(
@@ -750,7 +855,10 @@ class _DropDownState extends State<DropDown> {
             labelStyle: TextStyle(color: ColorGlobal.blueColor),
           ),
           child: DropdownButton<String>(
-            hint: Text(widget.hint,style: TextStyle(color: Colors.black,fontSize: 15.0),),
+            hint: Text(
+              widget.hint,
+              style: TextStyle(color: Colors.black, fontSize: 15.0),
+            ),
             value: _emirate,
             icon: Icon(Icons.arrow_drop_down),
             iconSize: 18,
@@ -772,49 +880,48 @@ class _DropDownState extends State<DropDown> {
           ),
         ),
       );
-    }
-    else {
-     return DropdownButtonHideUnderline(
-       child: InputDecorator(
-         decoration: InputDecoration(
-           enabledBorder: UnderlineInputBorder(
-             borderSide: BorderSide(color: Colors.white),
-           ),
-           focusedBorder: UnderlineInputBorder(
-             borderSide: BorderSide(color: Colors.blue),
-           ),
-           border: UnderlineInputBorder(
-             borderSide: BorderSide(color: Colors.white),
-           ),
-           labelText: "Gender",
-           labelStyle: TextStyle(color: ColorGlobal.blueColor),
-         ),
-         child: DropdownButton<String>(
-           hint: Text(widget.hint,style: TextStyle(color: Colors.black,fontSize: 15.0),),
-           value: _gender,
-           icon: Icon(Icons.arrow_drop_down),
-           iconSize: 18,
-           elevation: 10,
-           isExpanded: true,
-           style: TextStyle(color: Colors.black, fontSize: 15.0),
-           onChanged: (String newValue) {
-             setState(() {
-               _gender = newValue;
-               DropDown.gender = newValue;
-             });
-           },
-           items: gList.map<DropdownMenuItem<String>>((Gender value) {
-             return DropdownMenuItem<String>(
-               value: value.name,
-               child: Text(value.name),
-             );
-           }).toList(),
-         ),
-       ),
-     );
-
+    } else {
+      return DropdownButtonHideUnderline(
+        child: InputDecorator(
+          decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue),
+            ),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            labelText: "Gender",
+            labelStyle: TextStyle(color: ColorGlobal.blueColor),
+          ),
+          child: DropdownButton<String>(
+            hint: Text(
+              widget.hint,
+              style: TextStyle(color: Colors.black, fontSize: 15.0),
+            ),
+            value: _gender,
+            icon: Icon(Icons.arrow_drop_down),
+            iconSize: 18,
+            elevation: 10,
+            isExpanded: true,
+            style: TextStyle(color: Colors.black, fontSize: 15.0),
+            onChanged: (String newValue) {
+              setState(() {
+                _gender = newValue;
+                DropDown.gender = newValue;
+              });
+            },
+            items: gList.map<DropdownMenuItem<String>>((Gender value) {
+              return DropdownMenuItem<String>(
+                value: value.name,
+                child: Text(value.name),
+              );
+            }).toList(),
+          ),
+        ),
+      );
     }
   }
-
 }
-

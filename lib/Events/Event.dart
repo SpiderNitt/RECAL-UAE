@@ -1,35 +1,37 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:iosrecal/Constant/utils.dart';
+import 'package:iosrecal/models/EventInfo.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
+import '../models/socialmedia_feed.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../Constant/ColorGlobal.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 class Event extends StatefulWidget {
   bool isCompleted=false;
-  String num;
-  Event(bool isComp,String tag){
-    isCompleted=isComp;
-    num=tag;
-  }
+  EventInfo currEvent;
+  Event(this.isCompleted,this.currEvent);
   @override
-  _EventState createState() => _EventState(isCompleted,num);
+  _EventState createState() => _EventState();
 }
 
 class _EventState extends State<Event> {
-  bool checkComplete;
-  String num;
-  _EventState(bool isComp,String tag){
-    checkComplete=isComp;
-    num=tag;
-  }
   final List<int> numbers = [1, 2, 3, 4, 5, 5, 2, 3, 5];
   @override
   Widget build(BuildContext context) {
+    final screenSize=MediaQuery.of(context).size;
+    UIUtills().updateScreenDimesion(width: screenSize.width,height: screenSize.height);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           titleSpacing: -5,
-          title: Text("RECAL UAE Meet",style: TextStyle(color: ColorGlobal.textColor)),
+          title: Text("Event Details",style: TextStyle(color: ColorGlobal.textColor)),
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
             onPressed: () => Navigator.of(context).pop(),
@@ -42,7 +44,7 @@ class _EventState extends State<Event> {
               Container(
                 margin: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  border: Border.all(color: ColorGlobal.blueColor.withOpacity(0.5),width: 2)
+                    border: Border.all(color: ColorGlobal.blueColor.withOpacity(0.5),width: 2)
                 ),
                 child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: "https://picsum.photos/300",fit: BoxFit.fitWidth,),
                 width: MediaQuery.of(context).size.width,
@@ -55,11 +57,11 @@ class _EventState extends State<Event> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          "September 20, 2020",
+                          getDate(),
                           style: TextStyle(color: Colors.blueGrey),
                         ),
                         Text(
-                          "5pm - 10pm",
+                          getTime(),
                           style: TextStyle(color: Colors.blueGrey),
                         )
                       ],
@@ -82,23 +84,35 @@ class _EventState extends State<Event> {
                             ),
                             Container(
                               margin: EdgeInsets.only(left: 4),
-                              child: Column(
+                              child: (widget.currEvent.location==null&&widget.currEvent.emirate_id==null)?Text(
+                                "N/A",
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
+                              ):Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(
-                                    "Location",
+                                  widget.currEvent.emirate_id==null?SizedBox(height: 6,):Text(
+                                    getEmirate(),
                                     style: TextStyle(
                                         color: Colors.black54,
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Container(
+                                    width: UIUtills().getProportionalWidth(width: 300),
                                     margin: EdgeInsets.only(top: 3),
-                                    child: Text(
-                                      "Emirate",
-                                      style: TextStyle(
-                                          color: Colors.black45, fontSize: 16),
-                                    ),
+                                    child: widget.currEvent.location!=null?Text(
+                                      widget.currEvent.location,
+                                      maxLines: 5,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: widget.currEvent.emirate_id!=null?TextStyle(
+                                          color: Colors.black45, fontSize: 16):TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold),
+                                    ):SizedBox(),
                                   ),
                                 ],
                               ),
@@ -114,12 +128,19 @@ class _EventState extends State<Event> {
                       children: <Widget>[
                         Container(
                             margin: EdgeInsets.only(top: 6),
-                            child: Text(
-                              " Detailed description of the event.",
+                            child: widget.currEvent.detail_message==null?SizedBox():Text(
+                              widget.currEvent.detail_message,
                               style:
                               TextStyle(color: Colors.blueGrey, fontSize: 16),
                             )),
-                        checkComplete?Container(
+                        Container(
+                            margin: EdgeInsets.only(top: 6),
+                            child: widget.currEvent.detail_amendment_message==null?SizedBox():Text(
+                              widget.currEvent.detail_amendment_message,
+                              style:
+                              TextStyle(color: Colors.blueGrey, fontSize: 16),
+                            )),
+                        widget.isCompleted?Container(
                           margin: EdgeInsets.only(top: 20),
                           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
                           height: MediaQuery.of(context).size.height * 0.35,
@@ -147,33 +168,49 @@ class _EventState extends State<Event> {
                               ),
                             );
                           }),
-                        ):Container(margin: EdgeInsets.only(top:4),child: InkWell(child: Text("Register Here",style: TextStyle(color: Colors.blue)),onTap: ()=>launch("https://picsum.photos/300"),)),
-                        checkComplete?SizedBox(height: 0,width: 0,):SizedBox(height: 20,),
-                        !checkComplete?Container(
-                          margin: EdgeInsets.symmetric(horizontal: 15),
-                          child: OutlineButton(
-                            splashColor: Colors.green,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(Icons.check_circle,color: Colors.green,),
-                                SizedBox(width: 10,),
-                                Text(
-                                  "Volunteer",
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                              ],
-                            ),
-                            onPressed: () {
+                        ):Column(
+                          children: <Widget>[
+                            Container(
+                                margin: EdgeInsets.only(top: 6),
+                                child: Text(
+                                  widget.currEvent.volunteer_message??" ",
+                                  style:
+                                  TextStyle(color: Colors.blueGrey, fontSize: 16),
+                                )),
+                            Container(margin: EdgeInsets.only(top:4),child: widget.currEvent.registration_link==null?SizedBox():InkWell(child: Text("Register Here",style: TextStyle(color: Colors.blue)),onTap: ()=>launch(widget.currEvent.registration_link),)),
+                          ],
+                        ),
+                        widget.isCompleted?SizedBox(height: 0,width: 0,):SizedBox(height: 20,),
+                        FutureBuilder(
+                          future: getSocialMediaLinks(),
+                          builder: (BuildContext context,AsyncSnapshot snapshot){
+                            if(snapshot.data==null){
+                              return Container(
+                                child: SizedBox(),
+                              );
+                            }else{
+                              return ListView.builder(
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder:(BuildContext context,int index){
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: ColorGlobal.blueColor.withOpacity(0.5),width: 2)
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(snapshot.data[index].platform),
+                                          Text(snapshot.data[index].feed_url,style: TextStyle(
+                                              color: Colors.blue
+                                          ),)
+                                        ],
+                                      ),
+                                    );
+                                  } );
+                            }
+                          },
+                        ),
 
-                            },
-                            color: Colors.white,
-                            borderSide: BorderSide(
-                                color: Colors.green,
-                                style: BorderStyle.solid,
-                                width: 0.8),
-                          ),
-                        ):SizedBox(height: 0,width: 0,),
                       ],
                     ),
                   )
@@ -185,4 +222,98 @@ class _EventState extends State<Event> {
       ),
     );
   }
+  String getDate(){
+    var date=DateTime.parse(widget.currEvent.datetime);
+    var updateddate=DateFormat.yMMMMd().format(date);
+    return updateddate;
+  }
+  String getTime(){
+    var date=DateTime.parse(widget.currEvent.datetime);
+    var updateddate=DateFormat.jm().format(date);
+    return updateddate;
+  }
+  String getEmirate() {
+    String id=widget.currEvent.emirate_id;
+    String emirate;
+    switch(id){
+      case '1': emirate="Dubai";break;
+      case '2': emirate="Abu Dhabi";break;
+      case '3': emirate="Ajman";break;
+      case '4': emirate="Fujairah";break;
+      case '5': emirate="Ras Al Khaimah";break;
+      case '6': emirate="Sharjah";break;
+      case '7': emirate="Umm Al Quwain";break;
+    }
+    print(emirate);
+    return emirate;
+  }
+
+//  Future<List<SponsorInfo>> getSponsorInfo()async{
+//
+//  }
+  Future<List<SocialMediaFeed>> getSocialMediaLinks() async{
+    var params={'event_id':widget.currEvent.event_id.toString()};
+    var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/events/social_media/',params);
+    SharedPreferences prefs=await SharedPreferences.getInstance();
+    var response=await http.get(
+        uri,
+        headers: {
+          "Accept" : "application/json",
+          "Cookie" : "${prefs.getString("cookie")}",
+        }
+    ) .then((_response) {
+      ResponseBody responseBody = new ResponseBody();
+      print('Response body: ${_response.body}');
+      if (_response.statusCode == 200) {
+        responseBody = ResponseBody.fromJson(json.decode(_response.body));
+        if (responseBody.status_code == 200) {
+          if(responseBody.data!=[]) {
+            List<String> socialmediaIDs=[];
+            for(var u in responseBody.data){
+              socialmediaIDs.add(responseBody.data['socialmedia_id']);
+            }
+            //   getFeedUrl();
+          }
+        } else {
+          print(responseBody.data);
+        }
+      } else {
+        print('Server error');
+      }
+    });
+  }
+
+  getFeedUrl() async{
+    var params={'event_id':'1'};
+    var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/events/social_media/',params);
+    SharedPreferences prefs=await SharedPreferences.getInstance();
+    var response=await http.get(
+        uri,
+        headers: {
+          "Accept" : "application/json",
+          "Cookie" : "${prefs.getString("cookie")}",
+        }
+    ) .then((_response) {
+      ResponseBody responseBody = new ResponseBody();
+      print('Response body: ${_response.body}');
+      if (_response.statusCode == 200) {
+        responseBody = ResponseBody.fromJson(json.decode(_response.body));
+        if (responseBody.status_code == 200) {
+          if(responseBody.data!=[]) {
+            List<String> socialmediaIDs=[];
+            for(var u in responseBody.data){
+              socialmediaIDs.add(responseBody.data['socialmedia_id']);
+            }
+            getFeedUrl();
+          }
+        } else {
+          print(responseBody.data);
+        }
+      } else {
+        print('Server error');
+      }
+    });
+  }
+
 }
+

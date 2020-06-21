@@ -16,7 +16,7 @@ class SplashScreenState extends State<ImageSplashScreen> {
   String email;
 
   startTime() async {
-  var _duration = new Duration(seconds:   1);
+  var _duration = new Duration(seconds:1);
     return new Timer(_duration, navigationPage);
   }
   Future <Null> _getUserDetails() async {
