@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:url_launcher/url_launcher.dart';
 
+
 //void main() => runApp(new MyApp());
 class SocialMediaScreen extends StatefulWidget {
   @override
@@ -55,14 +56,30 @@ _launchlinkedin() async {
 }
 
 class SocialMediaScreenState extends State<SocialMediaScreen> {
+   Future<bool> _onBackPressed() {
+    Navigator.pop(context);
+  }
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height / 3;
+    final double height = MediaQuery.of(context).size.height ;
 
-    return Dialog(
-         child: Container(
-              height: height + 80,
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: new Scaffold(
+        appBar: AppBar(
+          title: Text('Write to Mentor'),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+         body: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/SocialMedia.jpg"),
@@ -73,7 +90,6 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                   child: Container(
-                    height: height+80,
                     alignment: Alignment.center,
                     child: SingleChildScrollView(
                       child: Column(
@@ -82,7 +98,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                         children: <Widget>[
                           SizedBox(height: 20.0),
                           Container(
-                            height: height / 6,
+                            height: height / 8,
                             alignment: Alignment.center,
                             child: RaisedButton(
                               onPressed: _launchfacebook,
@@ -115,8 +131,8 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                                           padding: EdgeInsets.all(5),
                                           child: Container(
                                             child: Image(
-                                              height: 15.0,
-                                              width: 15.0,
+                                              height: 40.0,
+                                              width: 40.0,
                                               fit: BoxFit.cover,
                                               image: AssetImage(
                                                   'assets/images/facebook.png'),
@@ -131,7 +147,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                           ),
                           SizedBox(height: 20.0),
                           Container(
-                            height: height / 6,
+                            height: height / 8,
                             alignment: Alignment.center,
                             child: RaisedButton(
                               onPressed: _launchtwitter,
@@ -164,8 +180,8 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                                           padding: EdgeInsets.all(5),
                                           child: Container(
                                             child: Image(
-                                              height: 15.0,
-                                              width: 15.0,
+                                              height: 40.0,
+                                              width: 40.0,
                                               fit: BoxFit.cover,
                                               image: AssetImage(
                                                   'assets/images/twitter.png'),
@@ -180,7 +196,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                           ),
                           SizedBox(height: 20.0),
                           Container(
-                            height: height / 6,
+                            height: height / 8,
                             alignment: Alignment.center,
                             child: RaisedButton(
                               onPressed: _launchyoutube,
@@ -213,8 +229,8 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                                           padding: EdgeInsets.all(5),
                                           child: Container(
                                             child: Image(
-                                              height: 15.0,
-                                              width: 15.0,
+                                              height: 40.0,
+                                              width: 40.0,
                                               fit: BoxFit.cover,
                                               image: AssetImage(
                                                   'assets/images/youtube.png'),
@@ -229,7 +245,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                           ),
                           SizedBox(height: 20.0),
                           Container(
-                            height: height / 6,
+                            height: height / 8,
                             alignment: Alignment.center,
                             child: RaisedButton(
                               onPressed: _launchlinkedin,
@@ -262,8 +278,8 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                                           padding: EdgeInsets.all(5),
                                           child: Container(
                                             child: Image(
-                                              height: 15.0,
-                                              width: 15.0,
+                                              height: 40.0,
+                                              width: 40.0,
                                               fit: BoxFit.cover,
                                               image: AssetImage(
                                                   'assets/images/linkedin.png'),
@@ -278,7 +294,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                           ),
                           SizedBox(height: 20.0),
                           Container(
-                            height: height / 6,
+                            height: height / 8,
                             alignment: Alignment.center,
                             child: RaisedButton(
                               onPressed: _launchhome,
@@ -311,8 +327,8 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                                           padding: EdgeInsets.all(5),
                                           child: Container(
                                             child: Image(
-                                              height: 15.0,
-                                              width: 15.0,
+                                              height: 40.0,
+                                              width: 40.0,
                                               fit: BoxFit.cover,
                                               image: AssetImage(
                                                   'assets/images/mail.png'),
@@ -333,6 +349,6 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                 ),
               ),
           ),
-    );
+    ));
   }
 }

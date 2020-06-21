@@ -1,6 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:iosrecal/Home/Feedback.dart';
+import 'package:iosrecal/Home/MentorList.dart';
+import 'package:iosrecal/Home/SocialMedia.dart';
+import 'package:iosrecal/Home/WriteToMentor.dart';
 import 'package:iosrecal/Home/AlumniPlaced.dart';
 import 'package:iosrecal/Home/MentorList.dart';
 import 'package:iosrecal/Home/OpenPositions.dart';
@@ -22,6 +26,9 @@ import './Screen/HomePage.dart';
 import './Screen/ImageSplashScreen.dart';
 import 'package:flutter/material.dart';
 import './UserAuth/Login.dart';
+import './Home/MarketSurvey.dart';
+import './Home/Feedback.dart';
+import './Home/SocialMedia.dart';
 
 void main()  {
 
@@ -46,6 +53,9 @@ void main()  {
               MENTOR_GROUPS: (BuildContext context) => new MentorGroups(),
               MENTOR_LIST_SCREEN: (BuildContext context) => new MentorList(),
               MEMBER_LINKEDIN: (BuildContext context) => new LinkedIn(),
+              FEED_BACK:(BuildContext context) => new FeedbackScreen(),
+              SOCIAL_MEDIA: (BuildContext context) => new SocialMediaScreen(),
+              WRITE_MENTOR: (BuildContext context) => new WriteMentorScreen()
               WRITE_RESUME_SCREEN: (BuildContext context) => new WriteResume(),
               OPEN_POSITIONS: (BuildContext context) => new OpenPositions(),
               ALUMNI_PLACED_SCREEN: (BuildContext context) => new AlumniPlaced(),
