@@ -1,13 +1,18 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:iosrecal/models/EventInfo.dart';
 import './VolunteerCard.dart';
 class CompletedEvents extends StatefulWidget {
+  List<EventInfo> list;
+  CompletedEvents(this.list);
   @override
-  _ColpletedEventsState createState() => _ColpletedEventsState();
+  _CompletedEventsState createState() => _CompletedEventsState(list);
 }
 
-class _ColpletedEventsState extends State<CompletedEvents> with TickerProviderStateMixin  {
+class _CompletedEventsState extends State<CompletedEvents> with TickerProviderStateMixin  {
+  List<EventInfo> eventList;
+  _CompletedEventsState(this.eventList);
   GlobalKey<AnimatedListState> animatedListKey=GlobalKey<AnimatedListState>();
   AnimationController emptyController;
   List events=["1","2","3","4","5","6"];
@@ -25,18 +30,19 @@ class _ColpletedEventsState extends State<CompletedEvents> with TickerProviderSt
   }
   Widget EmptyList(){
     return Center(
-      child: FadeTransition(child: Text("No events yet!!"),
+      child: FadeTransition(child: Text("No events to show!!"),
         opacity: emptyController,),
     );
   }
   @override
   Widget build(BuildContext context) {
-    return isEmpty?EmptyList():Container(
+    return eventList.isEmpty?EmptyList():Container(
       child: AnimatedList(
           key: animatedListKey,
-          initialItemCount: events.length,
+          initialItemCount: eventList.length,
           itemBuilder: (BuildContext context, int index,animation){
-            return SizeTransition(child: VolunteerCard(comp[index],events[index],Random().nextInt(2)==1 ? true : false),
+            //return SizeTransition(child: VolunteerCard(comp[index],events[index],Random().nextInt(2)==1 ? true : false),
+            return SizeTransition(child: VolunteerCard(eventList[index],true),
               sizeFactor: animation,);
           }
       ),
