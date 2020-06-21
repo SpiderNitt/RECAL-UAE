@@ -99,6 +99,7 @@ class _HomeActivityState extends State<HomeActivity> {
   void initState()  {
     // TODO: implement initState
     super.initState();
+    _corecomm();
     setState(() {
       name = _fetchUserName();
     });
