@@ -122,12 +122,14 @@ class LoginState extends State<Login> {
         false;
   }
 
-  static _saveUserDetails(String email, String name) async {
+  static _saveUserDetails(String email, String name, String userId, String cookie) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print("Login email:  ${prefs.getString("email")}");
     print("Login name:  ${prefs.getString("name")}");
     prefs.setString("email", email);
     prefs.setString("name", name);
+    prefs.setString("user_id", userId);
+    prefs.setString("cookie", cookie);
 
     print("login save ${prefs.getString("name")}");
   }
@@ -139,6 +141,16 @@ class LoginState extends State<Login> {
         textDirection: TextDirection.ltr)
       ..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
+  }
+
+  void updateCookie(http.Response response) {
+    String rawCookie = response.headers['set-cookie'];
+    if (rawCookie != null) {
+      int index = rawCookie.indexOf(';');
+//      headers['cookie'] =
+//      (index == -1) ? rawCookie : rawCookie.substring(0, index);
+      print((index == -1) ? rawCookie : rawCookie.substring(0, index));
+    }
   }
 
   static loginUser(String email, String password) async {
@@ -153,12 +165,16 @@ class LoginState extends State<Login> {
       User user = new User();
       ResponseBody responseBody = new ResponseBody();
       print('Response body: ${_response.body}');
-
       if (_response.statusCode == 200) {
+//        updateCookie(_response);
         responseBody = ResponseBody.fromJson(json.decode(_response.body));
         if (responseBody.status_code == 200) {
+          String rawCookie = _response.headers['set-cookie'];
+          String cookie = rawCookie.substring(0, rawCookie.indexOf(';'));
+          print(cookie);
           user = User.fromJson(json.decode(responseBody.data));
-          _saveUserDetails(user.email, user.name);
+          var userId = user.user_id;
+          _saveUserDetails(user.email, user.name, userId.toString(), cookie);
           return [user.name, 1];
         } else {
           print(responseBody.data);
@@ -304,13 +320,17 @@ class LoginState extends State<Login> {
                                   print('Response body: ${_response.body}');
 
                                   if (_response.statusCode == 200) {
+                                    String rawCookie = _response.headers['set-cookie'];
+                                    String cookie = rawCookie.substring(0, rawCookie.indexOf(';'));
+                                    print(cookie);
                                     responseBody = ResponseBody.fromJson(
                                         json.decode(_response.body));
                                     print(json.encode(responseBody.data));
                                     if (responseBody.status_code == 200) {
                                       user = User.fromJson(json.decode(
                                           json.encode(responseBody.data)));
-                                      _saveUserDetails(user.email, user.name);
+                                      var userId = user.user_id;
+                                      _saveUserDetails(user.email, user.name, userId.toString(), cookie);
                                       _loginDialog(
                                           "Login Success", "Proceed", 1);
                                     } else {
@@ -505,3 +525,4 @@ class LoginState extends State<Login> {
     );
   }
 }
+

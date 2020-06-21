@@ -43,6 +43,7 @@ dependencies:
   auto_size_text: ^2.1.0
   http: ^0.12.1
   intl: ^0.16.1
+  fluttertoast: ^4.0.0
 
 dev_dependencies:
   flutter_test:
