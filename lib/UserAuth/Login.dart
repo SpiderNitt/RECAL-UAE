@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import '../models/User.dart';
 import 'package:page_transition/page_transition.dart';
@@ -50,25 +51,7 @@ class LoginState extends State<Login> {
     passwordFocus.unfocus();
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print("LOGIN");
-//    getDisposeController();
-  }
 
-  @override
-  void dispose() {
-    getDisposeController();
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  var list = [
-    Colors.lightGreen,
-    Colors.redAccent,
-  ];
   Future<bool> _onBackPressed() {
     return showDialog(
           context: context,
@@ -85,7 +68,8 @@ class LoginState extends State<Login> {
               ),
               new GestureDetector(
                 onTap: () {
-                  Navigator.of(context, rootNavigator: true).pop(true);
+                  SystemNavigator.pop();
+//                  Navigator.of(context, rootNavigator: true).pop(true);
                 },
                 child: FlatButton(
                   color: Colors.red,
@@ -122,14 +106,24 @@ class LoginState extends State<Login> {
         false;
   }
 
-  static _saveUserDetails(String email, String name) async {
+  static _saveUserDetails(String email, String name,String cookie,int user_id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print("Login email:  ${prefs.getString("email")}");
     print("Login name:  ${prefs.getString("name")}");
     prefs.setString("email", email);
     prefs.setString("name", name);
+    prefs.setString("cookie", cookie.trim());
+    prefs.setInt("user_id", user_id);
+    print("cookie: " + cookie.trim());
 
-    print("login save ${prefs.getString("name")}");
+    print("login save ${prefs.getString("name")} ${prefs.getString("cookie")} $user_id");
+  }
+  _deleteUserDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("email", null);
+    prefs.setString("name", null);
+    prefs.setInt("user_id", null);
+    prefs.setString("cookie", null);
   }
 
   static Size _textSize(String text, TextStyle style) {
@@ -141,34 +135,20 @@ class LoginState extends State<Login> {
     return textPainter.size;
   }
 
-  static loginUser(String email, String password) async {
-    var url = "https://delta.nitt.edu/recal-uae/api/auth/login/";
-    var body = {'email': email, 'password': password};
-    await http
-        .post(
-      url,
-      body: body,
-    )
-        .then((_response) {
-      User user = new User();
-      ResponseBody responseBody = new ResponseBody();
-      print('Response body: ${_response.body}');
-
-      if (_response.statusCode == 200) {
-        responseBody = ResponseBody.fromJson(json.decode(_response.body));
-        if (responseBody.status_code == 200) {
-          user = User.fromJson(json.decode(responseBody.data));
-          _saveUserDetails(user.email, user.name);
-          return [user.name, 1];
-        } else {
-          print(responseBody.data);
-          return [responseBody.data, 0];
-        }
-      } else {
-        print('Server error');
-        return ["Server Error", 0];
-      }
-    });
+  @override
+  void initState() {
+    // TODO: implement initState
+    email = TextEditingController(text: "someone@gmail.com");
+    password = TextEditingController(text: "o84HWLLJ5pmd");
+    _deleteUserDetails();
+    super.initState();
+    print("LOGIN");
+//    getDisposeController();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -302,15 +282,18 @@ class LoginState extends State<Login> {
                                   User user = new User();
                                   ResponseBody responseBody = new ResponseBody();
                                   print('Response body: ${_response.body}');
-
+                                  print(_response.headers);
                                   if (_response.statusCode == 200) {
                                     responseBody = ResponseBody.fromJson(
                                         json.decode(_response.body));
+
                                     print(json.encode(responseBody.data));
                                     if (responseBody.status_code == 200) {
-                                      user = User.fromJson(json.decode(
+                                      user = User.fromLogin(json.decode(
                                           json.encode(responseBody.data)));
-                                      _saveUserDetails(user.email, user.name);
+                                      String cookie = _response.headers.toString();
+                                      _saveUserDetails(user.email, user.name,cookie.split(";")[0].split(":")[1],user.user_id);
+
                                       _loginDialog(
                                           "Login Success", "Proceed", 1);
                                     } else {
@@ -323,12 +306,15 @@ class LoginState extends State<Login> {
                                     _loginDialog(
                                         "Server Error", "Try again", 0);
                                   }
+                                }).catchError((error) {
+                                  print("server error");
+                                  _loginDialog(
+                                      "Please connect to Wi-fi", "Try again", 0);
                                 });
                               }
                               else {
                                 _loginDialog(
                                     "Enter all fields", "Try again", 2);
-
                               }
                             },
                             child: Container(
@@ -403,103 +389,103 @@ class LoginState extends State<Login> {
               ),
             ),
           ),
-          bottomNavigationBar: Container(
-            color: ColorGlobal.whiteColor,
-            height: 70,
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () {
-                        getDisposeController();
-                        Navigator.push(
-                                context,
-                                PageTransition(
-                                    type: PageTransitionType.rightToLeft,
-                                    duration: Duration(milliseconds: 300),
-                                    child: SignUp()))
-                            .then((value) {
-                          Future.delayed(Duration(milliseconds: 200), () {
-                            setState(() {
-                              width = accountSize;
-                            });
-                          });
-                        });
-                        setState(() {
-                          width = screenWidth - 20;
-                        });
-                      },
-                      child: AnimatedContainer(
-                        height: 65.0,
-                        width: width,
-                        duration: Duration(milliseconds: 500),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(left: 10),
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                color: ColorGlobal.whiteColor,
-                                size: 30,
-                              ),
-                            ),
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-//                          margin: EdgeInsets.only(right: 8,top: 15),
-                                    child: Text(
-                                      "Don't have an account?",
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        letterSpacing: 1,
-                                        color: ColorGlobal.whiteColor
-                                            .withOpacity(0.9),
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Container(
-//                          margin: EdgeInsets.only(right: 8,top: 15),
-                                    child: AutoSizeText(
-                                      "Sign Up",
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        letterSpacing: 1,
-                                        color: ColorGlobal.whiteColor
-                                            .withOpacity(0.9),
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      maxLines: 1,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        curve: Curves.linear,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(40),
-                            topLeft: Radius.circular(40),
-                          ),
-                          color: ColorGlobal.colorPrimary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+//          bottomNavigationBar: Container(
+//            color: ColorGlobal.whiteColor,
+//            height: 70,
+//            child: Column(
+//              children: <Widget>[
+//                Row(
+//                  mainAxisAlignment: MainAxisAlignment.end,
+//                  children: <Widget>[
+//                    InkWell(
+//                      onTap: () {
+//                        getDisposeController();
+//                        Navigator.push(
+//                                context,
+//                                PageTransition(
+//                                    type: PageTransitionType.rightToLeft,
+//                                    duration: Duration(milliseconds: 300),
+//                                    child: SignUp()))
+//                            .then((value) {
+//                          Future.delayed(Duration(milliseconds: 200), () {
+//                            setState(() {
+//                              width = accountSize;
+//                            });
+//                          });
+//                        });
+//                        setState(() {
+//                          width = screenWidth - 20;
+//                        });
+//                      },
+//                      child: AnimatedContainer(
+//                        height: 65.0,
+//                        width: width,
+//                        duration: Duration(milliseconds: 500),
+//                        child: Row(
+//                          children: <Widget>[
+//                            Container(
+//                              margin: EdgeInsets.only(left: 10),
+//                              child: Icon(
+//                                Icons.arrow_back_ios,
+//                                color: ColorGlobal.whiteColor,
+//                                size: 30,
+//                              ),
+//                            ),
+//                            Container(
+//                              child: Column(
+//                                mainAxisAlignment: MainAxisAlignment.center,
+//                                crossAxisAlignment: CrossAxisAlignment.start,
+//                                children: <Widget>[
+//                                  Container(
+////                          margin: EdgeInsets.only(right: 8,top: 15),
+//                                    child: Text(
+//                                      "Don't have an account?",
+//                                      textAlign: TextAlign.start,
+//                                      style: TextStyle(
+//                                        fontSize: 14,
+//                                        letterSpacing: 1,
+//                                        color: ColorGlobal.whiteColor
+//                                            .withOpacity(0.9),
+//                                        fontWeight: FontWeight.w400,
+//                                      ),
+//                                    ),
+//                                  ),
+//                                  SizedBox(height: 5),
+//                                  Container(
+////                          margin: EdgeInsets.only(right: 8,top: 15),
+//                                    child: AutoSizeText(
+//                                      "Sign Up",
+//                                      textAlign: TextAlign.end,
+//                                      style: TextStyle(
+//                                        fontSize: 16,
+//                                        letterSpacing: 1,
+//                                        color: ColorGlobal.whiteColor
+//                                            .withOpacity(0.9),
+//                                        fontWeight: FontWeight.w600,
+//                                      ),
+//                                      maxLines: 1,
+//                                    ),
+//                                  ),
+//                                ],
+//                              ),
+//                            ),
+//                          ],
+//                        ),
+//                        curve: Curves.linear,
+//                        decoration: BoxDecoration(
+//                          borderRadius: BorderRadius.only(
+//                            bottomLeft: Radius.circular(40),
+//                            topLeft: Radius.circular(40),
+//                          ),
+//                          color: ColorGlobal.colorPrimary,
+//                        ),
+//                      ),
+//                    ),
+//                  ],
+//                ),
+//              ],
+//            ),
+//          ),
         ),
       ),
     );
