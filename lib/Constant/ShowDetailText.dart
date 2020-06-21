@@ -22,6 +22,11 @@ class ShowDetailTextWidget extends StatelessWidget {
     this.focusNode,
     this.color, this.controller, this.type,
   });
+  bool isValidEmail(input) {
+    return RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(input);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +34,13 @@ class ShowDetailTextWidget extends StatelessWidget {
       onChanged: onChanged,
       cursorColor: ColorGlobal.textColor,
       focusNode:  focusNode,
+//      autovalidate: hintText=="Email" && controller.text!=""  ?  true : false,
+//      validator: hintText=="Email" && controller.text!="" ?  (input) => isValidEmail(input) ? null : "Check your email" : null,
         controller: controller,
         keyboardType: type=='number'? TextInputType.numberWithOptions(signed: false,decimal: false) : type=='phone' ? TextInputType.phone : TextInputType.text,
         inputFormatters: type=='number' ? [WhitelistingTextInputFormatter.digitsOnly] : null ,
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(vertical: 10),   //  <- you can it to 0.0 for no space
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey),
           ),

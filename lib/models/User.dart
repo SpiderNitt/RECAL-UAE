@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class User {
   String email;
-  String password;
+   String password;
   String name;
   int user_id;
   String cookie;
@@ -45,15 +45,13 @@ class User {
       year_of_graduation : json['year_of_graduation'],
       mobile_no : json['mobile_no'],
       organization : json['organization'] ,
-      position : json[' position '],
+      position : json['position'],
       gender: json['gender'],
       is_registered: json['is_registered'],
       linkedIn_link: json['linkedIn_link'],
       branch: json['branch'],
       emirate: json['emirate'],
       profile_pic: json['profile_pic'],
-
-
     );
   }
 }

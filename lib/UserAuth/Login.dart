@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -135,14 +136,14 @@ class LoginState extends State<Login> {
 
   static _saveUserDetails(String email, String name, String userId, String cookie) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("Login email:  ${prefs.getString("email")}");
-    print("Login name:  ${prefs.getString("name")}");
+    print("Login email before:  ${prefs.getString("email")}");
+    print("Login name before:  ${prefs.getString("name")}");
     prefs.setString("email", email);
     prefs.setString("name", name);
     prefs.setString("user_id", userId);
     prefs.setString("cookie", cookie);
-
-    print("login save ${prefs.getString("name")}");
+    print("cookie: " + cookie);
+    print("login after name ${prefs.getString("name")}");
   }
 
   static Size _textSize(String text, TextStyle style) {
@@ -537,4 +538,3 @@ class LoginState extends State<Login> {
     );
   }
 }
-
