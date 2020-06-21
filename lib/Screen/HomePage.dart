@@ -1,74 +1,177 @@
-import 'package:AeologicSplashDemo/Constant/Constant.dart';
+import '../Home/HomeActivity.dart';
+import '../Achievements/AchievementsScreen.dart';
+import '../Home/HomeScreen.dart';
+import '../Events/EventsScreen.dart';
+import '../UAEChapter/ChapterScreen.dart';
+import '../Profile/ProfileScreen.dart';
+import '../Constant/ColorGlobal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
-class HomeScreen extends StatefulWidget {
+
+class HomePage extends StatefulWidget {
   @override
-  HomeScreenState createState() => new HomeScreenState();
+  HomePageState createState() => new HomePageState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class HomePageState extends State<HomePage> {
+  int _index = 2;
+  Widget _showPage= Scaffold(
+    body: HomeActivity(),
+  );
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+//    Navigator.pushReplacement(
+//        context,
+//        PageTransition(
+//            type: PageTransitionType.rightToLeftWithFade,
+//            child: Login()));
+  }
+
+
+  static List<String> _pages = [
+    "UAE Chapter",
+    "Achievements",
+    "Home",
+    "Events",
+    "Profile",
+  ];
+  Widget _getHomeWidgets(index,context) {
+    switch(index) {
+      case 0: return (ChapterScreen());
+      break;
+      case 1: return (AchievementsScreen());
+      break;
+      case 2: return (HomeActivity());
+      break;
+      case 3: return(EventsScreen());
+      break;
+      case 4: return(ProfileScreen());
+      break;
+      default: return(ProfileScreen());
+    }
+  }
+
+  Future<bool> _onBackPressed() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit the App'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () => Navigator.of(context).pop(false),
+                child: FlatButton(
+                  color: Colors.green,
+                  child: Text("NO"),
+                ),
+              ),
+              new GestureDetector(
+                onTap: () => Navigator.of(context).maybePop(true),
+                child: FlatButton(
+                  color: Colors.red,
+                  child: Text("YES"),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
-    return new Scaffold(
-        /* appBar: AppBar(
-          title: new Text("Home Page"),
-        ),*/
-        backgroundColor: Colors.black,
-        body: new Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            new Column(
-              children: <Widget>[
-                SizedBox(height: 70.0),
-                SizedBox(
-                  height: 0.0,
-                  child: new Text(
-                    "Home Page",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 28.0,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new RaisedButton(
-                      elevation: 0.0,
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      padding: EdgeInsets.only(
-                          top: 7.0, bottom: 7.0, right: 40.0, left: 7.0),
-                      onPressed: () {
-                        Navigator
-                            .of(context)
-                            .pushReplacementNamed(IMAGE_SPLASH);
-                      },
-                      child: new Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          new Image.asset('assets/images/image.png',
-                              height: 40.0, width: 40.0),
-                          Padding(
-                              padding: EdgeInsets.only(left: 10.0),
-                              child: new Text(
-                                "Image Splash   ",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15.0),
-                              ))
-                        ],
-                      ),
-                      textColor: Color(0xFF292929),
-                      color: Color(0xFFDADADA)),
-                ],
-            )
-          ],
-        ));
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+//        appBar: new AppBar(
+//          backgroundColor: Colors.black.withOpacity(0.5),
+//          actions: <Widget>[
+//            IconButton(
+//              icon: Container(
+//                child: SvgPicture.asset(
+//                  "assets/icons/Logout.svg",
+//                  color: Colors.white70,
+//                ),
+//                height: 20,
+//              ),
+//              onPressed: () {
+//                Navigator.of(context).pushReplacementNamed(LOGIN_SCREEN);
+//              },
+//            )
+//          ],
+//          title: Text(_pages[_index]),
+//          elevation: 0.0,
+//        ),
+          bottomNavigationBar: CurvedNavigationBar(
+            backgroundColor: ColorGlobal.whiteColor,
+            color: Colors.black,
+            buttonBackgroundColor: ColorGlobal.color2,
+            height: 50,
+            items: <Widget>[
+              Icon(
+                Icons.account_balance,
+                size: 30,
+                color: ColorGlobal.color3,
+              ),
+              //     SvgPicture.asset("assets/icons/ac.svg",color:color_shades.color4,height: 30,),
+              Icon(
+                Icons.assistant_photo,
+                size: 30,
+                color: ColorGlobal.color3,
+              ),
+              Icon(
+                Icons.home,
+                size: 30,
+                color: ColorGlobal.color3,
+              ),
+              Icon(
+                Icons.event,
+                size: 30,
+                color: ColorGlobal.color3,
+              ),
+              Icon(
+                Icons.person,
+                size: 30,
+                color: ColorGlobal.color3,
+              ),
+            ],
+            animationCurve: Curves.bounceInOut,
+            index: _index,
+            animationDuration: Duration(milliseconds: 200),
+            onTap: (int tappedIndex) {
+              setState(() {
+                _showPage = _getHomeWidgets(tappedIndex, context);
+              });
+            },
+          ),
+          body: _showPage,
+//            Stack(
+//              children: [
+//                ClipPath(
+//                  child: Container(
+//                    height: MediaQuery.of(context).size.height / 2,
+//                    decoration: BoxDecoration(
+//                      image: DecorationImage(
+//                          image: AssetImage("assets/images/admin.jpeg"),
+//                          fit: BoxFit.cover),
+//                    ),
+//                  ),
+//                  clipper: Header(),
+//                ),
+//                Container(
+//                  child: _showPage,
+//                )
+//              ],
+//            ),
+        ),
+      ),
+    );
   }
 }

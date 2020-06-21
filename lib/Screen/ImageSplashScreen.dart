@@ -1,8 +1,10 @@
 import 'dart:async';
-
-import 'package:AeologicSplashDemo/Constant/Constant.dart';
+import '../Home/HomeActivity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../Constant/Constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../UserAuth/Login.dart';
 
 class ImageSplashScreen extends StatefulWidget {
   @override
@@ -10,13 +12,33 @@ class ImageSplashScreen extends StatefulWidget {
 }
 
 class SplashScreenState extends State<ImageSplashScreen> {
+  SharedPreferences sharedPreferences;
+  String email;
+
   startTime() async {
-    var _duration = new Duration(seconds: 5);
+  var _duration = new Duration(seconds:   1);
     return new Timer(_duration, navigationPage);
   }
+  Future <Null> _getUserDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString("email")==null ? "+9,q": prefs.getString("email");
+    print("splash: " + id);
+    if(id!="+9,q")
+    setState(() {
+      email=id;
+    });
+  }
 
-  void navigationPage() {
-    Navigator.of(context).popAndPushNamed(HOME_SCREEN);
+  void navigationPage() async {
+    await _getUserDetails();
+    print("nav page: $email");
+
+    if(email==null)
+    Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
+    else {
+//      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeActivity()));
+      Navigator.pushReplacementNamed(context, HOME_PAGE);
+    }
   }
 
   @override
