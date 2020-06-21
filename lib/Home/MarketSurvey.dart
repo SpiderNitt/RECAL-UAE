@@ -21,7 +21,7 @@ class MarketSurvey {
   }
 }
 _launchsurvey(String url) async {
-  
+
   if (await canLaunch(url)) {
     await launch(url);
   } else {
@@ -31,14 +31,14 @@ _launchsurvey(String url) async {
 Future<MarketSurvey> getSurveyDetails() async {
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http.get(
+  var response = await http.get(
       "https://delta.nitt.edu/recal-uae/api/employment/market_survey",
-        headers: {
-          "Accept" : "application/json",
-          "Cookie" : "${prefs.getString("cookie")}",
-        }
-    );
- 
+      headers: {
+        "Accept" : "application/json",
+        "Cookie" : "${prefs.getString("cookie")}",
+      }
+  );
+
 
   if (response.statusCode == 200) {
     Map<String,dynamic> jsonSurvey = jsonDecode(response.body);
@@ -92,26 +92,26 @@ class SurveyScreenState extends State<SurveyScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           FutureBuilder<MarketSurvey>(
-            future: getSurveyDetails(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if(snapshot.data.link!=null){
-                  
-                return Text(snapshot.data.link);
-                }
-                else{
-                  return Text("NO DATA AVAILABLE",  style: TextStyle(
-                                fontSize: 25,
-                                color: const Color(0xff3AAFFA),
-                                fontWeight: FontWeight.bold),);
-                }
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
+                            future: getSurveyDetails(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                if(snapshot.data.link!=null){
 
-              // By default, show a loading spinner.
-              return CircularProgressIndicator();
-            },),
+                                  return Text(snapshot.data.link);
+                                }
+                                else{
+                                  return Text("NO DATA AVAILABLE",  style: TextStyle(
+                                      fontSize: 25,
+                                      color: const Color(0xff3AAFFA),
+                                      fontWeight: FontWeight.bold),);
+                                }
+                              } else if (snapshot.hasError) {
+                                return Text("${snapshot.error}");
+                              }
+
+                              // By default, show a loading spinner.
+                              return CircularProgressIndicator();
+                            },),
                           // Text(
                           //   "Your opinion matters!!",
                           //   style: TextStyle(
@@ -130,58 +130,58 @@ class SurveyScreenState extends State<SurveyScreen> {
                           ),
                           SizedBox(height: 20.0),
                           FutureBuilder<MarketSurvey>(
-            future: getSurveyDetails(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if(snapshot.data.link != null){
-                  
-                return Container(
-                            width: width / 2,
-                            height: 40,
-                            child: RaisedButton(
-                              onPressed: () {_launchsurvey(snapshot.data.link);},
-                              color: const Color(0xff3AAFFA),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                      child: Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: Text(
-                                      "Go to survey",
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  )),
-                                  Container(
-                                    child: Icon(
-                                      Icons.arrow_forward,
-                                      color: Colors.white,
-                                      size: 30.0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                }
-                else{
-                  return Text("NO DATA AVAILABLE",  style: TextStyle(
-                                fontSize: 15,
-                                color: const Color(0xff3AAFFA),
-                                fontWeight: FontWeight.bold),);
-                }
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
+                            future: getSurveyDetails(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                if(snapshot.data.link != null){
 
-              // By default, show a loading spinner.
-              return CircularProgressIndicator();
-            },),
-                          
+                                  return Container(
+                                    width: width / 2,
+                                    height: 40,
+                                    child: RaisedButton(
+                                      onPressed: () {_launchsurvey(snapshot.data.link);},
+                                      color: const Color(0xff3AAFFA),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20.0)),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Container(
+                                              child: Padding(
+                                                padding: EdgeInsets.all(5),
+                                                child: Text(
+                                                  "Go to survey",
+                                                  style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                              )),
+                                          Container(
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Colors.white,
+                                              size: 30.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                                else{
+                                  return Text("NO DATA AVAILABLE",  style: TextStyle(
+                                      fontSize: 15,
+                                      color: const Color(0xff3AAFFA),
+                                      fontWeight: FontWeight.bold),);
+                                }
+                              } else if (snapshot.hasError) {
+                                return Text("${snapshot.error}");
+                              }
+
+                              // By default, show a loading spinner.
+                              return CircularProgressIndicator();
+                            },),
+
                         ],
                       )),
                   Align(

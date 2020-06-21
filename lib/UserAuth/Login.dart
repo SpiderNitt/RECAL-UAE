@@ -122,15 +122,15 @@ class LoginState extends State<Login> {
         false;
   }
 
-  static _saveUserDetails(String email, String name,int user_id, String cookie) async {
+  static _saveUserDetails(String email, String name, String userId, String cookie) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print("Login email:  ${prefs.getString("email")}");
     print("Login name:  ${prefs.getString("name")}");
     prefs.setString("email", email);
     prefs.setString("name", name);
+    prefs.setString("user_id", userId);
     prefs.setString("cookie", cookie);
-    prefs.setInt('user_id', user_id);
-    print("Login id:  ${prefs.getString("user_id")}");
+
     print("login save ${prefs.getString("name")}");
   }
 
@@ -173,7 +173,8 @@ class LoginState extends State<Login> {
           String cookie = rawCookie.substring(0, rawCookie.indexOf(';'));
           print(cookie);
           user = User.fromJson(json.decode(responseBody.data));
-          _saveUserDetails(user.email, user.name,user.user_id, cookie);
+          var userId = user.user_id;
+          _saveUserDetails(user.email, user.name, userId.toString(), cookie);
           return [user.name, 1];
         } else {
           print(responseBody.data);
@@ -328,7 +329,8 @@ class LoginState extends State<Login> {
                                     if (responseBody.status_code == 200) {
                                       user = User.fromJson(json.decode(
                                           json.encode(responseBody.data)));
-                                      _saveUserDetails(user.email, user.name, user.user_id,cookie);
+                                      var userId = user.user_id;
+                                      _saveUserDetails(user.email, user.name, userId.toString(), cookie);
                                       _loginDialog(
                                           "Login Success", "Proceed", 1);
                                     } else {
@@ -523,3 +525,4 @@ class LoginState extends State<Login> {
     );
   }
 }
+

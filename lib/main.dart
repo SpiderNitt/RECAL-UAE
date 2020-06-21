@@ -5,6 +5,16 @@ import 'package:iosrecal/Home/Feedback.dart';
 import 'package:iosrecal/Home/MentorList.dart';
 import 'package:iosrecal/Home/SocialMedia.dart';
 import 'package:iosrecal/Home/WriteToMentor.dart';
+import 'package:iosrecal/Home/AlumniPlaced.dart';
+import 'package:iosrecal/Home/MentorList.dart';
+import 'package:iosrecal/Home/OpenPositions.dart';
+import 'package:iosrecal/Home/SeekGuidance.dart';
+import 'package:iosrecal/Home/WriteAdmin.dart';
+import 'Constant/Constant.dart';
+import 'Constant/Constant.dart';
+import 'Constant/Constant.dart';
+import 'Home/MarketSurvey.dart';
+import 'Home/WriteResume.dart';
 import 'Home/LinkedInProfiles.dart';
 import 'Home/MentorGroups.dart';
 import 'Home/EmploymentSupport.dart';
@@ -40,13 +50,18 @@ void main()  {
               PROFILE_SCREEN: (BuildContext context) => new ProfileScreen(),
               SOCIAL_BUSINESS: (BuildContext context) => new SocialPage(),
               EMPLOYMENT_SUPPORT: (BuildContext context) => new EmploymentSupport(),
-              MENTOR_GROUPS: (BuildContext context) => new MentorGroupsPage(),
+              MENTOR_GROUPS: (BuildContext context) => new MentorGroups(),
               MENTOR_LIST_SCREEN: (BuildContext context) => new MentorList(),
               MEMBER_LINKEDIN: (BuildContext context) => new LinkedIn(),
-              MARKET_SURVEY: (BuildContext context) => new SurveyScreen(),
               FEED_BACK:(BuildContext context) => new FeedbackScreen(),
               SOCIAL_MEDIA: (BuildContext context) => new SocialMediaScreen(),
               WRITE_MENTOR: (BuildContext context) => new WriteMentorScreen()
+              WRITE_RESUME_SCREEN: (BuildContext context) => new WriteResume(),
+              OPEN_POSITIONS: (BuildContext context) => new OpenPositions(),
+              ALUMNI_PLACED_SCREEN: (BuildContext context) => new AlumniPlaced(),
+              MARKET_SURVEY: (BuildContext context) => new SurveyScreen(),
+              WRITE_TO_ADMIN: (BuildContext context) => new WriteAdmin(),
+              SEEK_GUIDANCE: (BuildContext context) => new WriteMentorScreen(),
             }
         ));
   });

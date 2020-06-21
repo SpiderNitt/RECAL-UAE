@@ -5,7 +5,7 @@ class User {
   final String password;
   final String name;
   final int user_id;
-  User({this.name,this.email,this.password,this.user_id});
+  User({this.name,this.email,this.password, this.user_id});
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       name: json['name'],
