@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
-//import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/ColorGlobal.dart';
 import '../Constant/Constant.dart';
+import 'package:http/http.dart' as http;
+import 'package:iosrecal/models/CoreCommModel.dart';
+import 'dart:convert';
+import 'package:iosrecal/models/ResponseBody.dart';
 
 class HomeActivity extends StatefulWidget {
   @override
@@ -17,6 +20,40 @@ class HomeActivity extends StatefulWidget {
 class _HomeActivityState extends State<HomeActivity> {
 
   Future<String> name;
+  static List<String> _members = [];
+
+  Future<CoreCommModel> _corecomm() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var response = await http.get(
+        "https://delta.nitt.edu/recal-uae/api/chapter/core",
+        headers: {
+          "Accept": "application/json",
+          "Cookie": "${prefs.getString("cookie")}",
+        }
+    ).then((_response) {
+      ResponseBody responseBody = new ResponseBody();
+      print('Response body: ${_response.body}');
+      if (_response.statusCode == 200) {
+        responseBody = ResponseBody.fromJson(json.decode(_response.body));
+        if (responseBody.status_code == 200) {
+          if(responseBody.data != []) {
+              _members.add(responseBody.data['president']);
+              _members.add(responseBody.data['vice_president']);
+              _members.add(responseBody.data['secretary']);
+              _members.add(responseBody.data['joint_secretary']);
+              _members.add(responseBody.data['treasurer']);
+              _members.add(responseBody.data['mentor1']);
+              _members.add(responseBody.data['mentor2']);
+          }
+        } else {
+          print(responseBody.data);
+        }
+      } else {
+        print('Server error');
+      }
+    });
+  }
+
 
   static List<String> _events = [
     "Social",
@@ -24,15 +61,9 @@ class _HomeActivityState extends State<HomeActivity> {
     "Mentor Support",
     "Employment",
   ];
-  static List<String> _members = [
-    "ASHEET AGARWAL",
-    "MANOJ PANDEY",
-    "NAVAL TAYDE",
-    "LIMI SURESH",
-    "UMESH AGARWAL",
-    "ANAMITRA ROY",
-    "GANGA KANDASWAMY",
-  ];
+
+
+
   String _getLongestString() {
     var s = _members[0];
     for (int i = 1; i < 7; i++) {
