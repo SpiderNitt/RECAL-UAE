@@ -55,13 +55,13 @@ void main()  {
               MEMBER_LINKEDIN: (BuildContext context) => new LinkedIn(),
               FEED_BACK:(BuildContext context) => new FeedbackScreen(),
               SOCIAL_MEDIA: (BuildContext context) => new SocialMediaScreen(),
-              WRITE_MENTOR: (BuildContext context) => new WriteMentorScreen()
+              WRITE_MENTOR: (BuildContext context) => new WriteMentorScreen(),
               WRITE_RESUME_SCREEN: (BuildContext context) => new WriteResume(),
               OPEN_POSITIONS: (BuildContext context) => new OpenPositions(),
               ALUMNI_PLACED_SCREEN: (BuildContext context) => new AlumniPlaced(),
               MARKET_SURVEY: (BuildContext context) => new SurveyScreen(),
               WRITE_TO_ADMIN: (BuildContext context) => new WriteAdmin(),
-              SEEK_GUIDANCE: (BuildContext context) => new WriteMentorScreen(),
+              SEEK_GUIDANCE: (BuildContext context) => new SeekGuidanceScreen(),
             }
         ));
   });

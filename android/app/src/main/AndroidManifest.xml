@@ -32,4 +32,6 @@
         tools:ignore="ManifestOrder" />
     <uses-permission android:name="android.permission.CAMERA"
         tools:ignore="ManifestOrder" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>
