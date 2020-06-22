@@ -26,7 +26,7 @@ class _VisionMissionState extends State<VisionMission> {
   Future<ChapterModel> _chapter() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(
-        "https://delta.nitt.edu/recal-uae/api/chapter",
+        "https://delta.nitt.edu/recal-uae/api/chapter/",
         headers: {
           "Accept": "application/json",
           "Cookie": "${prefs.getString("cookie")}",
@@ -128,12 +128,12 @@ class _VisionMissionState extends State<VisionMission> {
                                   }
                                   else{
                                     return Text("NO DATA AVAILABLE",  style: TextStyle(
-                                        fontSize: 25,
+                                        fontSize: 20,
                                         color: const Color(0xff3AAFFA),
                                         fontWeight: FontWeight.bold),);
                                   }
                                 } else if (snapshot.hasError) {
-                                  return Text("${snapshot.error}");
+                                  return Text("Error loading data, Please try again");
                                 }
                                 // By default, show a loading spinner.
                                 return CircularProgressIndicator();
@@ -173,7 +173,7 @@ class _VisionMissionState extends State<VisionMission> {
                                   }
                                   else{
                                     return Text("NO DATA AVAILABLE",  style: TextStyle(
-                                        fontSize: 25,
+                                        fontSize: 20,
                                         color: const Color(0xff3AAFFA),
                                         fontWeight: FontWeight.bold),);
                                   }

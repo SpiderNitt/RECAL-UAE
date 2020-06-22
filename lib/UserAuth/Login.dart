@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import '../models/User.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Home/HomeActivity.dart';
@@ -43,6 +44,8 @@ class LoginState extends State<Login> {
   FocusNode emailFocus = new FocusNode();
   FocusNode passwordFocus = new FocusNode();
   List<String> result = new List<String>();
+  ProgressDialog pr;
+
 
   getDisposeController() {
     email.clear();
@@ -58,24 +61,6 @@ class LoginState extends State<Login> {
     prefs.setString("cookie", null);
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    email = TextEditingController(text: "someone@gmail.com");
-    password = TextEditingController(text: "o84HWLLJ5pmd");
-    super.initState();
-    print("LOGIN");
-    _deleteUserDetails();
-
-//    getDisposeController();
-  }
-
-  @override
-  void dispose() {
-    getDisposeController();
-    // TODO: implement dispose
-    super.dispose();
-  }
 
   var list = [
     Colors.lightGreen,
@@ -109,8 +94,41 @@ class LoginState extends State<Login> {
         ) ??
         false;
   }
+  _loginDialog1(String show, String again, int flag) {
+    pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      textDirection: TextDirection.rtl,
+      showLogs: true,
+      isDismissible: false,
+//      customBody: LinearProgressIndicator(
+//        valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
+//        backgroundColor: Colors.white,
+//      ),
+    );
 
-  _loginDialog(String show, String again, int flag) {
+    pr.style(
+      message: "..Logging In",
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      progressWidgetAlignment: Alignment.center,
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+    );
+    pr.show();
+    Future.delayed(Duration(milliseconds: 1000)).then((value) {
+      pr.update(message: show.replaceAll("!", ""),progressWidget: Text(""));
+    });
+    Future.delayed(Duration(milliseconds: 2000)).then((value) {
+      pr.hide();
+    });
+    }
+
+
+    _loginDialog(String show, String again, int flag) {
+
     return showDialog(
           context: context,
           builder: (context) => new AlertDialog(
@@ -198,6 +216,26 @@ class LoginState extends State<Login> {
       }
     });
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    email = TextEditingController(text: "someone@gmail.com");
+    password = TextEditingController(text: "o84HWLLJ5pmd");
+    super.initState();
+    print("LOGIN");
+    _deleteUserDetails();
+
+//    getDisposeController();
+  }
+
+  @override
+  void dispose() {
+    getDisposeController();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -332,28 +370,30 @@ class LoginState extends State<Login> {
                                   print('Response body: ${_response.body}');
 
                                   if (_response.statusCode == 200) {
-                                    String rawCookie = _response.headers['set-cookie'];
-                                    String cookie = rawCookie.substring(0, rawCookie.indexOf(';'));
-                                    print(cookie);
                                     responseBody = ResponseBody.fromJson(
                                         json.decode(_response.body));
                                     print(json.encode(responseBody.data));
                                     if (responseBody.status_code == 200) {
+                                      String rawCookie = _response.headers['set-cookie'];
+                                      String cookie = rawCookie.substring(0, rawCookie.indexOf(';'));
+                                      print(cookie);
                                       user = User.fromLogin(json.decode(
                                           json.encode(responseBody.data)));
                                       var userId = user.user_id;
-
                                       _saveUserDetails(user.email, user.name, userId.toString(), cookie);
-                                      _loginDialog(
+                                      _loginDialog1(
                                           "Login Success", "Proceed", 1);
+                                      Future.delayed(Duration(milliseconds: 2000), () {
+                                        Navigator.pushReplacementNamed(context, HOME_PAGE);
+                                      });
                                     } else {
                                       print(responseBody.data);
-                                      _loginDialog(
+                                      _loginDialog1(
                                           responseBody.data, "Try again", 0);
                                     }
                                   } else {
                                     print("server error");
-                                    _loginDialog(
+                                    _loginDialog1(
                                         "Server Error", "Try again", 0);
                                   }
                                 });
