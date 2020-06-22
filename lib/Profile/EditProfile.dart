@@ -206,6 +206,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       backgroundColor: Colors.white,
       elevation: 10.0,
       insetAnimCurve: Curves.easeInOut,
+      progressWidget: Image.asset("assets/images/ring.gif",height: 50,width: 50,),
       progressWidgetAlignment: Alignment.center,
       messageTextStyle: TextStyle(
           color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
@@ -214,7 +215,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
     pr.show();
     Future.delayed(Duration(milliseconds: 1000)).then((value) {
-      pr.update(message: show,progressWidget: Text(""));
+      Widget prog = flag==1? Icon(Icons.check_circle,size: 50,color: Colors.green,) : Icon(Icons.close,size: 50,color: Colors.red,);
+      pr.update(message: show.replaceAll("!", ""),progressWidget: prog);
     });
     Future.delayed(Duration(milliseconds: 2500)).then((value) {
       pr.hide();

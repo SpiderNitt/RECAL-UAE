@@ -148,7 +148,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   color: ColorGlobal.textColor,
                 ),
                 onPressed: () {
-                  _deleteUserDetails();
                   _onLogoutPressed();
                 },
               )

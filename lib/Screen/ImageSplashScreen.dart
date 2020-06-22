@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'WalkthroughApp.dart';
+
 import '../Home/HomeActivity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/Constant.dart';
@@ -14,6 +16,7 @@ class ImageSplashScreen extends StatefulWidget {
 class SplashScreenState extends State<ImageSplashScreen> {
   SharedPreferences sharedPreferences;
   String email;
+  int flag;
 
   startTime() async {
   var _duration = new Duration(seconds:1);
@@ -22,7 +25,10 @@ class SplashScreenState extends State<ImageSplashScreen> {
   Future <Null> _getUserDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString("email")==null ? "+9,q": prefs.getString("email");
+    flag = prefs.getInt("first")==null ? 0 : prefs.getInt("first");
+    prefs.setInt("first", 10);
     print("splash: " + id);
+    print("first: $flag");
     if(id!="+9,q")
     setState(() {
       email=id;
@@ -33,11 +39,15 @@ class SplashScreenState extends State<ImageSplashScreen> {
     await _getUserDetails();
     print("nav page: $email");
 
-    if(email==null)
-    Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
-    else {
-//      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeActivity()));
+    if(flag==0) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WalkThroughApp()));
+    }
+    else if(email!=null) {
       Navigator.pushReplacementNamed(context, HOME_PAGE);
+    }
+    else {
+   //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WalkThroughApp()));
+      Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
     }
   }
 
