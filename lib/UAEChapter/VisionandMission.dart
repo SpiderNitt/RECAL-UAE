@@ -36,7 +36,7 @@ class _VisionMissionState extends State<VisionMission> {
       Map<String,dynamic> jsonChapter = jsonDecode(response.body);
         return ChapterModel.fromJson(jsonChapter);
     } else {
-      throw Exception('Failed to load survey link');
+      throw Exception('Failed to load data');
     }
   }
 
@@ -178,7 +178,7 @@ class _VisionMissionState extends State<VisionMission> {
                                         fontWeight: FontWeight.bold),);
                                   }
                                 } else if (snapshot.hasError) {
-                                  return Text("${snapshot.error}");
+                                  return Text("Error loading data, Please try again");
                                 }
                                 // By default, show a loading spinner.
                                 return CircularProgressIndicator();
