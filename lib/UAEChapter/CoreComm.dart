@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import '../models/CoreCommModel.dart';
+import '../models/ResponseBody.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/ColorGlobal.dart';
+import 'package:http/http.dart' as http;
+
 
 class CoreComm extends StatefulWidget {
   @override
@@ -13,12 +20,64 @@ class CoreCommState extends State<CoreComm> {
   var bottom = FractionalOffset.bottomCenter;
   double width = 220.0;
   double widthIcon = 200.0;
+  static List<String> _members = [];
+  int flag=0;
+  Future<CoreCommModel> _corecomm() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await http.get(
+        "https://delta.nitt.edu/recal-uae/api/chapter/core/",
+        headers: {
+          "Accept": "application/json",
+          "Cookie": "${prefs.getString("cookie")}",
+        }
+    ).then((_response) {
+      ResponseBody responseBody = new ResponseBody();
+      print('Response body: ${_response.body}');
+      if (_response.statusCode == 200) {
+        responseBody = ResponseBody.fromJson(json.decode(_response.body));
+        if (responseBody.status_code == 200) {
+          if(responseBody.data!=null) {
+            responseBody.data['president']!=null ? _members.add(responseBody.data['president']) : print("empty");
+            responseBody.data['vice_president']!=null ?    _members.add(responseBody.data['vice_president']): print("empty");
+            responseBody.data['secretary']!=null  ? _members.add(responseBody.data['secretary']): print("empty");
+            responseBody.data['joint_secretary']!=null   ?_members.add(responseBody.data['joint_secretary']): print("empty");
+            responseBody.data['treasurer']!=null  ? _members.add(responseBody.data['treasurer']): print("empty");
+            responseBody.data['mentor1']!=null  ? _members.add(responseBody.data['mentor1']): print("empty");
+            responseBody.data['mentor2']!=null  ? _members.add(responseBody.data['mentor2']): print("empty");
+            if(_members.length>0)
+              setState(() {
+                flag=1;
+              });
+            else
+              setState(() {
+                flag=2;
+              });
+
+            print("members: ");
+            print(_members);
+          }
+        } else {
+          setState(() {
+            flag=2;
+          });
+          print(responseBody.data);
+        }
+      } else {
+        setState(() {
+          flag=2;
+        });
+        print('Server error');
+      }
+    });
+  }
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     print("Core Committee");
+    _corecomm();
   }
 
   Future<bool> _onBackPressed() {
@@ -84,23 +143,27 @@ class CoreCommState extends State<CoreComm> {
                     ),
                     child: Padding(
                       padding: EdgeInsets.all(15.0),
-                      child: Text(
+                      child: flag==1 ? Text(
                         "The ongoing members of the core committee of RECAL UAE Chapter are functioning since Oct 2019. The member details are as follows:"
-                            "\n\nPresident:\n ASHEET AGARWAL (Arch. 1994)"
-                            "\n\nVice President:\n MANOJ PANDEY (Chem. 1994)"
-                            "\n\nSecretary:\n NAVAL TAYDE (EEE. 2004)"
-                            "\n\nJoint Secretary:\n LIMI SURESH (Arch. 2017)"
-                            "\n\nTreasurer:\n UMESH AGARWAL (Arch. 1999)"
-                            "\n\nMentor 1:\n ANAMITRA ROY (Meta. 1989)"
-                            "\n\nMentor 2:\n GANGA KANDASWAMY (CSE. 1987)"
+                            "\n\nPresident:\n ${_members[0]} "
+                            "\n\nVice President:\n ${_members[1]} "
+                            "\n\nSecretary:\n ${_members[2]} "
+                            "\n\nJoint Secretary:\n ${_members[3]} "
+                            "\n\nTreasurer:\n ${_members[4]} "
+                            "\n\nMentor 1:\n ${_members[5]} "
+                            "\n\nMentor 2:\n ${_members[6]} "
                         ,
                         style: TextStyle(
                           color: Color(0xFF544F50),
                           fontSize: 15.0*(size.width)/refWidth,
                         ),
                         textAlign: TextAlign.center,
-                      ),
-                    )
+                      ) : Text("Error loading data, Please try again", style: TextStyle(
+                          color: Color(0xFF544F50),
+                      fontSize: 15.0*(size.width)/refWidth,
+                    ),
+                  textAlign: TextAlign.center,),
+                    ),
                 ),
               ),
             )
