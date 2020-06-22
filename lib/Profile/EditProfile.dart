@@ -198,10 +198,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       textDirection: TextDirection.rtl,
       showLogs: true,
       isDismissible: false,
-//      customBody: LinearProgressIndicator(
-//        valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
-//        backgroundColor: Colors.white,
-//      ),
     );
 
     pr.style(
@@ -212,6 +208,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       insetAnimCurve: Curves.easeInOut,
       progressWidgetAlignment: Alignment.center,
       messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+      progressTextStyle: TextStyle(
           color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
     );
     pr.show();
