@@ -198,10 +198,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       textDirection: TextDirection.rtl,
       showLogs: true,
       isDismissible: false,
-//      customBody: LinearProgressIndicator(
-//        valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
-//        backgroundColor: Colors.white,
-//      ),
     );
 
     pr.style(
