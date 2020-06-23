@@ -600,7 +600,7 @@ child: Image.asset(
                     socialSize.height +
                     40,
                 left: width/2 - 20,
-                child: CircularProgressIndicator()))
+                child: SizedBox()))
                 : SizedBox(),
           ],
         ),

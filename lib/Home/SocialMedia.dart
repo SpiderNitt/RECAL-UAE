@@ -68,7 +68,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
       onWillPop: _onBackPressed,
       child: new Scaffold(
         appBar: AppBar(
-          title: Text('Write to Mentor'),
+          title: Text('Social Media'),
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,

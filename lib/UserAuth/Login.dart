@@ -44,7 +44,6 @@ class LoginState extends State<Login> {
   FocusNode emailFocus = new FocusNode();
   FocusNode passwordFocus = new FocusNode();
   List<String> result = new List<String>();
-  ProgressDialog pr;
 
 
   getDisposeController() {
@@ -94,8 +93,8 @@ class LoginState extends State<Login> {
         ) ??
         false;
   }
-  _loginDialog1(String show, String again, int flag) {
-    pr = ProgressDialog(
+  _loginDialog1(ProgressDialog pr,String show, String again, int flag) {
+    pr = new ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
       textDirection: TextDirection.rtl,
@@ -112,6 +111,7 @@ class LoginState extends State<Login> {
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       elevation: 10.0,
+      progressWidget: Image.asset("assets/images/ring.gif",height: 50,width: 50,),
       insetAnimCurve: Curves.easeInOut,
       progressWidgetAlignment: Alignment.center,
       messageTextStyle: TextStyle(
@@ -119,9 +119,11 @@ class LoginState extends State<Login> {
     );
     pr.show();
     Future.delayed(Duration(milliseconds: 1000)).then((value) {
-      pr.update(message: show.replaceAll("!", ""),progressWidget: Text(""));
+      Widget prog = flag==1? Icon(Icons.check_circle,size: 50,color: Colors.green,) : Icon(Icons.close,size: 50,color: Colors.red,);
+      pr.update(message: show.replaceAll("!", ""),progressWidget: prog);
     });
     Future.delayed(Duration(milliseconds: 2000)).then((value) {
+      pr.update(progressWidget: null);
       pr.hide();
     });
     }
@@ -365,6 +367,7 @@ class LoginState extends State<Login> {
                                   url,
                                   body: body,
                                 ).then((_response) {
+                                  ProgressDialog progressDialog;
                                   User user = new User();
                                   ResponseBody responseBody = new ResponseBody();
                                   print('Response body: ${_response.body}');
@@ -381,19 +384,19 @@ class LoginState extends State<Login> {
                                           json.encode(responseBody.data)));
                                       var userId = user.user_id;
                                       _saveUserDetails(user.email, user.name, userId.toString(), cookie);
-                                      _loginDialog1(
-                                          "Login Success", "Proceed", 1);
+                                      _loginDialog1(progressDialog,
+                                          "Login Successful", "Proceed", 1);
                                       Future.delayed(Duration(milliseconds: 2000), () {
                                         Navigator.pushReplacementNamed(context, HOME_PAGE);
                                       });
                                     } else {
                                       print(responseBody.data);
-                                      _loginDialog1(
+                                      _loginDialog1(progressDialog,
                                           responseBody.data, "Try again", 0);
                                     }
                                   } else {
                                     print("server error");
-                                    _loginDialog1(
+                                    _loginDialog1(progressDialog,
                                         "Server Error", "Try again", 0);
                                   }
                                 });
