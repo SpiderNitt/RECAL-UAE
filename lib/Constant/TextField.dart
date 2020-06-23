@@ -11,6 +11,7 @@ class TextFieldWidget extends StatelessWidget {
   final Function onChanged;
   final FocusNode focusNode;
   final TextEditingController textEditingController;
+  final Color borderColor;
 
   TextFieldWidget({
     this.hintText,
@@ -19,13 +20,20 @@ class TextFieldWidget extends StatelessWidget {
     this.obscureText,
     this.onChanged,
     this.textEditingController,
-    this.focusNode,
+    this.focusNode, this.borderColor,
   });
+  bool isValidEmail(input) {
+    return RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(input);
+}
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       onChanged: onChanged,
+//      autovalidate: (hintText=="Email" && textEditingController.text!="") ? true : false,
+//      validator: (hintText=="Email" && textEditingController.text!="") ? ( (input) => isValidEmail(input) ? null : "Check your Email") : null,
       obscureText: obscureText,
       controller: textEditingController,
       cursorColor: ColorGlobal.textColor,
@@ -47,7 +55,7 @@ class TextFieldWidget extends StatelessWidget {
         filled: true,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: ColorGlobal.textColor),
+          borderSide: BorderSide(color: borderColor==null ? ColorGlobal.textColor : borderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),

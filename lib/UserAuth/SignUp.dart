@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import '../Constant/Constant.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Constant/ColorGlobal.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Constant/TextField.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 
 class SignUp extends StatefulWidget {
@@ -21,8 +27,9 @@ class SignUpState extends State<SignUp> {
   var bottom = FractionalOffset.bottomCenter;
   double width = 400.0;
   TextEditingController name = new TextEditingController();
-  TextEditingController email = new TextEditingController();
+  TextEditingController email = new TextEditingController(text: "");
   TextEditingController password = new TextEditingController();
+  Color emailColor = ColorGlobal.textColor;
 
   FocusNode nameFocus = new FocusNode();
   FocusNode emailFocus = new FocusNode();
@@ -40,11 +47,19 @@ class SignUpState extends State<SignUp> {
       ..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
   }
+  bool isValidEmail(input) {
+    return RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(input);
+  }
 
-    @override
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Branch.year=-1;
+    Branch.branch="";
     Future.delayed(Duration(milliseconds: 200), () {
       setState(() {
         width = _textSize("Have an account?",
@@ -59,7 +74,29 @@ class SignUpState extends State<SignUp> {
       });
     });
   }
-
+  _signinDialog(String show, String again, int flag) {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: Text('Sign In Check'),
+        content: new Text(show),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () {
+              flag != 1
+                  ? Navigator.of(context).pop(false)
+                  : Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
+            },
+            child: FlatButton(
+              color: Colors.green,
+              child: Text(again),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,6 +214,7 @@ class SignUpState extends State<SignUp> {
                           obscureText: false,
                           prefixIconData: Icons.email,
                           textEditingController: email,
+                          borderColor: emailColor,
                           focusNode: emailFocus,
                         ),
                       ),
@@ -193,6 +231,65 @@ class SignUpState extends State<SignUp> {
                         ),
                       ),
                       InkWell(
+                        onTap: () async {
+                          print(Branch.year);
+                          if(email.text!="" && password.text!="" && name.text!="" && Branch.branch!="" && Branch.year!=-1) {
+                            if(isValidEmail(email.text)) {
+                              var url =
+                                  "https://delta.nitt.edu/recal-uae/api/users/add/";
+                              Map<String, String> body = <String,String> {
+                                'email': email.text,
+                                'password': password.text,
+                                'name' : name.text,
+                                'branch' : Branch.branch,
+                                'year' : Branch.year.toString(),
+                                'mobile_no': "1234567890",
+                                'organization' : "none",
+                                'position' : "none",
+                                'gender' : "F",
+                                'linkedIn' : "none",
+                                'is_admin' : "0",
+                                'emirate' : "Abu Dhabi",
+                              };
+//                              Map<String, String> headers = {
+//                                "authorization" : "Basic Og==",
+//                                'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
+//                              };
+                              var request =  http.MultipartRequest(
+                                'POST',
+                                Uri.parse(url)
+                          )..fields.addAll(body);
+                              var response = await request.send().then((_response) async {
+                                print(_response.headers);
+                                final respStr = await _response.stream.bytesToString();
+                                print("Status ${_response.statusCode}");
+                                print(jsonDecode(respStr));
+                                if (_response.statusCode == 200) {
+
+
+                                }
+                                else {
+                                  print("server error");
+                                  _signinDialog(
+                                      "Server Error", "Try again", 0);
+                                }
+                              }).catchError((error) {
+                                print('${error ?? "Empty"}');
+                                _signinDialog(
+                                    '${error ?? "Empty"}', "Try again", 0);
+                              });
+                            }
+                            else {
+                              setState(() {
+                                emailColor = Colors.red;
+                              });
+                              _signinDialog("Enter valid email", "Try again", 2);
+                            }
+                          }
+                          else {
+                            _signinDialog("Enter all fields", "Try again", 2);
+                          }
+                        },
                         child: Container(
                           margin: EdgeInsets.only(
                             top: (20),
@@ -340,8 +437,12 @@ class SignUpState extends State<SignUp> {
     );
   }
 }
+// ignore: must_be_immutable
 class Branch extends StatefulWidget {
+
   final int select;
+  static String branch;
+  static int year;
   Branch({Key key, this.select}) : super(key: key);
 
 
@@ -352,13 +453,13 @@ class Branch extends StatefulWidget {
 
 class _BranchState extends State<Branch> {
   String _branch;
-  String _year;
-  List <String> all = new List<String>();
+  int _year;
+  List <int> all = new List<int>();
 
-  List<String> getYears() {
-    all = new List<String>();
+  List<int> getYears() {
+    all = new List<int>();
     for(var i=2019;i>=1964;i--)
-      all.add(i.toString());
+      all.add(i);
     return all;
   }
   List <String> getBranches() {
@@ -398,6 +499,7 @@ class _BranchState extends State<Branch> {
           setState(() {
             _branch = newValue;
           });
+          Branch.branch = newValue;
         },
         items: getBranches().map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
@@ -408,22 +510,23 @@ class _BranchState extends State<Branch> {
       );
     }
     else {
-          return DropdownButton<String>(
+          return DropdownButton<int>(
             hint: Text('Year of Passing'),
             value: _year,
               icon: Icon(Icons.arrow_drop_down),
               iconSize: 24,
               elevation: 16,
               style: TextStyle(color: ColorGlobal.textColor,fontWeight: FontWeight.w600,fontSize: 16.0),
-              onChanged: (String newValue) {
+              onChanged: (int newValue) {
               setState(() {
               _year = newValue;
               });
+              Branch.year = newValue;
               },
-              items: getYears().map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
+              items: getYears().map<DropdownMenuItem<int>>((int value) {
+              return DropdownMenuItem<int>(
               value: value,
-              child: Text(value),
+              child: Text("$value"),
               );
               }).toList(),
             );

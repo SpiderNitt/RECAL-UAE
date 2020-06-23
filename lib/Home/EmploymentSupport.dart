@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import '../Constant/ColorGlobal.dart';
 import '../Constant/Constant.dart';
 import '../Constant/Constant.dart';
 import '../Constant/Constant.dart';
@@ -24,8 +25,7 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
   Future<bool> _resumeOptions() {
     return showDialog(
       context: context,
-      builder: (context) =>
-      new AlertDialog(
+      builder: (context) => new AlertDialog(
         title: new Text('Choose Action'),
         content: new Text('Do you want to upload CV or write resume'),
         actions: <Widget>[
@@ -54,69 +54,59 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text('Employment Support'),
           backgroundColor: const Color(0xFF3AAFFA),
-
         ),
         body: Container(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Card(
-                  child: Column(
+            child: Card(
+              borderOnForeground: true,
+              elevation: 10,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                            8.0, 12.0, 8.0, 12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      GestureDetector(
+                        child: Column(
                           children: <Widget>[
-                            GestureDetector(
-                              child: Column(
-                                children: <Widget>[
-                                  Card(
-                                    child: Container(
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        radius: width / 10,
-                                        child: Image.asset(
-                                          'assets/images/curriculum.png',
-                                          height: width / 10,
-                                          width: width / 10,
-                                        ),
-                                      ),
-                                    ),
-                                    elevation: 20,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: new BorderRadius.circular(
-                                            width / 10)),
+                            Card(
+                              child: Container(
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: width / 10,
+                                  child: Image.asset(
+                                    'assets/images/curriculum.png',
+                                    height: width / 10,
+                                    width: width / 10,
                                   ),
-                                  SizedBox(height: 6.0),
-                                  Container(
+                                ),
+                              ),
+                              elevation: 20,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(
+                                      width / 10)),
+                            ),
+                            SizedBox(height: 6.0),
+                            Container(
 //                                    alignment: Alignment.center,
-                                    child: AutoSizeText(
-                                      "Upload/Write CV",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF433d3e),
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                    ),
-                                  ),
+                              child: AutoSizeText(
+                                "Upload/Write CV",
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Color(0xFF433d3e),
+                                    fontWeight: FontWeight.w600),
+                                maxLines: 1,
+                              ),
+                            ),
 //                        Text(
 //                          "Upload/Write CV",
 //                          style: TextStyle(
@@ -125,44 +115,44 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
 //                              fontWeight: FontWeight.bold,
 //                              color: Colors.black26),
 //                        ),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.center,
-                              ),
-                              onTap: () {
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                        onTap: () {
 //                                Navigator.pushNamed(context,SOCIAL_BUSINESS);
-                                _resumeOptions();
-                              },
+                          _resumeOptions();
+                        },
+                      ),
+                      GestureDetector(
+                        child: Column(
+                          children: <Widget>[
+                            Card(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: width / 10,
+                                child: Image.asset(
+                                  'assets/images/open_positions.png',
+                                  height: width / 10,
+                                  width: width / 10,
+                                ),
+                              ),
+                              elevation: 20,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(
+                                      width / 10)),
                             ),
-                            GestureDetector(
-                              child: Column(
-                                children: <Widget>[
-                                  Card(
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      radius: width / 10,
-                                      child: Image.asset(
-                                        'assets/images/open_positions.png',
-                                        height: width / 10,
-                                        width: width / 10,
-                                      ),
-                                    ),
-                                    elevation: 20,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: new BorderRadius.circular(
-                                            width / 10)),
-                                  ),
-                                  SizedBox(height: 6.0),
-                                  Container(
+                            SizedBox(height: 6.0),
+                            Container(
 //                                    alignment: Alignment.center,
-                                    child: AutoSizeText(
-                                      "Open Positions",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF433d3e),
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                    ),
-                                  ),
+                              child: AutoSizeText(
+                                "Open Positions",
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Color(0xFF433d3e),
+                                    fontWeight: FontWeight.w600),
+                                maxLines: 1,
+                              ),
+                            ),
 //                        Text(
 //                          "Open Positions",
 //                          style: TextStyle(
@@ -171,99 +161,95 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
 //                              fontWeight: FontWeight.bold,
 //                              color: Colors.black26),
 //                        ),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.center,
-                              ),
-                              onTap: () {
-                                Navigator.pushNamed(context,OPEN_POSITIONS);
-                              },
-                            ),
-
                           ],
+                          mainAxisAlignment: MainAxisAlignment.center,
                         ),
+                        onTap: () {
+                          Navigator.pushNamed(context, OPEN_POSITIONS);
+                        },
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                            8.0, 12.0, 8.0, 12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            GestureDetector(
-                              child: Column(
-                                children: <Widget>[
-                                  Card(
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      radius: width / 10,
-                                      child: Image.asset(
-                                        'assets/images/alumni_placed.png',
-                                        height: width / 10,
-                                        width: width / 10,
-                                      ),
-                                    ),
-                                    elevation: 20,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: new BorderRadius.circular(
-                                            width / 10)),
-                                  ),
-                                  SizedBox(height: 6.0),
-                                  Container(
-//                                    alignment: Alignment.center,
-                                    child: AutoSizeText(
-                                      "Alumni Placed",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF433d3e),
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                    ),
-                                  ),
-//                        Text(
-//                          "Alumni Placed",
-//                          style: TextStyle(
-//                              fontFamily: 'Pacifico',
-//                              fontSize: 15,
-//                              fontWeight: FontWeight.bold,
-//                              color: Colors.black26),
-//                        ),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.center,
-                              ),
-                              onTap: () {
-                                Navigator.pushNamed(context,ALUMNI_PLACED_SCREEN);
-                              },
-                            ),
+                    ],
+                  ),
 
-                            GestureDetector(
-                              child: Column(
-                                children: <Widget>[
-                                  Card(
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      radius: width / 10,
-                                      child: Image.asset(
-                                        'assets/images/seek_guidance.png',
-                                        height: width / 10,
-                                        width: width / 10,
-                                      ),
-                                    ),
-                                    elevation: 20,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: new BorderRadius.circular(
-                                            width / 10)),
-                                  ),
-                                  SizedBox(height: 6.0),
-                                  Container(
+//                            GestureDetector(
+//                              child: Column(
+//                                children: <Widget>[
+//                                  Card(
+//                                    child: CircleAvatar(
+//                                      backgroundColor: Colors.white,
+//                                      radius: width / 10,
+//                                      child: Image.asset(
+//                                        'assets/images/alumni_placed.png',
+//                                        height: width / 10,
+//                                        width: width / 10,
+//                                      ),
+//                                    ),
+//                                    elevation: 20,
+//                                    shape: RoundedRectangleBorder(
+//                                        borderRadius: new BorderRadius.circular(
+//                                            width / 10)),
+//                                  ),
+//                                  SizedBox(height: 6.0),
+//                                  Container(
+////                                    alignment: Alignment.center,
+//                                    child: AutoSizeText(
+//                                      "Alumni Placed",
+//                                      style: TextStyle(
+//                                          fontSize: 16.0,
+//                                          color: Color(0xFF433d3e),
+//                                          fontWeight: FontWeight.w600),
+//                                      maxLines: 1,
+//                                    ),
+//                                  ),
+////                        Text(
+////                          "Alumni Placed",
+////                          style: TextStyle(
+////                              fontFamily: 'Pacifico',
+////                              fontSize: 15,
+////                              fontWeight: FontWeight.bold,
+////                              color: Colors.black26),
+////                        ),
+//                                ],
+//                                mainAxisAlignment: MainAxisAlignment.center,
+//                              ),
+//                              onTap: () {
+//                                Navigator.pushNamed(context,ALUMNI_PLACED_SCREEN);
+//                              },
+//                            ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      GestureDetector(
+                        child: Column(
+                          children: <Widget>[
+                            Card(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: width / 10,
+                                child: Image.asset(
+                                  'assets/images/seek_guidance.png',
+                                  height: width / 10,
+                                  width: width / 10,
+                                ),
+                              ),
+                              elevation: 20,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(
+                                      width / 10)),
+                            ),
+                            SizedBox(height: 6.0),
+                            Container(
 //                                    alignment: Alignment.center,
-                                    child: AutoSizeText(
-                                      "Seek Guidance",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF433d3e),
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                    ),
-                                  ),
+                              child: AutoSizeText(
+                                "Seek Guidance",
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Color(0xFF433d3e),
+                                    fontWeight: FontWeight.w600),
+                                maxLines: 1,
+                              ),
+                            ),
 //                        Text(
 //                          "Seek Guidance",
 //                          style: TextStyle(
@@ -272,53 +258,43 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
 //                              fontWeight: FontWeight.bold,
 //                              color: Colors.black26),
 //                        ),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.center,
-                              ),
-                              onTap: () {
-                                Navigator.pushNamed(context,SEEK_GUIDANCE);
-                              },
-                            ),
                           ],
+                          mainAxisAlignment: MainAxisAlignment.center,
                         ),
+                        onTap: () {
+                          Navigator.pushNamed(context, SEEK_GUIDANCE);
+                        },
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                            8.0, 12.0, 8.0, 12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      GestureDetector(
+                        child: Column(
                           children: <Widget>[
-
-                            GestureDetector(
-                              child: Column(
-                                children: <Widget>[
-                                  Card(
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      radius: width / 10,
-                                      child: Image.asset(
-                                        'assets/images/market_survey.png',
-                                        height: width / 10,
-                                        width: width / 10,
-                                      ),
-                                    ),
-                                    elevation: 20,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: new BorderRadius.circular(
-                                            width / 10)),
-                                  ),
-                                  SizedBox(height: 6.0),
-                                  Container(
+                            Card(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: width / 10,
+                                child: Image.asset(
+                                  'assets/images/market_survey.png',
+                                  height: width / 10,
+                                  width: width / 10,
+                                ),
+                              ),
+                              elevation: 20,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(
+                                      width / 10)),
+                            ),
+                            SizedBox(height: 6.0),
+                            Container(
 //                                    alignment: Alignment.center,
-                                    child: AutoSizeText(
-                                      "Market Survey",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF433d3e),
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                    ),
-                                  ),
+                              child: AutoSizeText(
+                                "Market Survey",
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Color(0xFF433d3e),
+                                    fontWeight: FontWeight.w600),
+                                maxLines: 1,
+                              ),
+                            ),
 //                        Text(
 //                          "Market Survey",
 //                          style: TextStyle(
@@ -327,43 +303,93 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
 //                              fontWeight: FontWeight.bold,
 //                              color: Colors.black26),
 //                        ),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.center,
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, MARKET_SURVEY);
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      GestureDetector(
+                        child: Column(
+                          children: <Widget>[
+                            Card(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: width / 10,
+                                child: Image.asset(
+                                  'assets/images/alumni_placed.png',
+                                  height: width / 10,
+                                  width: width / 10,
+                                ),
                               ),
-                              onTap: () {
-                                Navigator.pushNamed(context,MARKET_SURVEY);
-                              },
+                              elevation: 20,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  new BorderRadius.circular(width / 10)),
                             ),
-                            GestureDetector(
-                              child: Column(
-                                children: <Widget>[
-                                  Card(
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      radius: width / 10,
-                                      child: Image.asset(
-                                        'assets/images/write_to_admin.png',
-                                        height: width / 10,
-                                        width: width / 10,
-                                      ),
-                                    ),
-                                    elevation: 20,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: new BorderRadius.circular(
-                                            width / 10)),
-                                  ),
-                                  SizedBox(height: 6.0),
-                                  Container(
+                            SizedBox(height: 6.0),
+                            Container(
 //                                    alignment: Alignment.center,
-                                    child: AutoSizeText(
-                                      "Write to Admin",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF433d3e),
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                    ),
-                                  ),
+                              child: AutoSizeText(
+                                "Alumni Placed",
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Color(0xFF433d3e),
+                                    fontWeight: FontWeight.w600),
+                                maxLines: 1,
+                              ),
+                            ),
+//                        Text(
+//                          "Alumni Placed",
+//                          style: TextStyle(
+//                              fontFamily: 'Pacifico',
+//                              fontSize: 15,
+//                              fontWeight: FontWeight.bold,
+//                              color: Colors.black26),
+//                        ),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, ALUMNI_PLACED_SCREEN);
+                        },
+                      ),
+                      GestureDetector(
+                        child: Column(
+                          children: <Widget>[
+                            Card(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: width / 10,
+                                child: Image.asset(
+                                  'assets/images/write_to_admin.png',
+                                  height: width / 10,
+                                  width: width / 10,
+                                ),
+                              ),
+                              elevation: 20,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  new BorderRadius.circular(width / 10)),
+                            ),
+                            SizedBox(height: 6.0),
+                            Container(
+//                                    alignment: Alignment.center,
+                              child: AutoSizeText(
+                                "Write to Admin",
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Color(0xFF433d3e),
+                                    fontWeight: FontWeight.w600),
+                                maxLines: 1,
+                              ),
+                            ),
 //                        Text(
 //                          "Write to Admin",
 //                          style: TextStyle(
@@ -372,22 +398,17 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
 //                              fontWeight: FontWeight.bold,
 //                              color: Colors.black26),
 //                        ),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.center,
-                              ),
-                              onTap: () {
-                                Navigator.pushNamed(context,WRITE_TO_ADMIN);
-                              },
-                            ),
                           ],
+                          mainAxisAlignment: MainAxisAlignment.center,
                         ),
+                        onTap: () {
+                          Navigator.pushNamed(context, WRITE_TO_ADMIN);
+                        },
                       ),
                     ],
                   ),
-                ),
-                SizedBox(height: 10.0),
-
-              ],
+                ],
+              ),
             ),
           ),
         ),

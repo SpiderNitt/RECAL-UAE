@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
-//import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/ColorGlobal.dart';
 import '../Constant/Constant.dart';
+import 'package:http/http.dart' as http;
+import 'package:iosrecal/models/CoreCommModel.dart';
+import 'dart:convert';
+import 'package:iosrecal/models/ResponseBody.dart';
 
 class HomeActivity extends StatefulWidget {
   @override
@@ -17,6 +20,57 @@ class HomeActivity extends StatefulWidget {
 class _HomeActivityState extends State<HomeActivity> {
 
   Future<String> name;
+  static List<String> _members = [];
+  int flag=0;
+  Future<CoreCommModel> _corecomm() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await http.get(
+        "https://delta.nitt.edu/recal-uae/api/chapter/core/",
+        headers: {
+          "Accept": "application/json",
+          "Cookie": "${prefs.getString("cookie")}",
+        }
+    ).then((_response) {
+      ResponseBody responseBody = new ResponseBody();
+      print('Response body: ${_response.body}');
+      if (_response.statusCode == 200) {
+        responseBody = ResponseBody.fromJson(json.decode(_response.body));
+        if (responseBody.status_code == 200) {
+          if(responseBody.data!=null) {
+            responseBody.data['president']!=null ? _members.add(responseBody.data['president']) : print("empty");
+            responseBody.data['vice_president']!=null ?    _members.add(responseBody.data['vice_president']): print("empty");
+            responseBody.data['secretary']!=null  ? _members.add(responseBody.data['secretary']): print("empty");
+            responseBody.data['joint_secretary']!=null   ?_members.add(responseBody.data['joint_secretary']): print("empty");
+            responseBody.data['treasurer']!=null  ? _members.add(responseBody.data['treasurer']): print("empty");
+            responseBody.data['mentor1']!=null  ? _members.add(responseBody.data['mentor1']): print("empty");
+            responseBody.data['mentor2']!=null  ? _members.add(responseBody.data['mentor2']): print("empty");
+              if(_members.length>0)
+              setState(() {
+                flag=1;
+              });
+              else
+                setState(() {
+                  flag=2;
+                });
+
+              print("members: ");
+              print(_members);
+          }
+        } else {
+          setState(() {
+            flag=2;
+          });
+          print(responseBody.data);
+        }
+      } else {
+        setState(() {
+          flag=2;
+        });
+        print('Server error');
+      }
+    });
+  }
+
 
   static List<String> _events = [
     "Social",
@@ -24,21 +78,19 @@ class _HomeActivityState extends State<HomeActivity> {
     "Mentor Support",
     "Employment",
   ];
-  static List<String> _members = [
-    "ASHEET AGARWAL",
-    "MANOJ PANDEY",
-    "NAVAL TAYDE",
-    "LIMI SURESH",
-    "UMESH AGARWAL",
-    "ANAMITRA ROY",
-    "GANGA KANDASWAMY",
-  ];
+
+
+
   String _getLongestString() {
-    var s = _members[0];
-    for (int i = 1; i < 7; i++) {
-      if (_members[i].length > s.length) s = _members[i];
+    if(flag==1) {
+      var s = _members[0];
+      for (int i = 1; i < 7; i++) {
+        if (_members[i].length > s.length) s = _members[i];
+      }
+      return s;
     }
-    return s;
+    else
+      return "Abcdef Ghijk";
   }
 
   static List<String> _roles = [
@@ -68,6 +120,7 @@ class _HomeActivityState extends State<HomeActivity> {
   void initState()  {
     // TODO: implement initState
     super.initState();
+    _corecomm();
     setState(() {
       name = _fetchUserName();
     });
@@ -92,7 +145,7 @@ class _HomeActivityState extends State<HomeActivity> {
           color: ColorGlobal.textColor),
     );
     final goSocialSize = _textSize(
-      _getLongestString(),
+    _members.length>0 ? _getLongestString() : "Abcdef Ghijk",
       TextStyle(
         fontSize: 11,
         letterSpacing: 1,
@@ -118,6 +171,7 @@ class _HomeActivityState extends State<HomeActivity> {
             coreSize.height +
             10));
     print(0.4 * height);
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -370,6 +424,58 @@ child: Image.asset(
                     ],
                   ),
                 ),
+//                FlatButton(
+//                  onPressed: () async {
+//                    List<String> branch = [
+//                      "ECE",
+//                      "EEE",
+//                      "MECH",
+//                      "PROD",
+//                      "CHEM",
+//                      "META",
+//                      "ARCHI",
+//                      "PhD/MSc/MS",
+//                      "M.DOMS",
+//                      "MCA",
+//                      "MTECH"
+//                    ];
+//                    int i=0;
+//                    for(i=0;i<branch.length;i++) {
+//
+//                      SharedPreferences prefs = await SharedPreferences.getInstance();
+//                      var url = "https://delta.nitt.edu/recal-uae/api/branch/add/";
+//                      var body = {'branch_name': branch[i]};
+//                      await http
+//                          .post(
+//                        url,
+//                        body: body,
+//                          headers: {
+//                            "Accept": "application/json",
+//                            "Cookie": "${prefs.getString("cookie")}",
+//                          }
+//                      )
+//                          .then((_response) {
+//                        ResponseBody responseBody = new ResponseBody();
+//                        print('Response body: ${_response.body}');
+//                        if (_response.statusCode == 200) {
+////        updateCookie(_response);
+//                          responseBody = ResponseBody.fromJson(
+//                              json.decode(_response.body));
+//                          if (responseBody.status_code == 200) {
+//                            print("success ${branch[i]}");
+//                          } else {
+//                            print("fail ${branch[i]}");
+//                            print(responseBody.data);
+//                          }
+//                        } else {
+//                          print("fail ${branch[i]}");
+//                          print('Server error');
+//                        }
+//                      });
+//                    }
+//                  },
+//                  child: Text("Update branch"),
+//                ),
               ],
             ),
             (height -
@@ -380,7 +486,7 @@ child: Image.asset(
                             coreSize.height +
                             40)) >=
                     0.4 * height
-                ? Positioned(
+                ?  (flag==1 ? Positioned(
                     top: 0.325 * height +
                         width / 5 +
                         goSocialSize.height +
@@ -397,7 +503,7 @@ child: Image.asset(
                             color: ColorGlobal.textColor),
                       ),
                     ),
-                  )
+                  ) :  SizedBox())
                 : SizedBox(),
             (height -
                         (0.325 * height +
@@ -407,7 +513,8 @@ child: Image.asset(
                             coreSize.height +
                             40)) >=
                     0.4 * height
-                ? Positioned(
+
+                ? (flag ==1 ?  Positioned(
                     bottom: 0,
                     left: 0,
                     child: Container(
@@ -486,7 +593,14 @@ child: Image.asset(
                         },
                       ),
                     ),
-                  )
+            ) : flag==2 ? SizedBox() : Positioned(
+                top: 0.325 * height +
+                    width / 5 +
+                    goSocialSize.height +
+                    socialSize.height +
+                    40,
+                left: width/2 - 20,
+                child: CircularProgressIndicator()))
                 : SizedBox(),
           ],
         ),

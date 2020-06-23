@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import '../Home/HomeActivity.dart';
 import '../Achievements/AchievementsScreen.dart';
 import '../Home/HomeScreen.dart';
@@ -71,7 +73,7 @@ class HomePageState extends State<HomePage> {
                 ),
               ),
               new GestureDetector(
-                onTap: () => Navigator.of(context).maybePop(true),
+                onTap: () => SystemNavigator.pop(),
                 child: FlatButton(
                   color: Colors.red,
                   child: Text("YES"),
