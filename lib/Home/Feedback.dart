@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -36,10 +38,29 @@ Future<FeedbackModel> createFeedback(String body ) async{
   if (response.statusCode == 200) {
     Map<String,dynamic> jsonSurvey = json.decode(response.body);
     debugPrint("FEEDBACK SENT");
+    Fluttertoast.showToast(
+        msg: "Message sent",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
     return FeedbackModel.fromJson(jsonSurvey);
 
   } else {
+    Fluttertoast.showToast(
+        msg: "An error occured. Please try again",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
     throw Exception('Failed to send feedback');
+
   }
  
 }
