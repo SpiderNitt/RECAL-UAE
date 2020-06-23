@@ -89,11 +89,6 @@ class _WriteAdminState extends State<WriteAdmin> {
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        title: Text(
-          'Write to Admin',
-          style: TextStyle(color: ColorGlobal.textColor),
-        ),
-      ),
       body: SingleChildScrollView(
 
         child: Container(
@@ -193,6 +188,7 @@ class _WriteAdminState extends State<WriteAdmin> {
           ),
         ),
       ),
+    ),
     );
   }
 }

@@ -257,7 +257,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               PageTransition(
                                   type: PageTransitionType.downToUp,
                                   duration: Duration(milliseconds: 400),
-                                  child: EditProfileScreen()));
+                                  child: EditProfileScreen())).then((value) {
+                                    setState(() {
+                                      user=_fetchPrimaryDetails();
+                                    });
+                          });
                         },
                         child: Container(
                           decoration: BoxDecoration(
