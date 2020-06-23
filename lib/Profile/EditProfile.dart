@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iosrecal/Constant/Constant.dart';
 import '../models/ResponseBody.dart';
 import '../models/User.dart';
 import 'package:page_transition/page_transition.dart';
@@ -339,6 +340,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           : prefs.getString("user_id");
       String cookie =
       prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+      prefs.setString("email", email.text);
+      prefs.setString("name", name.text);
 
       print("USERID Profile: $user_id");
       print("cookie profile: $cookie");
@@ -379,6 +382,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             _userDialog("Details Updated", "Okay", 1);
             Future.delayed(Duration(milliseconds: 2500), () {
               Navigator.pop(context);
+//              Navigator.pushReplacementNamed(context, PROFILE_SCREEN);
             });
           } else if (responseBody.status_code == 500) {
             print(responseBody.data);
