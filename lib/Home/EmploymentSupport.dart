@@ -178,6 +178,16 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                                 Navigator.pushNamed(context,OPEN_POSITIONS);
                               },
                             ),
+
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                            8.0, 12.0, 8.0, 12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
                             GestureDetector(
                               child: Column(
                                 children: <Widget>[
@@ -223,15 +233,7 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                                 Navigator.pushNamed(context,ALUMNI_PLACED_SCREEN);
                               },
                             ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                            8.0, 12.0, 8.0, 12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
+
                             GestureDetector(
                               child: Column(
                                 children: <Widget>[
@@ -277,6 +279,16 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                                 Navigator.pushNamed(context,SEEK_GUIDANCE);
                               },
                             ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                            8.0, 12.0, 8.0, 12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+
                             GestureDetector(
                               child: Column(
                                 children: <Widget>[

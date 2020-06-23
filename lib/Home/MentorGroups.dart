@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/models/MentorGroupModel.dart';
 import 'package:iosrecal/Constant/Constant.dart';
-import './MentorList.dart';
+import 'package:iosrecal/models/MentorGroupModel.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MentorGroups extends StatefulWidget {
   @override
@@ -16,11 +15,7 @@ class MentorGroups extends StatefulWidget {
 class _MentorGroupsState extends State<MentorGroups> {
   var groups = new List<MentorGroupModel>();
 
-  initState() {
-    super.initState();
-    _groups();
-  }
-  Future<List> _groups() async {
+  Future<List<MentorGroupModel>> _getGroups() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(
         "https://delta.nitt.edu/recal-uae/api/mentor_group/groups",
@@ -29,17 +24,25 @@ class _MentorGroupsState extends State<MentorGroups> {
           "Cookie": "${prefs.getString("cookie")}",
         }
     );
-    ResponseBody responseBody = new ResponseBody();
-
     if (response.statusCode == 200) {
       print("success");
-//        updateCookie(_response);
-      responseBody = ResponseBody.fromJson(json.decode(response.body));
+      ResponseBody responseBody = ResponseBody.fromJson(
+          json.decode(response.body));
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
-        groups =
-            list.map((model) => MentorGroupModel.fromJson(model)).toList();
-        print(response.body);
+        print(list);
+        //groups = list.map((model) => MentorGroupModel.fromJson(model)).toList();
+        for(var group in list){
+          MentorGroupModel mentorGroupModel = MentorGroupModel(
+              mentor_group_id: group["mentor_group_id"],
+              industry: group["industry"],
+              leader: group["leader"],
+              group: group["group"]);
+          groups.add(mentorGroupModel);
+        }
+
+        print(groups.length);
+        return groups;
       } else {
         print(responseBody.data);
       }
@@ -48,48 +51,6 @@ class _MentorGroupsState extends State<MentorGroups> {
     }
   }
 
-  List _buildList(int count, BuildContext context) {
-    List<Widget> listItems = List();
-    List<String> groups = List();
-    groups.add("IT and Related Services");
-    groups.add("Energy");
-    groups.add("Construction");
-    groups.add("Banking/Finance/Investment");
-    groups.add("Trading/MFG/Recycling");
-    groups.add("Education/Others");
-
-    for (int i = 0; i < count; i++) {
-      String t = 'textHero' + i.toString();
-      listItems.add(new Padding(padding: new EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Hero(
-                    tag : t,
-                    child: new Text(
-                        groups[i],
-                        style: new TextStyle(fontSize: 18.0)
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.0),
-              const Divider(
-                color: const Color(0x22000000),
-                height: 1,
-                thickness: 1,
-              ),
-            ],
-          )
-      ),
-      );
-    }
-
-    return listItems;
-  }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -122,69 +83,58 @@ class _MentorGroupsState extends State<MentorGroups> {
                   )
               ),
             ),
-//            FutureBuilder(
-//              future: _groups(),
-//              builder: (context, projectSnap) {
-//                //                Whether project = projectSnap.data[index]; //todo check your model
-//                var childCount = 0;
+            FutureBuilder(
+              future: _getGroups(),
+              builder: (BuildContext context, AsyncSnapshot projectSnap) {
+                //                Whether project = projectSnap.data[index]; //todo check your model
+                var childCount = 0;
 //                if (projectSnap.connectionState !=
 //                    ConnectionState.done || projectSnap.hasData == null)
 //                  childCount = 1;
-////                else
-////                  childCount = projectSnap.data.length;
-//                return SliverList(
-//                  delegate: SliverChildBuilderDelegate(
-//                          (context, index) {
-//                        if (projectSnap.connectionState !=
-//                            ConnectionState.done) { //todo handle state
-//                          return CircularProgressIndicator(); //todo set progress bar
-//                        }
-//                        if (projectSnap.hasData == null) {
-//                          return Container();
-//                        }
-//                        return new Padding(padding: new EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
-//                            child: Column(
-//                              crossAxisAlignment: CrossAxisAlignment.start,
-//                              children: <Widget>[
-//                                Row(
-//                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                                  children: <Widget>[
-//                                    new Text(
-//                                        groups[index].group,
-//                                        style: new TextStyle(fontSize: 18.0)
-//                                    ),
-//                                    Container(
-//                                      height: 30.0,
-//                                      width: 30.0,
-//                                      child: IconButton(
-//                                          icon: Icon(Icons.arrow_forward_ios,
-//                                            color: Color(0x88000000),
-//                                          ),
-//                                          onPressed: () {
-//                                            Navigator.pushNamed(context,MENTOR_LIST_SCREEN);
-//                                            // Do something
-//                                          }
-//                                      ),
-//                                    ),
-//                                  ],
-//                                ),
-//                                SizedBox(height: 16.0),
-//                                const Divider(
-//                                  color: const Color(0x22000000),
-//                                  height: 1,
-//                                  thickness: 1,
-//                                ),
-//                              ],
-//                            )
-//                        );
-//                      },
-//                      childCount: childCount),
-//                );
-//              },
-//            ),
-            new SliverList(
-                delegate: new SliverChildListDelegate(_buildList(6, context))
+                if (projectSnap.data == null) {
+                  return SliverFillRemaining(
+                    child: Container(
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                  );
+                }
+                else {
+                  childCount=projectSnap.data.length;
+                  print(childCount);
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                          return new Padding(padding: new EdgeInsets.fromLTRB(
+                              16.0, 16.0, 16.0, 0.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceBetween,
+                                    children: <Widget>[
+                                      new Text(
+                                          groups[index].group,
+                                          style: new TextStyle(fontSize: 18.0)
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 16.0),
+                                  const Divider(
+                                    color: const Color(0x22000000),
+                                    height: 1,
+                                    thickness: 1,
+                                  ),
+                                ],
+                              )
+                          );
+                        },
+                        childCount: childCount),
+                  );
+                }
+              },
             ),
+
           ],
         ));
 
