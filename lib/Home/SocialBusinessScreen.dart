@@ -20,8 +20,6 @@ class _SocialPageState extends State<SocialPage> {
   Future<bool> _onBackPressed() {
     Navigator.pop(context);
   }
-
-
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;

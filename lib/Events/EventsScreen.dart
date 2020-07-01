@@ -33,8 +33,8 @@ class _EventsScreenState extends State<EventsScreen> {
           ),
         ),
         body: isLoading?
-        SpinKitFadingCircle(
-          color:ColorGlobal.blueColor,
+        SpinKitDoubleBounce(
+          color:ColorGlobal.color2,
         )
             :DefaultTabController(
           length: 2,
