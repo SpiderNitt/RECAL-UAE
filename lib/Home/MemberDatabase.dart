@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/MemberModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../Constant/ColorGlobal.dart';
 
 class MemberDatabase extends StatefulWidget {
