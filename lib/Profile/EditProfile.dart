@@ -480,7 +480,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   )
                 ],
                 title: Text(
-                  'Edit Profile',
+                  'Update Your Profile',
                   style: TextStyle(color: ColorGlobal.textColor),
                 ),
               ),

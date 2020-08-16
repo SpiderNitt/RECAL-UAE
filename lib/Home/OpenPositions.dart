@@ -57,7 +57,18 @@ class _OpenPositionsState extends State<OpenPositions> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Open Positions'),
+          backgroundColor: ColorGlobal.whiteColor,
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+          ),
+          title: Text(
+            'Open Positions',
+            style: TextStyle(color: ColorGlobal.textColor),
+          ),
         ),
         body: Center(
           child: Padding(

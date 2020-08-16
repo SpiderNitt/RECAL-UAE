@@ -8,7 +8,8 @@
      OPEN_POSITIONS='/HomeScreen/Employment/OpenPositions',
      ALUMNI_PLACED_SCREEN='/HomeScreen/Employment/AlumniPlaced', MARKET_SURVEY='/HomeScreen/Employment/MarketSurvey',
      WRITE_TO_ADMIN='/HomeScreen/Employment/WriteAdmin', SEEK_GUIDANCE='/HomeScreen/Employment/SeekGuidance',
-     SOCIAL_MEDIA='/HomeScreen/SocialMedia',WRITE_MENTOR='/HomeScreen/SocialBusiness/WriteToMentor', FEED_BACK='/HomeScreen/SocialBusiness/Feedback';
+     SOCIAL_MEDIA='/HomeScreen/SocialMedia',WRITE_MENTOR='/HomeScreen/SocialBusiness/WriteToMentor',
+     FEED_BACK='/HomeScreen/SocialBusiness/Feedback', MEMBER_DATABASE='/HomeScreen/SocialBusiness/Members';
 
 
 

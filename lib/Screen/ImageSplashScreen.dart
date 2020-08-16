@@ -7,6 +7,7 @@ import '../Constant/Constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../UserAuth/Login.dart';
+import '../Constant/ColorGlobal.dart';
 
 class ImageSplashScreen extends StatefulWidget {
   @override
@@ -59,18 +60,48 @@ class SplashScreenState extends State<ImageSplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return new Scaffold(
       backgroundColor: Colors.black,
       body: new Stack(
         fit: StackFit.expand,
         children: <Widget>[
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              height: width*0.2,
+              width: width*0.2,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(24.0, 32.0, 0.0, 0.0),
+                child: new Image.asset('assets/images/nitt_logo.png'),
+              ),
+            ),
+          ),
+
           new Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Image.asset('assets/images/nitt_logo.png',alignment: Alignment.topCenter, scale: 1.3),
+
+              Center(
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 15),
+                  width: width*0.7,
+                  height: width*0.3,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  decoration: new BoxDecoration(
+                      color: ColorGlobal.colorPrimaryDark,
+                      image: new DecorationImage(
+                        image: new AssetImage('assets/images/recal_logo.jpg'),
+                        fit: BoxFit.fill,
+                      ),
+                      borderRadius: BorderRadius.circular(width*0.1)
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 0.0, right: 0.0, top: 0.0, bottom: 120.0),
+                    left: 0.0, right: 0.0, top: 20.0, bottom: 120.0),
                 child:
                   new Text(
                     "RECAL",
@@ -84,27 +115,27 @@ class SplashScreenState extends State<ImageSplashScreen> {
                 child:
                   Image.asset('assets/images/loading.gif', alignment: Alignment.bottomCenter, scale : 4.0),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 0.0, right: 0.0, top: 50.0, bottom: 0.0),
-                child: new Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    new Image.asset('assets/images/spiderlogo.png',
-                        height: 20.0, width: 20.0),
-                    Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child: new Text(
-                          "Weaved Together ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.0,
-                              color: Colors.white
-                          ),
-                        ))
-                  ],
-                ),
-              ),
+//              Padding(
+//                padding: const EdgeInsets.only(
+//                    left: 0.0, right: 0.0, top: 50.0, bottom: 0.0),
+//                child: new Row(
+//                  mainAxisSize: MainAxisSize.min,
+//                  children: <Widget>[
+//                    new Image.asset('assets/images/spiderlogo.png',
+//                        height: 20.0, width: 20.0),
+//                    Padding(
+//                        padding: EdgeInsets.only(left: 10.0),
+//                        child: new Text(
+//                          "Weaved Together ",
+//                          style: TextStyle(
+//                              fontWeight: FontWeight.bold,
+//                              fontSize: 15.0,
+//                              color: Colors.white
+//                          ),
+//                        ))
+//                  ],
+//                ),
+//              ),
             ]
           ),
         ],

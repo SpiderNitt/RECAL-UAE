@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Constant/Constant.dart';
+import '../Constant/ColorGlobal.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -67,15 +69,17 @@ class FeedbackScreenState extends State<FeedbackScreen> {
       onWillPop: _onBackPressed,
       child: new Scaffold(
         appBar: AppBar(
-          title: Text('Feedback'),
+          backgroundColor: ColorGlobal.whiteColor,
           leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+          ),
+          title: Text(
+            'Feedback',
+            style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
         body:  SingleChildScrollView(

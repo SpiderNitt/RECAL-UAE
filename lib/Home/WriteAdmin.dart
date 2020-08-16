@@ -80,8 +80,11 @@ class _WriteAdminState extends State<WriteAdmin> {
       appBar: AppBar(
         backgroundColor: ColorGlobal.whiteColor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
-          onPressed: () => Navigator.of(context).pop(),
+            icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            }
         ),
         title: Text(
           'Write to Admin',

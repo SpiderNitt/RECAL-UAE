@@ -282,18 +282,21 @@ class LoginState extends State<Login> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 70),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ClipRRect(
-                          child: Image.asset(
-                            'assets/images/nitt_logo.png',
-                            height: 120,
-                            width: 120,
-                          ),
-                          borderRadius: BorderRadius.circular(60),
+                    child: Center(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 15),
+                        width: width,
+                        height: width*0.4,
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: new BoxDecoration(
+                            color: ColorGlobal.colorPrimaryDark,
+                            image: new DecorationImage(
+                              image: new AssetImage('assets/images/recal_logo.jpg'),
+                              fit: BoxFit.fill,
+                            ),
+                            borderRadius: BorderRadius.circular(width*0.1)
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   Padding(
@@ -466,15 +469,35 @@ class LoginState extends State<Login> {
                             "Forgot Password?",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 16,
                               color: ColorGlobal.textColor.withOpacity(0.9),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: 24.0,
+                        ),
                       ],
                     ),
-                  )
+                  ),
+                  Positioned(
+                    bottom: 20,
+                    left: 20,
+                    right: 20.0,
+                    child: Container(
+                      margin: EdgeInsets.only(top: 15),
+                      child: Text(
+                        "Note: Don't have the credentials? Write an email to recaluaechapter@gmail.com",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: ColorGlobal.textColor.withOpacity(0.9),
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

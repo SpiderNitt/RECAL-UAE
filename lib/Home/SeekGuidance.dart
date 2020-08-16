@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import '../Constant/ColorGlobal.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MentorModel {
@@ -82,15 +82,17 @@ class WriteMentorScreenState extends State<SeekGuidanceScreen> {
       onWillPop: _onBackPressed,
       child: new Scaffold(
         appBar: AppBar(
-          title: Text('Seek Guidance'),
+          backgroundColor: ColorGlobal.whiteColor,
           leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+          ),
+          title: Text(
+            'Seek Guidance',
+            style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
         body:  SingleChildScrollView(

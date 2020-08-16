@@ -176,11 +176,31 @@ class _HomeActivityState extends State<HomeActivity> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorGlobal.whiteColor,
-          title: Text(
-            'Home',
+          centerTitle: true,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Image(
+              image: AssetImage('assets/images/recal_logo.jpg'),
+            ),
+          ), // you can put Icon as well, it accepts any widget.
+          title:Text(
+            'RECAL UAE CHAPTER',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: CircleAvatar(
+                radius: 24,
+                backgroundImage: AssetImage('assets/images/spiderlogo.png'),
+              ),
+            ),
+          ],
+//          actions: [
+//            Text('picture'),
+//          ],
         ),
+
         body: Stack(
           children: <Widget>[
             ClipRRect(

@@ -5,8 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/MentorGroupModel.dart';
-import 'package:iosrecal/Constant/Constant.dart';
-import './MentorList.dart';
+import '../Constant/ColorGlobal.dart';
 
 class MentorGroups extends StatefulWidget {
   @override
@@ -52,11 +51,12 @@ class _MentorGroupsState extends State<MentorGroups> {
     List<Widget> listItems = List();
     List<String> groups = List();
     groups.add("IT and Related Services");
-    groups.add("Energy");
+    groups.add("Energy (Oil and Gas)");
     groups.add("Construction");
     groups.add("Banking/Finance/Investment");
     groups.add("Trading/MFG/Recycling");
-    groups.add("Education/Others");
+    groups.add("Education");
+    groups.add("Others");
 
     for (int i = 0; i < count; i++) {
       String t = 'textHero' + i.toString();
@@ -97,9 +97,15 @@ class _MentorGroupsState extends State<MentorGroups> {
         body: new CustomScrollView(
           slivers: <Widget>[
             new SliverAppBar(
+              leading: IconButton(
+                  icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }
+              ),
               brightness: Brightness.dark,
               centerTitle: true,
-              title: Text('Mentor Groups'),
               expandedHeight: 250,
               floating: true,
               pinned: true,
@@ -108,10 +114,7 @@ class _MentorGroupsState extends State<MentorGroups> {
               flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
                   title: Text('Mentor Groups',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                    ),
+                    style: TextStyle(color: ColorGlobal.textColor, fontSize: 20.0),
                   ),
                   background: Hero(
                     tag: 'imageHero',
@@ -122,68 +125,9 @@ class _MentorGroupsState extends State<MentorGroups> {
                   )
               ),
             ),
-//            FutureBuilder(
-//              future: _groups(),
-//              builder: (context, projectSnap) {
-//                //                Whether project = projectSnap.data[index]; //todo check your model
-//                var childCount = 0;
-//                if (projectSnap.connectionState !=
-//                    ConnectionState.done || projectSnap.hasData == null)
-//                  childCount = 1;
-////                else
-////                  childCount = projectSnap.data.length;
-//                return SliverList(
-//                  delegate: SliverChildBuilderDelegate(
-//                          (context, index) {
-//                        if (projectSnap.connectionState !=
-//                            ConnectionState.done) { //todo handle state
-//                          return CircularProgressIndicator(); //todo set progress bar
-//                        }
-//                        if (projectSnap.hasData == null) {
-//                          return Container();
-//                        }
-//                        return new Padding(padding: new EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
-//                            child: Column(
-//                              crossAxisAlignment: CrossAxisAlignment.start,
-//                              children: <Widget>[
-//                                Row(
-//                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                                  children: <Widget>[
-//                                    new Text(
-//                                        groups[index].group,
-//                                        style: new TextStyle(fontSize: 18.0)
-//                                    ),
-//                                    Container(
-//                                      height: 30.0,
-//                                      width: 30.0,
-//                                      child: IconButton(
-//                                          icon: Icon(Icons.arrow_forward_ios,
-//                                            color: Color(0x88000000),
-//                                          ),
-//                                          onPressed: () {
-//                                            Navigator.pushNamed(context,MENTOR_LIST_SCREEN);
-//                                            // Do something
-//                                          }
-//                                      ),
-//                                    ),
-//                                  ],
-//                                ),
-//                                SizedBox(height: 16.0),
-//                                const Divider(
-//                                  color: const Color(0x22000000),
-//                                  height: 1,
-//                                  thickness: 1,
-//                                ),
-//                              ],
-//                            )
-//                        );
-//                      },
-//                      childCount: childCount),
-//                );
-//              },
-//            ),
+
             new SliverList(
-                delegate: new SliverChildListDelegate(_buildList(6, context))
+                delegate: new SliverChildListDelegate(_buildList(7, context))
             ),
           ],
         ));
