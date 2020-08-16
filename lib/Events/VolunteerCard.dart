@@ -16,10 +16,10 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 class VolunteerCard extends StatefulWidget {
-  //bool isCompleted = false,attended=false;
-  //String num;
   EventInfo currEvent;
   bool isCompleted;
+  bool isAttended=false;
+  bool isCheckAttended=false;
   VolunteerCard( this.currEvent,this.isCompleted);
 
   @override
@@ -31,22 +31,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-  }
-
-
-  void getData() async{
-    var params={'id':'1'};
-    //var uri='delta.nitt.edu/recal-uae/events/social_media/params?event_id=1';
-    var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/events/social_media/',params);
-    SharedPreferences prefs=await SharedPreferences.getInstance();
-    var response=await http.get(
-        uri,
-        headers: {
-          "Accept" : "application/json",
-          "Cookie" : "${prefs.getString("cookie")}",
-        }
-    );
-    print(response.body);
+    checkAttended();
   }
 
   @override
@@ -81,9 +66,8 @@ class _VolunteerCardState extends State<VolunteerCard> {
                     widget.isCompleted==true ?
                     Container(
                       margin: EdgeInsets.only(top: 6),
-                      //child:checkAttended()==true? Icon(Icons.check_circle,color: Colors.green,) : Icon(Icons.cancel,color: Colors.red,),
-                      child:Random().nextInt(2)==1? Icon(Icons.check_circle,color: Colors.green,) : Icon(Icons.cancel,color: Colors.red,),
-                    ) : SizedBox(),
+                      child:getAttendWidget(),
+                        ) : SizedBox(),
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 ),
@@ -142,9 +126,22 @@ class _VolunteerCardState extends State<VolunteerCard> {
       ),
     );
   }
-  Future<bool> checkAttended() async{
-    var params={'id':'1'};
-    var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/events/attendees/',params);
+Widget getAttendWidget(){
+if(widget.isCheckAttended){
+  if(widget.isAttended){
+    return Icon(Icons.check_circle,color: Colors.green,);
+  }
+  else {
+    return Icon(Icons.cancel,color: Colors.red,);
+  }
+}
+else{
+  return SizedBox();
+}
+}
+  Future<void> checkAttended() async{
+    var params={'id':widget.currEvent.event_id.toString()};
+    var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/event/attendees/',params);
     SharedPreferences prefs=await SharedPreferences.getInstance();
     var response=await http.get(
         uri,
@@ -154,15 +151,22 @@ class _VolunteerCardState extends State<VolunteerCard> {
         }
     ) .then((_response) {
       ResponseBody responseBody = new ResponseBody();
-      print('Response body: ${_response.body}');
+      print('Response body:for attendees ${_response.body}'+ 'userid: ${prefs.getString('user_id')}');
       if (_response.statusCode == 200) {
         responseBody = ResponseBody.fromJson(json.decode(_response.body));
         if (responseBody.status_code == 200) {
-          if(responseBody.data!=[]) {
+          if(responseBody.data.length!=0) {
             for (var u in responseBody.data) {
-              //EventInfo currInfo = EventInfo.fromJson(u);
-              //eventinfo.add(currInfo);
+              if(u['attendee_id'].toString()== prefs.getString('user_id')){
+               setState(() {
+                 widget.isAttended=true;
+               });
+
+              }
             }
+          setState(() {
+            widget.isCheckAttended=true;
+          });
           }
         } else {
           print(responseBody.data);
@@ -171,6 +175,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
         print('Server error');
       }
     });
+
   }
   String getDate(){
     var date=DateTime.parse(widget.currEvent.datetime);
@@ -182,4 +187,5 @@ class _VolunteerCardState extends State<VolunteerCard> {
     var updateddate=DateFormat.jm().format(date);
     return updateddate;
   }
+
 }

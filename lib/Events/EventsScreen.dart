@@ -26,6 +26,9 @@ class _EventsScreenState extends State<EventsScreen> {
     return SafeArea (
       child: Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(
+              color: ColorGlobal.textColor
+          ),
           backgroundColor: ColorGlobal.whiteColor,
           title: Text(
             'Events',
@@ -33,8 +36,8 @@ class _EventsScreenState extends State<EventsScreen> {
           ),
         ),
         body: isLoading?
-        SpinKitFadingCircle(
-          color:ColorGlobal.blueColor,
+        SpinKitDoubleBounce(
+          color:ColorGlobal.color2,
         )
             :DefaultTabController(
           length: 2,
