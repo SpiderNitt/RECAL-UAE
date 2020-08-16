@@ -7,7 +7,6 @@ import 'package:iosrecal/Home/MentorList.dart';
 import 'package:iosrecal/Home/SocialMedia.dart';
 import 'package:iosrecal/Home/WriteToMentor.dart';
 import 'package:iosrecal/Home/AlumniPlaced.dart';
-import 'package:iosrecal/Home/MentorList.dart';
 import 'package:iosrecal/Home/OpenPositions.dart';
 import 'package:iosrecal/Home/SeekGuidance.dart';
 import 'package:iosrecal/Home/WriteAdmin.dart';
@@ -53,7 +52,6 @@ void main()  {
               SOCIAL_BUSINESS: (BuildContext context) => new SocialPage(),
               EMPLOYMENT_SUPPORT: (BuildContext context) => new EmploymentSupport(),
               MENTOR_GROUPS: (BuildContext context) => new MentorGroups(),
-              MENTOR_LIST_SCREEN: (BuildContext context) => new MentorList(),
               MEMBER_LINKEDIN: (BuildContext context) => new LinkedIn(),
               FEED_BACK:(BuildContext context) => new FeedbackScreen(),
               SOCIAL_MEDIA: (BuildContext context) => new SocialMediaScreen(),

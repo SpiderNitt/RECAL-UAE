@@ -75,22 +75,20 @@ class _WriteAdminState extends State<WriteAdmin> {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Color(0xDDFFFFFF),
-      appBar: AppBar(
-        backgroundColor: ColorGlobal.whiteColor,
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Color(0xDDFFFFFF),
+        appBar: AppBar(
+          backgroundColor: ColorGlobal.whiteColor,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text(
+            'Write to Admin',
+            style: TextStyle(color: ColorGlobal.textColor),
+          ),
         ),
-        title: Text(
-          'Write to Admin',
-          style: TextStyle(color: ColorGlobal.textColor),
-        ),
-      ),
       body: SingleChildScrollView(
 
         child: Container(
@@ -189,8 +187,7 @@ class _WriteAdminState extends State<WriteAdmin> {
             ],
           ),
         ),
-      ),
+      ),)
     );
   }
 }
-

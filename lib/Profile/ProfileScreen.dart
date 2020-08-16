@@ -16,7 +16,7 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserver {
+class _ProfileScreenState extends State<ProfileScreen> {
   int _unfinished = 2;
   Future<dynamic> user;
   String cookie = "";
@@ -130,31 +130,6 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
     // TODO: implement initState
     super.initState();
     user = _fetchPrimaryDetails();
-    WidgetsBinding.instance.addObserver(this);
-
-  }
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if(state == AppLifecycleState.resumed){
-      // user returned to our app
-      print("resumes");
-    }else if(state == AppLifecycleState.inactive){
-      print("inact");
-      // app is inactive
-    }else if(state == AppLifecycleState.paused){
-      print("paused");
-      // user is about quit our app temporally
-    }else if(state == AppLifecycleState.detached){
-      print("detached");
-      // app suspended (not used in iOS)
-    }
   }
 
   @override
@@ -164,6 +139,9 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
           backgroundColor: ColorGlobal.whiteColor,
           appBar: AppBar(
             backgroundColor: ColorGlobal.whiteColor,
+            iconTheme: IconThemeData(
+              color: ColorGlobal.textColor
+            ),
             actions: <Widget>[
               IconButton(
                 padding: EdgeInsets.only(right: 20),
@@ -284,7 +262,7 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
                                   duration: Duration(milliseconds: 400),
                                   child: EditProfileScreen())).then((value) {
                                     setState(() {
-                                      user = _fetchPrimaryDetails();
+                                      user=_fetchPrimaryDetails();
                                     });
                           });
                         },
