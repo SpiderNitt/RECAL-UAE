@@ -45,6 +45,9 @@ class _EventState extends State<Event> {
       child: Scaffold(
         appBar: AppBar(
           titleSpacing: -5,
+          iconTheme: IconThemeData(
+            color: ColorGlobal.textColor
+          ),
           title: Text("Event Details",
               style: TextStyle(color: ColorGlobal.textColor)),
           leading: IconButton(

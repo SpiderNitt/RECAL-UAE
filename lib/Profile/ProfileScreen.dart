@@ -139,6 +139,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: ColorGlobal.whiteColor,
           appBar: AppBar(
             backgroundColor: ColorGlobal.whiteColor,
+            iconTheme: IconThemeData(
+              color: ColorGlobal.textColor
+            ),
             actions: <Widget>[
               IconButton(
                 padding: EdgeInsets.only(right: 20),

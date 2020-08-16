@@ -6,6 +6,7 @@ import '../Home/HomeScreen.dart';
 import '../Events/EventsScreen.dart';
 import '../UAEChapter/ChapterScreen.dart';
 import '../Profile/ProfileScreen.dart';
+import '../Home/SocialMedia.dart';
 import '../Constant/ColorGlobal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  int _index = 2;
+  int _index = 1;
   Widget _showPage= Scaffold(
     body: HomeActivity(),
   );
@@ -46,15 +47,16 @@ class HomePageState extends State<HomePage> {
     switch(index) {
       case 0: return (ChapterScreen());
       break;
-      case 1: return (AchievementsScreen());
+//      case 1: return (AchievementsScreen());
+//      break;
+      case 1: return (HomeActivity());
       break;
-      case 2: return (HomeActivity());
-      break;
-      case 3: return(EventsScreen());
-      break;
-      case 4: return(ProfileScreen());
-      break;
-      default: return(ProfileScreen());
+      default:return(SocialMediaScreen());
+//      case 3: return(EventsScreen());
+//      break;
+//      case 4: return(ProfileScreen());
+//      break;
+//      default: return(ProfileScreen());
     }
   }
 
@@ -114,7 +116,7 @@ class HomePageState extends State<HomePage> {
           bottomNavigationBar: CurvedNavigationBar(
             backgroundColor: ColorGlobal.whiteColor,
             color: Colors.black,
-            buttonBackgroundColor: ColorGlobal.color2,
+            buttonBackgroundColor: ColorGlobal.blueColor,
             height: 50,
             items: <Widget>[
               Icon(
@@ -123,26 +125,26 @@ class HomePageState extends State<HomePage> {
                 color: ColorGlobal.color3,
               ),
               //     SvgPicture.asset("assets/icons/ac.svg",color:color_shades.color4,height: 30,),
-              Icon(
-                Icons.assistant_photo,
-                size: 30,
-                color: ColorGlobal.color3,
-              ),
+//              Icon(
+//                Icons.assistant_photo,
+//                size: 30,
+//                color: ColorGlobal.color3,
+//              ),
               Icon(
                 Icons.home,
                 size: 30,
                 color: ColorGlobal.color3,
               ),
               Icon(
-                Icons.event,
+                Icons.question_answer,
                 size: 30,
                 color: ColorGlobal.color3,
               ),
-              Icon(
-                Icons.person,
-                size: 30,
-                color: ColorGlobal.color3,
-              ),
+//              Icon(
+//                Icons.person,
+//                size: 30,
+//                color: ColorGlobal.color3,
+//              ),
             ],
             animationCurve: Curves.bounceInOut,
             index: _index,
