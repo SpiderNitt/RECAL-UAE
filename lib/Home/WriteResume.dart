@@ -4,7 +4,7 @@ import 'package:iosrecal/models/ResumeWriteModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/ResponseBody.dart';
-
+import '../Constant/ColorGlobal.dart';
 
 class WriteResume extends StatefulWidget {
   @override
@@ -51,11 +51,20 @@ class _WriteResumeState extends State<WriteResume> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          appBar: AppBar(
-            title: Text('Write Resume'),
-            backgroundColor: const Color(0xFF3AAFFA),
-
+        appBar: AppBar(
+          backgroundColor: ColorGlobal.whiteColor,
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }
           ),
+          title: Text(
+            'Write Resume',
+            style: TextStyle(color: ColorGlobal.textColor),
+          ),
+        ),
           body: Padding(
             padding: const EdgeInsets.fromLTRB(12.0, 24.0, 12.0, 24.0),
             child: ListView.builder(

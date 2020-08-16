@@ -83,7 +83,18 @@ class LinkedinState extends State<LinkedIn> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('LinkedIn Profiles'),
+          backgroundColor: ColorGlobal.whiteColor,
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+          ),
+          title: Text(
+            'LinkedIn Profiles',
+            style: TextStyle(color: ColorGlobal.textColor),
+          ),
         ),
         body: Center(
           child: Padding(

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:url_launcher/url_launcher.dart';
-
+import '../Constant/ColorGlobal.dart';
 
 //void main() => runApp(new MyApp());
 class SocialMediaScreen extends StatefulWidget {
@@ -68,15 +68,17 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
       onWillPop: _onBackPressed,
       child: new Scaffold(
         appBar: AppBar(
-          title: Text('Social Media'),
+          backgroundColor: ColorGlobal.whiteColor,
           leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+          ),
+          title: Text(
+            'Social Media',
+            style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
          body: Container(
@@ -331,7 +333,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                                               width: 40.0,
                                               fit: BoxFit.cover,
                                               image: AssetImage(
-                                                  'assets/images/mail.png'),
+                                                  'assets/images/instagram.png'),
                                               alignment: Alignment.center,
                                             ),
                                           )),

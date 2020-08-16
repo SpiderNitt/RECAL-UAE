@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:iosrecal/Home/Feedback.dart';
+import 'package:iosrecal/Home/MemberDatabase.dart';
+import 'package:iosrecal/Home/MentorList.dart';
 import 'package:iosrecal/Home/SocialMedia.dart';
 import 'package:iosrecal/Home/WriteToMentor.dart';
 import 'package:iosrecal/Home/AlumniPlaced.dart';
@@ -60,6 +62,8 @@ void main()  {
               MARKET_SURVEY: (BuildContext context) => new SurveyScreen(),
               WRITE_TO_ADMIN: (BuildContext context) => new WriteAdmin(),
               SEEK_GUIDANCE: (BuildContext context) => new SeekGuidanceScreen(),
+              MEMBER_DATABASE: (BuildContext context) => new MemberDatabase(),
+
             }
         ));
   });

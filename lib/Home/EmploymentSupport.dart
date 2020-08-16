@@ -1,11 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import '../Constant/Constant.dart';
 import '../Constant/ColorGlobal.dart';
-import '../Constant/Constant.dart';
-import '../Constant/Constant.dart';
-import '../Constant/Constant.dart';
-import '../Constant/Constant.dart';
-import '../Constant/Constant.dart';
 
 class EmploymentSupport extends StatefulWidget {
   @override
@@ -60,8 +56,18 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Employment Support'),
-          backgroundColor: const Color(0xFF3AAFFA),
+          backgroundColor: ColorGlobal.whiteColor,
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+          ),
+          title: Text(
+            'Employee Support',
+            style: TextStyle(color: ColorGlobal.textColor),
+          ),
         ),
         body: Container(
           child: Padding(
@@ -99,7 +105,7 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                             Container(
 //                                    alignment: Alignment.center,
                               child: AutoSizeText(
-                                "Upload/Write CV",
+                                "Upload CV",
                                 style: TextStyle(
                                     fontSize: 16.0,
                                     color: Color(0xFF433d3e),
@@ -107,20 +113,12 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                                 maxLines: 1,
                               ),
                             ),
-//                        Text(
-//                          "Upload/Write CV",
-//                          style: TextStyle(
-//                              fontFamily: 'Pacifico',
-//                              fontSize: 15,
-//                              fontWeight: FontWeight.bold,
-//                              color: Colors.black26),
-//                        ),
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
                         onTap: () {
 //                                Navigator.pushNamed(context,SOCIAL_BUSINESS);
-                          _resumeOptions();
+                          //_resumeOptions();
                         },
                       ),
                       GestureDetector(
@@ -153,14 +151,6 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                                 maxLines: 1,
                               ),
                             ),
-//                        Text(
-//                          "Open Positions",
-//                          style: TextStyle(
-//                              fontFamily: 'Pacifico',
-//                              fontSize: 15,
-//                              fontWeight: FontWeight.bold,
-//                              color: Colors.black26),
-//                        ),
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
@@ -170,52 +160,6 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                       ),
                     ],
                   ),
-
-//                            GestureDetector(
-//                              child: Column(
-//                                children: <Widget>[
-//                                  Card(
-//                                    child: CircleAvatar(
-//                                      backgroundColor: Colors.white,
-//                                      radius: width / 10,
-//                                      child: Image.asset(
-//                                        'assets/images/alumni_placed.png',
-//                                        height: width / 10,
-//                                        width: width / 10,
-//                                      ),
-//                                    ),
-//                                    elevation: 20,
-//                                    shape: RoundedRectangleBorder(
-//                                        borderRadius: new BorderRadius.circular(
-//                                            width / 10)),
-//                                  ),
-//                                  SizedBox(height: 6.0),
-//                                  Container(
-////                                    alignment: Alignment.center,
-//                                    child: AutoSizeText(
-//                                      "Alumni Placed",
-//                                      style: TextStyle(
-//                                          fontSize: 16.0,
-//                                          color: Color(0xFF433d3e),
-//                                          fontWeight: FontWeight.w600),
-//                                      maxLines: 1,
-//                                    ),
-//                                  ),
-////                        Text(
-////                          "Alumni Placed",
-////                          style: TextStyle(
-////                              fontFamily: 'Pacifico',
-////                              fontSize: 15,
-////                              fontWeight: FontWeight.bold,
-////                              color: Colors.black26),
-////                        ),
-//                                ],
-//                                mainAxisAlignment: MainAxisAlignment.center,
-//                              ),
-//                              onTap: () {
-//                                Navigator.pushNamed(context,ALUMNI_PLACED_SCREEN);
-//                              },
-//                            ),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -228,7 +172,7 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                                 backgroundColor: Colors.white,
                                 radius: width / 10,
                                 child: Image.asset(
-                                  'assets/images/seek_guidance.png',
+                                  'assets/images/linkedin.png',
                                   height: width / 10,
                                   width: width / 10,
                                 ),
@@ -242,7 +186,7 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                             Container(
 //                                    alignment: Alignment.center,
                               child: AutoSizeText(
-                                "Seek Guidance",
+                                "LinkedIn Profiles",
                                 style: TextStyle(
                                     fontSize: 16.0,
                                     color: Color(0xFF433d3e),
@@ -250,19 +194,11 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                                 maxLines: 1,
                               ),
                             ),
-//                        Text(
-//                          "Seek Guidance",
-//                          style: TextStyle(
-//                              fontFamily: 'Pacifico',
-//                              fontSize: 15,
-//                              fontWeight: FontWeight.bold,
-//                              color: Colors.black26),
-//                        ),
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
                         onTap: () {
-                          Navigator.pushNamed(context, SEEK_GUIDANCE);
+                          Navigator.pushNamed(context, MEMBER_LINKEDIN);
                         },
                       ),
                       GestureDetector(
@@ -295,14 +231,6 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                                 maxLines: 1,
                               ),
                             ),
-//                        Text(
-//                          "Market Survey",
-//                          style: TextStyle(
-//                              fontFamily: 'Pacifico',
-//                              fontSize: 15,
-//                              fontWeight: FontWeight.bold,
-//                              color: Colors.black26),
-//                        ),
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
@@ -345,14 +273,6 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                                 maxLines: 1,
                               ),
                             ),
-//                        Text(
-//                          "Alumni Placed",
-//                          style: TextStyle(
-//                              fontFamily: 'Pacifico',
-//                              fontSize: 15,
-//                              fontWeight: FontWeight.bold,
-//                              color: Colors.black26),
-//                        ),
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
@@ -382,7 +302,7 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                             Container(
 //                                    alignment: Alignment.center,
                               child: AutoSizeText(
-                                "Write to Admin",
+                                "Resume Writing",
                                 style: TextStyle(
                                     fontSize: 16.0,
                                     color: Color(0xFF433d3e),
@@ -390,19 +310,11 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
                                 maxLines: 1,
                               ),
                             ),
-//                        Text(
-//                          "Write to Admin",
-//                          style: TextStyle(
-//                              fontFamily: 'Pacifico',
-//                              fontSize: 15,
-//                              fontWeight: FontWeight.bold,
-//                              color: Colors.black26),
-//                        ),
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
                         onTap: () {
-                          Navigator.pushNamed(context, WRITE_TO_ADMIN);
+                          Navigator.pushNamed(context, WRITE_RESUME_SCREEN);
                         },
                       ),
                     ],

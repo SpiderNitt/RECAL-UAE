@@ -7,15 +7,15 @@ class WalkThroughApp extends StatelessWidget {
 
   final List<Walkthrough> walk = [
     Walkthrough(
-      title: "Welcome to RECAL NIT Trichy",
-      content: "Regional Engineering College's Alumni Association",
+      title: "Welcome to REC/NIT Trichy Alumni Association",
+      content: "(UAE Chapter)",
       imageIcon: Icons.people,
       imagecolor: Colors.blue,
       asset: "assets/images/admin.jpeg",
     ),
     Walkthrough(
-      title: "Alumni Events",
-      content: "Get details about upcoming events, felicitations and alumni achievements",
+      title: "Events",
+      content: "Get details about upcoming networking events, felicitations and alumni achievements",
       imageIcon: Icons.event,
       imagecolor: Colors.purple,
       asset: "assets/images/feed.jpg",
@@ -23,14 +23,14 @@ class WalkThroughApp extends StatelessWidget {
     ),
     Walkthrough(
       title: "Mentorship",
-      content: "Join Mentor Groups, get in touch with young minds.",
+      content: "Join our Mentor Groups",
       imageIcon: Icons.school,
       imagecolor: Colors.green,
       asset: "assets/images/writementor.jpeg",
     ),
     Walkthrough(
-      title: "Employment Support",
-      content: "Get latest updates on new job positions and seek guidance from mentors",
+      title: "Employment",
+      content: "Get jobs",
       imageIcon: Icons.work,
       imagecolor: Colors.deepPurpleAccent,
       asset: "assets/images/employment_groups.jpg",

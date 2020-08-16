@@ -57,8 +57,18 @@ class _AlumniPlacedState extends State<AlumniPlaced> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Alumni Placed'),
-          backgroundColor: const Color(0xFF3AAFFA),
+          backgroundColor: ColorGlobal.whiteColor,
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+          ),
+          title: Text(
+            'Alumni Placed',
+            style: TextStyle(color: ColorGlobal.textColor),
+          ),
         ),
         body: Center(
           child: Padding(
