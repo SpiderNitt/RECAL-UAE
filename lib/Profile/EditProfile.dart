@@ -339,6 +339,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           : prefs.getString("user_id");
       String cookie =
       prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+      prefs.setString("email", email.text);
+      prefs.setString("name", name.text);
 
       print("USERID Profile: $user_id");
       print("cookie profile: $cookie");
