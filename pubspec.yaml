@@ -31,7 +31,7 @@ dependencies:
   badges: ^1.1.1
   image_picker: ^0.6.7+2
   shared_preferences: ^0.5.7+3
-  curved_navigation_bar: ^0.3.2
+  curved_navigation_bar: ^0.3.2 
   permission_handler: ^5.0.0+hotfix.9
   flutter_custom_clippers: ^1.1.1
   flutter_swiper: ^1.1.6
