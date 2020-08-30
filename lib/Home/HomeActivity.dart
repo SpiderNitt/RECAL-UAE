@@ -238,41 +238,46 @@ class _HomeActivityState extends State<HomeActivity> {
 //                    ],
 //                  ),
 //                ),
-                Stack(
-                    fit: StackFit.loose,
-                    children:[
-                      Container(
-                        width: width,
-                        child: Card(
-                          child:Row(
-                            children: <Widget>[
-                              Container(
-                                  padding: EdgeInsets.all(10.0),
-                                  width: width*0.9,
-                                  child: Text("No new messagessfjf adjfjggj jdejf ajdfh ajf dfjfg sdjfdjfhfgjfkgjfgfjgfjieiddkndsnhuaheuajndawuhna;woeiiej!!",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 15),)),
-                            ],
-                          ),
-                          elevation: 5,
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pushNamed(context, NOTIFICATION_MENU);
+                  },
+                  child: Stack(
+                      fit: StackFit.loose,
+                      children:[
+                        Container(
+                          width: width,
+                          child: Card(
+                            child:Row(
+                              children: <Widget>[
+                                Container(
+                                    padding: EdgeInsets.all(10.0),
+                                    width: width*0.9,
+                                    child: Text("No new messages!!",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 15),)),
+                              ],
+                            ),
+                            elevation: 5,
 //                     shape: RoundedRectangleBorder(
 //                       borderRadius: BorderRadius.circular(15),
 //                     ),
+                          ),
                         ),
-                      ),
-                      Container(
-                        width: width*0.95,
-                        height: height*0.07,
-                        child: Row(
-                          mainAxisAlignment:MainAxisAlignment.end,
-                          children: <Widget>[
-                            Badge(
-                              badgeContent: Text('3',style: TextStyle(color: Colors.white),),
-                              badgeColor: Colors.green,
-                              child: Icon(Icons.notifications,size: 28,color: Colors.grey[700],),
-                            )
-                          ],
+                        Container(
+                          width: width*0.95,
+                          height: height*0.07,
+                          child: Row(
+                            mainAxisAlignment:MainAxisAlignment.end,
+                            children: <Widget>[
+                              Badge(
+                                badgeContent: Text('3',style: TextStyle(color: Colors.white),),
+                                badgeColor: Colors.green,
+                                child: Icon(Icons.notifications,size: 28,color: Colors.grey[700],),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ]
+                      ]
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top:30.0,left: 20,right: 20,bottom: 30),
@@ -288,7 +293,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               width: width*0.8,
                               child: Center(
                                 child: Text(
-                           "Welcome "+"${snapshot.data}",
+                                  "Welcome "+"${snapshot.data}",
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.lato(
                                       fontSize: 24,
@@ -382,8 +387,9 @@ class _HomeActivityState extends State<HomeActivity> {
                                 switch(this._currentItemSelected){
                                   case "Volunteer":{Navigator.pushNamed(context,EMPLOYMENT_SUPPORT);break;}
                                   case "Write to admin":{Navigator.pushNamed(context,WRITE_TO_ADMIN);break;}
-                                case "Write to mentor":{Navigator.pushNamed(context,WRITE_MENTOR);break;}
-                                default:{Navigator.pushNamed(context,MARKET_SURVEY);break;}
+                                  case "Write to mentor":{Navigator.pushNamed(context,WRITE_MENTOR);break;}
+                                  default:{Navigator.pushNamed(context,MARKET_SURVEY);break;}
+
                                 }
 
                               });
@@ -573,7 +579,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                 ),
                                 onTap: () {
-                                  Navigator.pushNamed(context,SOCIAL_BUSINESS);
+                                  Navigator.pushNamed(context,SOCIAL);
                                 },
                               ),
                               SizedBox(
@@ -616,7 +622,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                   ],
                                 ),
                                 onTap: () {
-                                  Navigator.pushNamed(context,SOCIAL_BUSINESS);
+                                  Navigator.pushNamed(context,BUSINESS);
                                 },
                               ),
                             ],
