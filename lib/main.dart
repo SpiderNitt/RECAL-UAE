@@ -1,18 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:iosrecal/Home/BusinessDatabase.dart';
+import 'package:iosrecal/Home/BusinessScreen.dart';
+import 'package:iosrecal/Home/DealsExecuted.dart';
 import 'package:iosrecal/Home/Feedback.dart';
 import 'package:iosrecal/Home/MemberDatabase.dart';
 import 'package:iosrecal/Home/MentorList.dart';
 import 'package:iosrecal/Home/SocialMedia.dart';
+import 'package:iosrecal/Home/SocialScreen.dart';
 import 'package:iosrecal/Home/WriteToMentor.dart';
 import 'package:iosrecal/Home/AlumniPlaced.dart';
-import 'package:iosrecal/Home/MentorList.dart';
 import 'package:iosrecal/Home/OpenPositions.dart';
 import 'package:iosrecal/Home/SeekGuidance.dart';
 import 'package:iosrecal/Home/WriteAdmin.dart';
-import 'Constant/Constant.dart';
-import 'Constant/Constant.dart';
+import 'package:iosrecal/Home/NotificationMenu.dart';
 import 'Constant/Constant.dart';
 import 'Home/MarketSurvey.dart';
 import 'Home/SeekGuidance.dart';
@@ -20,8 +22,6 @@ import 'Home/WriteResume.dart';
 import 'Home/LinkedInProfiles.dart';
 import 'Home/MentorGroups.dart';
 import 'Home/EmploymentSupport.dart';
-import 'Home/HomeScreen.dart';
-import 'Home/SocialBusinessScreen.dart';
 import 'Profile/ProfileScreen.dart';
 import './Constant/Constant.dart';
 import './Screen/HomePage.dart';
@@ -50,7 +50,8 @@ void main()  {
               HOME_PAGE: (BuildContext context) => new HomePage(),
               IMAGE_SPLASH: (BuildContext context) => new ImageSplashScreen(),
               PROFILE_SCREEN: (BuildContext context) => new ProfileScreen(),
-              SOCIAL_BUSINESS: (BuildContext context) => new SocialPage(),
+              SOCIAL: (BuildContext context) => new SocialScreen(),
+              BUSINESS: (BuildContext context) => new BusinessScreen(),
               EMPLOYMENT_SUPPORT: (BuildContext context) => new EmploymentSupport(),
               MENTOR_GROUPS: (BuildContext context) => new MentorGroups(),
               MENTOR_LIST_SCREEN: (BuildContext context) => new MentorList(),
@@ -65,7 +66,9 @@ void main()  {
               WRITE_TO_ADMIN: (BuildContext context) => new WriteAdmin(),
               SEEK_GUIDANCE: (BuildContext context) => new SeekGuidanceScreen(),
               MEMBER_DATABASE: (BuildContext context) => new MemberDatabase(),
-
+              BUSINESS_DATABASE: (BuildContext context) => new BusinessDatabase(),
+              DEALS_EXECUTED: (BuildContext context) => new DealsExecuted(),
+              NOTIFICATION_MENU: (BuildContext context) => new NotificationsMenu(),
             }
         ));
   });

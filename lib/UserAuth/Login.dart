@@ -39,7 +39,7 @@ class LoginState extends State<Login> {
   TextEditingController email =
       new TextEditingController(text: "someone@gmail.com");
   TextEditingController password =
-      new TextEditingController(text: "o84HWLLJ5pmd");
+      new TextEditingController(text: "1j7P1T3ync2I");
 
   FocusNode emailFocus = new FocusNode();
   FocusNode passwordFocus = new FocusNode();
@@ -223,7 +223,7 @@ class LoginState extends State<Login> {
   void initState() {
     // TODO: implement initState
     email = TextEditingController(text: "someone@gmail.com");
-    password = TextEditingController(text: "o84HWLLJ5pmd");
+    password = TextEditingController(text: "1j7P1T3ync2I");
     super.initState();
     print("LOGIN");
     _deleteUserDetails();
