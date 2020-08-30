@@ -1,5 +1,3 @@
- import 'package:iosrecal/Support/SupportScreen.dart';
-
 String HOME_PAGE = '/HomePage',
     IMAGE_SPLASH = '/ImageSplashScreen',
     VIDEO_SPALSH = '/VideoSplashScreen',
@@ -25,7 +23,6 @@ String HOME_PAGE = '/HomePage',
     WRITE_MENTOR='/SupportScreen/WriteToMentor',
     FEED_BACK = '/HomeScreen/SocialBusiness/Feedback',
     MEMBER_DATABASE = '/HomeScreen/SocialBusiness/Members',
-    SUPPORT_SCREEN = '/HomeScreen/SupportScreen',
     TECHNICAL_SUPPORT = '/HomeScreen/SupportScreen/TechnicalSupport',
     VOLUNTEER_SUPPORT = '/HomeScreen/SupportScreen/VolunteerSupport',
     OTHER_SUPPORT = '/HomeScreen/SupportScreen/OtherSupport',

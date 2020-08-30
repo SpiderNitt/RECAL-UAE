@@ -8,12 +8,12 @@ import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 
 
-class SupportScreen extends StatefulWidget {
+class SupportScreen1 extends StatefulWidget {
   @override
-  _SupportScreenState createState() => _SupportScreenState();
+  _SupportScreen1State createState() => _SupportScreen1State();
 }
 
-class _SupportScreenState extends State<SupportScreen> {
+class _SupportScreen1State extends State<SupportScreen1> {
   var dropdownItems=["Volunteer","Write to admin","Write to mentor","Survey"];
   var _currentItemSelected="Volunteer";
 
