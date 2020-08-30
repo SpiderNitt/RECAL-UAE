@@ -5,6 +5,7 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:folding_cell/folding_cell.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'package:iosrecal/Events/EventsScreen.dart';
 import 'package:iosrecal/Home/MemberDatabase.dart';
 
 class SocialScreen extends StatefulWidget {
@@ -72,6 +73,8 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
   void _navigatePage(int num){
     if(num==0)
       Navigator.of(context).push(MaterialPageRoute(builder: (_) => MemberDatabase()));
+    if(num==1)
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => EventsScreen(2)));
   }
 
   @override

@@ -470,7 +470,7 @@ class _HomeActivityState extends State<HomeActivity> {
                         ),
                         onTap: () {
                           Navigator.push(context,MaterialPageRoute(builder: (context) =>
-                              EventsScreen()));
+                              EventsScreen(1)));
                         },
                       ),
                     ],

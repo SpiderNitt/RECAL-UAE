@@ -1,19 +1,16 @@
 class SponsorInfo{
-String sponsor_name;
-int sponsor_id;
-int contact_person;
-int payment_id;
-int brochure_file_id;
+  String contact_person_name;
+  int contact_person_id;
+  String sponsor_name;
+  int brochure;
 
-SponsorInfo({this.sponsor_name, this.sponsor_id, this.contact_person,
-      this.payment_id, this.brochure_file_id});
-factory SponsorInfo.fromJson(Map<String, dynamic> json) {
-  return SponsorInfo(
+  SponsorInfo({this.sponsor_name, this.contact_person_id, this.contact_person_name, this.brochure});
+  factory SponsorInfo.fromJson(Map<String, dynamic> json) {
+    return SponsorInfo(
       sponsor_name:json['sponsor_name'],
-      sponsor_id:json['sponsor_id'],
-      contact_person:json['contact_person'],
-      payment_id:json['payment_id'],
-      brochure_file_id:json['brochure_file_id'],
-  );
-}
+      contact_person_id:json['contact_person_id'],
+      contact_person_name:json['contact_person_name'],
+      brochure:json['brochure'],
+    );
+  }
 }

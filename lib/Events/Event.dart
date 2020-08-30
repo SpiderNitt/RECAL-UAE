@@ -8,6 +8,7 @@ import 'package:iosrecal/Events/Accounts.dart';
 import 'package:iosrecal/Events/Felicitations.dart';
 import 'package:iosrecal/models/EventDetailsInfo.dart';
 import 'package:iosrecal/models/EventInfo.dart';
+import 'package:iosrecal/models/FelicitationInfo.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/SponsorInfo.dart';
 import '../models/Socialmedia_feed.dart';
@@ -32,6 +33,7 @@ class Event extends StatefulWidget {
 class _EventState extends State<Event> {
   final List<int> numbers = [1, 2, 3, 4, 5, 5, 2, 3, 5];
   bool isEmpty = false;
+  bool isSocialMediaEmpty=false;
   bool serverError = false;
   bool detailsLoading=true;
   bool detailsServerError=false;
@@ -43,24 +45,24 @@ class _EventState extends State<Event> {
         width: screenSize.width, height: screenSize.height);
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          titleSpacing: -5,
-          iconTheme: IconThemeData(
-            color: ColorGlobal.textColor
+          appBar: AppBar(
+            titleSpacing: -5,
+            iconTheme: IconThemeData(
+                color: ColorGlobal.textColor
+            ),
+            title: Text("Event Details",
+                style: TextStyle(color: ColorGlobal.textColor)),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            backgroundColor: ColorGlobal.whiteColor,
           ),
-          title: Text("Event Details",
-              style: TextStyle(color: ColorGlobal.textColor)),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          backgroundColor: ColorGlobal.whiteColor,
-        ),
-        body: getBody()
+          body: getBody()
       ),
     );
   }
-Widget getBody(){
+  Widget getBody(){
     if(detailsLoading==false){
       return SingleChildScrollView(
         child: Column(
@@ -308,8 +310,8 @@ Widget getBody(){
                         children: <Widget>[
                           detailsInfo!=null?detailsInfo.volunteer_message=="" ? SizedBox()
                               :SizedBox(height: 10):SizedBox(),
-  detailsInfo!=null?
-  (detailsInfo.volunteer_message!=""? Container(
+                          detailsInfo!=null?
+                          (detailsInfo.volunteer_message!=""? Container(
                               child: Text(
                                 detailsInfo.volunteer_message,
                                 style: TextStyle(
@@ -487,394 +489,365 @@ Widget getBody(){
                       SizedBox(
                         height: 10,
                       ),
-//                      FutureBuilder(
-//                        future: getSponsors(),
-//                        builder:
-//                            (BuildContext context, AsyncSnapshot snapshot) {
-//                          if (snapshot.data == null) {
-//                            if (isEmpty) {
-//                              return Row(
-//                                children: <Widget>[
-//                                  Row(
-//                                    children: <Widget>[
-//                                      Container(
-//                                          margin: EdgeInsets.only(left: 4),
-//                                          child: Text("Sponsors : ")),
-//                                    ],
-//                                  ),
-//                                  Text(
-//                                    "No Sponsors for this event",
-//                                    style: TextStyle(color: Colors.black38),
-//                                  ),
-//                                ],
-//                              );
-//                            } else if (serverError) {
-//                              return Center(
-//                                  child: Text(
-//                                    "Server Error..Try again after sometime",
-//                                    style: TextStyle(color: Colors.blueGrey),
-//                                  ));
-//                            } else {
-//                              return Center(
-//                                child: SpinKitDoubleBounce(
-//                                  color: Colors.lightBlueAccent,
-//                                ),
-//                              );
-//                            }
-//                          } else {
-//                            return Column(
-//                              crossAxisAlignment: CrossAxisAlignment.start,
-//                              children: <Widget>[
-//                                Row(
-//                                  children: <Widget>[
-//                                    Container(
-//                                        margin: EdgeInsets.only(left: 4),
-//                                        child: Text(
-//                                          "Sponsors",
-//                                          style: TextStyle(
-//                                              fontWeight: FontWeight.bold),
-//                                        )),
-//                                  ],
-//                                ),
-//                                Container(
-//                                  padding: EdgeInsets.symmetric(
-//                                      horizontal: UIUtills()
-//                                          .getProportionalWidth(width: 4),
-//                                      vertical: UIUtills()
-//                                          .getProportionalHeight(height: 6)),
-//                                  height: UIUtills()
-//                                      .getProportionalHeight(height: 288),
-//                                  child: ListView.builder(
-//                                      scrollDirection: Axis.horizontal,
-//                                      itemCount: numbers.length,
-//                                      itemBuilder: (context, index) {
-//                                        return Container(
-//                                          width: UIUtills()
-//                                              .getProportionalWidth(
-//                                              width: 216),
-//                                          child: Card(
-//                                            //color: Colors.blue,
-//                                            child: Column(
-//                                              mainAxisAlignment:
-//                                              MainAxisAlignment.center,
-//                                              children: <Widget>[
-//                                                Expanded(
-//                                                  child: Container(
-//                                                    margin: EdgeInsets.only(
-//                                                        bottom: UIUtills()
-//                                                            .getProportionalHeight(
-//                                                            height: 6)),
-//                                                    child: Image.network(
-//                                                      "https://picsum.photos/300",
-//                                                      fit: BoxFit.cover,
-//                                                      loadingBuilder:
-//                                                          (BuildContext ctx,
-//                                                          Widget child,
-//                                                          ImageChunkEvent
-//                                                          loadingProgress) {
-//                                                        if (loadingProgress ==
-//                                                            null) {
-//                                                          return child;
-//                                                        } else {
-//                                                          return Center(
-//                                                            child:
-//                                                            SpinKitDoubleBounce(
-//                                                              color: Colors
-//                                                                  .lightBlueAccent,
-//                                                            ),
-//                                                          );
-//                                                        }
-//                                                      },
-//                                                    ),
-//                                                  ),
-//                                                ),
-//                                                snapshot.data[index]
-//                                                    .sponsor_name
-//                                                    ? Tooltip(
-//                                                  child: Text(
-//                                                    snapshot.data[index]
-//                                                        .sponsor_name,
-//                                                    maxLines: 2,
-//                                                    overflow:
-//                                                    TextOverflow
-//                                                        .ellipsis,
-//                                                    style: TextStyle(
-//                                                        fontWeight:
-//                                                        FontWeight
-//                                                            .bold),
-//                                                  ),
-//                                                  message: snapshot
-//                                                      .data[index]
-//                                                      .sponsor_name,
-//                                                  waitDuration:
-//                                                  Duration(
-//                                                      milliseconds:
-//                                                      0),
-//                                                )
-//                                                    : SizedBox(),
-//                                                snapshot.data[index]
-//                                                    .contact_person
-//                                                    ? Row(
-//                                                  mainAxisAlignment:
-//                                                  MainAxisAlignment
-//                                                      .center,
-//                                                  children: <Widget>[
-//                                                    Icon(Icons.phone),
-//                                                    Container(
-//                                                      margin: EdgeInsets
-//                                                          .only(
-//                                                          left: 4),
-//                                                      child: Tooltip(
-//                                                        child: Text(
-//                                                          snapshot
-//                                                              .data[
-//                                                          index]
-//                                                              .contact_person,
-//                                                          overflow:
-//                                                          TextOverflow
-//                                                              .ellipsis,
-//                                                        ),
-//                                                        message: snapshot
-//                                                            .data[index]
-//                                                            .contact_person,
-//                                                      ),
-//                                                    ),
-//                                                  ],
-//                                                )
-//                                                    : SizedBox(),
-//                                              ],
-//                                            ),
-//                                          ),
-//                                        );
-//                                      }),
-//                                ),
-//                              ],
-//                            );
-//                          }
-//                        },
-//                      ),
-                      //sample
-  Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: <Widget>[
-  Row(
-  children: <Widget>[
-  Container(
-  margin: EdgeInsets.only(left: 4),
-  child: Text(
-  "Sponsors",
-  style: TextStyle(
-  fontWeight: FontWeight.bold),
-  )),
-  ],
-  ),
-  Container(
-  padding: EdgeInsets.symmetric(
-  horizontal: UIUtills()
-      .getProportionalWidth(width: 4),
-  vertical: UIUtills()
-      .getProportionalHeight(height: 6)),
-  height: UIUtills()
-      .getProportionalHeight(height: 288),
-  child: ListView.builder(
-  scrollDirection: Axis.horizontal,
-  itemCount: numbers.length,
-  itemBuilder: (context, index) {
-  return Container(
-  width: UIUtills()
-      .getProportionalWidth(
-  width: 216),
-  child: Card(
-  //color: Colors.blue,
-  child: Column(
-  mainAxisAlignment:
-  MainAxisAlignment.center,
-  children: <Widget>[
-  Expanded(
-  child: Container(
-  margin: EdgeInsets.only(
-  bottom: UIUtills()
-      .getProportionalHeight(
-  height: 6)),
-  child: Image.network(
-  "https://picsum.photos/300",
-  fit: BoxFit.cover,
-  loadingBuilder:
-  (BuildContext ctx,
-  Widget child,
-  ImageChunkEvent
-  loadingProgress) {
-  if (loadingProgress ==
-  null) {
-  return child;
-  } else {
-  return Center(
-  child:
-  SpinKitDoubleBounce(
-  color: Colors
-      .lightBlueAccent,
-  ),
-  );
-  }
-  },
-  ),
-  ),
-  ),
-   Tooltip(
-  child: Text(
-
-      "Sponsor name",
-  maxLines: 2,
-  overflow:
-  TextOverflow
-      .ellipsis,
-  style: TextStyle(
-  fontWeight:
-  FontWeight
-      .bold),
-  ),
-  message: "sponsor_name",
-  waitDuration:
-  Duration(
-  milliseconds:
-  0),
-  ),
-
-   Row(
-  mainAxisAlignment:
-  MainAxisAlignment
-      .center,
-  children: <Widget>[
-  Icon(Icons.phone),
-  Container(
-  margin: EdgeInsets
-      .only(
-  left: 4),
-  child: Tooltip(
-  child: Text(
-
-      "contact person",
-  overflow:
-  TextOverflow
-      .ellipsis,
-  ),
-  message:
-      "contact_person",
-  ),
-  ),
-  ],
-  )
-  ],
-  ),
-  ),
-  );
-  }),
-  ),
-  ],
-  ),
-//                      FutureBuilder(
-//                        future: getSocialMediaLinks(),
-//                        builder:
-//                            (BuildContext context, AsyncSnapshot snapshot) {
-//                          if (snapshot.data == null) {
-//                            return Container(
-//                              child: SizedBox(),
-//                            );
-//                          } else {
-//                            return Container(
-//                              margin: EdgeInsets.only(top: 0.5),
-//                              padding: EdgeInsets.symmetric(
-//                                  horizontal: 16.0, vertical: 4.0),
-//                              height:
-//                              MediaQuery.of(context).size.height * 0.08,
-//                              child: ListView.builder(
-//                                  scrollDirection: Axis.horizontal,
-//                                  itemCount: numbers.length,
-//                                  itemBuilder: (context, index) {
-//                                    return Card(
-//                                      color: ColorGlobal.color2,
-//                                      child: Container(
-//                                        child: Card(
-//                                          elevation: 2,
-//                                          clipBehavior: Clip.antiAlias,
-//                                          shape: RoundedRectangleBorder(
-//                                              borderRadius:
-//                                              BorderRadius.circular(10)),
-//                                          child: Container(
-//                                            color: ColorGlobal.textColor,
-//                                            padding: EdgeInsets.all(5),
-//                                            child: FittedBox(
-//                                              fit: BoxFit.fitWidth,
-//                                              child: Center(
-//                                                  child: InkWell(
-//                                                    child: Text(
-//                                                      snapshot
-//                                                          .data[index].platform,
-//                                                      style: TextStyle(
-//                                                          color: ColorGlobal
-//                                                              .whiteColor,
-//                                                          fontSize: 15,
-//                                                          fontWeight:
-//                                                          FontWeight.bold),
-//                                                    ),
-//                                                    onTap: () => launch(snapshot
-//                                                        .data[index].feed_url),
-//                                                  )),
-//                                            ),
-//                                          ),
-//                                        ),
-//                                      ),
-//                                    );
-//                                  }),
-//                            );
-//                          }
-//                        },
-//                      ),
-  //sample
-                      Container(
-  margin: EdgeInsets.only(top: 0.5),
-  padding: EdgeInsets.symmetric(
-  horizontal: 16.0, vertical: 4.0),
-  height:
-  MediaQuery.of(context).size.height * 0.08,
-  child: ListView.builder(
-  scrollDirection: Axis.horizontal,
-  itemCount: numbers.length,
-  itemBuilder: (context, index) {
-  return Card(
-  color: ColorGlobal.color2,
-  child: Container(
-  child: Card(
-  elevation: 2,
-  clipBehavior: Clip.antiAlias,
-  shape: RoundedRectangleBorder(
-  borderRadius:
-  BorderRadius.circular(10)),
-  child: Container(
-  color: ColorGlobal.textColor,
-  padding: EdgeInsets.all(5),
-  child: FittedBox(
-  fit: BoxFit.fitWidth,
-  child: Center(
-  child: InkWell(
-  child: Text(
-  "Facebook",
-  style: TextStyle(
-  color: ColorGlobal
-      .whiteColor,
-  fontSize: 15,
-  fontWeight:
-  FontWeight.bold),
-  ),
-  onTap: () => launch("https://www.facebook.com/"),
-  )),
-  ),
-  ),
-  ),
-  ),
-  );
-  }),
-  ),
+                      FutureBuilder(
+                        future: getSponsors(),
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          if (snapshot.data == null) {
+                            if (isEmpty) {
+                              return Row(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Container(
+                                          margin: EdgeInsets.only(left: 4),
+                                          child: Text("Sponsors : ")),
+                                    ],
+                                  ),
+                                  Text(
+                                    "No Sponsors for this event",
+                                    style: TextStyle(color: Colors.black38),
+                                  ),
+                                ],
+                              );
+                            } else if (serverError) {
+                              return Center(
+                                  child: Text(
+                                    "Server Error..Try again after sometime",
+                                    style: TextStyle(color: Colors.blueGrey),
+                                  ));
+                            } else {
+                              return Center(
+                                child: SpinKitDoubleBounce(
+                                  color: Colors.lightBlueAccent,
+                                ),
+                              );
+                            }
+                          } else {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Container(
+                                        margin: EdgeInsets.only(left: 4),
+                                        child: Text(
+                                          "Sponsors",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                  ],
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: UIUtills()
+                                          .getProportionalWidth(width: 4),
+                                      vertical: UIUtills()
+                                          .getProportionalHeight(height: 6)),
+                                  height: UIUtills()
+                                      .getProportionalHeight(height: 288),
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: snapshot.data.length,
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                          width: UIUtills()
+                                              .getProportionalWidth(
+                                              width: 216),
+                                          child: Card(
+                                            //color: Colors.blue,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: Container(
+                                                    margin: EdgeInsets.only(
+                                                        bottom: UIUtills()
+                                                            .getProportionalHeight(
+                                                            height: 6)),
+                                                    child: Image.network(
+                                                      "https://picsum.photos/300",
+                                                      fit: BoxFit.cover,
+                                                      loadingBuilder:
+                                                          (BuildContext ctx,
+                                                          Widget child,
+                                                          ImageChunkEvent
+                                                          loadingProgress) {
+                                                        if (loadingProgress ==
+                                                            null) {
+                                                          return child;
+                                                        } else {
+                                                          return Center(
+                                                            child:
+                                                            SpinKitDoubleBounce(
+                                                              color: Colors.lightBlueAccent,
+                                                            ),
+                                                          );
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                snapshot.data[index].sponsor_name!=null
+                                                    ? Tooltip(
+                                                  child: Text(
+                                                    snapshot.data[index]
+                                                        .sponsor_name,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                    TextOverflow
+                                                        .ellipsis,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .bold),
+                                                  ),
+                                                  message: snapshot
+                                                      .data[index]
+                                                      .sponsor_name,
+                                                  waitDuration:
+                                                  Duration(
+                                                      milliseconds:
+                                                      0),
+                                                )
+                                                    : SizedBox(),
+                                                snapshot.data[index].contact_person_name!=null ? Row(
+                                                  mainAxisAlignment:MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    Icon(Icons.phone),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 4),
+                                                      child: Tooltip(
+                                                        child: Text(
+                                                          snapshot.data[
+                                                          index].contact_person_name,
+                                                          overflow:
+                                                          TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                        message: snapshot
+                                                            .data[index]
+                                                            .contact_person_name,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                                    : SizedBox(),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                ),
+                              ],
+                            );
+                          }
+                        },
+                      ),
+                      //                     //sample
+                      // Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // children: <Widget>[
+                      // Row(
+                      // children: <Widget>[
+                      // Container(
+                      // margin: EdgeInsets.only(left: 4),
+                      // child: Text(
+                      // "Sponsors",
+                      // style: TextStyle(
+                      // fontWeight: FontWeight.bold),
+                      // )),
+                      // ],
+                      // ),
+                      // Container(
+                      // padding: EdgeInsets.symmetric(
+                      // horizontal: UIUtills()
+                      //     .getProportionalWidth(width: 4),
+                      // vertical: UIUtills()
+                      //     .getProportionalHeight(height: 6)),
+                      // height: UIUtills()
+                      //     .getProportionalHeight(height: 288),
+                      // child: ListView.builder(
+                      // scrollDirection: Axis.horizontal,
+                      // itemCount: numbers.length,
+                      // itemBuilder: (context, index) {
+                      // return Container(
+                      // width: UIUtills()
+                      //     .getProportionalWidth(
+                      // width: 216),
+                      // child: Card(
+                      // //color: Colors.blue,
+                      // child: Column(
+                      // mainAxisAlignment:
+                      // MainAxisAlignment.center,
+                      // children: <Widget>[
+                      // Expanded(
+                      // child: Container(
+                      // margin: EdgeInsets.only(
+                      // bottom: UIUtills()
+                      //     .getProportionalHeight(
+                      // height: 6)),
+                      // child: Image.network(
+                      // "https://picsum.photos/300",
+                      // fit: BoxFit.cover,
+                      // loadingBuilder:
+                      // (BuildContext ctx,
+                      // Widget child,
+                      // ImageChunkEvent
+                      // loadingProgress) {
+                      // if (loadingProgress ==
+                      // null) {
+                      // return child;
+                      // } else {
+                      // return Center(
+                      // child:
+                      // SpinKitDoubleBounce(
+                      // color: Colors
+                      //     .lightBlueAccent,
+                      // ),
+                      // );
+                      // }
+                      // },
+                      // ),
+                      // ),
+                      // ),
+                      //  Tooltip(
+                      // child: Text(
+                      //
+                      //     "Sponsor name",
+                      // maxLines: 2,
+                      // overflow:
+                      // TextOverflow
+                      //     .ellipsis,
+                      // style: TextStyle(
+                      // fontWeight:
+                      // FontWeight
+                      //     .bold),
+                      // ),
+                      // message: "sponsor_name",
+                      // waitDuration:
+                      // Duration(
+                      // milliseconds:
+                      // 0),
+                      // ),
+                      //
+                      //  Row(
+                      // mainAxisAlignment:
+                      // MainAxisAlignment
+                      //     .center,
+                      // children: <Widget>[
+                      // Icon(Icons.phone),
+                      // Container(
+                      // margin: EdgeInsets
+                      //     .only(
+                      // left: 4),
+                      // child: Tooltip(
+                      // child: Text(
+                      //
+                      //     "contact person",
+                      // overflow:
+                      // TextOverflow
+                      //     .ellipsis,
+                      // ),
+                      // message:
+                      //     "contact_person",
+                      // ),
+                      // ),
+                      // ],
+                      // )
+                      // ],
+                      // ),
+                      // ),
+                      // );
+                      // }),
+                      // ),
+                      // ],
+                      // ),
+                      (isSocialMediaEmpty)==false?Container(child: Text("Event Links"),margin: EdgeInsets.only(left: 4),):SizedBox(height: 4,),
+                      FutureBuilder(
+                        future: getSocialMediaLinks(),
+                        builder: (BuildContext context,AsyncSnapshot snapshot){
+                          if(snapshot.data==null){
+                            if(isSocialMediaEmpty){
+                              return SizedBox();
+                            }else{
+                              return Container(width: 0,height: 0,);
+                            }
+                            // else if(serverError){
+                            //   return Center(
+                            //       child:Text("Server Error..Try again after some time",style: TextStyle(color: Colors.blueGrey,fontSize: 16),)
+                            //   );
+                            // }
+                            // else {
+                            //   return Center(
+                            //     child: SpinKitDoubleBounce(
+                            //       color: Colors.lightBlueAccent,
+                            //     ),
+                            //   );
+                            // }
+                          }
+                          else{
+                            return Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 4.0),
+                              height:MediaQuery.of(context).size.height * 0.06,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (context, index) {
+                                    return getIcon(snapshot.data[index].platform.toString(),snapshot.data[index].feed_url.toString());
+                                  }),
+                            );
+                          }
+                        },
+                      )
+                      // //sample
+                      //                     Container(
+                      // margin: EdgeInsets.only(top: 0.5),
+                      // padding: EdgeInsets.symmetric(
+                      // horizontal: 16.0, vertical: 4.0),
+                      // height:
+                      // MediaQuery.of(context).size.height * 0.08,
+                      // child: ListView.builder(
+                      // scrollDirection: Axis.horizontal,
+                      // itemCount: numbers.length,
+                      // itemBuilder: (context, index) {
+                      // return Card(
+                      // color: ColorGlobal.color2,
+                      // child: Container(
+                      // child: Card(
+                      // elevation: 2,
+                      // clipBehavior: Clip.antiAlias,
+                      // shape: RoundedRectangleBorder(
+                      // borderRadius:
+                      // BorderRadius.circular(10)),
+                      // child: Container(
+                      // color: ColorGlobal.textColor,
+                      // padding: EdgeInsets.all(5),
+                      // child: FittedBox(
+                      // fit: BoxFit.fitWidth,
+                      // child: Center(
+                      // child: InkWell(
+                      // child: Text(
+                      // "Facebook",
+                      // style: TextStyle(
+                      // color: ColorGlobal
+                      //     .whiteColor,
+                      // fontSize: 15,
+                      // fontWeight:
+                      // FontWeight.bold),
+                      // ),
+                      // onTap: () => launch("https://www.facebook.com/"),
+                      // )),
+                      // ),
+                      // ),
+                      // ),
+                      // ),
+                      // );
+                      // }),
+                      // ),
                     ],
                   ),
                 )
@@ -899,8 +872,8 @@ Widget getBody(){
               fontSize: 16
           ))
       );
-      }
-}
+    }
+  }
   String getDate() {
     var date = DateTime.parse(widget.currEvent.datetime);
     var updateddate = DateFormat.yMMMMd().format(date);
@@ -943,7 +916,7 @@ Widget getBody(){
     return emirate;
   }
 
-  Future<dynamic> getSocialMediaLinks() async {
+  Future<List<SocialMediaFeed>> getSocialMediaLinks() async {
     var params = {'event_id': widget.currEvent.event_id.toString()};
     List<SocialMediaFeed> socialmediafeeds = [];
     var uri = Uri.https(
@@ -954,27 +927,32 @@ Widget getBody(){
       "Cookie": "${prefs.getString("cookie")}",
     }).then((_response) {
       ResponseBody responseBody = new ResponseBody();
-      print('Response body: ${_response.body}');
+      print('Response body:socialmedia ${_response.body}');
       if (_response.statusCode == 200) {
         responseBody = ResponseBody.fromJson(json.decode(_response.body));
         if (responseBody.status_code == 200) {
-          if (responseBody.data != []) {
+          if (responseBody.data.length!=0) {
             for (var u in responseBody.data) {
-              if (SocialMediaFeed.fromJson(json.decode(u)).feed_url != null) {
-                socialmediafeeds.add(SocialMediaFeed.fromJson(json.decode(u)));
-              }
+              SocialMediaFeed currInfo = SocialMediaFeed.fromJson(u);
+              socialmediafeeds.add(currInfo);
             }
+            return socialmediafeeds;
           }
-          return socialmediafeeds;
+          else{
+            print('Social Media Empty');
+            isSocialMediaEmpty=true;
+            return 1;
+          }
         } else {
           print(responseBody.data);
-          return socialmediafeeds;
+          return 2;
         }
       } else {
         print('Server error');
-        return socialmediafeeds;
+        return 3;
       }
     });
+    if(socialmediafeeds.length!=0){return socialmediafeeds;}
   }
 
   @override
@@ -982,12 +960,73 @@ Widget getBody(){
     super.initState();
     getEventDetails();
   }
-
+  Widget getIcon(String socialMediaName,String feed_url){
+    String iconLocation;
+    if(socialMediaName.toLowerCase()=="instagram"){
+      iconLocation='assets/images/instagram.png';
+    }    else if(socialMediaName.toLowerCase()=="facebook"){
+      iconLocation='assets/images/facebook.png';
+    }else if(socialMediaName.toLowerCase()=="twitter"){
+      iconLocation='assets/images/twitter.png';
+    }else if(socialMediaName.toLowerCase()=="youtube"){
+      iconLocation='assets/images/youtube.png';
+    }else if(socialMediaName.toLowerCase()=="linkedin"){
+      iconLocation='assets/images/linkedin.png';
+    }
+    if(iconLocation!=null){
+      return InkWell(
+        child: Container(
+          margin: EdgeInsets.only(left: 8,right: 8),
+          child: Image(
+            height: 26.0,
+            width: 26.0,
+            fit: BoxFit.scaleDown,
+            image: AssetImage(
+                iconLocation),
+            alignment: Alignment.center,
+          ),
+        ),
+        onTap: () => launch(feed_url),
+      );
+    }else{
+      return Card(
+        color: ColorGlobal.color2,
+        child: Container(
+          child: Card(
+            elevation: 2,
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(10)),
+            child: Container(
+              color: ColorGlobal.textColor,
+              padding: EdgeInsets.all(5),
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Center(
+                    child: InkWell(
+                      child: Text(
+                        socialMediaName,
+                        style: TextStyle(
+                            color: ColorGlobal
+                                .whiteColor,
+                            fontSize: 15,
+                            fontWeight:
+                            FontWeight.bold),
+                      ),
+                      onTap: () => launch(feed_url),
+                    )),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+  }
   Future<dynamic> getEventDetails() async {
     var params = {'event_id': widget.currEvent.event_id.toString()};
 
-    var uri =
-    Uri.https('delta.nitt.edu', '/recal-uae/api/events/manage/', params);
+    var uri =Uri.https('delta.nitt.edu', '/recal-uae/api/events/manage/', params);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(uri, headers: {
       "Accept": "application/json",
@@ -999,16 +1038,15 @@ Widget getBody(){
         responseBody = ResponseBody.fromJson(json.decode(_response.body));
         if (responseBody.status_code == 200) {
           if (responseBody.data.length != 0) {
-
-              setState(() {
-                detailsInfo=EventDetailsInfo(
-                    detail_amendment_message: responseBody.data['detail_amendment_message'],
-                    detail_message: responseBody.data['detail_message'],
-                registration_link: responseBody.data['registration_link'],
-                volunteer_message: responseBody.data['volunteer_message']);
-                detailsLoading=false;
-              });
-          print("yayy"+responseBody.data.toString());
+            setState(() {
+              detailsInfo=EventDetailsInfo(
+                  detail_amendment_message: responseBody.data['detail_amendment_message'],
+                  detail_message: responseBody.data['detail_message'],
+                  registration_link: responseBody.data['registration_link'],
+                  volunteer_message: responseBody.data['volunteer_message']);
+              detailsLoading=false;
+            });
+            print("yayy"+responseBody.data.toString());
             return detailsInfo;
           } else {
             setState(() {
@@ -1024,7 +1062,7 @@ Widget getBody(){
         setState(() {
           detailsServerError = true;
         });
-       print('Server error');
+        print('Server error');
         return 3;
       }
     });
@@ -1034,7 +1072,7 @@ Widget getBody(){
     var params = {'event_id': widget.currEvent.event_id.toString()};
     List<SponsorInfo> sponsorList = [];
     var uri =
-        Uri.https('delta.nitt.edu', '/recal-uae/api/events/sponsors/', params);
+    Uri.https('delta.nitt.edu', '/recal-uae/api/events/sponsors/',params);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(uri, headers: {
       "Accept": "application/json",
@@ -1047,7 +1085,8 @@ Widget getBody(){
         if (responseBody.status_code == 200) {
           if (responseBody.data.length != 0) {
             for (var u in responseBody.data) {
-              sponsorList.add(SponsorInfo.fromJson(json.decode(u)));
+              SponsorInfo model= SponsorInfo.fromJson(u);
+              sponsorList.add(model);
             }
             return sponsorList;
           } else {
@@ -1064,5 +1103,49 @@ Widget getBody(){
         return 3;
       }
     });
+    if(sponsorList.length!=0){return sponsorList;}
+  }
+  Future<List<FelicitationModel>> getFelicitations() async{
+    var params={'event_id':widget.currEvent.event_id.toString()};
+    List<FelicitationModel> felicitationList=[];
+    var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/events/felicitations/',params);
+    SharedPreferences prefs=await SharedPreferences.getInstance();
+    var response=await http.get(
+        uri,
+        headers: {
+          "Accept" : "application/json",
+          "Cookie" : "${prefs.getString("cookie")}",
+        }
+    ) .then((_response) {
+      ResponseBody responseBody = new ResponseBody();
+      print('Response body: felicitations ${_response.body}');
+      if (_response.statusCode == 200) {
+        responseBody = ResponseBody.fromJson(json.decode(_response.body));
+        if (responseBody.status_code == 200) {
+          if(responseBody.data.length!=0) {
+            for(var u in responseBody.data) {
+              FelicitationModel model= FelicitationModel.fromJson(u);
+              felicitationList.add(model);
+            }
+            print(felicitationList.length.toString());
+            return felicitationList;
+          }
+          else{
+            print("empty");
+            isEmpty=true;
+            return 1;
+          }
+        } else {
+          print(responseBody.data);
+          return 2;
+        }
+      } else {
+        print('Server error');
+        serverError=true;
+        return 3;
+      }
+    });
+    if(felicitationList.length!=0){return felicitationList;}
   }
 }
+

@@ -11,32 +11,32 @@ class _EventPhotosState extends State<EventPhotos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Event Photos",
-          style: TextStyle(color: ColorGlobal.textColor),),
-        backgroundColor: ColorGlobal.whiteColor,
-        iconTheme: IconThemeData(color: ColorGlobal.textColor),
-      ),
-      body: Container(
-        margin: EdgeInsets.only(top: 8),
-        child: GridView.count(crossAxisCount: 2,
-        mainAxisSpacing: 5.0,
-        crossAxisSpacing: 5.0,
-        padding: EdgeInsets.all(5),
-        children: gridTiles(),
+        appBar: AppBar(
+          title: Text("Event Photos",
+            style: TextStyle(color: ColorGlobal.textColor),),
+          backgroundColor: ColorGlobal.whiteColor,
+          iconTheme: IconThemeData(color: ColorGlobal.textColor),
         ),
-      )
+        body: Container(
+          margin: EdgeInsets.only(top: 8),
+          child: GridView.count(crossAxisCount: 2,
+            mainAxisSpacing: 5.0,
+            crossAxisSpacing: 5.0,
+            padding: EdgeInsets.all(5),
+            children: gridTiles(),
+          ),
+        )
     );
   }
   List<Widget> gridTiles(){
     List<Container> containers=new List<Container>.generate(30, (index){
-  return Container(
-    child:ClipRRect(
-      child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: "https://picsum.photos/300",fit: BoxFit.cover,),
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-    ),
-  );
+      return Container(
+        child:ClipRRect(
+          child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: "https://picsum.photos/300",fit: BoxFit.cover,),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      );
     });
-  return containers;
+    return containers;
   }
 }
