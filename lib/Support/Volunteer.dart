@@ -10,18 +10,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
-class WriteMentorScreen extends StatefulWidget {
+class VolunteerScreen extends StatefulWidget {
   @override
-  MentorState createState() => MentorState();
+  VolunteerState createState() => VolunteerState();
 }
 
-class MentorState extends State<WriteMentorScreen> {
+class VolunteerState extends State<VolunteerScreen> {
   final TextEditingController messageController = TextEditingController();
 
   Future<bool> _sendMessage(String body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String url =
-        "https://delta.nitt.edu/recal-uae/api/employment/write_mentor";
+        "https://delta.nitt.edu/recal-uae/api/employment/write_admin";
     final response = await http.post(url, body: {
       "user_id": "${prefs.getString("user_id")}",
       "body": body,
@@ -82,7 +82,7 @@ class MentorState extends State<WriteMentorScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'Mentor Support',
+          'Volunteer',
           style: TextStyle(color: ColorGlobal.textColor),
         ),
       ),
@@ -100,7 +100,7 @@ class MentorState extends State<WriteMentorScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Text(
-                      "NEED MENTOR HELP!!",
+                      "WANT TO VOLUNTEER!!",
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),
@@ -121,7 +121,7 @@ class MentorState extends State<WriteMentorScreen> {
                       maxLines: 5,
                       controller: messageController,
                       decoration: InputDecoration(
-                        hintText: 'Enter message to mentor',
+                        hintText: 'Enter details',
                         hintStyle: TextStyle(color: Colors.grey[500]),
                         filled: true,
                         fillColor: Colors.white70,
@@ -167,7 +167,7 @@ class MentorState extends State<WriteMentorScreen> {
                   height: height / 2.75,
                   width: width,
                   fit: BoxFit.fitWidth,
-                  image: AssetImage('assets/images/writementor.jpg'),
+                  image: AssetImage('assets/images/volunteerScreen.jpg'),
                   alignment: Alignment.bottomCenter,
                 ),
               )
