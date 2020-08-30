@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -45,13 +44,13 @@ class LoginState extends State<Login> {
   FocusNode passwordFocus = new FocusNode();
   List<String> result = new List<String>();
 
-
   getDisposeController() {
     email.clear();
     password.clear();
     emailFocus.unfocus();
     passwordFocus.unfocus();
   }
+
   _deleteUserDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("email", null);
@@ -59,7 +58,6 @@ class LoginState extends State<Login> {
     prefs.setString("user_id", null);
     prefs.setString("cookie", null);
   }
-
 
   var list = [
     Colors.lightGreen,
@@ -93,7 +91,8 @@ class LoginState extends State<Login> {
         ) ??
         false;
   }
-  _loginDialog1(ProgressDialog pr,String show, String again, int flag) {
+
+  _loginDialog1(ProgressDialog pr, String show, String again, int flag) {
     pr = new ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
@@ -111,7 +110,11 @@ class LoginState extends State<Login> {
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       elevation: 10.0,
-      progressWidget: Image.asset("assets/images/ring.gif",height: 50,width: 50,),
+      progressWidget: Image.asset(
+        "assets/images/ring.gif",
+        height: 50,
+        width: 50,
+      ),
       insetAnimCurve: Curves.easeInOut,
       progressWidgetAlignment: Alignment.center,
       messageTextStyle: TextStyle(
@@ -119,18 +122,26 @@ class LoginState extends State<Login> {
     );
     pr.show();
     Future.delayed(Duration(milliseconds: 1000)).then((value) {
-      Widget prog = flag==1? Icon(Icons.check_circle,size: 50,color: Colors.green,) : Icon(Icons.close,size: 50,color: Colors.red,);
-      pr.update(message: show.replaceAll("!", ""),progressWidget: prog);
+      Widget prog = flag == 1
+          ? Icon(
+              Icons.check_circle,
+              size: 50,
+              color: Colors.green,
+            )
+          : Icon(
+              Icons.close,
+              size: 50,
+              color: Colors.red,
+            );
+      pr.update(message: show.replaceAll("!", ""), progressWidget: prog);
     });
     Future.delayed(Duration(milliseconds: 2000)).then((value) {
       pr.update(progressWidget: null);
       pr.hide();
     });
-    }
+  }
 
-
-    _loginDialog(String show, String again, int flag) {
-
+  _loginDialog(String show, String again, int flag) {
     return showDialog(
           context: context,
           builder: (context) => new AlertDialog(
@@ -154,7 +165,8 @@ class LoginState extends State<Login> {
         false;
   }
 
-  static _saveUserDetails(String email, String name, String userId, String cookie) async {
+  static _saveUserDetails(
+      String email, String name, String userId, String cookie) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print("Login email before:  ${prefs.getString("email")}");
     print("Login name before:  ${prefs.getString("name")}");
@@ -239,7 +251,6 @@ class LoginState extends State<Login> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -287,16 +298,16 @@ class LoginState extends State<Login> {
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 15),
                         width: width,
-                        height: width*0.4,
+                        height: width * 0.4,
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         decoration: new BoxDecoration(
                             color: ColorGlobal.colorPrimaryDark,
                             image: new DecorationImage(
-                              image: new AssetImage('assets/images/recal_logo.jpg'),
+                              image: new AssetImage(
+                                  'assets/images/recal_logo.jpg'),
                               fit: BoxFit.fill,
                             ),
-                            borderRadius: BorderRadius.circular(width*0.1)
-                        ),
+                            borderRadius: BorderRadius.circular(width * 0.1)),
                       ),
                     ),
                   ),
@@ -369,13 +380,16 @@ class LoginState extends State<Login> {
                                   'email': email.text,
                                   'password': password.text
                                 };
-                                await http.post(
+                                await http
+                                    .post(
                                   url,
                                   body: body,
-                                ).then((_response) {
+                                )
+                                    .then((_response) {
                                   ProgressDialog progressDialog;
                                   User user = new User();
-                                  ResponseBody responseBody = new ResponseBody();
+                                  ResponseBody responseBody =
+                                      new ResponseBody();
                                   print('Response body: ${_response.body}');
 
                                   if (_response.statusCode == 200) {
@@ -383,17 +397,22 @@ class LoginState extends State<Login> {
                                         json.decode(_response.body));
                                     print(json.encode(responseBody.data));
                                     if (responseBody.status_code == 200) {
-                                      String rawCookie = _response.headers['set-cookie'];
-                                      String cookie = rawCookie.substring(0, rawCookie.indexOf(';'));
+                                      String rawCookie =
+                                          _response.headers['set-cookie'];
+                                      String cookie = rawCookie.substring(
+                                          0, rawCookie.indexOf(';'));
                                       print(cookie);
                                       user = User.fromLogin(json.decode(
                                           json.encode(responseBody.data)));
                                       var userId = user.user_id;
-                                      _saveUserDetails(user.email, user.name, userId.toString(), cookie);
+                                      _saveUserDetails(user.email, user.name,
+                                          userId.toString(), cookie);
                                       _loginDialog1(progressDialog,
                                           "Login Successful", "Proceed", 1);
-                                      Future.delayed(Duration(milliseconds: 2000), () {
-                                        Navigator.pushReplacementNamed(context, HOME_PAGE);
+                                      Future.delayed(
+                                          Duration(milliseconds: 2000), () {
+                                        Navigator.pushReplacementNamed(
+                                            context, HOME_PAGE);
                                       });
                                     } else {
                                       print(responseBody.data);
@@ -406,8 +425,7 @@ class LoginState extends State<Login> {
                                         "Server Error", "Try again", 0);
                                   }
                                 });
-                              }
-                              else {
+                              } else {
                                 _loginDialog(
                                     "Enter all fields", "Try again", 2);
                               }

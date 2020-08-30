@@ -317,7 +317,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               width: width*0.8,
                               child: Center(
                                 child: Text(
-                           "Welcome "+"${snapshot.data}",
+                                  "Welcome "+"${snapshot.data}",
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.josefinSans(
                                       fontSize: 25,
@@ -655,7 +655,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                 ),
                                 onTap: () {
-                                  Navigator.pushNamed(context,SOCIAL_BUSINESS);
+                                  Navigator.pushNamed(context,SOCIAL);
                                 },
                               ),
                               SizedBox(
@@ -699,7 +699,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                   ],
                                 ),
                                 onTap: () {
-                                  Navigator.pushNamed(context,SOCIAL_BUSINESS);
+                                  Navigator.pushNamed(context,BUSINESS);
                                 },
                               ),
                             ],
