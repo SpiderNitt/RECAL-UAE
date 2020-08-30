@@ -181,28 +181,44 @@ class _HomeActivityState extends State<HomeActivity> {
         appBar:AppBar(
           backgroundColor: ColorGlobal.whiteColor,
           centerTitle: true,
-          leading: Image(
-            fit: BoxFit.fill,
-            image: AssetImage('assets/images/recal_logo.jpg'),
-          ), // you can put Icon as well, it accepts any widget.
-          title:Text(
-            'RECAL UAE CHAPTER',
-            style: TextStyle(color: ColorGlobal.textColor),
-          ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: GestureDetector(
-                onTap: (){
-                  Navigator.pushNamed(context,PROFILE_SCREEN);
-                },
-                child: CircleAvatar(
-                  radius: 24,
-                  backgroundImage: AssetImage('assets/images/spiderlogo.png'),
-                ),
+          leading: Card(
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 60,
+              child: Image.asset(
+                'assets/images/recal_circular.png',
+                height: 60,
+                width: 60,
+                fit: BoxFit.fill,
               ),
             ),
-          ],
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                new BorderRadius.circular(60)),
+          ),
+          title:Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'RECAL UAE CHAPTER',
+                style: GoogleFonts.josefinSans(color: ColorGlobal.textColor, fontWeight: FontWeight.bold,fontSize: 22),
+              ),
+            ],
+          ),
+//          actions: <Widget>[
+//            Padding(
+//              padding: const EdgeInsets.all(6.0),
+//              child: GestureDetector(
+//                onTap: (){
+//                  Navigator.pushNamed(context,PROFILE_SCREEN);
+//                },
+//                child: CircleAvatar(
+//                  radius: 24,
+//                  backgroundImage: AssetImage('assets/images/spiderlogo.png'),
+//                ),
+//              ),
+//            ),
+//          ],
         ),
         body: Stack(
           children: <Widget>[
@@ -215,7 +231,7 @@ class _HomeActivityState extends State<HomeActivity> {
             ClipRRect(
               borderRadius: BorderRadius.circular(height * 0.05),
               child: Container(
-                height: height * 0.420,
+                height: height * 0.460,
                 color: ColorGlobal.blueColor,
               ),
             ),
@@ -238,49 +254,57 @@ class _HomeActivityState extends State<HomeActivity> {
 //                    ],
 //                  ),
 //                ),
-                GestureDetector(
-                  onTap: (){
-                    Navigator.pushNamed(context, NOTIFICATION_MENU);
-                  },
-                  child: Stack(
-                      fit: StackFit.loose,
-                      children:[
-                        Container(
-                          width: width,
-                          child: Card(
-                            child:Row(
-                              children: <Widget>[
-                                Container(
-                                    padding: EdgeInsets.all(10.0),
-                                    width: width*0.9,
-                                    child: Text("No new messages!!",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 15),)),
-                              ],
-                            ),
-                            elevation: 5,
-//                     shape: RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.circular(15),
-//                     ),
-                          ),
-                        ),
-                        Container(
-                          width: width*0.95,
-                          height: height*0.07,
-                          child: Row(
-                            mainAxisAlignment:MainAxisAlignment.end,
-                            children: <Widget>[
-                              Badge(
-                                badgeContent: Text('3',style: TextStyle(color: Colors.white),),
-                                badgeColor: Colors.green,
-                                child: Icon(Icons.notifications,size: 28,color: Colors.grey[700],),
-                              )
-                            ],
-                          ),
-                        ),
-                      ]
-                  ),
-                ),
+//                Stack(
+//                    fit: StackFit.loose,
+//                    children:[
+//                      Container(
+//                        width: width,
+//                        child: Card(
+//                          child:Row(
+//                            children: <Widget>[
+//                              Container(
+//                                  padding: EdgeInsets.all(10.0),
+//                                  width: width*0.9,
+//                                  child: Text("No new messagessfjf adjfjggj jdejf ajdfh ajf dfjfg sdjfdjfhfgjfkgjfgfjgfjieiddkndsnhuaheuajndawuhna;woeiiej!!",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 15),)),
+//                            ],
+//                          ),
+//                          elevation: 5,
+////                     shape: RoundedRectangleBorder(
+////                       borderRadius: BorderRadius.circular(15),
+////                     ),
+//                        ),
+//                      ),
+//                      Container(
+//                        width: width*0.95,
+//                        height: height*0.07,
+//                        child: Row(
+//                          mainAxisAlignment:MainAxisAlignment.end,
+//                          children: <Widget>[
+//                            Badge(
+//                              badgeContent: Text('3',style: TextStyle(color: Colors.white),),
+//                              badgeColor: Colors.green,
+//                              child: Icon(Icons.notifications,size: 28,color: Colors.grey[700],),
+//                            )
+//                          ],
+//                        ),
+//                      ),
+//                    ]
+//                ),
                 Padding(
-                  padding: const EdgeInsets.only(top:30.0,left: 20,right: 20,bottom: 30),
+                  padding: const EdgeInsets.only(top:15.0,left: 20,right: 20),
+                  child: GestureDetector(
+                    onTap: (){
+                    Navigator.pushNamed(context,PROFILE_SCREEN);
+                    },
+                      child: CircleAvatar(
+                        radius: width/10,
+                        backgroundImage: AssetImage('assets/images/nitt_logo.png'),
+                      ),
+                    ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(top:10.0,left: 20,right: 20, bottom: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -295,8 +319,8 @@ class _HomeActivityState extends State<HomeActivity> {
                                 child: Text(
                                   "Welcome "+"${snapshot.data}",
                                   overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.lato(
-                                      fontSize: 24,
+                                  style: GoogleFonts.josefinSans(
+                                      fontSize: 25,
                                       fontWeight: FontWeight.bold,
                                       color: ColorGlobal.whiteColor
                                   ),
@@ -354,58 +378,110 @@ class _HomeActivityState extends State<HomeActivity> {
 //                    ],
 //                  ),
 //                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-
-                    Container(
-                      width: width*0.5,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(10))
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left:8.0,right: 8,),
-                        child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: DropdownButton<String>(
-                            underline: SizedBox(),
-                            items: dropdownItems.map((String dropdownmenuitem){
-                              return DropdownMenuItem<String>(
-                                  value:dropdownmenuitem,
-                                  child: Container(child: Text(dropdownmenuitem,overflow:TextOverflow.ellipsis,maxLines: 1,style:TextStyle(color: Colors.black),))
-                              );
-                            }).toList(),
-                            hint: Text(
-                                "Options",
-                                style:TextStyle(fontSize: 18)
+                Padding(
+                  padding: const EdgeInsets.only(top:10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        child: Column(
+                          children: <Widget>[
+                            Card(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: width / 10,
+                                child: Badge(
+                                  badgeContent: Text('5',style: TextStyle(color: Colors.white),),
+                                  badgeColor: Colors.green,
+                                  position: BadgePosition.topRight(top: -8, right: -8),
+                                  child: Image.asset(
+                                    'assets/images/chat.png',
+                                    color: Colors.blue[800],
+                                    height: width / 8,
+                                    width: width / 8,
+                                  ),
+                                ),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  new BorderRadius.circular(width / 10)),
                             ),
-                            onChanged: (String newvalue){
-                              setState(() {
-                                this._currentItemSelected=newvalue;
-                                switch(this._currentItemSelected){
-                                  case "Volunteer":{Navigator.pushNamed(context,EMPLOYMENT_SUPPORT);break;}
-                                  case "Write to admin":{Navigator.pushNamed(context,WRITE_TO_ADMIN);break;}
-                                  case "Write to mentor":{Navigator.pushNamed(context,WRITE_MENTOR);break;}
-                                  default:{Navigator.pushNamed(context,MARKET_SURVEY);break;}
-
-                                }
-
-                              });
-                            },
-                          ),
+                            Text(
+                              "Message",
+                              style: TextStyle(
+                                  fontFamily: 'Pacifico',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorGlobal.whiteColor),
+                            ),
+                            Text(
+                              "View Messages",
+                              style: TextStyle(
+                                  fontFamily: 'Pacifico',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: ColorGlobal.whiteColor.withOpacity(0.7)),
+                            ),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
                         ),
+                        onTap: () {
+//                          Navigator.pushNamed(context,SOCIAL_BUSINESS);
+                        },
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        width: width/5,
+                      ),
+                      GestureDetector(
+                        child: Column(
+                          children: <Widget>[
+                            Card(
+                              child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: width / 10,
+                                  child: Image.asset(
+                                    'assets/images/calendar.png',
+                                    height: width / 8,
+                                    width: width / 8,
+                                    color: Colors.blue[700],
+                                  ),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  new BorderRadius.circular(width / 10)),
+                            ),
+                            Text(
+                              "Events",
+                              style: TextStyle(
+                                  fontFamily: 'Pacifico',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorGlobal.whiteColor),
+                            ),
+                            Text(
+                              "Checkout Events",
+                              style: TextStyle(
+                                  fontFamily: 'Pacifico',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: ColorGlobal.whiteColor.withOpacity(0.7)),
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          Navigator.push(context,MaterialPageRoute(builder: (context) =>
+                              EventsScreen()));
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
             Column(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(top: height * 0.36),
+                  margin: EdgeInsets.only(top: height * 0.40),
                   child: Column(
                       children: [Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -418,9 +494,10 @@ class _HomeActivityState extends State<HomeActivity> {
                                     backgroundColor: Colors.white,
                                     radius: width / 10,
                                     child: Image.asset(
-                                      'assets/images/calendar.png',
+                                      'assets/images/social_media.png',
                                       height: width / 9,
                                       width: width / 9,
+                                      color: Colors.blue[800],
                                     ),
                                   ),
                                   elevation: 20,
@@ -429,7 +506,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                       new BorderRadius.circular(width / 10)),
                                 ),
                                 Text(
-                                  "Events",
+                                  "Social Media",
                                   style: TextStyle(
                                       fontFamily: 'Pacifico',
                                       fontSize: 15,
@@ -437,7 +514,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                       color: ColorGlobal.textColor),
                                 ),
                                 Text(
-                                  "Checkout events",
+                                  "Social Network",
                                   style: TextStyle(
                                       fontFamily: 'Pacifico',
                                       fontSize: 13,
@@ -447,8 +524,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               ],
                             ),
                             onTap: () {
-                              Navigator.push(context,MaterialPageRoute(builder: (context) =>
-                                  EventsScreen()));
+                              Navigator.pushNamed(context, SOCIAL_MEDIA);
                             },
                           ),
                           GestureDetector(
@@ -460,7 +536,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                     radius: width / 10,
                                     child: Image.asset(
                                       'assets/images/application.png',
-                                      color: ColorGlobal.blueColor,
+                                      color: Colors.blue[800],
                                       height: width / 10,
                                       width: width / 10,
                                     ),
@@ -501,7 +577,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                     radius: width / 10,
                                     child: Image.asset(
                                       'assets/images/scholarship.png',
-                                      color: ColorGlobal.blueColor,
+                                      color: Colors.blue[800],
                                       height: width / 10,
                                       width: width / 10,
                                     ),
@@ -549,7 +625,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                         radius: width / 10,
                                         child: Image.asset(
                                           'assets/images/network.png',
-                                          color: ColorGlobal.blueColor,
+                                          color: Colors.blue[800],
                                           height: width / 10,
                                           width: width / 10,
                                         ),
@@ -593,9 +669,10 @@ class _HomeActivityState extends State<HomeActivity> {
                                         backgroundColor: Colors.white,
                                         radius: width / 10,
                                         child: Image.asset(
-                                          'assets/images/business.png',
+                                          'assets/images/busi_group.png',
                                           height: width / 9,
                                           width: width / 9,
+                                          color: Colors.blue[800],
                                         ),
                                       ),
                                       elevation: 20,
@@ -628,7 +705,8 @@ class _HomeActivityState extends State<HomeActivity> {
                             ],
                           ),
                         ),
-                      ]),
+                      ],
+                  ),
                 ),
 //                FlatButton(
 //                  onPressed: () async {
