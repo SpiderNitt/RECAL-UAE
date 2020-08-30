@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:iosrecal/Home/Feedback.dart';
 import 'package:iosrecal/Home/MemberDatabase.dart';
-import 'package:iosrecal/Home/MentorList.dart';
 import 'package:iosrecal/Home/SocialMedia.dart';
 import 'package:iosrecal/Home/WriteToMentor.dart';
 import 'package:iosrecal/Home/AlumniPlaced.dart';

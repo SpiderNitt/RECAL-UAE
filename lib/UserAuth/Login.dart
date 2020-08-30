@@ -39,7 +39,7 @@ class LoginState extends State<Login> {
   TextEditingController email =
       new TextEditingController(text: "someone@gmail.com");
   TextEditingController password =
-      new TextEditingController(text: "o84HWLLJ5pmd");
+      new TextEditingController(text: "1j7P1T3ync2I");
 
   FocusNode emailFocus = new FocusNode();
   FocusNode passwordFocus = new FocusNode();
@@ -187,6 +187,7 @@ class LoginState extends State<Login> {
 
   static loginUser(String email, String password) async {
     var url = "https://delta.nitt.edu/recal-uae/api/auth/login/";
+    print("password: " + password);
     var body = {'email': email, 'password': password};
     await http
         .post(
@@ -223,7 +224,7 @@ class LoginState extends State<Login> {
   void initState() {
     // TODO: implement initState
     email = TextEditingController(text: "someone@gmail.com");
-    password = TextEditingController(text: "o84HWLLJ5pmd");
+    password = TextEditingController(text: "1j7P1T3ync2I");
     super.initState();
     print("LOGIN");
     _deleteUserDetails();
@@ -362,6 +363,8 @@ class LoginState extends State<Login> {
                               if (email.text != "" && password.text != "") {
                                 var url =
                                     "https://delta.nitt.edu/recal-uae/api/auth/login/";
+                                print("password: " + password.text);
+
                                 var body = {
                                   'email': email.text,
                                   'password': password.text
@@ -407,7 +410,6 @@ class LoginState extends State<Login> {
                               else {
                                 _loginDialog(
                                     "Enter all fields", "Try again", 2);
-
                               }
                             },
                             child: Container(
@@ -476,26 +478,18 @@ class LoginState extends State<Login> {
                           ),
                         ),
                         SizedBox(
-                          height: 24.0,
+                          height: 10.0,
+                        ),
+                        Text(
+                          "Note: Don't have the credentials? Write an email to recaluaechapter@gmail.com",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: ColorGlobal.textColor.withOpacity(0.9),
+                            fontWeight: FontWeight.w300,
+                          ),
                         ),
                       ],
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 20,
-                    left: 20,
-                    right: 20.0,
-                    child: Container(
-                      margin: EdgeInsets.only(top: 15),
-                      child: Text(
-                        "Note: Don't have the credentials? Write an email to recaluaechapter@gmail.com",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: ColorGlobal.textColor.withOpacity(0.9),
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
                     ),
                   ),
                 ],

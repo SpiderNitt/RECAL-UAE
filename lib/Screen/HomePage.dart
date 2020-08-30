@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:iosrecal/Support/SupportScreen.dart';
 
 import '../Home/HomeActivity.dart';
 import '../Achievements/AchievementsScreen.dart';
@@ -51,7 +52,7 @@ class HomePageState extends State<HomePage> {
 //      break;
       case 1: return (HomeActivity());
       break;
-      default:return(SocialMediaScreen());
+      default:return(SupportScreen());
 //      case 3: return(EventsScreen());
 //      break;
 //      case 4: return(ProfileScreen());
@@ -136,7 +137,7 @@ class HomePageState extends State<HomePage> {
                 color: ColorGlobal.color3,
               ),
               Icon(
-                Icons.question_answer,
+                Icons.rate_review,
                 size: 30,
                 color: ColorGlobal.color3,
               ),

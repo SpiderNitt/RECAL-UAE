@@ -74,7 +74,6 @@ class _EmploymentSupportState extends State<EmploymentSupport> {
             padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
             child: Card(
               borderOnForeground: true,
-              elevation: 10,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
