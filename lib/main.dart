@@ -12,7 +12,6 @@ import 'package:iosrecal/Home/WriteToMentor.dart';
 import 'package:iosrecal/Home/AlumniPlaced.dart';
 import 'package:iosrecal/Home/OpenPositions.dart';
 import 'package:iosrecal/Home/SeekGuidance.dart';
-import 'package:iosrecal/Home/WriteAdmin.dart';
 import 'package:iosrecal/Home/NotificationMenu.dart';
 import 'Support/WriteAdmin.dart';
 import 'Constant/Constant.dart';

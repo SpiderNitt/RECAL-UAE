@@ -143,7 +143,7 @@ class SurveyState extends State<SurveyScreen>
                           child: Card(
                             //color: ColorGlobal.blueColor,
                             elevation: 20,
-                            shadowColor: const Color(0x802196F3),
+//                            shadowColor: const Color(0x802196F3),
                             margin: const EdgeInsets.all(8),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -190,7 +190,7 @@ class SurveyState extends State<SurveyScreen>
                             child: Card(
                               //color: ColorGlobal.blueColor,
                               elevation: 20,
-                              shadowColor: const Color(0x802196F3),
+//                              shadowColor: const Color(0x802196F3),
                               margin: const EdgeInsets.all(8),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
