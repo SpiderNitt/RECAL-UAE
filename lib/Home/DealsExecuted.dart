@@ -64,7 +64,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
                 Navigator.pop(context);
               }),
           title: Text(
-            'Member Database',
+            'Deals Executed',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),

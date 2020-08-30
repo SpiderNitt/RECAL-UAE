@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:iosrecal/Home/NotificationDetail.dart';
 import 'package:iosrecal/models/NotificationsModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/PositionModel.dart';
@@ -87,26 +88,35 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                 icon = Icons.notifications_active;
                 color =Color(0xcc26cb3c);
               }
-              return ListTile(
-                leading: CircleAvatar(
-                  //backgroundColor: Color(color),
-                  child: Icon(
-                    icon,
-                    color: ColorGlobal.whiteColor,
+              return InkWell(
+                onTap: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationDetail(notifications[index]))),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    //backgroundColor: Color(color),
+                    child: Icon(
+                      icon,
+                      color: ColorGlobal.whiteColor,
+                    ),
                   ),
-                ),
-                title: Text(notifications[index].title,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20.0,
+                  title: Hero(
+                    tag: "Notification_" + notifications[index].notification_id.toString(),
+                    child: Material(
+                      type: MaterialType.transparency,
+                      child: Text(notifications[index].title,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                trailing: Container(
-                  height: 10.0,
-                  width: 10.0,
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
+                  trailing: Container(
+                    height: 10.0,
+                    width: 10.0,
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                    ),
                   ),
                 ),
               );
