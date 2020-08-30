@@ -46,6 +46,7 @@ dependencies:
   fluttertoast: ^4.0.0
   progress_dialog: ^1.2.4
   carousel_slider: ^2.2.1
+  flip_card: ^0.4.4
 
 
 dev_dependencies:

@@ -11,6 +11,7 @@ import '../Constant/ColorGlobal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import '../Support/supportScreen.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -51,7 +52,7 @@ class HomePageState extends State<HomePage> {
 //      break;
       case 1: return (HomeActivity());
       break;
-      default:return(SocialMediaScreen());
+      default:return(SupportScreen());
 //      case 3: return(EventsScreen());
 //      break;
 //      case 4: return(ProfileScreen());
