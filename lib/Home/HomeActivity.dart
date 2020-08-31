@@ -1,12 +1,16 @@
+import 'dart:core';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iosrecal/Events/EventsScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/ColorGlobal.dart';
 import '../Constant/Constant.dart';
+import 'package:badges/badges.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/CoreCommModel.dart';
 import 'dart:convert';
@@ -44,17 +48,17 @@ class _HomeActivityState extends State<HomeActivity> {
             responseBody.data['treasurer']!=null  ? _members.add(responseBody.data['treasurer']): print("empty");
             responseBody.data['mentor1']!=null  ? _members.add(responseBody.data['mentor1']): print("empty");
             responseBody.data['mentor2']!=null  ? _members.add(responseBody.data['mentor2']): print("empty");
-              if(_members.length>0)
+            if(_members.length>0)
               setState(() {
                 flag=1;
               });
-              else
-                setState(() {
-                  flag=2;
-                });
+            else
+              setState(() {
+                flag=2;
+              });
 
-              print("members: ");
-              print(_members);
+            print("members: ");
+            print(_members);
           }
         } else {
           setState(() {
@@ -125,6 +129,8 @@ class _HomeActivityState extends State<HomeActivity> {
       name = _fetchUserName();
     });
   }
+  var dropdownItems=["Volunteer","Write to admin","Write to mentor","Survey"];
+  var _currentItemSelected="Volunteer";
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -145,7 +151,7 @@ class _HomeActivityState extends State<HomeActivity> {
           color: ColorGlobal.textColor),
     );
     final goSocialSize = _textSize(
-    _members.length>0 ? _getLongestString() : "Abcdef Ghijk",
+      _members.length>0 ? _getLongestString() : "Abcdef Ghijk",
       TextStyle(
         fontSize: 11,
         letterSpacing: 1,
@@ -174,33 +180,48 @@ class _HomeActivityState extends State<HomeActivity> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
+        appBar:AppBar(
           backgroundColor: ColorGlobal.whiteColor,
           centerTitle: true,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Image(
-              image: AssetImage('assets/images/recal_logo.jpg'),
-            ),
-          ), // you can put Icon as well, it accepts any widget.
-          title:Text(
-            'RECAL UAE CHAPTER',
-            style: TextStyle(color: ColorGlobal.textColor),
-          ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: CircleAvatar(
-                radius: 24,
-                backgroundImage: AssetImage('assets/images/spiderlogo.png'),
+          leading: Card(
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 60,
+              child: Image.asset(
+                'assets/images/recal_circular.png',
+                height: 60,
+                width: 60,
+                fit: BoxFit.fill,
               ),
             ),
-          ],
-//          actions: [
-//            Text('picture'),
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                new BorderRadius.circular(60)),
+          ),
+          title:Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'RECAL UAE CHAPTER',
+                style: GoogleFonts.josefinSans(color: ColorGlobal.textColor, fontWeight: FontWeight.bold,fontSize: 22),
+              ),
+            ],
+          ),
+//          actions: <Widget>[
+//            Padding(
+//              padding: const EdgeInsets.all(6.0),
+//              child: GestureDetector(
+//                onTap: (){
+//                  Navigator.pushNamed(context,PROFILE_SCREEN);
+//                },
+//                child: CircleAvatar(
+//                  radius: 24,
+//                  backgroundImage: AssetImage('assets/images/spiderlogo.png'),
+//                ),
+//              ),
+//            ),
 //          ],
         ),
-
         body: Stack(
           children: <Widget>[
             ClipRRect(
@@ -212,98 +233,248 @@ class _HomeActivityState extends State<HomeActivity> {
             ClipRRect(
               borderRadius: BorderRadius.circular(height * 0.05),
               child: Container(
-                height: height * 0.40,
+                height: height * 0.460,
                 color: ColorGlobal.blueColor,
               ),
             ),
             Column(
               children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(top: 10),
+//                Container(
+//                  padding: EdgeInsets.only(top: 10),
+//                  child: Row(
+//                    mainAxisAlignment: MainAxisAlignment.center,
+//                    children: <Widget>[
+//                      AutoSizeText(
+//                        "RECAL UAE CHAPTER",
+//                        style: GoogleFonts.lato(
+//                            fontSize: 20,
+//                            fontWeight: FontWeight.bold,
+//                            color: ColorGlobal.whiteColor
+//                        ),
+//                        maxLines: 1,
+//                      ),
+//                    ],
+//                  ),
+//                ),
+//                Stack(
+//                    fit: StackFit.loose,
+//                    children:[
+//                      Container(
+//                        width: width,
+//                        child: Card(
+//                          child:Row(
+//                            children: <Widget>[
+//                              Container(
+//                                  padding: EdgeInsets.all(10.0),
+//                                  width: width*0.9,
+//                                  child: Text("No new messagessfjf adjfjggj jdejf ajdfh ajf dfjfg sdjfdjfhfgjfkgjfgfjgfjieiddkndsnhuaheuajndawuhna;woeiiej!!",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 15),)),
+//                            ],
+//                          ),
+//                          elevation: 5,
+////                     shape: RoundedRectangleBorder(
+////                       borderRadius: BorderRadius.circular(15),
+////                     ),
+//                        ),
+//                      ),
+//                      Container(
+//                        width: width*0.95,
+//                        height: height*0.07,
+//                        child: Row(
+//                          mainAxisAlignment:MainAxisAlignment.end,
+//                          children: <Widget>[
+//                            Badge(
+//                              badgeContent: Text('3',style: TextStyle(color: Colors.white),),
+//                              badgeColor: Colors.green,
+//                              child: Icon(Icons.notifications,size: 28,color: Colors.grey[700],),
+//                            )
+//                          ],
+//                        ),
+//                      ),
+//                    ]
+//                ),
+                Padding(
+                  padding: const EdgeInsets.only(top:15.0,left: 20,right: 20),
+                  child: GestureDetector(
+                    onTap: (){
+                    Navigator.pushNamed(context,PROFILE_SCREEN);
+                    },
+                      child: CircleAvatar(
+                        radius: width/10,
+                        backgroundImage: AssetImage('assets/images/nitt_logo.png'),
+                      ),
+                    ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(top:10.0,left: 20,right: 20, bottom: 10),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      AutoSizeText(
-                        "RECAL UAE CHAPTER",
-                        style: GoogleFonts.lato(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: ColorGlobal.whiteColor
-                        ),
-                        maxLines: 1,
+                      FutureBuilder<String>(
+                        future: name,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Container(
+                              width: width*0.8,
+                              child: Center(
+                                child: Text(
+                                  "Welcome "+"${snapshot.data}",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.josefinSans(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorGlobal.whiteColor
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text("${snapshot.error}");
+                          }
+                          // By default, show a loading spinner.
+                          return CircularProgressIndicator();
+                        },
                       ),
                     ],
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 0.1 * height, left: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+//                Container(
+//                  margin: EdgeInsets.only(top: 0.1 * height, left: 20),
+//                  child: Column(
+//                    crossAxisAlignment: CrossAxisAlignment.start,
+//                    children: <Widget>[
+//                      Row(
+//                        mainAxisAlignment: MainAxisAlignment.start,
+//                        children: <Widget>[
+////                          Card(
+////                            child: Container(
+////                              padding: EdgeInsets.only(top: 10),
+////                              height: 0.1 * height,
+////                              width: 0.1 * height,
+////                              decoration: new BoxDecoration(
+////                                color: ColorGlobal.colorPrimaryDark,
+////                                image: new DecorationImage(
+////                                  image: new AssetImage(
+////                                      'assets/images/spiderlogo.png'),
+////                                  fit: BoxFit.contain,
+////                                ),
+////                                border: Border.all(
+////                                    color: ColorGlobal.colorPrimaryDark,
+////                                    width: 2),
+////                                borderRadius: new BorderRadius.all(
+////                                    Radius.circular(0.1 * height)),
+////                              ),
+////                            ),
+////                            elevation: 15,
+////                            shape: RoundedRectangleBorder(
+////                                borderRadius:
+////                                    new BorderRadius.circular(width / 6)),
+////                          ),
+////                          SizedBox(
+////                            width: 10,
+////                          ),
+//                        ],
+//                      ),
+//                    ],
+//                  ),
+//                ),
+                Padding(
+                  padding: const EdgeInsets.only(top:10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Card(
-                            child: Container(
-                              padding: EdgeInsets.only(top: 10),
-                              height: 0.1 * height,
-                              width: 0.1 * height,
-                              decoration: new BoxDecoration(
-                                color: ColorGlobal.colorPrimaryDark,
-                                image: new DecorationImage(
-                                  image: new AssetImage(
-                                      'assets/images/spiderlogo.png'),
-                                  fit: BoxFit.contain,
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, NOTIFICATION_MENU);
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            Card(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: width / 10,
+                                child: Badge(
+                                  badgeContent: Text('5',style: TextStyle(color: Colors.white),),
+                                  badgeColor: Colors.green,
+                                  position: BadgePosition.topRight(top: -8, right: -8),
+                                  child: Image.asset(
+                                    'assets/images/chat.png',
+                                    color: Colors.blue[800],
+                                    height: width / 8,
+                                    width: width / 8,
+                                  ),
                                 ),
-                                border: Border.all(
-                                    color: ColorGlobal.colorPrimaryDark,
-                                    width: 2),
-                                borderRadius: new BorderRadius.all(
-                                    Radius.circular(0.1 * height)),
                               ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  new BorderRadius.circular(width / 10)),
                             ),
-                            elevation: 15,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    new BorderRadius.circular(width / 6)),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "Welcome back, ",
-                                style: GoogleFonts.lato(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorGlobal.whiteColor
-                                        .withOpacity(0.9)),
+                            Text(
+                              "Message",
+                              style: TextStyle(
+                                  fontFamily: 'Pacifico',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorGlobal.whiteColor),
+                            ),
+                            Text(
+                              "View Messages",
+                              style: TextStyle(
+                                  fontFamily: 'Pacifico',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: ColorGlobal.whiteColor.withOpacity(0.7)),
+                            ),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+
+                      ),
+                      SizedBox(
+                        width: width/5,
+                      ),
+                      GestureDetector(
+                        child: Column(
+                          children: <Widget>[
+                            Card(
+                              child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: width / 10,
+                                  child: Image.asset(
+                                    'assets/images/calendar.png',
+                                    height: width / 8,
+                                    width: width / 8,
+                                    color: Colors.blue[700],
+                                  ),
                               ),
-                              FutureBuilder<String>(
-                                future: name,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return AutoSizeText(
-                                      "${snapshot.data}",
-                                      style: GoogleFonts.lato(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: ColorGlobal.whiteColor
-                                      ),
-                                      maxLines: 1,
-                                    );
-                                  } else if (snapshot.hasError) {
-                                    return Text("${snapshot.error}");
-                                  }
-                                  // By default, show a loading spinner.
-                                  return CircularProgressIndicator();
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  new BorderRadius.circular(width / 10)),
+                            ),
+                            Text(
+                              "Events",
+                              style: TextStyle(
+                                  fontFamily: 'Pacifico',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorGlobal.whiteColor),
+                            ),
+                            Text(
+                              "Checkout Events",
+                              style: TextStyle(
+                                  fontFamily: 'Pacifico',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: ColorGlobal.whiteColor.withOpacity(0.7)),
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          Navigator.push(context,MaterialPageRoute(builder: (context) =>
+                              EventsScreen(1)));
+                        },
                       ),
                     ],
                   ),
@@ -313,135 +484,231 @@ class _HomeActivityState extends State<HomeActivity> {
             Column(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(top: height * 0.325),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      GestureDetector(
-                        child: Column(
-                          children: <Widget>[
-                            Card(
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: width / 10,
-child: Image.asset(
-'assets/images/network.png',
-                                  color: ColorGlobal.blueColor,
-                                height: width / 10,
-                                width: width / 10,
-                                ),
-                              ),
-                              elevation: 20,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      new BorderRadius.circular(width / 10)),
-                            ),
-                            Text(
-                              "Social",
-                              style: TextStyle(
-                                  fontFamily: 'Pacifico',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorGlobal.textColor),
-                            ),
-                            Text(
-                              "Go Social",
-                              style: TextStyle(
-                                  fontFamily: 'Pacifico',
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: ColorGlobal.textColor.withOpacity(0.7)),
-                            ),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.center,
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(context,SOCIAL_BUSINESS);
-                        },
-                      ),
-                      GestureDetector(
-                        child: Column(
-                          children: <Widget>[
-                            Card(
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: width / 10,
-child: Image.asset(
-'assets/images/application.png',
-                                  color: ColorGlobal.blueColor,
-                                  height: width / 10,
-                                  width: width / 10,
-                                ),
-                              ),
-                              elevation: 20,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      new BorderRadius.circular(width / 10)),
-                            ),
-                            Text(
-                              "Employment",
-                              style: TextStyle(
-                                  fontFamily: 'Pacifico',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorGlobal.textColor),
-                            ),
-                            Text(
-                              "Job Positions",
-                              style: TextStyle(
-                                  fontFamily: 'Pacifico',
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: ColorGlobal.textColor.withOpacity(0.7)),
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(context,EMPLOYMENT_SUPPORT);
-                        },
-                      ),
-                      GestureDetector(
-                        child: Column(
-                          children: <Widget>[
-                            Card(
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: width / 10,
-                                child: Image.asset(
-'assets/images/scholarship.png',
-                                  color: ColorGlobal.blueColor,
-                                  height: width / 10,
-                                  width: width / 10,
+                  margin: EdgeInsets.only(top: height * 0.40),
+                  child: Column(
+                      children: [Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          GestureDetector(
+                            child: Column(
+                              children: <Widget>[
+                                Card(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: width / 10,
+                                    child: Image.asset(
+                                      'assets/images/social_media.png',
+                                      height: width / 9,
+                                      width: width / 9,
+                                      color: Colors.blue[800],
+                                    ),
                                   ),
-                              ),
-                              elevation: 20,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
+                                  elevation: 20,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
                                       new BorderRadius.circular(width / 10)),
+                                ),
+                                Text(
+                                  "Social Media",
+                                  style: TextStyle(
+                                      fontFamily: 'Pacifico',
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorGlobal.textColor),
+                                ),
+                                Text(
+                                  "Social Network",
+                                  style: TextStyle(
+                                      fontFamily: 'Pacifico',
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: ColorGlobal.textColor.withOpacity(0.7)),
+                                ),
+                              ],
                             ),
-                            Text(
-                              "Mentorship",
-                              style: TextStyle(
-                                  fontFamily: 'Pacifico',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorGlobal.textColor),
+                            onTap: () {
+                              Navigator.pushNamed(context, SOCIAL_MEDIA);
+                            },
+                          ),
+                          GestureDetector(
+                            child: Column(
+                              children: <Widget>[
+                                Card(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: width / 10,
+                                    child: Image.asset(
+                                      'assets/images/application.png',
+                                      color: Colors.blue[800],
+                                      height: width / 10,
+                                      width: width / 10,
+                                    ),
+                                  ),
+                                  elevation: 20,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      new BorderRadius.circular(width / 10)),
+                                ),
+                                Text(
+                                  "Employment",
+                                  style: TextStyle(
+                                      fontFamily: 'Pacifico',
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorGlobal.textColor),
+                                ),
+                                Text(
+                                  "Job Positions",
+                                  style: TextStyle(
+                                      fontFamily: 'Pacifico',
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: ColorGlobal.textColor.withOpacity(0.7)),
+                                ),
+                              ],
                             ),
-                            Text(
-                              "Mentor Groups",
-                              style: TextStyle(
-                                  fontFamily: 'Pacifico',
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: ColorGlobal.textColor.withOpacity(0.7)),
+                            onTap: () {
+                              Navigator.pushNamed(context,EMPLOYMENT_SUPPORT);
+                            },
+                          ),
+                          GestureDetector(
+                            child: Column(
+                              children: <Widget>[
+                                Card(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: width / 10,
+                                    child: Image.asset(
+                                      'assets/images/scholarship.png',
+                                      color: Colors.blue[800],
+                                      height: width / 10,
+                                      width: width / 10,
+                                    ),
+                                  ),
+                                  elevation: 20,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      new BorderRadius.circular(width / 10)),
+                                ),
+                                Text(
+                                  "Mentorship",
+                                  style: TextStyle(
+                                      fontFamily: 'Pacifico',
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorGlobal.textColor),
+                                ),
+                                Text(
+                                  "Mentor Groups",
+                                  style: TextStyle(
+                                      fontFamily: 'Pacifico',
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: ColorGlobal.textColor.withOpacity(0.7)),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(context,MENTOR_GROUPS);
-                        },
+                            onTap: () {
+                              Navigator.pushNamed(context,MENTOR_GROUPS);
+                            },
+                          ),
+                        ],
                       ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(top:10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              GestureDetector(
+                                child: Column(
+                                  children: <Widget>[
+                                    Card(
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        radius: width / 10,
+                                        child: Image.asset(
+                                          'assets/images/network.png',
+                                          color: Colors.blue[800],
+                                          height: width / 10,
+                                          width: width / 10,
+                                        ),
+                                      ),
+                                      elevation: 20,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          new BorderRadius.circular(width / 10)),
+                                    ),
+                                    Text(
+                                      "Social",
+                                      style: TextStyle(
+                                          fontFamily: 'Pacifico',
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorGlobal.textColor),
+                                    ),
+                                    Text(
+                                      "Go Social",
+                                      style: TextStyle(
+                                          fontFamily: 'Pacifico',
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: ColorGlobal.textColor.withOpacity(0.7)),
+                                    ),
+                                  ],
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                ),
+                                onTap: () {
+                                  Navigator.pushNamed(context,SOCIAL);
+                                },
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              GestureDetector(
+                                child: Column(
+                                  children: <Widget>[
+                                    Card(
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        radius: width / 10,
+                                        child: Image.asset(
+                                          'assets/images/busi_group.png',
+                                          height: width / 9,
+                                          width: width / 9,
+                                          color: Colors.blue[800],
+                                        ),
+                                      ),
+                                      elevation: 20,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          new BorderRadius.circular(width / 10)),
+                                    ),
+                                    Text(
+                                      "Business",
+                                      style: TextStyle(
+                                          fontFamily: 'Pacifico',
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorGlobal.textColor),
+                                    ),
+                                    Text(
+                                      "Business Group",
+                                      style: TextStyle(
+                                          fontFamily: 'Pacifico',
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: ColorGlobal.textColor.withOpacity(0.7)),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  Navigator.pushNamed(context,BUSINESS);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                   ),
                 ),
 //                FlatButton(
@@ -499,120 +766,120 @@ child: Image.asset(
               ],
             ),
             (height -
-                        (0.325 * height +
-                            width / 5 +
-                            goSocialSize.height +
-                            socialSize.height +
-                            coreSize.height +
-                            40)) >=
-                    0.4 * height
+                (0.325 * height +
+                    width / 5 +
+                    goSocialSize.height +
+                    socialSize.height +
+                    coreSize.height +
+                    40)) >=
+                0.4 * height
                 ?  (flag==1 ? Positioned(
-                    top: 0.325 * height +
-                        width / 5 +
-                        goSocialSize.height +
-                        socialSize.height +
-                        40,
-                    left: 10,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        "Core Committee: ",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: ColorGlobal.textColor),
-                      ),
-                    ),
-                  ) :  SizedBox())
+              top: 0.325 * height +
+                  width / 5 +
+                  goSocialSize.height +
+                  socialSize.height +
+                  40,
+              left: 10,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  "Core Committee: ",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: ColorGlobal.textColor),
+                ),
+              ),
+            ) :  SizedBox())
                 : SizedBox(),
             (height -
-                        (0.325 * height +
-                            width / 5 +
-                            goSocialSize.height +
-                            socialSize.height +
-                            coreSize.height +
-                            40)) >=
-                    0.4 * height
+                (0.325 * height +
+                    width / 5 +
+                    goSocialSize.height +
+                    socialSize.height +
+                    coreSize.height +
+                    40)) >=
+                0.4 * height
 
                 ? (flag ==1 ?  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    child: Container(
+              bottom: 0,
+              left: 0,
+              child: Container(
+                height: 0.2 * height,
+                width: width,
+                child: new ListView.builder(
+                  itemCount: 7,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (_, i) {
+                    return Container(
+                      width: width * 0.4,
                       height: 0.2 * height,
-                      width: width,
-                      child: new ListView.builder(
-                        itemCount: 7,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (_, i) {
-                          return Container(
-                            width: width * 0.4,
-                            height: 0.2 * height,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 5),
-                            child: Card(
-                              elevation: 10,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 5),
+                      child: Card(
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Card(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Column(
-                                children: <Widget>[
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            height * 0.10)),
-                                    child: Container(
-                                      height: height * 0.10,
-                                      width: height * 0.10,
-                                      decoration: new BoxDecoration(
-                                        color: ColorGlobal.colorPrimaryDark,
-                                        image: new DecorationImage(
-                                          image: new AssetImage(
-                                              'assets/images/mentor.png'),
-                                          fit: BoxFit.contain,
-                                        ),
-                                        borderRadius: new BorderRadius.all(
-                                            Radius.circular(height * 0.10)),
-                                      ),
-                                    ),
+                                  borderRadius: BorderRadius.circular(
+                                      height * 0.10)),
+                              child: Container(
+                                height: height * 0.10,
+                                width: height * 0.10,
+                                decoration: new BoxDecoration(
+                                  color: ColorGlobal.colorPrimaryDark,
+                                  image: new DecorationImage(
+                                    image: new AssetImage(
+                                        'assets/images/mentor.png'),
+                                    fit: BoxFit.contain,
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        child: AutoSizeText(
-                                          "${_members[i]}",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            color: ColorGlobal.textColor,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                          maxLines: 2,
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Text(
-                                          "${_roles[i]}",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontSize: 9,
-                                            letterSpacing: 1,
-                                            color: ColorGlobal.textColor
-                                                .withOpacity(0.6),
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                  borderRadius: new BorderRadius.all(
+                                      Radius.circular(height * 0.10)),
+                                ),
                               ),
                             ),
-                          );
-                        },
+                            Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  child: AutoSizeText(
+                                    "${_members[i]}",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: ColorGlobal.textColor,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    maxLines: 2,
+                                  ),
+                                ),
+                                Container(
+                                  child: Text(
+                                    "${_roles[i]}",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 9,
+                                      letterSpacing: 1,
+                                      color: ColorGlobal.textColor
+                                          .withOpacity(0.6),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                    );
+                  },
+                ),
+              ),
             ) : flag==2 ? SizedBox() : Positioned(
                 top: 0.325 * height +
                     width / 5 +

@@ -90,7 +90,7 @@ class SplashScreenState extends State<ImageSplashScreen> {
                   height: width*0.3,
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   decoration: new BoxDecoration(
-                      color: ColorGlobal.colorPrimaryDark,
+                      //color: ColorGlobal.colorPrimaryDark,
                       image: new DecorationImage(
                         image: new AssetImage('assets/images/recal_logo.jpg'),
                         fit: BoxFit.fill,

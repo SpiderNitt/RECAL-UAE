@@ -1,204 +1,237 @@
-import 'dart:convert';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/ColorGlobal.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:flip_card/flip_card.dart';
 
-import 'package:url_launcher/url_launcher.dart';
+int num = 0;
 
-class MarketSurvey {
-  final String survey_id;
-  final String text;
-  final String link;
-  final String user;
-  MarketSurvey({this.survey_id, this.text, this.link, this.user});
-  factory MarketSurvey.fromJson(Map<String,dynamic> json) {
-    return MarketSurvey(
-        survey_id: json["survey_id"],
-        text: json["text"],
-        link: json["link"],
-        user: json["user"]);
-  }
-}
-_launchsurvey(String url) async {
-
+_launchyoutube(url) async {
+  //const url = 'https://www.youtube.com/channel/UCEPOEe5azp3FbUjvMwttPqw';
   if (await canLaunch(url)) {
     await launch(url);
   } else {
     throw 'Could not launch $url';
   }
 }
-Future<MarketSurvey> getSurveyDetails() async {
 
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  var response = await http.get(
-      "https://delta.nitt.edu/recal-uae/api/employment/market_survey",
-      headers: {
-        "Accept" : "application/json",
-        "Cookie" : "${prefs.getString("cookie")}",
-      }
-  );
+GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
 
+class SurveyModel {
+  final int survey_id;
+  final String user;
+  final String text;
+  final String link;
 
-  if (response.statusCode == 200) {
-    Map<String,dynamic> jsonSurvey = jsonDecode(response.body);
-    return MarketSurvey.fromJson(jsonSurvey);
+  SurveyModel({
+    this.survey_id,
+    this.text,
+    this.link,
+    this.user,
+  });
 
-  } else {
-    throw Exception('Failed to load survey link');
+  factory SurveyModel.fromJson(Map<String, dynamic> json) {
+    return SurveyModel(
+      survey_id: json['survey_id'],
+      text: json['text'],
+      link: json['link'],
+      user: json['user'],
+    );
   }
 }
 
 class SurveyScreen extends StatefulWidget {
   @override
-  SurveyScreenState createState() => new SurveyScreenState();
+  SurveyState createState() => SurveyState();
 }
 
-class SurveyScreenState extends State<SurveyScreen> {
-  Future<bool> _onBackPressed() {
-    Navigator.pop(context);
+class SurveyState extends State<SurveyScreen>
+    with SingleTickerProviderStateMixin {
+  var positions = new List<SurveyModel>();
+  AnimationController _animationController;
+  Animation<double> _animation;
+  AnimationStatus _animationStatus = AnimationStatus.dismissed;
+
+  @override
+  void initState() {
+    super.initState();
+    _positions();
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    _animation = Tween<double>(end: 1, begin: 0).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        _animationStatus = status;
+      });
+  }
+
+  Future<String> _positions() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var response = await http.get(
+        "https://delta.nitt.edu/recal-uae/api/employment/market_survey",
+        headers: {
+          "Accept": "application/json",
+          "Cookie": "${prefs.getString("cookie")}",
+        });
+    ResponseBody responseBody = new ResponseBody();
+
+    if (response.statusCode == 200) {
+      print("success");
+//        updateCookie(_response);
+      responseBody = ResponseBody.fromJson(json.decode(response.body));
+      if (responseBody.status_code == 200) {
+        setState(() {
+          List list = responseBody.data;
+          positions = list.map((model) => SurveyModel.fromJson(model)).toList();
+          for (int i = 0; i < positions.length; i++) {
+            if (positions[i].survey_id != null) {
+              num++;
+            }
+          }
+          print("Answer");
+          print(positions.length);
+        });
+      } else {
+        print(responseBody.data);
+      }
+    } else {
+      print('Server error');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    String uri;
+
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
-
-    return WillPopScope(
-      onWillPop: _onBackPressed,
-      child: new Scaffold(
+    return SafeArea(
+      child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorGlobal.whiteColor,
           leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              icon: Icon(
+                Icons.arrow_back,
+                color: ColorGlobal.textColor,
               ),
               onPressed: () {
                 Navigator.pop(context);
-              }
-          ),
+              }),
           title: Text(
             'Market Survey',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Container(
-              color: Colors.white,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                      margin: EdgeInsets.fromLTRB(20.0, height / 7, 20, 0.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          FutureBuilder<MarketSurvey>(
-                            future: getSurveyDetails(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                if(snapshot.data.link!=null){
-
-                                  return Text(snapshot.data.link);
-                                }
-                                else{
-                                  return Text("NO DATA AVAILABLE",  style: TextStyle(
-                                      fontSize: 25,
-                                      color: const Color(0xff3AAFFA),
-                                      fontWeight: FontWeight.bold),);
-                                }
-                              } else if (snapshot.hasError) {
-                                return Text("${snapshot.error}");
-                              }
-
-                              // By default, show a loading spinner.
-                              return CircularProgressIndicator();
-                            },),
-                          // Text(
-                          //   "Your opinion matters!!",
-                          //   style: TextStyle(
-                          //       fontSize: 25,
-                          //       color: const Color(0xff3AAFFA),
-                          //       fontWeight: FontWeight.bold),
-                          // ),
-                          SizedBox(height: 20.0),
-                          Text(
-                            "Click the button to view the market survey.",
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: const Color(0xff3AAFFA),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 20.0),
-                          FutureBuilder<MarketSurvey>(
-                            future: getSurveyDetails(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                if(snapshot.data.link != null){
-
-                                  return Container(
-                                    width: width / 2,
-                                    height: 40,
-                                    child: RaisedButton(
-                                      onPressed: () {_launchsurvey(snapshot.data.link);},
-                                      color: const Color(0xff3AAFFA),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20.0)),
-                                      child: Row(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView.builder(
+              itemCount: positions.length,
+              itemBuilder: (context, index) {
+                return FlipCard(
+                    //key: cardKey,
+                    // flipOnTouch: false,
+                    front: Container(
+                        height: height / 8,
+                        child: GestureDetector(
+                          child: Card(
+                            //color: ColorGlobal.blueColor,
+                            elevation: 20,
+//                            shadowColor: const Color(0x802196F3),
+                            margin: const EdgeInsets.all(8),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: <Widget>[
+                                  // SizedBox(
+                                  //   width: width / 5,
+                                  // ),
+                                  Column(
+                                    children: <Widget>[
+                                      Row(
                                         children: <Widget>[
-                                          Container(
-                                              child: Padding(
-                                                padding: EdgeInsets.all(5),
-                                                child: Text(
-                                                  "Go to survey",
-                                                  style: TextStyle(
-                                                      fontSize: 18.0,
-                                                      color: Colors.white,
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                              )),
-                                          Container(
-                                            child: Icon(
-                                              Icons.arrow_forward,
-                                              color: Colors.white,
-                                              size: 30.0,
-                                            ),
+                                          SizedBox(
+                                            width: width - width / 5,
+                                          ),
+                                          Icon(
+                                            Icons.swap_horiz,
+                                            color: ColorGlobal.blueColor,
                                           ),
                                         ],
                                       ),
+                                      // SizedBox(height: height / 42),
+                                      Text(
+                                        positions[index].text.toUpperCase(),
+                                        style: TextStyle(
+                                          fontSize: 20.0,
+                                          color: ColorGlobal.textColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 12.0),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // onTap: () => cardKey.currentState.toggleCard(),
+                        )),
+                    back: Container(
+                        height: height / 8,
+                        child: GestureDetector(
+                            child: Card(
+                              //color: ColorGlobal.blueColor,
+                              elevation: 20,
+//                              shadowColor: const Color(0x802196F3),
+                              margin: const EdgeInsets.all(8),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Column(
+                                      children: <Widget>[
+                                        //SizedBox(height: height / 32),
+                                        Row(
+                                          children: <Widget>[
+                                            SizedBox(
+                                              width: width - width / 5,
+                                            ),
+                                            Icon(
+                                              Icons.swap_horiz,
+                                              color: ColorGlobal.blueColor,
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          positions[index].link,
+                                          style: TextStyle(
+                                            fontSize: 10.0,
+                                            color: ColorGlobal.textColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                          maxLines: 2,
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      ],
                                     ),
-                                  );
-                                }
-                                else{
-                                  return Text("NO DATA AVAILABLE",  style: TextStyle(
-                                      fontSize: 15,
-                                      color: const Color(0xff3AAFFA),
-                                      fontWeight: FontWeight.bold),);
-                                }
-                              } else if (snapshot.hasError) {
-                                return Text("${snapshot.error}");
-                              }
-
-                              // By default, show a loading spinner.
-                              return CircularProgressIndicator();
-                            },),
-
-                        ],
-                      )),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Image(
-                      height: height / 2,
-                      width: width,
-                      fit: BoxFit.cover,
-                      image: AssetImage('assets/images/MarketSurvey.jpg'),
-                      alignment: Alignment.bottomCenter,
-                    ),
-                  )
-                ],
-              )),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            onLongPress: () =>
+                                {_launchyoutube(positions[index].link)})));
+              },
+            ),
+          ),
         ),
       ),
     );

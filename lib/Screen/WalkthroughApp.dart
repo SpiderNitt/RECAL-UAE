@@ -33,7 +33,7 @@ class WalkThroughApp extends StatelessWidget {
       content: "Get jobs",
       imageIcon: Icons.work,
       imagecolor: Colors.deepPurpleAccent,
-      asset: "assets/images/employment_groups.jpg",
+      asset: "assets/images/socialBusiness.jpg",
     ),
   ];
 
