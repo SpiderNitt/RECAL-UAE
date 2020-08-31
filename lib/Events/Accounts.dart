@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -20,7 +19,11 @@ class _AccountsState extends State<Accounts> {
   bool isAccountEmpty = false;
   bool accountServerError = false;
   int accountID=-1;
-  AccountInfo accountInfos=new AccountInfo();
+  int countDetailsCall=0;
+  bool isCompleted=false;
+  List<int> accountIDList=new List<int>();
+  List<AccountInfo> accountDetailsList=new List<AccountInfo>();
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery
@@ -33,6 +36,8 @@ class _AccountsState extends State<Accounts> {
         .height;
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
+        //0XFF0288d1
         appBar: AppBar(
           title: Text(
               "Accounts", style: TextStyle(color: ColorGlobal.textColor)),
@@ -46,217 +51,278 @@ class _AccountsState extends State<Accounts> {
     );
   }
 
-Widget DisplayAccount(){
+  Widget DisplayAccount(){
+    if(!isCompleted){
+      if(accountID==-2||isAccountEmpty){
+        return Center(
+            child: Text(
+                "No account information for this event", style: TextStyle(
+                color: Colors.blueGrey,
+                fontSize: 16
+            ))
+        );
+      }
+      else if(accountID==-3||accountServerError){
+        return Center(
+            child: Text(
+                "Server Error", style: TextStyle(
+                color: Colors.blueGrey,
+                fontSize: 16
+            ))
+        );
+      }
+      else   if(accountID==-1||accountID==null){
+        return
+          Center(
+            child: SpinKitDoubleBounce(
+              color: Colors.lightBlueAccent,
+            ),
 
-     if(accountID==-2||isAccountEmpty){
-      return Center(
-                    child: Text(
-                        "No account information for this event", style: TextStyle(
-                        color: Colors.blueGrey,
-                      fontSize: 16
-                    ))
-                );
-    }
-    else if(accountID==-3||accountServerError){
-      return Center(
-                    child: Text(
-                        "Server Error", style: TextStyle(
-                        color: Colors.blueGrey,
-                      fontSize: 16
-                    ))
-                );
-    }
-    else   if(accountID==-1||accountID==null){
-       return
-         Center(
-           child: SpinKitDoubleBounce(
-             color: Colors.lightBlueAccent,
-           ),
-
-         );
-     }
+          );
+      }    }
     else{
-      print("whyyy"+accountID.toString());
-        return Container(
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [Color(0xff374ABE), Color(0xff3AAFFA)],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                              ),
-                              borderRadius: BorderRadius.circular(20.0)),
-                          margin: EdgeInsets.all(6),
-                          child: Padding(
-                              padding: const EdgeInsets.all(6),
-                              child: Card(
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .start,
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment
-                                                  .start,
-                                              children: <Widget>[
-                                                Container(
-                                                  child: Image.asset(
-                                                    "assets/images/pay.png",
-                                                    fit: BoxFit.cover,),
-                                                  height: 50,
-                                                ),
+      print(accountDetailsList.length.toString()+"length");
+      return Container(
+        margin: EdgeInsets.only(top:6),
+        child: ListView.builder(
+            itemCount: accountDetailsList.length, itemBuilder: (context, index) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                    spreadRadius: 0.75,
+                    blurRadius: 100.0,
+                    offset: Offset(
+                        0, // Move to right 10  horizontally
+                        0.75// Move to bottom 5 Vertically
+                    ),
+                    color: Colors.black12
+                )
+              ],
+            ),
+            margin:EdgeInsets.only(top:5,bottom:5,left:10,right: 10),
+            child: ExpansionTile(
+              backgroundColor: Colors.white,
+              title: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.monetization_on, size: 34,
+                    color: Colors.green,),
+                  SizedBox(width: 8,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 8,),
+                      accountDetailsList[index]
+                          .payment_amount!=null?Text(accountDetailsList[index].payment_amount.toString(),
+                        style: TextStyle(
+                            color: ColorGlobal.textColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),):Text("Payment amount not available",style:TextStyle(color: Colors.black38)),
+                      SizedBox(height: 4,),
+                      accountDetailsList[index].income_expense!=null?Text(accountDetailsList[index].income_expense.substring(0,1).toUpperCase()+accountDetailsList[index].income_expense.substring(1),
+                        style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 16),):SizedBox(),
+                      SizedBox(height: 8,)
+                    ],
+                  ),
+                ],
+              ),
+
+              trailing: Icon(
+                Icons.keyboard_arrow_down,
+                color: ColorGlobal.textColor,
+              ),
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xff374ABE), Color(0xff3AAFFA)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(20.0)),
+                  margin: EdgeInsets.all(6),
+                  child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: Card(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment
+                                    .start,
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
+                                      children: <Widget>[
+                                        Container(
+                                          child: Image.asset(
+                                            "assets/images/pay.png",
+                                            fit: BoxFit.cover,),
+                                          height: 50,
+                                        ),
 //Icon(Icons.payment,size: 36,color: Colors.blueGrey,),
-                                                SizedBox(width: 4,),
-                                                accountInfos.payment_type!=null&& accountInfos.payment_mode!=null?Column(
-                                                  children: <Widget>[
-                                                    accountInfos.payment_type!=null?Text(
-                                                      accountInfos.payment_type,
-                                                      style: TextStyle(
-                                                          fontSize: 18
-                                                      ),
-                                                    ):SizedBox(),
-                                                    SizedBox(height: 4,),
-                                                    accountInfos.payment_mode!=null? Text(
-                                                      accountInfos.payment_mode,
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.black45
-                                                      ),
-                                                    ):SizedBox()
-                                                  ],
-                                                ):Text("Payment Type Not available",style: TextStyle(color: Colors.black38),)
-                                              ],
-                                            ),
-                                          ),
-                                          accountInfos.date!=null? Text(
-                                            accountInfos.date,
-                                            style: TextStyle(
-                                                color: Colors.black54
-                                            ),
-                                          ):SizedBox()
-                                        ],
-                                      ),
-                                      SizedBox(height: 10,),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .start,
-                                        children: <Widget>[
+                                        SizedBox(width: 4,),
+                                        accountDetailsList[index].payment_type!=null&& accountDetailsList[index].payment_mode!=null?Column(
+                                          children: <Widget>[
+                                            accountDetailsList[index].payment_type!=null?Text(
+                                              accountDetailsList[index].payment_type,
+                                              style: TextStyle(
+                                                  fontSize: 18
+                                              ),
+                                            ):SizedBox(),
+                                            SizedBox(height: 4,),
+                                            accountDetailsList[index].payment_mode!=null? Text(
+                                              accountDetailsList[index].payment_mode,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black45
+                                              ),
+                                            ):SizedBox()
+                                          ],
+                                        ):Text("Payment Type Not available",style: TextStyle(color: Colors.black38),)
+                                      ],
+                                    ),
+                                  ),
+                                  accountDetailsList[index].date!=null? Text(
+                                    accountDetailsList[index].date,
+                                    style: TextStyle(
+                                        color: Colors.black54
+                                    ),
+                                  ):SizedBox()
+                                ],
+                              ),
+                              SizedBox(height: 10,),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment
+                                    .start,
+                                children: <Widget>[
 
-                                          Row(
-                                            children: <Widget>[
-                                              Icon(
-                                                Icons.monetization_on, size: 28,
-                                                color: Colors.green,),
-                                              SizedBox(width: 4,),
-                                              accountInfos
-                                                  .payment_amount!=null?Text(accountInfos.payment_amount.toString(),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16),):Text("Payment amount not available",style:TextStyle(color: Colors.black38))
-                                            ],
-                                          ),
-                                          SizedBox(height: 4,),
-                                          Row(
-                                            children: <Widget>[
-                                              Text("Paid by: ",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold
-                                                ),),
-                                              accountInfos.paid_user_name!=null?Text(
-                                                  accountInfos.paid_user_name):Text("Not available"),
-                                            ],
-                                          ),
-                                          accountInfos.income_expense!=null?Text(accountInfos
-                                              .income_expense.toUpperCase()):SizedBox(),
-SizedBox(height: 20,),
-Container(
-  child:FadeInImage.memoryNetwork(
-    placeholder: kTransparentImage,
-    image: "https://picsum.photos/300",
-    fit: BoxFit.fitWidth,
-  ),
-  width: MediaQuery.of(context).size.width,
-),
+                                  Row(
+                                    children: <Widget>[
 
-                                        ],
-                                      )
+                                      SizedBox(width: 4,),
+
                                     ],
                                   ),
-                                ),
+                                  SizedBox(height: 4,),
+                                  Row(
+                                    children: <Widget>[
+                                      Text("Paid by: ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold
+                                        ),),
+                                      accountDetailsList[index].paid_user_name!=null?Text(
+                                          accountDetailsList[index].paid_user_name):Text("Not available"),
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 20,),
+                                  Container(
+                                    child:FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: "https://picsum.photos/300",
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                    width: MediaQuery.of(context).size.width,
+                                  ),
+
+                                ],
                               )
+                            ],
                           ),
-                        );
+                        ),
+                      )
+                  ),
+                )
+              ],
+            ),
+          );
+        }),
+      );
     }
-}
-Future<AccountInfo> getAccountDetails() async {
+
+  }
+  Future<AccountInfo> getAccountDetails() async {
+    print("second api");
+    AccountInfo accountInfos=new AccountInfo();
     if(accountID!=-1&& accountID!=null){
       print("second api called");
-        var params={'account_id':accountID.toString()};
+      var params={'account_id':accountID.toString()};
+      var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/events/accounts/',params);
+      SharedPreferences prefs=await SharedPreferences.getInstance();
+      var response=await http.get(
+          uri,
+          headers: {
+            "Accept" : "application/json",
+            "Cookie" : "${prefs.getString("cookie")}",
+          }
+      ) .then((_response) {
+        ResponseBody responseBody = new ResponseBody();
+        print('Response body: accountDetails ${_response.body}');
+        if (_response.statusCode == 200) {
+          responseBody = ResponseBody.fromJson(json.decode(_response.body));
+          if (responseBody.status_code == 200) {
+            countDetailsCall++;
+            if(responseBody.data.length!=0) {
+              // accountInfo=AccountInfo.fromJson(json.decode(responseBody.data));
+              print("final Response"+responseBody.data.toString());
+              //  accountInfos=AccountInfo.fromJson(json.decode(responseBody.data));
 
-        var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/events/accounts/',params);
-        SharedPreferences prefs=await SharedPreferences.getInstance();
-        var response=await http.get(
-            uri,
-            headers: {
-              "Accept" : "application/json",
-              "Cookie" : "${prefs.getString("cookie")}",
-            }
-        ) .then((_response) {
-          ResponseBody responseBody = new ResponseBody();
-          print('Response body: accountDetails ${_response.body}');
-          if (_response.statusCode == 200) {
-            responseBody = ResponseBody.fromJson(json.decode(_response.body));
-
-            if (responseBody.status_code == 200) {
-              if(responseBody.data!=null) {
-             // accountInfo=AccountInfo.fromJson(json.decode(responseBody.data));
-                print(responseBody.data.toString());
+              accountInfos.paid_user_name=responseBody.data['paid_user_name'];
+              accountInfos.account_id=responseBody.data['account_id'];
+              accountInfos.payment_amount=responseBody.data['payment_amount'];
+              accountInfos.date=responseBody.data['date'];
+              accountInfos.payment_type=responseBody.data['payment_type'];
+              accountInfos.payment_mode=responseBody.data['payment_mode'];
+              accountInfos.income_expense=responseBody.data['income_expense'];
+              accountInfos.invoice_file=responseBody.data['invoice'];
+              accountDetailsList.add(accountInfos);
+              if(accountIDList.length==countDetailsCall){
                 setState(() {
-                //  accountInfos=AccountInfo.fromJson(json.decode(responseBody.data));
-                accountInfos.paid_user_name=responseBody.data['paid_user_name'];
-                accountInfos.account_id=responseBody.data['account_id'];
-                accountInfos.payment_amount=responseBody.data['payment_amount'];
-                accountInfos.date=responseBody.data['date'];
-                accountInfos.payment_type=responseBody.data['payment_type'];
-                accountInfos.payment_mode=responseBody.data['payment_mode'];
-                accountInfos.income_expense=responseBody.data['income_expense'];
-                accountInfos.invoice_file=responseBody.data['invoice'];
+                  isCompleted=true;
                 });
               }
-            } else {
-              print(responseBody.data);
-              return 2;
+
             }
           } else {
-            print('Server error');
-            accountServerError=true;
-
+            print(responseBody.data);
+            return 2;
           }
-          return accountInfos;
-        });
-
-    if(accountInfos==null){
-      if(accountServerError==true){
-        setState(() {
+        } else {
+          print('Server error');
           accountServerError=true;
-          accountID=-3;
-        });
-      }
-else{
-setState(() {
-  isAccountEmpty=true;
-  accountID=-2;
-});
+
+        }
+        return accountInfos;
+      });
+
+      if(accountInfos==null){
+        if(accountServerError==true){
+          setState(() {
+            accountServerError=true;
+            accountID=-3;
+          });
+        }
+        else{
+          setState(() {
+            isAccountEmpty=true;
+            accountID=-2;
+          });
+        }
       }
     }
-    }
-}
+  }
 
 
   @override
@@ -264,13 +330,12 @@ setState(() {
     super.initState();
     getAccountId();
   }
-void getId() async{
+  void getId() async{
     accountID=await getAccountId();
     print(accountID.toString());
   }
   Future<dynamic> getAccountId() async {
     List<String> nameList=new List<String>();
-    List<int> accountIDList=new List<int>();
     var uri = Uri.https(
         'delta.nitt.edu', '/recal-uae/api/events/all_accounts/');
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -288,27 +353,44 @@ void getId() async{
               if(u['event_id']==widget.event_id) {
                 if (u['expenses'] != null) {
                   for(var m in u['expenses']){
-                   if(m['account_id']!=null){
-                     accountIDList.add(m['account_id']);
-                     if(m['paid_user_name']!=null){
-                       nameList.add(m['paid_user_name']);
-                     }else{
-                       nameList.add('null');
-                     }
-                   }
+                    if(m['account_id']!=null){
+                      if(m['paid_user_id'].toString()== prefs.getString('user_id').toString()) {
+                        accountIDList.add(m['account_id']);
+                        if(m['paid_user_name']!=null){
+                          nameList.add(m['paid_user_name']);
+                        }else{
+                          nameList.add('null');
+                        }
+                      }
+                    }
+                  }
+                }
+                if (u['income'] != null) {
+                  for(var m in u['income']){
+                    if(m['account_id']!=null){
+                      if(m['paid_user_id'].toString()== prefs.getString('user_id').toString()) {
+                        accountIDList.add(m['account_id']);
+                        if(m['paid_user_name']!=null){
+                          nameList.add(m['paid_user_name']);
+                        }else{
+                          nameList.add('null');
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
             if(accountIDList.length!=0){
-           //   getAccountDetails(nameList,accountIDList);
-              setState(() {
-                accountID=accountIDList[0];
-              });
-              getAccountDetails();
+              //   getAccountDetails(nameList,accountIDList);
+              for(int i=0;i<accountIDList.length;i++){
+                setState(() {
+                  accountID=accountIDList[i];
+                });
+                getAccountDetails();
+              }
             }
             else{
-
               setState(() {
                 isAccountEmpty=true;
               });

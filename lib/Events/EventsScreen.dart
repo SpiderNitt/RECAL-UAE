@@ -12,6 +12,8 @@ import 'UpcomingEvents.dart';
 import 'package:http/http.dart' as http;
 
 class EventsScreen extends StatefulWidget {
+  int status;
+  EventsScreen(this.status);
   @override
   _EventsScreenState createState() => _EventsScreenState();
 }
@@ -19,6 +21,7 @@ class EventsScreen extends StatefulWidget {
 class _EventsScreenState extends State<EventsScreen> {
   List<EventInfo> upcomingEventsList=[];
   List<EventInfo> completedEventsList=[];
+  List<EventInfo> socialEvents =[];
   double position=1;
   bool isLoading=true;
   @override
@@ -39,7 +42,7 @@ class _EventsScreenState extends State<EventsScreen> {
         SpinKitDoubleBounce(
           color:ColorGlobal.color2,
         )
-            :DefaultTabController(
+            :widget.status==1?DefaultTabController(
           length: 2,
           child: Column(
             children: <Widget>[
@@ -96,13 +99,13 @@ class _EventsScreenState extends State<EventsScreen> {
                 child: TabBarView(
                   children: <Widget>[
                     UpcomingEvents(upcomingEventsList),
-                    CompletedEvents(completedEventsList),
+                    CompletedEvents(completedEventsList,1),
                   ],
                 ),
               )
             ],
           ),
-        ),
+        ):CompletedEvents(socialEvents,2),
       ),
     );
   }
@@ -137,7 +140,9 @@ class _EventsScreenState extends State<EventsScreen> {
               EventInfo currInfo = EventInfo.fromJson(u);
               eventinfo.add(currInfo);
             }
-            checkTime(eventinfo);
+            if(widget.status==1){checkTime(eventinfo);}else{
+              checkSocial(eventinfo);
+            }
             print("Eventlist length=" + eventinfo.length.toString());
           }
           setState(() {
@@ -152,6 +157,13 @@ class _EventsScreenState extends State<EventsScreen> {
         //return ["Server Error", 0];
       }
     });
+  }
+  void checkSocial(List<EventInfo> eventinfo){
+    for(var curr in eventinfo){
+      if(curr.event_type=="Social"){
+        socialEvents.add(curr);
+      }
+    }
   }
   void checkTime(List<EventInfo> eventinfo){
     var currDate=DateTime.now();
