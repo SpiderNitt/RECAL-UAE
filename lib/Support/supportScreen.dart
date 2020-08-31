@@ -50,10 +50,10 @@ class SupportScreenState extends State<SupportScreen> {
                               height: height / 2.75,
                               decoration: BoxDecoration(
                                   image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image:
+                                    fit: BoxFit.fill,
+                                    image:
                                     AssetImage('assets/images/supportbg.jpg'),
-                              ))))),
+                                  ))))),
                   Column(children: <Widget>[
                     SizedBox(
                       height: height / 3.25,
@@ -84,29 +84,29 @@ class SupportScreenState extends State<SupportScreen> {
                                 elevation: 30,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
-                                        new BorderRadius.circular(width / 10)),
+                                    new BorderRadius.circular(width / 10)),
                               ),
                               SizedBox(height: 6.0),
                               Container(
 //                                    alignment: Alignment.center,
                                   child: Column(children: <Widget>[
-                                AutoSizeText(
-                                  "Write to",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Color(0xFF433d3e),
-                                      fontWeight: FontWeight.w600),
-                                  maxLines: 1,
-                                ),
-                                AutoSizeText(
-                                  "admin",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Color(0xFF433d3e),
-                                      fontWeight: FontWeight.w600),
-                                  maxLines: 1,
-                                ),
-                              ])),
+                                    AutoSizeText(
+                                      "Write to",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Color(0xFF433d3e),
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                    AutoSizeText(
+                                      "admin",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Color(0xFF433d3e),
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                  ])),
                             ],
                             mainAxisAlignment: MainAxisAlignment.center,
                           ),
@@ -135,29 +135,29 @@ class SupportScreenState extends State<SupportScreen> {
                                 elevation: 30,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
-                                        new BorderRadius.circular(width / 10)),
+                                    new BorderRadius.circular(width / 10)),
                               ),
                               SizedBox(height: 6.0),
                               Container(
 //                                    alignment: Alignment.center,
                                   child: Column(children: <Widget>[
-                                AutoSizeText(
-                                  "Write to",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Color(0xFF433d3e),
-                                      fontWeight: FontWeight.w600),
-                                  maxLines: 1,
-                                ),
-                                AutoSizeText(
-                                  "mentor",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Color(0xFF433d3e),
-                                      fontWeight: FontWeight.w600),
-                                  maxLines: 1,
-                                ),
-                              ])),
+                                    AutoSizeText(
+                                      "Write to",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Color(0xFF433d3e),
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                    AutoSizeText(
+                                      "mentor",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Color(0xFF433d3e),
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                  ])),
                             ],
                             mainAxisAlignment: MainAxisAlignment.center,
                           ),
@@ -186,29 +186,29 @@ class SupportScreenState extends State<SupportScreen> {
                                 elevation: 30,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
-                                        new BorderRadius.circular(width / 10)),
+                                    new BorderRadius.circular(width / 10)),
                               ),
                               SizedBox(height: 6.0),
                               Container(
 //                                    alignment: Alignment.center,
                                   child: Column(children: <Widget>[
-                                AutoSizeText(
-                                  "Technical",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Color(0xFF433d3e),
-                                      fontWeight: FontWeight.w600),
-                                  maxLines: 1,
-                                ),
-                                AutoSizeText(
-                                  "Support",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Color(0xFF433d3e),
-                                      fontWeight: FontWeight.w600),
-                                  maxLines: 1,
-                                ),
-                              ])),
+                                    AutoSizeText(
+                                      "Technical",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Color(0xFF433d3e),
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                    AutoSizeText(
+                                      "Support",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Color(0xFF433d3e),
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                  ])),
                             ],
                             mainAxisAlignment: MainAxisAlignment.center,
                           ),
@@ -246,21 +246,21 @@ class SupportScreenState extends State<SupportScreen> {
                               elevation: 30,
                               shape: RoundedRectangleBorder(
                                   borderRadius:
-                                      new BorderRadius.circular(width / 10)),
+                                  new BorderRadius.circular(width / 10)),
                             ),
                             SizedBox(height: 6.0),
                             Container(
 //                                    alignment: Alignment.center,
                                 child: Column(children: <Widget>[
-                              AutoSizeText(
-                                "Volunteer",
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Color(0xFF433d3e),
-                                    fontWeight: FontWeight.w600),
-                                maxLines: 1,
-                              ),
-                            ])),
+                                  AutoSizeText(
+                                    "Volunteer",
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Color(0xFF433d3e),
+                                        fontWeight: FontWeight.w600),
+                                    maxLines: 1,
+                                  ),
+                                ])),
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
@@ -289,21 +289,21 @@ class SupportScreenState extends State<SupportScreen> {
                               elevation: 30,
                               shape: RoundedRectangleBorder(
                                   borderRadius:
-                                      new BorderRadius.circular(width / 10)),
+                                  new BorderRadius.circular(width / 10)),
                             ),
                             SizedBox(height: 6.0),
                             Container(
 //                                    alignment: Alignment.center,
                                 child: Column(children: <Widget>[
-                              AutoSizeText(
-                                "Others",
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Color(0xFF433d3e),
-                                    fontWeight: FontWeight.w600),
-                                maxLines: 1,
-                              ),
-                            ])),
+                                  AutoSizeText(
+                                    "Others",
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Color(0xFF433d3e),
+                                        fontWeight: FontWeight.w600),
+                                    maxLines: 1,
+                                  ),
+                                ])),
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),

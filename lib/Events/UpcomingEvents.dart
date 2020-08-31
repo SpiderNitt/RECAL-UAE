@@ -42,7 +42,7 @@ class _UpcomingEventsState extends State<UpcomingEvents> with TickerProviderStat
           initialItemCount: eventList.length,
           itemBuilder: (BuildContext context, int index,animation){
             // return SizeTransition(child: VolunteerCard(comp[index],events[index],false),
-            return SizeTransition(child: VolunteerCard(eventList[index],false),
+            return SizeTransition(child: VolunteerCard(eventList[index],false,0),
               sizeFactor: animation,);
           }
       ),

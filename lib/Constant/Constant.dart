@@ -1,3 +1,4 @@
+
 String HOME_PAGE = '/HomePage',
     IMAGE_SPLASH = '/ImageSplashScreen',
     VIDEO_SPALSH = '/VideoSplashScreen',
@@ -15,18 +16,18 @@ String HOME_PAGE = '/HomePage',
     WRITE_RESUME_SCREEN = '/HomeScreen/EmploymentSupport/WriteResume',
     OPEN_POSITIONS = '/HomeScreen/Employment/OpenPositions',
     ALUMNI_PLACED_SCREEN = '/HomeScreen/Employment/AlumniPlaced',
-    MARKET_SURVEY = '/HomeScreen/Employment/MarketSurvey',
-    WRITE_TO_ADMIN = '/HomeScreen/SupportScreen/WriteAdmin',
+    MARKET_SURVEY='/SupportScreen/MarketSurvey',
+    WRITE_TO_ADMIN='/SupportScreen/WriteAdmin',
     SEEK_GUIDANCE = '/HomeScreen/Employment/SeekGuidance',
     SOCIAL_MEDIA = '/HomeScreen/SocialMedia',
-    WRITE_MENTOR = '/HomeScreen/SocialBusiness/WriteToMentor',
+    WRITE_MENTOR='/SupportScreen/WriteToMentor',
     FEED_BACK = '/HomeScreen/SocialBusiness/Feedback',
     MEMBER_DATABASE = '/HomeScreen/SocialBusiness/Members',
-    SUPPORT_SCREEN = '/HomeScreen/SupportScreen',
     TECHNICAL_SUPPORT = '/HomeScreen/SupportScreen/TechnicalSupport',
     VOLUNTEER_SUPPORT = '/HomeScreen/SupportScreen/VolunteerSupport',
     OTHER_SUPPORT = '/HomeScreen/SupportScreen/OtherSupport',
     BUSINESS_DATABASE='/HomeScreen/Business/Database', 
     DEALS_EXECUTED = '/HomeScreen/Business/Deals',
-    NOTIFICATION_MENU = '/HomeScreen/Notifications';
+    NOTIFICATION_MENU = '/HomeScreen/Notifications',
+    SUPPORT_SCREEN = '/HomeScreen/SupportScreen';
 

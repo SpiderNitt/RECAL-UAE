@@ -199,6 +199,7 @@ class LoginState extends State<Login> {
 
   static loginUser(String email, String password) async {
     var url = "https://delta.nitt.edu/recal-uae/api/auth/login/";
+    print("password: " + password);
     var body = {'email': email, 'password': password};
     await http
         .post(
@@ -373,6 +374,8 @@ class LoginState extends State<Login> {
                               if (email.text != "" && password.text != "") {
                                 var url =
                                     "https://delta.nitt.edu/recal-uae/api/auth/login/";
+                                print("password: " + password.text);
+
                                 var body = {
                                   'email': email.text,
                                   'password': password.text
@@ -493,26 +496,18 @@ class LoginState extends State<Login> {
                           ),
                         ),
                         SizedBox(
-                          height: 24.0,
+                          height: 10.0,
+                        ),
+                        Text(
+                          "Note: Don't have the credentials? Write an email to recaluaechapter@gmail.com",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: ColorGlobal.textColor.withOpacity(0.9),
+                            fontWeight: FontWeight.w300,
+                          ),
                         ),
                       ],
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 20,
-                    left: 20,
-                    right: 20.0,
-                    child: Container(
-                      margin: EdgeInsets.only(top: 15),
-                      child: Text(
-                        "Note: Don't have the credentials? Write an email to recaluaechapter@gmail.com",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: ColorGlobal.textColor.withOpacity(0.9),
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
                     ),
                   ),
                 ],

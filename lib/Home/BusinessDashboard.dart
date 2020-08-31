@@ -355,6 +355,13 @@ class _DashBoardState extends State<DashBoard> {
     );
   }
 
+  List<StaggeredTile> getTileExtent() {
+    List<StaggeredTile> list = new List<StaggeredTile>();
+    list.add(StaggeredTile.extent(2, 550.0));
+    list.add(StaggeredTile.extent(2, 206.0));
+    list.add(StaggeredTile.extent(2, 204.0));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -384,11 +391,14 @@ class _DashBoardState extends State<DashBoard> {
             eventsItem(0xffed622b),
             dealsItem(0xff7297ff),
           ],
-          staggeredTiles: [
-            StaggeredTile.extent(2, 550.0),
-            StaggeredTile.extent(2, 206.0),
-            StaggeredTile.extent(2, 204.0),
-          ],
+          staggeredTiles: getTileExtent(),
+//          staggeredTiles: [
+//            getTileExtent(),
+//            StaggeredTile.extent(2, 550.0),
+//            StaggeredTile.extent(2, 206.0),
+//            StaggeredTile.extent(2, 204.0),
+//
+//          ],
         ),
       ),
     );

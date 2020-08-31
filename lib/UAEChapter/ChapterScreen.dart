@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'ContactUs.dart';
 import 'Pay.dart';
@@ -23,9 +24,15 @@ class _ChapterScreenState extends State<ChapterScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorGlobal.whiteColor,
-          title: Text(
-            'UAE Chapter',
-            style: TextStyle(color: ColorGlobal.textColor),
+          centerTitle: true,
+          title: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'UAE CHAPTER',
+                style: GoogleFonts.josefinSans(color: ColorGlobal.textColor, fontWeight: FontWeight.bold,fontSize: 20),
+              ),
+            ],
           ),
         ),
 
