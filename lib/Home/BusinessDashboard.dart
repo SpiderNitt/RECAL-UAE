@@ -31,7 +31,7 @@ class _DashBoardState extends State<DashBoard> {
         domainFn: (Gender gender, _) => gender.gender,
         measureFn: (Gender gender, _) => gender.genderval,
         colorFn: (Gender gender, _) =>
-          charts.ColorUtil.fromDartColor(gender.colorval),
+            charts.ColorUtil.fromDartColor(gender.colorval),
         id: 'Gender distribution',
         labelAccessorFn: (Gender row, _)=>'${row.gender}',
 
@@ -228,7 +228,7 @@ class _DashBoardState extends State<DashBoard> {
                       height: 8.0,
                     ),
                     Text(
-                      '37',
+                        '37',
                         style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w400, fontSize: 22.0)
                     ),
                   ],
@@ -321,7 +321,7 @@ class _DashBoardState extends State<DashBoard> {
                   arcWidth: 50,
                   arcRendererDecorators: [
                     new charts.ArcLabelDecorator(
-                      labelPosition: charts.ArcLabelPosition.inside
+                        labelPosition: charts.ArcLabelPosition.inside
                     ),
                   ],
                 ),
@@ -364,12 +364,6 @@ class _DashBoardState extends State<DashBoard> {
     );
   }
 
-  List<StaggeredTile> getTileExtent(){
-    List<StaggeredTile> list = new List<StaggeredTile>();
-    list.add(StaggeredTile.extent(2, 550.0));
-    list.add(StaggeredTile.extent(2, 206.0));
-    list.add(StaggeredTile.extent(2, 204.0));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -400,14 +394,12 @@ class _DashBoardState extends State<DashBoard> {
             eventsItem(0xffed622b),
             dealsItem(0xff7297ff),
           ],
-          staggeredTiles: getTileExtent(),
-//          staggeredTiles: [
-//            getTileExtent(),
-//            StaggeredTile.extent(2, 550.0),
-//            StaggeredTile.extent(2, 206.0),
-//            StaggeredTile.extent(2, 204.0),
-//
-//          ],
+          staggeredTiles: [
+            StaggeredTile.extent(2, 550.0),
+            StaggeredTile.extent(2, 206.0),
+            StaggeredTile.extent(2, 204.0),
+
+          ],
         ),
       ),
     );
@@ -419,7 +411,7 @@ class Gender{
   int genderval;
   Color colorval;
 
-    Gender(this.gender, this.genderval, this.colorval);
+  Gender(this.gender, this.genderval, this.colorval);
 }
 
 class SandB{
@@ -429,6 +421,3 @@ class SandB{
 
   SandB(this.types, this.typeval, this.colorval);
 }
-
-
-
