@@ -30,7 +30,7 @@ class _SocialScreenState extends State<SocialScreen> {
                 Navigator.pop(context);
               }),
           title: Text(
-            'Business Group',
+            'Social Group',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),

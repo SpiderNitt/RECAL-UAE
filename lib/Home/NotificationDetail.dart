@@ -97,11 +97,12 @@ class _NotificationDetailState extends State<NotificationDetail> {
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Material(
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Material(
                 color: Colors.white,
                 elevation: 14.0,
                 shadowColor: Color(0x802196F3),
@@ -131,8 +132,16 @@ class _NotificationDetailState extends State<NotificationDetail> {
                   ),
                 ),
               ),
-            ),
-          ],
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Image(
+                  fit: BoxFit.fitWidth,
+                  image: AssetImage('assets/images/notification_bg.png'),
+                  alignment: Alignment.bottomCenter,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

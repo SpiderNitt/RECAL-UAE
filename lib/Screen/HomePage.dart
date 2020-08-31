@@ -137,7 +137,7 @@ class HomePageState extends State<HomePage> {
                 color: ColorGlobal.color3,
               ),
               Icon(
-                Icons.question_answer,
+                Icons.rate_review,
                 size: 30,
                 color: ColorGlobal.color3,
               ),

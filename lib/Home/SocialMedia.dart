@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:ui';
 import 'package:url_launcher/url_launcher.dart';
 import '../Constant/ColorGlobal.dart';
@@ -78,7 +79,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
           ),
           title: Text(
             'Social Media',
-            style: TextStyle(color: ColorGlobal.textColor),
+            style: GoogleFonts.lato(color: ColorGlobal.textColor),
           ),
         ),
          body: Container(
