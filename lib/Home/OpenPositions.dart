@@ -107,12 +107,15 @@ class _OpenPositionsState extends State<OpenPositions> {
                           padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
                           child: Row(
                             children: <Widget>[
-                              Text(
-                                positions[index].description,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: ColorGlobal.textColor,
-                                  fontSize: 16.0,
+                              Flexible(
+                                child: Text(
+                                  positions[index].description,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: ColorGlobal.textColor,
+                                    fontSize: 16.0,
+                                  ),
+                                  overflow: TextOverflow.fade,
                                 ),
                               ),
                             ],
