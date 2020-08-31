@@ -5,7 +5,8 @@ import 'package:iosrecal/models/EventInfo.dart';
 import './VolunteerCard.dart';
 class CompletedEvents extends StatefulWidget {
   List<EventInfo> list;
-  CompletedEvents(this.list);
+  int status;
+  CompletedEvents(this.list,this.status);
   @override
   _CompletedEventsState createState() => _CompletedEventsState(list);
 }
@@ -42,7 +43,7 @@ class _CompletedEventsState extends State<CompletedEvents> with TickerProviderSt
           initialItemCount: eventList.length,
           itemBuilder: (BuildContext context, int index,animation){
             //return SizeTransition(child: VolunteerCard(comp[index],events[index],Random().nextInt(2)==1 ? true : false),
-            return SizeTransition(child: VolunteerCard(eventList[index],true),
+            return SizeTransition(child: VolunteerCard(eventList[index],true,widget.status),
               sizeFactor: animation,);
           }
       ),
