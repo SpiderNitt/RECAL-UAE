@@ -1,3 +1,4 @@
+
 String HOME_PAGE = '/HomePage',
     IMAGE_SPLASH = '/ImageSplashScreen',
     VIDEO_SPALSH = '/VideoSplashScreen',
@@ -9,7 +10,6 @@ String HOME_PAGE = '/HomePage',
     BUSINESS = '/HomeScreen/Business',
     EMPLOYMENT_SUPPORT = '/HomeScreen/EmploymentSupport',
     PAY_SCREEN = '/PayScreen',
-    SUPPORT_SCREEN= '/SupportScreen',
     CONTACT_US_SCREEN = '/ContactUsScreen',
     MEMBER_LINKEDIN = '/HomeScreen/EmploymentSupport/LinkedIn',
     MENTOR_GROUPS = '/HomeScreen/MentorGroups',
@@ -28,5 +28,6 @@ String HOME_PAGE = '/HomePage',
     OTHER_SUPPORT = '/HomeScreen/SupportScreen/OtherSupport',
     BUSINESS_DATABASE='/HomeScreen/Business/Database', 
     DEALS_EXECUTED = '/HomeScreen/Business/Deals',
-    NOTIFICATION_MENU = '/HomeScreen/Notifications';
+    NOTIFICATION_MENU = '/HomeScreen/Notifications',
+    SUPPORT_SCREEN = '/HomeScreen/SupportScreen';
 

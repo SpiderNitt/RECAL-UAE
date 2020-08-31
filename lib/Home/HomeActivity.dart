@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -384,6 +386,9 @@ class _HomeActivityState extends State<HomeActivity> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, NOTIFICATION_MENU);
+                        },
                         child: Column(
                           children: <Widget>[
                             Card(
@@ -425,9 +430,7 @@ class _HomeActivityState extends State<HomeActivity> {
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
-                        onTap: () {
-//                          Navigator.pushNamed(context,SOCIAL_BUSINESS);
-                        },
+
                       ),
                       SizedBox(
                         width: width/5,

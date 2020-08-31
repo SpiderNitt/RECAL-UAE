@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:iosrecal/Support/SupportScreen.dart';
 
 import '../Home/HomeActivity.dart';
 import '../Achievements/AchievementsScreen.dart';

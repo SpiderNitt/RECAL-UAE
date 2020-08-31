@@ -395,8 +395,8 @@ class _DashBoardState extends State<DashBoard> {
           ],
           staggeredTiles: [
             StaggeredTile.extent(2, 550.0),
-            StaggeredTile.extent(2, 198.0),
-            StaggeredTile.extent(2, 190.0),
+            StaggeredTile.extent(2, 206.0),
+            StaggeredTile.extent(2, 204.0),
 
           ],
         ),
