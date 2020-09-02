@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
+import 'package:iosrecal/Constant/Constant.dart';
 import '../models/ResponseBody.dart';
 import '../models/User.dart';
 import 'package:page_transition/page_transition.dart';
@@ -180,7 +181,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 if (previous == after)
                   Navigator.of(context).pop();
                 else {
-
                   _postUserDetails();
                 }
               } else {
@@ -258,6 +258,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
   }
   Future<bool> uploadProfilePic (String user_id, String cookie) async {
+
     print("image: " + _image.path);
     final length = await _image.length();
     var request = http.MultipartRequest('POST', Uri.parse("https://delta.nitt.edu/recal-uae/api/users/add_file/"))
@@ -274,14 +275,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         responseBody = ResponseBody.fromJson(json.decode(_response.body));
 
         print(json.encode(responseBody.data));
+
         if (responseBody.status_code == 200) {
           FocusManager.instance.primaryFocus.unfocus();
           print("yess correct");
           _userDialog("Details Updated", "Okay", 1);
           Future.delayed(Duration(milliseconds: 2500), () {
-            Navigator.pop(context);
+            var count=0;
+            Navigator.popUntil(context, (route) {
+              return count++==1;
+            });
           });
-
           return true;
         } else if (responseBody.status_code == 500) {
           print(responseBody);
@@ -432,17 +436,47 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       headers: {
         "Cookie": cookie,
       },
-    ).then((_response) {
+    ).then((_response) async {
       print(_response);
       ResponseBody responseBody = new ResponseBody();
 
       if (_response.statusCode == 200) {
         responseBody = ResponseBody.fromJson(json.decode(_response.body));
-
         print(json.encode(responseBody.data));
         if (responseBody.status_code == 200) {
           FocusManager.instance.primaryFocus.unfocus();
           yes=1;
+
+          var url = "https://delta.nitt.edu/recal-uae/api/users/profile/";
+          var uri = Uri.parse(url);
+          uri = uri.replace(query: "user_id=$user_id");
+
+          await http.get(uri, headers: {'Cookie': cookie}).then((_response) async {
+            print(_response.statusCode);
+            print(_response.body);
+            if (_response.statusCode == 200) {
+              ResponseBody responseBody =
+              ResponseBody.fromJson(json.decode(_response.body));
+              print(json.encode(responseBody.data));
+              if (responseBody.status_code == 200) {
+                User recal_user =
+                    User.fromProfile(json.decode(json.encode(responseBody.data)));
+                String picture1 = recal_user.profile_pic;
+                if(picture1!=null) {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.setString("profile_picture","https://delta.nitt.edu/recal-uae" + picture1);
+                }
+                print("display picture get after upload: $picture1");
+              } else {
+
+                print("${responseBody.data}");
+              }
+            } else {
+              print("Server error");
+            }
+          }).catchError((error) {
+            print(error);
+          });
         } else if (responseBody.status_code == 500) {
           print(responseBody.data);
           var response = json.decode(json.encode(responseBody.data));
@@ -450,7 +484,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           setState(() {
             dialog = 1;
           });
-
           _userDialog("Please provide unique details", "Try again", 0);
         } else {
           print("${responseBody.status_code}");
@@ -574,7 +607,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             onTap: () {
                               _settingModalBottomSheet(context);
                             },
-                            child: getPic == 0
+                            child: getPic == 0 && change_dp==0
                                 ? new Container(
                               height: 120,
                               width: 120,
@@ -606,7 +639,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             .textColor),
                                     image: DecorationImage(
                                         fit: BoxFit.cover,
-                                        image: _image==null ? NetworkImage(picture) : FileImage(_image)))),
+                                        image: _image==null && change_dp==0 ? NetworkImage(picture) : FileImage(_image)))),
                           ),
                           SizedBox(
                             height: 5,
