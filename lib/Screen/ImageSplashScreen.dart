@@ -56,7 +56,6 @@ class SplashScreenState extends State<ImageSplashScreen> {
 
   Future <Null> _checkLogin () async {
     var url = "https://delta.nitt.edu/recal-uae/api/auth/check_login/";
-
     await http.get(url, headers: {'Cookie': cookie}).then((_response) async {
       print(_response.statusCode);
       print(_response.body);
