@@ -13,6 +13,7 @@ import 'package:iosrecal/Home/AlumniPlaced.dart';
 import 'package:iosrecal/Home/OpenPositions.dart';
 import 'package:iosrecal/Home/SeekGuidance.dart';
 import 'package:iosrecal/Home/NotificationMenu.dart';
+import 'package:iosrecal/Profile/EditProfile.dart';
 import 'Support/WriteAdmin.dart';
 import 'Constant/Constant.dart';
 import 'Constant/Constant.dart';
@@ -52,6 +53,7 @@ void main() {
           HOME_PAGE: (BuildContext context) => new HomePage(),
           IMAGE_SPLASH: (BuildContext context) => new ImageSplashScreen(),
           PROFILE_SCREEN: (BuildContext context) => new ProfileScreen(),
+          EDIT_PROFILE_SCREEN: (BuildContext context) => new EditProfileScreen(),
           SOCIAL: (BuildContext context) => new SocialScreen(),
           BUSINESS: (BuildContext context) => new BusinessScreen(),
           EMPLOYMENT_SUPPORT: (BuildContext context) => new EmploymentSupport(),
@@ -74,6 +76,7 @@ void main() {
           BUSINESS_DATABASE: (BuildContext context) => new BusinessDatabase(),
           DEALS_EXECUTED: (BuildContext context) => new DealsExecuted(),
           NOTIFICATION_MENU: (BuildContext context) => new NotificationsMenu(),
+          PICTURE_SCREEN: (BuildContext context) => new PictureScreen(),
         }));
   });
 }

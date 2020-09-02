@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iosrecal/models/User.dart';
 import '../models/ResponseBody.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +21,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _unfinished = 2;
   Future<dynamic> user;
   String cookie = "";
+  String picture;
+  int profile_pic_flag = 0;
+  User recal_user;
+  int getPic = 0;
 
   Future<dynamic> _fetchPrimaryDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -29,10 +34,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         prefs.getString("email") == null ? "+9,q" : prefs.getString("email");
     String cookie_1 =
         prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+    String profile_picture =
+    prefs.getString("profile_picture") == null ? null : prefs.getString("profile_picture");
     setState(() {
       cookie = cookie_1;
     });
-    return {"name": name, "email": email};
+    return {"name": name, "email": email,"profile_picture": profile_picture};
   }
 
   _logoutDialog(String show, String again, int flag) {
@@ -86,27 +93,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   var url = "https://delta.nitt.edu/recal-uae/api/auth/logout/";
                   await http
                       .post(url, headers: {'Cookie': cookie}).then((_response) {
-                      if (_response.statusCode == 200) {
-                       ResponseBody responseBody =
-                            ResponseBody.fromJson(json.decode(_response.body));
+                    if (_response.statusCode == 200) {
+                      ResponseBody responseBody =
+                          ResponseBody.fromJson(json.decode(_response.body));
 
-                        print(json.encode(responseBody.data));
-                        if (responseBody.status_code == 200) {
-                          _deleteUserDetails();
-                          Navigator.pop(context,true);
-                          Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
-                        }
-                        else {
-                          _deleteUserDetails();
-                          print("${responseBody.data}");
-                          SystemNavigator.pop();
-                        }
-                      }
-                      else {
+                      print(json.encode(responseBody.data));
+                      if (responseBody.status_code == 200) {
                         _deleteUserDetails();
-                        print("Server error");
+                        Navigator.pop(context, true);
+                        Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
+                      } else {
+                        _deleteUserDetails();
+                        print("${responseBody.data}");
                         SystemNavigator.pop();
                       }
+                    } else {
+                      _deleteUserDetails();
+                      print("Server error");
+                      SystemNavigator.pop();
+                    }
                   }).catchError((error) {
                     _deleteUserDetails();
                     print("server error");
@@ -124,40 +129,104 @@ class _ProfileScreenState extends State<ProfileScreen> {
         false;
   }
 
+  Future<dynamic> _getUserPicture() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String user_id =
+    prefs.getString("user_id") == null ? -1 : prefs.getString("user_id");
+    String cookie =
+    prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+
+    print("USERID Profile: $user_id");
+    print("cookie profile: $cookie");
+
+    var url = "https://delta.nitt.edu/recal-uae/api/users/profile/";
+    var uri = Uri.parse(url);
+    uri = uri.replace(query: "user_id=$user_id");
+
+    await http.get(uri, headers: {'Cookie': cookie}).then((_response) async {
+      print(_response.statusCode);
+      print(_response.body);
+      if (_response.statusCode == 200) {
+        ResponseBody responseBody =
+        ResponseBody.fromJson(json.decode(_response.body));
+        print(json.encode(responseBody.data));
+        if (responseBody.status_code == 200) {
+          profile_pic_flag=1;
+          recal_user =
+              User.fromProfile(json.decode(json.encode(responseBody.data)));
+          picture = recal_user.profile_pic;
+          if(picture!=null) {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setString("profile_picture","https://delta.nitt.edu/recal-uae" + picture);
+          }
+          print("display picture get: $picture");
+          setState(() {
+            if (picture != null) {
+              setState(() {
+                picture =
+                    "https://delta.nitt.edu/recal-uae" + picture;
+                getPic = 1;
+              });
+            }
+          });
+        } else {
+          profile_pic_flag=2;
+          print("${responseBody.data}");
+        }
+      } else {
+        profile_pic_flag=2;
+        print("Server error");
+      }
+    }).catchError((error) {
+      profile_pic_flag=2;
+      print(error);
+    });
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     user = _fetchPrimaryDetails();
+    _getUserPicture();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+//    final Map<String, Object> getData =
+//        ModalRoute.of(context).settings.arguments;
+//    if (getData != null) {
+//      picture = getData["picture"];
+//    }
+
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Scaffold(
           backgroundColor: ColorGlobal.whiteColor,
           appBar: AppBar(
             backgroundColor: ColorGlobal.whiteColor,
-            iconTheme: IconThemeData(
-              color: ColorGlobal.textColor
-            ),
-            actions: <Widget>[
-              IconButton(
-                padding: EdgeInsets.only(right: 20),
-                icon: Icon(
-                  Icons.exit_to_app,
-                  size: 30,
-                  color: ColorGlobal.textColor,
-                ),
-                onPressed: () {
-                  _onLogoutPressed();
-                },
-              )
-            ],
             title: Text(
               'Profile',
               style: TextStyle(color: ColorGlobal.textColor),
+            ),
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                size: 30,
+                color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
           ),
           body: SingleChildScrollView(
@@ -170,33 +239,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   Center(
                       child: Hero(
-                    tag: 'profile_pic',
+                    tag: 'profile_picture',
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PictureScreen()));
+                        Navigator.pushNamed(context, PICTURE_SCREEN,
+                            arguments: {"picture": picture});
                       },
-                      child: Container(
+                      child: profile_pic_flag == 0 ? CircularProgressIndicator() :  Container(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         height: 160,
                         width: 160,
                         decoration: new BoxDecoration(
                           color: ColorGlobal.colorPrimaryDark,
                           image: new DecorationImage(
-                            image:
-                                new AssetImage('assets/images/spiderlogo.png'),
-                            fit: BoxFit.contain,
+                            image : picture==null ?   AssetImage(
+                                'assets/images/recal_circle.png') : NetworkImage(picture),
+                            fit: BoxFit.cover,
                           ),
                           border: Border.all(
-                              color: ColorGlobal.colorPrimaryDark, width: 2),
-                          borderRadius:
-                              new BorderRadius.all(const Radius.circular(80.0)),
+                              color: ColorGlobal.colorPrimaryDark,
+                              width: 2),
+                          borderRadius: new BorderRadius.all(
+                              const Radius.circular(80.0)),
                         ),
                       ),
                     ),
-                  )),
+                  ),
+          ),
                   SizedBox(
                     height: 10,
                   ),
@@ -246,24 +315,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Badge(
-                      badgeColor: Colors.red,
-                      position: BadgePosition.bottomRight(bottom: 27, right: 5),
-                      shape: BadgeShape.circle,
-                      borderRadius: 5,
-                      toAnimate: true,
-                      badgeContent: Text('$_unfinished'),
+//                    child: Badge(
+//                      badgeColor: Colors.red,
+//                      position: BadgePosition.bottomRight(bottom: 27, right: 5),
+//                      shape: BadgeShape.circle,
+//                      borderRadius: 5,
+//                      toAnimate: true,
+//                      badgeContent: Text('$_unfinished'),
                       child: FlatButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  type: PageTransitionType.downToUp,
-                                  duration: Duration(milliseconds: 400),
-                                  child: EditProfileScreen())).then((value) {
-                                    setState(() {
-                                      user=_fetchPrimaryDetails();
-                                    });
+                          Navigator.pushNamed(
+                                  context,EDIT_PROFILE_SCREEN)
+                              .then((value) {
+                            profile_pic_flag=1;
+                            getPic=0;
+                            user = _fetchPrimaryDetails();
+                            _getUserPicture();
                           });
                         },
                         child: Container(
@@ -279,10 +346,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: ColorGlobal.textColor,
                                 fontWeight: FontWeight.bold),
                           ),
-                          height: 27.0,
+                          height: 0.05 * height,
                         ),
                       ),
-                    ),
+//                    ),
                   ),
                 ],
               ),
@@ -292,32 +359,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-// ignore: must_be_immutable
 class PictureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final Map<String, Object> getData =
+        ModalRoute.of(context).settings.arguments;
+    String picture=null;
+    if (getData != null) {
+      picture = getData["picture"];
+    }
     return Scaffold(
       body: GestureDetector(
         onTap: () {
           Navigator.pop(context);
         },
-        child: Center(
-          child: Hero(
-            tag: 'profile_pic',
-            child: Container(
-              width: 300,
-              height: 300,
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              decoration: new BoxDecoration(
-                color: ColorGlobal.colorPrimaryDark,
-                image: new DecorationImage(
-                    image: new AssetImage('assets/images/spiderlogo.png'),
-                    fit: BoxFit.cover),
-                border:
-                    Border.all(color: ColorGlobal.colorPrimaryDark, width: 2),
-                borderRadius:
-                    new BorderRadius.all(const Radius.circular(150.0)),
-              ),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+            child: Hero(
+              tag: 'profile_picture',
+             child: Container(
+               padding: EdgeInsets.symmetric(horizontal: 20),
+               height: 300,
+               width: 300,
+               decoration: new BoxDecoration(
+                 color: ColorGlobal.colorPrimaryDark,
+                 image: new DecorationImage(
+                   image : picture == null ? AssetImage(
+                       'assets/images/nitt_logo.png') : NetworkImage(picture),
+                   fit: BoxFit.cover,
+                 ),
+                 border: Border.all(
+                     color: ColorGlobal.colorPrimaryDark,
+                     width: 2),
+                 borderRadius: new BorderRadius.all(
+                     const Radius.circular(150.0)),
+               ),
+             ),
             ),
           ),
         ),
