@@ -21,10 +21,11 @@ class VolunteerState extends State<VolunteerScreen> {
   Future<bool> _sendMessage(String body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String url =
-        "https://delta.nitt.edu/recal-uae/api/employment/write_admin";
+        "https://delta.nitt.edu/recal-uae/api/employment/volunteer";
     final response = await http.post(url, body: {
       "user_id": "${prefs.getString("user_id")}",
       "body": body,
+      "type": "volunteer",
     }, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",

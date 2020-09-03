@@ -10,12 +10,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
-class TechnicalSupport extends StatefulWidget {
+class FeedbackScreen extends StatefulWidget {
   @override
-  TechnicalState createState() => TechnicalState();
+  FeedbackState createState() => FeedbackState();
 }
 
-class TechnicalState extends State<TechnicalSupport> {
+class FeedbackState extends State<FeedbackScreen> {
   final TextEditingController messageController = TextEditingController();
 
   Future<bool> _sendMessage(String body) async {
@@ -25,7 +25,7 @@ class TechnicalState extends State<TechnicalSupport> {
     final response = await http.post(url, body: {
       "user_id": "${prefs.getString("user_id")}",
       "body": body,
-      "type": "technical support",
+      "type": "feedback",
     }, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
@@ -83,7 +83,7 @@ class TechnicalState extends State<TechnicalSupport> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'Technical Support',
+          'Feedback',
           style: TextStyle(color: ColorGlobal.textColor),
         ),
       ),
@@ -91,17 +91,18 @@ class TechnicalState extends State<TechnicalSupport> {
         child: Container(
           color: Colors.white,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
+                height: height,
                 margin: EdgeInsets.fromLTRB(
                     width / 12, height / 16, width / 12, 0.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      "NEED TECHNICAL HELP!!",
+                      "FEEDBACK PLEASE!!",
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),
@@ -122,7 +123,7 @@ class TechnicalState extends State<TechnicalSupport> {
                       maxLines: 5,
                       controller: messageController,
                       decoration: InputDecoration(
-                        hintText: 'Enter message',
+                        hintText: 'Enter feedback',
                         hintStyle: TextStyle(color: Colors.grey[500]),
                         filled: true,
                         fillColor: Colors.white70,
@@ -165,10 +166,10 @@ class TechnicalState extends State<TechnicalSupport> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Image(
-                  height: height / 2.75,
+                  height: height / 2,
                   width: width,
                   fit: BoxFit.fitWidth,
-                  image: AssetImage('assets/images/technicalSupport.jpg'),
+                  image: AssetImage('assets/images/feed.jpg'),
                   alignment: Alignment.bottomCenter,
                 ),
               )

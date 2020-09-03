@@ -21,10 +21,11 @@ class MentorState extends State<WriteMentorScreen> {
   Future<bool> _sendMessage(String body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String url =
-        "https://delta.nitt.edu/recal-uae/api/employment/write_mentor";
+        "https://delta.nitt.edu/recal-uae/api/employment/support";
     final response = await http.post(url, body: {
       "user_id": "${prefs.getString("user_id")}",
       "body": body,
+      "type": "write to mentor",
     }, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
