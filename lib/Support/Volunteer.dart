@@ -100,7 +100,7 @@ class VolunteerState extends State<VolunteerScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Text(
-                      "WANT TO VOLUNTEER!!",
+                      "WANT TO VOLUNTEER?",
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),
@@ -108,7 +108,7 @@ class VolunteerState extends State<VolunteerScreen> {
                     ),
                     SizedBox(height: height / 64),
                     Text(
-                      "Please write your message in the box below",
+                      "Send us a message to volunteer for events, committee and sponsors.",
                       style: TextStyle(
                         fontSize: 15,
                         color: const Color(0xff3AAFFA),

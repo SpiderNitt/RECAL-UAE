@@ -4,6 +4,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 
+import '../Constant/Constant.dart';
+
 class EmploymentSupport extends StatefulWidget {
   @override
   EmploymentSupportState createState() => new EmploymentSupportState();
@@ -118,7 +120,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                         ),
                         GestureDetector(
                             onTap: (){
-                              Navigator.pushNamed(context, OPEN_POSITIONS);
+                              Navigator.pushNamed(context, CLOSED_POSITIONS);
                             },
                             child: Column(
                               children: <Widget>[

@@ -100,7 +100,7 @@ class AdminState extends State<WriteAdmin> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Text(
-                      "NEED ADMIN HELP!!",
+                      "NEED ADMIN HELP?",
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),
@@ -108,7 +108,7 @@ class AdminState extends State<WriteAdmin> {
                     ),
                     SizedBox(height: height / 64),
                     Text(
-                      "Please write your message in the box below",
+                      "Please write about your issue in the box below",
                       style: TextStyle(
                         fontSize: 15,
                         color: const Color(0xff3AAFFA),

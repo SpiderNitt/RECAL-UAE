@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ResumeWriteModel {
-  final String writer_id;
+  final int writer_id;
   final String writer_name;
   final String contact_number;
   final String email;

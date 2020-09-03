@@ -100,7 +100,7 @@ class TechnicalState extends State<TechnicalSupport> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Text(
-                      "NEED TECHNICAL HELP!!",
+                      "NEED TECHNICAL HELP?",
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),

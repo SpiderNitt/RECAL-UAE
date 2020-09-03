@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:iosrecal/Home/BusinessDatabase.dart';
 import 'package:iosrecal/Home/BusinessScreen.dart';
+import 'package:iosrecal/Home/ClosedPositions.dart';
 import 'package:iosrecal/Home/DealsExecuted.dart';
 import 'package:iosrecal/Home/Feedback.dart';
 import 'package:iosrecal/Home/MemberDatabase.dart';
@@ -62,6 +63,7 @@ void main() {
           WRITE_MENTOR: (BuildContext context) => new WriteMentorScreen(),
           WRITE_RESUME_SCREEN: (BuildContext context) => new WriteResume(),
           OPEN_POSITIONS: (BuildContext context) => new OpenPositions(),
+          CLOSED_POSITIONS: (BuildContext context) => new ClosedPositions(),
           ALUMNI_PLACED_SCREEN: (BuildContext context) => new AlumniPlaced(),
           MARKET_SURVEY: (BuildContext context) => new SurveyScreen(),
           WRITE_TO_ADMIN: (BuildContext context) => new WriteAdmin(),
