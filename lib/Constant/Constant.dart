@@ -5,6 +5,7 @@ String HOME_PAGE = '/HomePage',
     ANIMATED_SPALSH = '/AnimatedSplashScreen',
     LOGIN_SCREEN = '/Login',
     PROFILE_SCREEN = '/Profile',
+    EDIT_PROFILE_SCREEN = '/HomeScreen/Profile/Edit',
     HOME_SCREEN = '/HomeScreen',
     SOCIAL = '/HomeScreen/Social',
     BUSINESS = '/HomeScreen/Business',
@@ -30,5 +31,5 @@ String HOME_PAGE = '/HomePage',
     BUSINESS_DATABASE='/HomeScreen/Business/Database', 
     DEALS_EXECUTED = '/HomeScreen/Business/Deals',
     NOTIFICATION_MENU = '/HomeScreen/Notifications',
-    SUPPORT_SCREEN = '/HomeScreen/SupportScreen';
-
+    SUPPORT_SCREEN = '/HomeScreen/SupportScreen',
+    PICTURE_SCREEN = '/HomeScreen/Profile/PictureScreen';

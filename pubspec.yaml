@@ -52,7 +52,6 @@ dependencies:
   flip_card: ^0.4.4
   lazy_load_scrollview: 1.1.0
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
