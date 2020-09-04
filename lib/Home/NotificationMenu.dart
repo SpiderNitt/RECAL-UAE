@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Home/NotificationDetail.dart';
+import 'package:iosrecal/Home/errorWrong.dart';
 import 'package:iosrecal/models/NotificationsModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/PositionModel.dart';
@@ -26,6 +27,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
   int flag=0;
   bool _hasMore = true;
   int page =1;
+  int error=0;
 
   initState() {
     super.initState();
@@ -65,7 +67,6 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       print(responseBody.data);
       if (responseBody.status_code == 200) {
-
         setState(() {
           List list = responseBody.data["notifications"];
           notifications =
@@ -99,10 +100,19 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
           for(var i=0;i<block_notification.keys.toList().length;i++)
             print(block_notification.keys.toList().elementAt(i) + "  ${block_notification[(block_notification.keys.toList()).elementAt(i)].length}");
         print("dates: ${block_notification.keys.toList().length}");
-      } else {
+      } else if(responseBody.status_code==401) {
+        setState(() {
+          error=1;
+        });
+        print(responseBody.data);
+      }
+      else {
         print(responseBody.data);
       }
     } else {
+      setState(() {
+        error=1;
+      });
       print('Server error');
     }
   }
@@ -123,9 +133,12 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
           }
           return Center(
             child:
-            SpinKitDoubleBounce(
-              color: Colors
-                  .lightBlueAccent,
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: SpinKitDoubleBounce(
+                color: Colors
+                    .lightBlueAccent,
+              ),
             ),
           );
         }
@@ -232,7 +245,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: flag == 0 ? Center(child: CircularProgressIndicator()) : getBody(),
+        body: error==1 ? Error8Screen() : (flag == 0 ? Center(child: CircularProgressIndicator()) : getBody()),
       ),
     );
   }
