@@ -459,8 +459,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ResponseBody.fromJson(json.decode(_response.body));
               print(json.encode(responseBody.data));
               if (responseBody.status_code == 200) {
-                User recal_user =
-                User.fromProfile(json.decode(json.encode(responseBody.data)));
+                User recal_user = User.fromProfile(json.decode(json.encode(responseBody.data)));
                 String picture1 = recal_user.profile_pic;
                 if(picture1!=null) {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
