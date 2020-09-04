@@ -8,7 +8,8 @@ class PositionModel {
   final String position;
   final String description;
   final String contact;
-  PositionModel({this.position_id,this.company,this.placed, this.author, this.position, this.description, this.contact});
+  final String open_until;
+  PositionModel({this.position_id,this.company,this.placed, this.author, this.position, this.description, this.contact, this.open_until});
   factory PositionModel.fromJson(Map<String, dynamic> json) {
     return PositionModel(
       position_id: json['position_id'],
@@ -18,6 +19,7 @@ class PositionModel {
       position: json['position'],
       description: json['description'],
       contact: json['contact'],
+      open_until: json['open_until'],
     );
   }
 }

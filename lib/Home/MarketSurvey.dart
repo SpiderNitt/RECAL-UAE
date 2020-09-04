@@ -7,11 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/ColorGlobal.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:flip_card/flip_card.dart';
+import './NoData.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 int num = 0;
 
 _launchyoutube(url) async {
-  //const url = 'https://www.youtube.com/channel/UCEPOEe5azp3FbUjvMwttPqw';
   if (await canLaunch(url)) {
     await launch(url);
   } else {
@@ -49,26 +51,13 @@ class SurveyScreen extends StatefulWidget {
   SurveyState createState() => SurveyState();
 }
 
-class SurveyState extends State<SurveyScreen>
-    with SingleTickerProviderStateMixin {
+class SurveyState extends State<SurveyScreen> {
   var positions = new List<SurveyModel>();
-  AnimationController _animationController;
-  Animation<double> _animation;
-  AnimationStatus _animationStatus = AnimationStatus.dismissed;
-
+  var state = 0;
   @override
   void initState() {
     super.initState();
     _positions();
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
-    _animation = Tween<double>(end: 1, begin: 0).animate(_animationController)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        _animationStatus = status;
-      });
   }
 
   Future<String> _positions() async {
@@ -96,6 +85,7 @@ class SurveyState extends State<SurveyScreen>
           }
           print("Answer");
           print(positions.length);
+          state = 1;
         });
       } else {
         print(responseBody.data);
@@ -103,6 +93,118 @@ class SurveyState extends State<SurveyScreen>
     } else {
       print('Server error');
     }
+  }
+
+  Widget getBody() {
+    if (state == 0) {
+      return SpinKitDoubleBounce(
+        color: Colors.lightBlueAccent,
+      );
+    } else if (state == 1 && positions.length == 0) {
+      return NodataScreen();
+    }
+    return ListView.builder(
+      itemCount: positions.length,
+      itemBuilder: (context, index) {
+        final double width = MediaQuery.of(context).size.width;
+        final double height = MediaQuery.of(context).size.height;
+        return FlipCard(
+            //key: cardKey,
+            // flipOnTouch: false,
+            front: Container(
+                height: height / 8,
+                child: GestureDetector(
+                  child: Card(
+                    //color: ColorGlobal.blueColor,
+                    elevation: 20,
+//                            shadowColor: const Color(0x802196F3),
+                    margin: const EdgeInsets.all(8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          // SizedBox(
+                          //   width: width / 5,
+                          // ),
+                          Column(
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: width - width / 5,
+                                  ),
+                                  Icon(
+                                    Icons.swap_horiz,
+                                    color: ColorGlobal.blueColor,
+                                  ),
+                                ],
+                              ),
+                              // SizedBox(height: height / 42),
+                              AutoSizeText(
+                                positions[index].text.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: ColorGlobal.textColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 12.0),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // onTap: () => cardKey.currentState.toggleCard(),
+                )),
+            back: Container(
+                height: height / 8,
+                child: GestureDetector(
+                    child: Card(
+                      //color: ColorGlobal.blueColor,
+                      elevation: 20,
+//                              shadowColor: const Color(0x802196F3),
+                      margin: const EdgeInsets.all(8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                //SizedBox(height: height / 32),
+                                Row(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: width - width / 5,
+                                    ),
+                                    Icon(
+                                      Icons.swap_horiz,
+                                      color: ColorGlobal.blueColor,
+                                    ),
+                                  ],
+                                ),
+                                AutoSizeText(
+                                  positions[index].link,
+                                  style: TextStyle(
+                                    fontSize: 10.0,
+                                    color: ColorGlobal.textColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    onLongPress: () =>
+                        {_launchyoutube(positions[index].link)})));
+      },
+    );
   }
 
   @override
@@ -131,106 +233,7 @@ class SurveyState extends State<SurveyScreen>
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ListView.builder(
-              itemCount: positions.length,
-              itemBuilder: (context, index) {
-                return FlipCard(
-                    //key: cardKey,
-                    // flipOnTouch: false,
-                    front: Container(
-                        height: height / 8,
-                        child: GestureDetector(
-                          child: Card(
-                            //color: ColorGlobal.blueColor,
-                            elevation: 20,
-//                            shadowColor: const Color(0x802196F3),
-                            margin: const EdgeInsets.all(8),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: <Widget>[
-                                  // SizedBox(
-                                  //   width: width / 5,
-                                  // ),
-                                  Column(
-                                    children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          SizedBox(
-                                            width: width - width / 5,
-                                          ),
-                                          Icon(
-                                            Icons.swap_horiz,
-                                            color: ColorGlobal.blueColor,
-                                          ),
-                                        ],
-                                      ),
-                                      // SizedBox(height: height / 42),
-                                      Text(
-                                        positions[index].text.toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: 20.0,
-                                          color: ColorGlobal.textColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontStyle: FontStyle.italic,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 12.0),
-                                ],
-                              ),
-                            ),
-                          ),
-                          // onTap: () => cardKey.currentState.toggleCard(),
-                        )),
-                    back: Container(
-                        height: height / 8,
-                        child: GestureDetector(
-                            child: Card(
-                              //color: ColorGlobal.blueColor,
-                              elevation: 20,
-//                              shadowColor: const Color(0x802196F3),
-                              margin: const EdgeInsets.all(8),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Column(
-                                      children: <Widget>[
-                                        //SizedBox(height: height / 32),
-                                        Row(
-                                          children: <Widget>[
-                                            SizedBox(
-                                              width: width - width / 5,
-                                            ),
-                                            Icon(
-                                              Icons.swap_horiz,
-                                              color: ColorGlobal.blueColor,
-                                            ),
-                                          ],
-                                        ),
-                                        Text(
-                                          positions[index].link,
-                                          style: TextStyle(
-                                            fontSize: 10.0,
-                                            color: ColorGlobal.textColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                          maxLines: 2,
-                                          textAlign: TextAlign.start,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            onLongPress: () =>
-                                {_launchyoutube(positions[index].link)})));
-              },
-            ),
+            child: getBody(),
           ),
         ),
       ),

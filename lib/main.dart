@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:iosrecal/Home/BusinessDatabase.dart';
 import 'package:iosrecal/Home/BusinessScreen.dart';
+import 'package:iosrecal/Home/ClosedPositions.dart';
 import 'package:iosrecal/Home/DealsExecuted.dart';
-import 'package:iosrecal/Home/Feedback.dart';
+//import 'package:iosrecal/Home/Feedback.dart';
 import 'package:iosrecal/Home/MemberDatabase.dart';
 import 'package:iosrecal/Home/SocialMedia.dart';
 import 'package:iosrecal/Home/SocialScreen.dart';
@@ -12,7 +13,10 @@ import 'package:iosrecal/Home/WriteToMentor.dart';
 import 'package:iosrecal/Home/AlumniPlaced.dart';
 import 'package:iosrecal/Home/OpenPositions.dart';
 import 'package:iosrecal/Home/SeekGuidance.dart';
+
+//import 'package:iosrecal/Home/WriteAdmin.dart';
 import 'package:iosrecal/Home/NotificationMenu.dart';
+import 'package:iosrecal/Profile/EditProfile.dart';
 import 'Support/WriteAdmin.dart';
 import 'Constant/Constant.dart';
 import 'Constant/Constant.dart';
@@ -23,18 +27,19 @@ import 'Home/LinkedInProfiles.dart';
 import 'Home/MentorGroups.dart';
 import 'Home/EmploymentSupport.dart';
 import 'Profile/ProfileScreen.dart';
+import 'Profile/EditProfile.dart';
 import './Constant/Constant.dart';
 import './Screen/HomePage.dart';
 import './Screen/ImageSplashScreen.dart';
 import 'package:flutter/material.dart';
 import './UserAuth/Login.dart';
 import './Home/MarketSurvey.dart';
-import './Home/Feedback.dart';
 import './Home/SocialMedia.dart';
 import 'Support/supportScreen.dart';
 import 'Support/TechnicalSupport.dart';
 import 'Support/Volunteer.dart';
 import 'Support/Other.dart';
+import 'Support/Feedback.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,16 +57,18 @@ void main() {
           HOME_PAGE: (BuildContext context) => new HomePage(),
           IMAGE_SPLASH: (BuildContext context) => new ImageSplashScreen(),
           PROFILE_SCREEN: (BuildContext context) => new ProfileScreen(),
+          EDIT_PROFILE_SCREEN: (BuildContext context) => new EditProfileScreen(),
           SOCIAL: (BuildContext context) => new SocialScreen(),
           BUSINESS: (BuildContext context) => new BusinessScreen(),
           EMPLOYMENT_SUPPORT: (BuildContext context) => new EmploymentSupport(),
           MENTOR_GROUPS: (BuildContext context) => new MentorGroups(),
           MEMBER_LINKEDIN: (BuildContext context) => new LinkedIn(),
-          FEED_BACK: (BuildContext context) => new FeedbackScreen(),
+          FEEDBACK_SUPPORT: (BuildContext context) => new FeedbackScreen(),
           SOCIAL_MEDIA: (BuildContext context) => new SocialMediaScreen(),
           WRITE_MENTOR: (BuildContext context) => new WriteMentorScreen(),
           WRITE_RESUME_SCREEN: (BuildContext context) => new WriteResume(),
           OPEN_POSITIONS: (BuildContext context) => new OpenPositions(),
+          CLOSED_POSITIONS: (BuildContext context) => new ClosedPositions(),
           ALUMNI_PLACED_SCREEN: (BuildContext context) => new AlumniPlaced(),
           MARKET_SURVEY: (BuildContext context) => new SurveyScreen(),
           WRITE_TO_ADMIN: (BuildContext context) => new WriteAdmin(),
@@ -74,6 +81,7 @@ void main() {
           BUSINESS_DATABASE: (BuildContext context) => new BusinessDatabase(),
           DEALS_EXECUTED: (BuildContext context) => new DealsExecuted(),
           NOTIFICATION_MENU: (BuildContext context) => new NotificationsMenu(),
+          PICTURE_SCREEN: (BuildContext context) => new PictureScreen(),
         }));
   });
 }

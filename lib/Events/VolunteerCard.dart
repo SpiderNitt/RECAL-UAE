@@ -134,7 +134,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
                       ),
                       Container(child: IconButton(icon:Icon(Icons.chevron_right),onPressed: (){
                         Navigator.push(context, MaterialPageRoute(builder:(context)=>
-                        widget.status==2?Felicitations(widget.currEvent.event_id):Event(widget.isCompleted,widget.currEvent)));
+                        widget.status==2?Felicitations(widget.currEvent.event_id):Event(widget.isCompleted,widget.currEvent))).then((value) => checkAttended());
                       },),margin: EdgeInsets.only(right: 8),),
                     ],
                   ),
@@ -146,7 +146,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
       ),
     );
   }
-  Widget getAttendWidget(){
+  Widget getAttendWidget() {
     if(widget.isCheckAttended){
       if(widget.isAttended){
         return Icon(Icons.check_circle,color: Colors.green,);
@@ -159,7 +159,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
       return SizedBox();
     }
   }
-  Future<void> checkAttended() async{
+  Future<void> checkAttended() async {
     var params={'id':widget.currEvent.event_id.toString()};
     var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/event/attendees/',params);
     SharedPreferences prefs=await SharedPreferences.getInstance();
@@ -181,7 +181,6 @@ class _VolunteerCardState extends State<VolunteerCard> {
                 setState(() {
                   widget.isAttended=true;
                 });
-
               }
             }
             setState(() {
