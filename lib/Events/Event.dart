@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/Events/Accounts.dart';
+import 'package:iosrecal/Events/EventPictureDisplay.dart';
 import 'package:iosrecal/Events/Felicitations.dart';
 import 'package:iosrecal/models/EventDetailsInfo.dart';
 import 'package:iosrecal/models/EventInfo.dart';
@@ -33,14 +37,23 @@ class Event extends StatefulWidget {
 class _EventState extends State<Event> {
   final List<int> numbers = [1, 2, 3, 4, 5, 5, 2, 3, 5];
   bool isEmpty = false;
-  bool isSocialMediaEmpty=false;
+  String flyerUrl;
+  bool isSocialMediaEmpty = false;
   bool serverError = false;
-  bool detailsLoading=true;
-  bool detailsServerError=false;
+  List<bool> fileServerError = [false,false,false];
+  bool detailsLoading = true;
+  List<bool> filesLoading = [true,true,true];
+  bool detailsServerError = false;
   EventDetailsInfo detailsInfo;
+  String baseURL = "https://delta.nitt.edu/recal-uae";
+  String reminderUrl;
+  List<String> picturesListUrl = [];
+  List<String> carouselListUrl = [];
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
     UIUtills().updateScreenDimesion(
         width: screenSize.width, height: screenSize.height);
     return SafeArea(
@@ -62,10 +75,12 @@ class _EventState extends State<Event> {
       ),
     );
   }
-  Widget getBody(){
-    if(detailsLoading==false){
+
+  Widget getBody() {
+    if (!detailsLoading&& !(filesLoading[0]) &&!(filesLoading[1])&&!(filesLoading[2])) {
       return SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
               margin: EdgeInsets.all(10),
@@ -73,12 +88,16 @@ class _EventState extends State<Event> {
                   border: Border.all(
                       color: ColorGlobal.blueColor.withOpacity(0.5),
                       width: 2)),
-              child: FadeInImage.memoryNetwork(
+              child: (!filesLoading[0] && !fileServerError[0]&&flyerUrl!=null) ?
+              FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
-                image: "https://picsum.photos/300",
+                image: flyerUrl,
                 fit: BoxFit.fitWidth,
-              ),
-              width: MediaQuery.of(context).size.width,
+              ) : SizedBox(),
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
             ),
             Column(
               children: <Widget>[
@@ -90,7 +109,7 @@ class _EventState extends State<Event> {
                     children: <Widget>[
                       Text(
                         getDate(),
-                        style: TextStyle(color: Colors.blueGrey),
+                        style: TextStyle(color: Colors.blueGrey,fontSize: 15),
                       ),
                       Text(
                         getTime(),
@@ -99,6 +118,23 @@ class _EventState extends State<Event> {
                     ],
                   ),
                 ),
+                widget.currEvent.event_name!=null?
+                Column(
+                  children: <Widget>[
+                    SizedBox(height: 4,),
+                    Container(
+                      margin: EdgeInsets.only(left: 8,right:8),
+                      child: AutoSizeText(widget.currEvent.event_name,
+                        textAlign: TextAlign.center,
+                        //overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                      color: ColorGlobal.textColor,
+                        ),
+                    )),
+                  ],
+                ):SizedBox(),
                 Container(
                   margin: EdgeInsets.only(top: 6),
                   child: Row(
@@ -114,33 +150,38 @@ class _EventState extends State<Event> {
                               color: ColorGlobal.color2,
                             ),
                           ),
+
                           Container(
-                            margin: EdgeInsets.only(left: 4),
+                            margin: EdgeInsets.only(left: 4,top:4),
                             child: (widget.currEvent.location == null &&
-                                widget.currEvent.emirate_id == null)
+                                widget.currEvent.emirate == null)
                                 ? Text(
                               "Location not available",
                               style: TextStyle(
                                   color: Colors.black54,
-                                  fontSize: 24,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.bold),
                             )
                                 : Column(
                               crossAxisAlignment:
                               CrossAxisAlignment.start,
                               children: <Widget>[
-                                widget.currEvent.emirate_id == null
+                                widget.currEvent.emirate == null
                                     ? SizedBox(
                                   height: 6,
                                 )
-                                    : Text(
-                                  getEmirate(),
+                                    : Container(
+                                  width: UIUtills()
+                                      .getProportionalWidth(width: 300),
+                                      child: Text(
+                                  widget.currEvent.emirate,
                                   style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 24,
-                                      fontWeight:
-                                      FontWeight.bold),
+                                        color: Colors.black54,
+                                        fontSize: 22,
+                                        fontWeight:
+                                        FontWeight.bold),
                                 ),
+                                    ),
                                 Container(
                                   width: UIUtills()
                                       .getProportionalWidth(width: 300),
@@ -153,7 +194,7 @@ class _EventState extends State<Event> {
                                     overflow:
                                     TextOverflow.ellipsis,
                                     style: widget.currEvent
-                                        .emirate_id !=
+                                        .emirate !=
                                         null
                                         ? TextStyle(
                                         color: Colors.black45,
@@ -179,16 +220,17 @@ class _EventState extends State<Event> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      detailsInfo!=null?detailsInfo.detail_message == ""
+                      detailsInfo != null ? detailsInfo.detail_message == ""
                           ? SizedBox()
                           : Container(
-                          margin: EdgeInsets.only(top: 6),
+                          margin: EdgeInsets.only(top: 6,left: 2),
                           child: Text(
                             detailsInfo.detail_message,
                             style: TextStyle(
                                 color: Colors.blueGrey, fontSize: 17),
-                          )):SizedBox(),
-                      detailsInfo!=null?detailsInfo.detail_amendment_message == ""
+                          )) : SizedBox(),
+                      detailsInfo != null ? detailsInfo
+                          .detail_amendment_message == ""
                           ? SizedBox()
                           : Container(
                           margin: EdgeInsets.only(top: 6),
@@ -196,14 +238,14 @@ class _EventState extends State<Event> {
                             detailsInfo.detail_amendment_message,
                             style: TextStyle(
                                 color: Colors.black54, fontSize: 16),
-                          )):SizedBox(),
+                          )) : SizedBox(),
                       widget.isCompleted
                           ? Column(
                         children: <Widget>[
-                          detailsInfo.detail_amendment_message!=""?
+                          detailsInfo.detail_amendment_message != "" ?
                           SizedBox(
                             height: 20,
-                          ):SizedBox(height: 0,),
+                          ) : SizedBox(height: 4,),
                           Row(
                             mainAxisAlignment:
                             MainAxisAlignment.spaceBetween,
@@ -218,12 +260,13 @@ class _EventState extends State<Event> {
                                   child: Text("More",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
-                                  onTap: () => {
+                                  onTap: () =>
+                                  {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                EventPhotos()))
+                                                EventPhotos(picturesListUrl)))
                                   })
                             ],
                           ),
@@ -247,24 +290,33 @@ class _EventState extends State<Event> {
                                           initialPage: 0,
                                           enlargeCenterPage: true,
                                           enableInfiniteScroll: false),
-                                      items: numbers.map((sponsor) {
+                                      items: carouselListUrl.map((photo) {
                                         return Builder(
                                           builder:
                                               (BuildContext context) {
-                                            return Container(
-                                                width: UIUtills()
-                                                    .getProportionalWidth(
-                                                    width: 300),
-                                                margin: EdgeInsets
-                                                    .symmetric(
-                                                    horizontal: 6),
-                                                decoration:
-                                                BoxDecoration(
-                                                    color: Colors
-                                                        .white),
-                                                child: Image.network(
-                                                    "https://picsum.photos/300",
-                                                    fit: BoxFit.cover));
+                                            return InkWell(
+                                              child: Container(
+                                                  width: UIUtills()
+                                                      .getProportionalWidth(
+                                                      width: 300),
+                                                  margin: EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 6),
+                                                  decoration:
+                                                  BoxDecoration(
+                                                      color: Colors
+                                                          .white),
+                                                  child: Image.network(
+                                                     photo,
+                                                      fit: BoxFit.cover)),
+                                                onTap: () =>
+                                                {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => EventPictureDisplay(photo)))
+                                                }
+                                            );
                                           },
                                         );
                                       }).toList(),
@@ -277,12 +329,25 @@ class _EventState extends State<Event> {
                         ],
                       )
                           : SizedBox(),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: (!filesLoading[1] && reminderUrl!=null) ?
+                        FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: reminderUrl,
+                          fit: BoxFit.fitWidth,
+                        ) : SizedBox(),
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
+                      ),
                       widget.isCompleted
                           ? SizedBox()
                           : Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          detailsInfo!=null?Container(
+                          detailsInfo != null ? Container(
                               margin: EdgeInsets.only(top: 4),
                               child: detailsInfo.registration_link == ""
                                   ? SizedBox()
@@ -300,24 +365,26 @@ class _EventState extends State<Event> {
                                                   .color2,
                                               fontSize: 16))
                                     ]),
-                                onTap: () => launch(detailsInfo.registration_link),
-                              )):SizedBox(),
+                                onTap: () =>
+                                    launch(detailsInfo.registration_link),
+                              )) : SizedBox(),
                         ],
                       ),
                       widget.isCompleted
                           ? SizedBox(height: 0)
                           : Column(
                         children: <Widget>[
-                          detailsInfo!=null?detailsInfo.volunteer_message=="" ? SizedBox()
-                              :SizedBox(height: 10):SizedBox(),
-                          detailsInfo!=null?
-                          (detailsInfo.volunteer_message!=""? Container(
+                          detailsInfo != null ? detailsInfo.volunteer_message ==
+                              "" ? SizedBox()
+                              : SizedBox(height: 10) : SizedBox(),
+                          detailsInfo != null ?
+                          (detailsInfo.volunteer_message != "" ? Container(
                               child: Text(
                                 detailsInfo.volunteer_message,
                                 style: TextStyle(
                                     color: Colors.black87,
                                     fontSize: 16),
-                              )):SizedBox()):SizedBox(),
+                              )) : SizedBox()) : SizedBox(),
                           OutlineButton(
                             child: Row(
                               mainAxisAlignment:
@@ -336,7 +403,9 @@ class _EventState extends State<Event> {
                                 ),
                               ],
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                  Navigator.pushNamed(context, VOLUNTEER_SUPPORT);
+                                          },
                             color: Colors.white,
                             borderSide: BorderSide(
                                 color: Colors.green,
@@ -433,7 +502,8 @@ class _EventState extends State<Event> {
                                         "assets/images/survey.png",
                                         fit: BoxFit.cover,
                                       ),
-                                      height: UIUtills().getProportionalHeight(height: 40),
+                                      height: UIUtills().getProportionalHeight(
+                                          height: 40),
                                     ),
                                     Container(
                                       height: UIUtills()
@@ -481,8 +551,9 @@ class _EventState extends State<Event> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Accounts(
-                                        widget.currEvent.event_id)));
+                                    builder: (context) =>
+                                        Accounts(
+                                            widget.currEvent.event_id)));
                           },
                         ),
                       ),
@@ -562,12 +633,18 @@ class _EventState extends State<Event> {
                                               children: <Widget>[
                                                 Expanded(
                                                   child: Container(
+                                                    //color:Colors.black,
                                                     margin: EdgeInsets.only(
                                                         bottom: UIUtills()
                                                             .getProportionalHeight(
                                                             height: 6)),
-                                                    child: Image.network(
-                                                      "https://picsum.photos/300",
+                                                    child: snapshot.data[index]
+                                                        .brochure != null
+                                                        ? Image.network(
+                                                      (baseURL+
+                                                          snapshot.data[index]
+                                                              .brochure
+                                                              .toString()),
                                                       fit: BoxFit.cover,
                                                       loadingBuilder:
                                                           (BuildContext ctx,
@@ -581,15 +658,18 @@ class _EventState extends State<Event> {
                                                           return Center(
                                                             child:
                                                             SpinKitDoubleBounce(
-                                                              color: Colors.lightBlueAccent,
+                                                              color: Colors
+                                                                  .lightBlueAccent,
                                                             ),
                                                           );
                                                         }
                                                       },
-                                                    ),
+                                                    ):Container(height:UIUtills().getProportionalHeight(height: 300),color: Color(0xff4a4a4d),child:Image.asset("assets/images/sponsors.png",fit: BoxFit.scaleDown,)
+                                                    )
                                                   ),
                                                 ),
-                                                snapshot.data[index].sponsor_name!=null
+                                                snapshot.data[index]
+                                                    .sponsor_name != null
                                                     ? Tooltip(
                                                   child: Text(
                                                     snapshot.data[index]
@@ -612,20 +692,29 @@ class _EventState extends State<Event> {
                                                       0),
                                                 )
                                                     : SizedBox(),
-                                                snapshot.data[index].contact_person_name!=null ? Row(
-                                                  mainAxisAlignment:MainAxisAlignment.center,
+                                                snapshot.data[index]
+                                                    .contact_person_name != null
+                                                    ? Row(
+                                                  mainAxisAlignment: MainAxisAlignment
+                                                      .center,
                                                   children: <Widget>[
                                                     Icon(Icons.phone),
                                                     Container(
                                                       margin: EdgeInsets.only(
                                                           left: 4),
                                                       child: Tooltip(
-                                                        child: Text(
-                                                          snapshot.data[
-                                                          index].contact_person_name,
-                                                          overflow:
-                                                          TextOverflow
-                                                              .ellipsis,
+                                                        child: Container(
+                                                          width:UIUtills()
+                                                              .getProportionalWidth(width: 60),
+                                                          child: Text(
+                                                            snapshot.data[
+                                                            index]
+                                                                .contact_person_name,
+                                                            overflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                            maxLines: 1,
+                                                          ),
                                                         ),
                                                         message: snapshot
                                                             .data[index]
@@ -646,135 +735,12 @@ class _EventState extends State<Event> {
                           }
                         },
                       ),
-                      //                     //sample
-                      // Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      // children: <Widget>[
-                      // Row(
-                      // children: <Widget>[
-                      // Container(
-                      // margin: EdgeInsets.only(left: 4),
-                      // child: Text(
-                      // "Sponsors",
-                      // style: TextStyle(
-                      // fontWeight: FontWeight.bold),
-                      // )),
-                      // ],
-                      // ),
-                      // Container(
-                      // padding: EdgeInsets.symmetric(
-                      // horizontal: UIUtills()
-                      //     .getProportionalWidth(width: 4),
-                      // vertical: UIUtills()
-                      //     .getProportionalHeight(height: 6)),
-                      // height: UIUtills()
-                      //     .getProportionalHeight(height: 288),
-                      // child: ListView.builder(
-                      // scrollDirection: Axis.horizontal,
-                      // itemCount: numbers.length,
-                      // itemBuilder: (context, index) {
-                      // return Container(
-                      // width: UIUtills()
-                      //     .getProportionalWidth(
-                      // width: 216),
-                      // child: Card(
-                      // //color: Colors.blue,
-                      // child: Column(
-                      // mainAxisAlignment:
-                      // MainAxisAlignment.center,
-                      // children: <Widget>[
-                      // Expanded(
-                      // child: Container(
-                      // margin: EdgeInsets.only(
-                      // bottom: UIUtills()
-                      //     .getProportionalHeight(
-                      // height: 6)),
-                      // child: Image.network(
-                      // "https://picsum.photos/300",
-                      // fit: BoxFit.cover,
-                      // loadingBuilder:
-                      // (BuildContext ctx,
-                      // Widget child,
-                      // ImageChunkEvent
-                      // loadingProgress) {
-                      // if (loadingProgress ==
-                      // null) {
-                      // return child;
-                      // } else {
-                      // return Center(
-                      // child:
-                      // SpinKitDoubleBounce(
-                      // color: Colors
-                      //     .lightBlueAccent,
-                      // ),
-                      // );
-                      // }
-                      // },
-                      // ),
-                      // ),
-                      // ),
-                      //  Tooltip(
-                      // child: Text(
-                      //
-                      //     "Sponsor name",
-                      // maxLines: 2,
-                      // overflow:
-                      // TextOverflow
-                      //     .ellipsis,
-                      // style: TextStyle(
-                      // fontWeight:
-                      // FontWeight
-                      //     .bold),
-                      // ),
-                      // message: "sponsor_name",
-                      // waitDuration:
-                      // Duration(
-                      // milliseconds:
-                      // 0),
-                      // ),
-                      //
-                      //  Row(
-                      // mainAxisAlignment:
-                      // MainAxisAlignment
-                      //     .center,
-                      // children: <Widget>[
-                      // Icon(Icons.phone),
-                      // Container(
-                      // margin: EdgeInsets
-                      //     .only(
-                      // left: 4),
-                      // child: Tooltip(
-                      // child: Text(
-                      //
-                      //     "contact person",
-                      // overflow:
-                      // TextOverflow
-                      //     .ellipsis,
-                      // ),
-                      // message:
-                      //     "contact_person",
-                      // ),
-                      // ),
-                      // ],
-                      // )
-                      // ],
-                      // ),
-                      // ),
-                      // );
-                      // }),
-                      // ),
-                      // ],
-                      // ),
-                      (isSocialMediaEmpty)==false?Container(child: Text("Event Links"),margin: EdgeInsets.only(left: 4),):SizedBox(height: 4,),
                       FutureBuilder(
                         future: getSocialMediaLinks(),
-                        builder: (BuildContext context,AsyncSnapshot snapshot){
-                          if(snapshot.data==null){
-                            if(isSocialMediaEmpty){
-                              return SizedBox();
-                            }else{
-                              return Container(width: 0,height: 0,);
-                            }
+                        builder: (BuildContext context,
+                            AsyncSnapshot snapshot) {
+                          if (snapshot.data == null) {
+                              return Container(width: 0, height: 2,);
                             // else if(serverError){
                             //   return Center(
                             //       child:Text("Server Error..Try again after some time",style: TextStyle(color: Colors.blueGrey,fontSize: 16),)
@@ -788,66 +754,38 @@ class _EventState extends State<Event> {
                             //   );
                             // }
                           }
-                          else{
-                            return Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 4.0),
-                              height:MediaQuery.of(context).size.height * 0.06,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: snapshot.data.length,
-                                  itemBuilder: (context, index) {
-                                    return getIcon(snapshot.data[index].platform.toString(),snapshot.data[index].feed_url.toString());
-                                  }),
+                          else {
+                            return Column(
+                              children: <Widget>[
+                                Container(
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text("Event Links"),
+                                    ],
+                                  ),
+                                  margin: EdgeInsets.only(left: 4),),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 4.0),
+                                  height: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .height * 0.06,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: snapshot.data.length,
+                                      itemBuilder: (context, index) {
+                                        return getIcon(snapshot.data[index].platform
+                                            .toString(),
+                                            snapshot.data[index].feed_url
+                                                .toString());
+                                      }),
+                                ),
+                              ],
                             );
                           }
                         },
                       )
-                      // //sample
-                      //                     Container(
-                      // margin: EdgeInsets.only(top: 0.5),
-                      // padding: EdgeInsets.symmetric(
-                      // horizontal: 16.0, vertical: 4.0),
-                      // height:
-                      // MediaQuery.of(context).size.height * 0.08,
-                      // child: ListView.builder(
-                      // scrollDirection: Axis.horizontal,
-                      // itemCount: numbers.length,
-                      // itemBuilder: (context, index) {
-                      // return Card(
-                      // color: ColorGlobal.color2,
-                      // child: Container(
-                      // child: Card(
-                      // elevation: 2,
-                      // clipBehavior: Clip.antiAlias,
-                      // shape: RoundedRectangleBorder(
-                      // borderRadius:
-                      // BorderRadius.circular(10)),
-                      // child: Container(
-                      // color: ColorGlobal.textColor,
-                      // padding: EdgeInsets.all(5),
-                      // child: FittedBox(
-                      // fit: BoxFit.fitWidth,
-                      // child: Center(
-                      // child: InkWell(
-                      // child: Text(
-                      // "Facebook",
-                      // style: TextStyle(
-                      // color: ColorGlobal
-                      //     .whiteColor,
-                      // fontSize: 15,
-                      // fontWeight:
-                      // FontWeight.bold),
-                      // ),
-                      // onTap: () => launch("https://www.facebook.com/"),
-                      // )),
-                      // ),
-                      // ),
-                      // ),
-                      // ),
-                      // );
-                      // }),
-                      // ),
                     ],
                   ),
                 )
@@ -857,14 +795,14 @@ class _EventState extends State<Event> {
         ),
       );
     }
-    else if(detailsLoading){
+    else if (detailsLoading || filesLoading[0]||filesLoading[1]||filesLoading[2]) {
       return Center(
         child: SpinKitDoubleBounce(
           color: Colors.lightBlueAccent,
         ),
       );
     }
-    else if(detailsServerError){
+    else if (detailsServerError || fileServerError[0]||fileServerError[1]||fileServerError[2]) {
       return Center(
           child: Text(
               "Server Error..Try again after sometime", style: TextStyle(
@@ -874,6 +812,7 @@ class _EventState extends State<Event> {
       );
     }
   }
+
   String getDate() {
     var date = DateTime.parse(widget.currEvent.datetime);
     var updateddate = DateFormat.yMMMMd().format(date);
@@ -887,29 +826,29 @@ class _EventState extends State<Event> {
   }
 
   String getEmirate() {
-    String id = widget.currEvent.emirate_id;
+    String id = widget.currEvent.emirate;
     String emirate;
     switch (id) {
       case '1':
-        emirate = "Dubai";
+        emirate = "Umm Al Quwain";
         break;
       case '2':
-        emirate = "Abu Dhabi";
+        emirate = "Sharjah";
         break;
       case '3':
-        emirate = "Ajman";
+        emirate = "Ras Al Khaimah";
         break;
       case '4':
         emirate = "Fujairah";
         break;
       case '5':
-        emirate = "Ras Al Khaimah";
+        emirate = "Dubai";
         break;
       case '6':
-        emirate = "Sharjah";
+        emirate = "Ajman";
         break;
       case '7':
-        emirate = "Umm Al Quwain";
+        emirate = "Abu Dhabi";
         break;
     }
     print(emirate);
@@ -931,16 +870,16 @@ class _EventState extends State<Event> {
       if (_response.statusCode == 200) {
         responseBody = ResponseBody.fromJson(json.decode(_response.body));
         if (responseBody.status_code == 200) {
-          if (responseBody.data.length!=0) {
+          if (responseBody.data.length != 0) {
             for (var u in responseBody.data) {
               SocialMediaFeed currInfo = SocialMediaFeed.fromJson(u);
               socialmediafeeds.add(currInfo);
             }
             return socialmediafeeds;
           }
-          else{
+          else {
             print('Social Media Empty');
-            isSocialMediaEmpty=true;
+            isSocialMediaEmpty = true;
             return 1;
           }
         } else {
@@ -952,31 +891,37 @@ class _EventState extends State<Event> {
         return 3;
       }
     });
-    if(socialmediafeeds.length!=0){return socialmediafeeds;}
+    if (socialmediafeeds.length != 0) {
+      return socialmediafeeds;
+    }
   }
 
   @override
   void initState() {
     super.initState();
+    getEventFile("flyer");
+    getEventFile("pictures");
+   getEventFile("reminder");
     getEventDetails();
   }
-  Widget getIcon(String socialMediaName,String feed_url){
+
+  Widget getIcon(String socialMediaName, String feed_url) {
     String iconLocation;
-    if(socialMediaName.toLowerCase()=="instagram"){
-      iconLocation='assets/images/instagram.png';
-    }    else if(socialMediaName.toLowerCase()=="facebook"){
-      iconLocation='assets/images/facebook.png';
-    }else if(socialMediaName.toLowerCase()=="twitter"){
-      iconLocation='assets/images/twitter.png';
-    }else if(socialMediaName.toLowerCase()=="youtube"){
-      iconLocation='assets/images/youtube.png';
-    }else if(socialMediaName.toLowerCase()=="linkedin"){
-      iconLocation='assets/images/linkedin.png';
+    if (socialMediaName.toLowerCase() == "instagram") {
+      iconLocation = 'assets/images/instagram.png';
+    } else if (socialMediaName.toLowerCase() == "facebook") {
+      iconLocation = 'assets/images/facebook.png';
+    } else if (socialMediaName.toLowerCase() == "twitter") {
+      iconLocation = 'assets/images/twitter.png';
+    } else if (socialMediaName.toLowerCase() == "youtube") {
+      iconLocation = 'assets/images/youtube.png';
+    } else if (socialMediaName.toLowerCase() == "linkedin") {
+      iconLocation = 'assets/images/linkedin.png';
     }
-    if(iconLocation!=null){
+    if (iconLocation != null) {
       return InkWell(
         child: Container(
-          margin: EdgeInsets.only(left: 8,right: 8),
+          margin: EdgeInsets.only(left: 8, right: 8),
           child: Image(
             height: 26.0,
             width: 26.0,
@@ -988,7 +933,7 @@ class _EventState extends State<Event> {
         ),
         onTap: () => launch(feed_url),
       );
-    }else{
+    } else {
       return Card(
         color: ColorGlobal.color2,
         child: Container(
@@ -1023,10 +968,12 @@ class _EventState extends State<Event> {
       );
     }
   }
+
   Future<dynamic> getEventDetails() async {
     var params = {'event_id': widget.currEvent.event_id.toString()};
 
-    var uri =Uri.https('delta.nitt.edu', '/recal-uae/api/events/manage/', params);
+    var uri = Uri.https(
+        'delta.nitt.edu', '/recal-uae/api/events/manage/', params);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(uri, headers: {
       "Accept": "application/json",
@@ -1039,14 +986,15 @@ class _EventState extends State<Event> {
         if (responseBody.status_code == 200) {
           if (responseBody.data.length != 0) {
             setState(() {
-              detailsInfo=EventDetailsInfo(
-                  detail_amendment_message: responseBody.data['detail_amendment_message'],
+              detailsInfo = EventDetailsInfo(
+                  detail_amendment_message: responseBody
+                      .data['detail_amendment_message'],
                   detail_message: responseBody.data['detail_message'],
                   registration_link: responseBody.data['registration_link'],
                   volunteer_message: responseBody.data['volunteer_message']);
-              detailsLoading=false;
+              detailsLoading = false;
             });
-            print("yayy"+responseBody.data.toString());
+            print("yayy" + responseBody.data.toString());
             return detailsInfo;
           } else {
             setState(() {
@@ -1068,28 +1016,34 @@ class _EventState extends State<Event> {
     });
   }
 
-  Future<dynamic> getSponsors() async {
+  Future<List<SponsorInfo>> getSponsors() async {
     var params = {'event_id': widget.currEvent.event_id.toString()};
-    List<SponsorInfo> sponsorList = [];
-    var uri =
-    Uri.https('delta.nitt.edu', '/recal-uae/api/events/sponsors/',params);
+    List<SponsorInfo> sponsorsList = [];
+    var uri = Uri.https(
+        'delta.nitt.edu', '/recal-uae/api/events/sponsors/', params);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http.get(uri, headers: {
-      "Accept": "application/json",
-      "Cookie": "${prefs.getString("cookie")}",
-    }).then((_response) {
+    var response = await http.get(
+        uri,
+        headers: {
+          "Accept": "application/json",
+          "Cookie": "${prefs.getString("cookie")}",
+        }
+    ).then((_response) {
       ResponseBody responseBody = new ResponseBody();
-      print('Response body: sponsors ${_response.body}');
+      print('Response body: sp ${_response.body}');
       if (_response.statusCode == 200) {
         responseBody = ResponseBody.fromJson(json.decode(_response.body));
         if (responseBody.status_code == 200) {
           if (responseBody.data.length != 0) {
             for (var u in responseBody.data) {
-              SponsorInfo model= SponsorInfo.fromJson(u);
-              sponsorList.add(model);
+              SponsorInfo model = SponsorInfo.fromJson(u);
+              sponsorsList.add(model);
             }
-            return sponsorList;
-          } else {
+            print(sponsorsList.length.toString());
+            return sponsorsList;
+          }
+          else {
+            print("empty");
             isEmpty = true;
             return 1;
           }
@@ -1098,41 +1052,71 @@ class _EventState extends State<Event> {
           return 2;
         }
       } else {
-        serverError = true;
         print('Server error');
+        serverError = true;
         return 3;
       }
     });
-    if(sponsorList.length!=0){return sponsorList;}
+    if (sponsorsList.length != 0) {
+      return sponsorsList;
+    }
   }
-  Future<List<FelicitationModel>> getFelicitations() async{
-    var params={'event_id':widget.currEvent.event_id.toString()};
-    List<FelicitationModel> felicitationList=[];
-    var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/events/felicitations/',params);
-    SharedPreferences prefs=await SharedPreferences.getInstance();
-    var response=await http.get(
+  Future<List<String>> getEventFile(String file_type) async {
+    var params = {
+      'event_id': widget.currEvent.event_id.toString(),
+      'file_type': file_type
+    };
+    
+    var uri = Uri.https(
+        'delta.nitt.edu', '/recal-uae/api/events/get_file/', params);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var response = await http.get(
         uri,
         headers: {
-          "Accept" : "application/json",
-          "Cookie" : "${prefs.getString("cookie")}",
+          "Accept": "application/json",
+          "Cookie": "${prefs.getString("cookie")}",
         }
-    ) .then((_response) {
+    ).then((_response) {
       ResponseBody responseBody = new ResponseBody();
-      print('Response body: felicitations ${_response.body}');
+      print('Response body: photos ${_response.body}');
       if (_response.statusCode == 200) {
         responseBody = ResponseBody.fromJson(json.decode(_response.body));
         if (responseBody.status_code == 200) {
-          if(responseBody.data.length!=0) {
-            for(var u in responseBody.data) {
-              FelicitationModel model= FelicitationModel.fromJson(u);
-              felicitationList.add(model);
-            }
-            print(felicitationList.length.toString());
-            return felicitationList;
+          if (responseBody.data.length != 0) {
+            setState(() {
+              if (file_type == "flyer") {
+                if(responseBody.data['file']!=null)
+                { filesLoading[0] = false;
+                  flyerUrl = baseURL + responseBody.data['file'].toString();}
+              }else if(file_type=="reminder"){
+                filesLoading[1]=false;
+                if(responseBody.data['file']!=null)
+                {reminderUrl = baseURL + responseBody.data['file'].toString();}
+              }else{
+                if(responseBody.data['file']!=null)
+                  {filesLoading[2]=false;
+                  int cnt=0;
+                  for(var u in responseBody.data['file']) {
+                    cnt++;
+                    if(cnt<=10){
+                      carouselListUrl.add(baseURL+u.toString());
+                    }
+                    print(u.toString());
+                   picturesListUrl.add(baseURL+u.toString());
+              print("picturesList"+picturesListUrl.length.toString());}
+              }}
+            });
+            return picturesListUrl;
           }
-          else{
-            print("empty");
-            isEmpty=true;
+          else {
+            setState(() {
+              if(file_type=="flyer")
+              {filesLoading[0] = false;}else if(file_type=="reminder"){
+                filesLoading[1]=false;
+              }else{
+                filesLoading[2]=false;
+              }
+            });
             return 1;
           }
         } else {
@@ -1141,11 +1125,20 @@ class _EventState extends State<Event> {
         }
       } else {
         print('Server error');
-        serverError=true;
+        setState(() {
+          if(file_type=="flyer")
+          {fileServerError[0] = false;}else if(file_type=="reminder"){
+            fileServerError[1]=false;
+          }else{
+            fileServerError[2]=false;
+          }
+        });
         return 3;
       }
     });
-    if(felicitationList.length!=0){return felicitationList;}
+    if (picturesListUrl.length != 0) {
+      return picturesListUrl;
+    }
   }
 }
 

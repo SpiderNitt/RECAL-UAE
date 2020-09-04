@@ -13,6 +13,7 @@ import './Event.dart';
 import '../Constant/ColorGlobal.dart';
 import '../Constant/ColorGlobal.dart';
 import 'dart:async';
+import '../Constant/utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,6 +39,11 @@ class _VolunteerCardState extends State<VolunteerCard> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
+    UIUtills().updateScreenDimesion(
+        width: screenSize.width, height: screenSize.height);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -101,13 +107,16 @@ class _VolunteerCardState extends State<VolunteerCard> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  widget.status==2?"Event Name":getDate(),
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                Container(
+    width:UIUtills().getProportionalWidth(width: 200),
+                                  child: Text(
+                                    widget.status==2?(widget.currEvent.event_name!=null?widget.currEvent.event_name:" "):getDate(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(top: 3),
