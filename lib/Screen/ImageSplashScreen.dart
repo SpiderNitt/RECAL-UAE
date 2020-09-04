@@ -1,4 +1,8 @@
 import 'dart:async';
+import 'dart:math';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'WalkthroughApp.dart';
 
 import '../Home/HomeActivity.dart';
@@ -18,9 +22,14 @@ class SplashScreenState extends State<ImageSplashScreen> {
   SharedPreferences sharedPreferences;
   String email;
   int flag;
+  String dots="0";
+  Timer _timer;
+  Color getColorFromColorCode(String code){
+    return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
+  }
 
   startTime() async {
-  var _duration = new Duration(seconds:1);
+    var _duration = new Duration(seconds:1);
     return new Timer(_duration, navigationPage);
   }
   Future <Null> _getUserDetails() async {
@@ -31,9 +40,9 @@ class SplashScreenState extends State<ImageSplashScreen> {
     print("splash: " + id);
     print("first: $flag");
     if(id!="+9,q")
-    setState(() {
-      email=id;
-    });
+      setState(() {
+        email=id;
+      });
   }
 
   void navigationPage() async {
@@ -47,96 +56,102 @@ class SplashScreenState extends State<ImageSplashScreen> {
       Navigator.pushReplacementNamed(context, HOME_PAGE);
     }
     else {
-   //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WalkThroughApp()));
+      //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WalkThroughApp()));
       Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
     }
+  }
+  void changeDots(Timer timer) {
+    int add = Random().nextInt(7);
+    add = add %2 == 0 ? (add%4==0 ? 8 : 5) : (add%3==0 ? 10: (add%5==0 ? 5 : 14));
+    String value = ((int.parse(dots)+add)%101).toString();
+    if(int.parse(dots)!=100) {
+      setState(() {
+        dots = value;
+      });
+    }
+    print("dots $dots");
+//    if(dots.trim().length==3)
+//      setState(() {
+//        dots =  "   ";
+//      });
+//    else {
+//      setState(() {
+//        dots = dots.trim() + "." + " "*(2 - dots.trim().length);
+//      });
+//    }
   }
 
   @override
   void initState() {
     super.initState();
+    _timer = new Timer.periodic(const Duration(milliseconds: 750),changeDots);
     startTime();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return new Scaffold(
-      backgroundColor: Colors.black,
-      body: new Stack(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              height: width*0.2,
-              width: width*0.2,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(24.0, 32.0, 0.0, 0.0),
-                child: new Image.asset('assets/images/nitt_logo.png'),
-              ),
-            ),
-          ),
-
-          new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-
-              Center(
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 15),
-                  width: width*0.7,
-                  height: width*0.3,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: new BoxDecoration(
-                      //color: ColorGlobal.colorPrimaryDark,
-                      image: new DecorationImage(
-                        image: new AssetImage('assets/images/recal_logo.jpg'),
-                        fit: BoxFit.fill,
+          Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: width*0.7,
+                      height: width*0.3,
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: new BoxDecoration(
+                        //color: ColorGlobal.colorPrimaryDark,
+                          image: new DecorationImage(
+                            image:  AssetImage('assets/images/recal_logo.jpg'),
+                            colorFilter: ColorFilter.mode(Colors.white, BlendMode.darken),
+                            fit: BoxFit.contain,
+                          ),
+                          borderRadius: BorderRadius.circular(width*0.1)
                       ),
-                      borderRadius: BorderRadius.circular(width*0.1)
-                  ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(30.0),
+                      child: Text(
+                        "RECAL UAE CHAPTER",
+                        style: GoogleFonts.josefinSans(fontSize: 23.0, fontWeight: FontWeight.bold, color: ColorGlobal.textColor),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 0.0, right: 0.0, top: 20.0, bottom: 120.0),
-                child:
-                  new Text(
-                    "RECAL",
-                    style: TextStyle(
-                        fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 0.0, right: 0.0, top: 0.0, bottom: 0.0),
-                child:
-                  Image.asset('assets/images/loading.gif', alignment: Alignment.bottomCenter, scale : 4.0),
-              ),
-//              Padding(
-//                padding: const EdgeInsets.only(
-//                    left: 0.0, right: 0.0, top: 50.0, bottom: 0.0),
-//                child: new Row(
-//                  mainAxisSize: MainAxisSize.min,
-//                  children: <Widget>[
-//                    new Image.asset('assets/images/spiderlogo.png',
-//                        height: 20.0, width: 20.0),
-//                    Padding(
-//                        padding: EdgeInsets.only(left: 10.0),
-//                        child: new Text(
-//                          "Weaved Together ",
-//                          style: TextStyle(
-//                              fontWeight: FontWeight.bold,
-//                              fontSize: 15.0,
-//                              color: Colors.white
-//                          ),
-//                        ))
-//                  ],
-//                ),
-//              ),
-            ]
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: SpinKitWave(
+                            color: getColorFromColorCode("#6289ce"),
+                            size: 50.0,
+                            duration :Duration(milliseconds: 1000)
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "Loading $dots%",
+                      style: GoogleFonts.josefinSans(fontSize: 20.0, fontWeight: FontWeight.w500, color: ColorGlobal.textColor),
+                    ),
+                  ],
+                ),
+              ]
           ),
         ],
       ),

@@ -6,6 +6,7 @@ import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Constant/ColorGlobal.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class MemberDatabase extends StatefulWidget {
   @override
@@ -17,10 +18,10 @@ class _MemberDatabaseState extends State<MemberDatabase> {
 
   initState() {
     super.initState();
-    _positions();
+    //_positions();
   }
 
-  Future<String> _positions() async {
+  Future<List> _positions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http
         .get("https://delta.nitt.edu/recal-uae/api/users/all_users/", headers: {
@@ -33,18 +34,14 @@ class _MemberDatabaseState extends State<MemberDatabase> {
       print("success");
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
-        setState(() {
+        //setState(() {
           List list = responseBody.data;
           members = list.map((model) => MemberModel.fromJson(model)).toList();
-          print("Answer");
           //print(positions.length);
-        });
-      } else {
-        print(responseBody.data);
+        //});
       }
-    } else {
-      print('Server error');
     }
+    return members;
   }
 
   @override
@@ -62,16 +59,37 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                 Navigator.pop(context);
               }),
           title: Text(
-            'Member Database',
+            'Social Network Links',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ListView.builder(
-              itemCount: members.length,
-              itemBuilder: (context, index) {
+            child: FutureBuilder(
+              future: _positions(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                    return Center(child: Text("Try Again!"));
+                  case ConnectionState.waiting:
+                  case ConnectionState.active:
+                    return Center(
+                      child: SpinKitDoubleBounce(
+                        color: Colors.lightBlueAccent,
+                      ),
+                    );
+                  case ConnectionState.done:
+                    if (snapshot.hasError) {
+                      return Center(child: Text("Try Again!"));
+                    } else {
+                      print("members length" + members.length.toString());
+                      return ListView.separated(
+                        itemCount: members.length,
+                        separatorBuilder: (context, index) {
+                          return Divider();
+                        },
+                        itemBuilder: (context, index) {
                 int color;
                 if(members[index].gender=="male")
                   color = 0xbb3399fe;
@@ -100,13 +118,6 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                       title: Text(members[index].email),
                       leading: Icon(Icons.email),
                     ),
-//                    Padding(
-//                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-//                      child: Divider(
-//                        thickness: 1,
-//                        color: Colors.black12,
-//                      ),
-//                    ),
                     ListTile(
                       title: Text(members[index].organization),
                       leading: Icon(Icons.business),
@@ -118,66 +129,27 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                     ListTile(
                       title: new InkWell(
                           child: new Text(members[index].linkedIn_link),
-                          onTap: () => launch('https://docs.flutter.io/flutter/services/UrlLauncher-class.html')
+                          onTap: () =>
+                              launch(
+                                  'https://docs.flutter.io/flutter/services/UrlLauncher-class.html')
                       ),
                       leading: Icon(Icons.share),
                     ),
                   ],
                 );
-//                return Card(
-//                  child: Padding(
-//                    padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
-//                    child: Row(
-//                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                      children: <Widget>[
-//                        Row(
-//                          children: <Widget>[
-//                            CircleAvatar(
-//                              child: Icon(
-//                                Icons.person,
-//                                color: ColorGlobal.whiteColor,
-//                              ),
-//                            ),
-//                            SizedBox(
-//                              width: 15,
-//                            ),
-////                            VerticalDivider(
-////                              color: Colors.red,
-////                              thickness: 5,
-////                            ),
-//                          Container(
-//                            height: 24.0,
-//                            width: 1.0,
-//                            color: Colors.black12,
-//                          ),
-//                            SizedBox(
-//                              width: 15,
-//                            ),
-//                            Text(
-//                              members[index].name,
-//                              style: TextStyle(
-//                                fontSize: 18.0,
-//                                color: ColorGlobal.textColor,
-//                                fontWeight: FontWeight.bold,
-//                              ),
-//                            ),
-//                          ],
-//                        ),
-//
-//                        Icon(
-//                          Icons.arrow_forward_ios,
-//                          color: ColorGlobal.textColor,
-//                        ),
-//                        //SizedBox(height: 12.0),
-//                      ],
-//                    ),
-//                  ),
-//                );
+                        },
+                      );
+                }
+                };
+                return Center(child: Text("Try Again!"
+                )
+                );
               },
+            ),
+
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

@@ -128,16 +128,20 @@ class VolunteerState extends State<VolunteerScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
+
                     AutoSizeText(
                       "WANT TO VOLUNTEER!!",
+
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: height / 64),
+
                     AutoSizeText(
                       "Please write your message in the box below",
+
                       style: TextStyle(
                         fontSize: 15,
                         color: const Color(0xff3AAFFA),
