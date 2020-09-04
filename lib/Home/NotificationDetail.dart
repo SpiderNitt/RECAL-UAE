@@ -10,6 +10,9 @@ import 'package:iosrecal/models/PositionModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Constant/ColorGlobal.dart';
+import '../models/NotificationDetailModel.dart';
+import '../models/NotificationDetailModel.dart';
+import '../models/NotificationDetailModel.dart';
 
 class NotificationDetail extends StatefulWidget {
   final NotificationsModel notificationsModel;
@@ -47,6 +50,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
 //        updateCookie(_response);
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
+        notification = NotificationDetailModel.fromJson(responseBody.data);
         setState(() {
           state = 1;
         });
@@ -60,7 +64,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
 
   Widget _notificationText(){
     if(state==1){
-      return Text('Your request to volunteer for this event has been approved',
+      return Text(notification.body,
         style: TextStyle(
           fontSize: 20.0,
           fontStyle: FontStyle.italic,
@@ -100,6 +104,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Material(
@@ -125,6 +130,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                         ),
                       ),
                       SizedBox(
+                        width: MediaQuery.of(context).size.width,
                         height: 24.0,
                       ),
                       _notificationText(),

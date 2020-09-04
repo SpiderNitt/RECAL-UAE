@@ -50,10 +50,10 @@ class SupportScreenState extends State<SupportScreen> {
                               height: height / 2.75,
                               decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image:
+                                fit: BoxFit.fill,
+                                image:
                                     AssetImage('assets/images/supportbg.jpg'),
-                                  ))))),
+                              ))))),
                   Column(children: <Widget>[
                     SizedBox(
                       height: height / 3.25,
@@ -84,29 +84,29 @@ class SupportScreenState extends State<SupportScreen> {
                                 elevation: 30,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
-                                    new BorderRadius.circular(width / 10)),
+                                        new BorderRadius.circular(width / 10)),
                               ),
                               SizedBox(height: 6.0),
                               Container(
 //                                    alignment: Alignment.center,
                                   child: Column(children: <Widget>[
-                                    AutoSizeText(
-                                      "Write to",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF433d3e),
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                    ),
-                                    AutoSizeText(
-                                      "admin",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF433d3e),
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                    ),
-                                  ])),
+                                AutoSizeText(
+                                  "Write to",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Color(0xFF433d3e),
+                                      fontWeight: FontWeight.w600),
+                                  maxLines: 1,
+                                ),
+                                AutoSizeText(
+                                  "admin",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Color(0xFF433d3e),
+                                      fontWeight: FontWeight.w600),
+                                  maxLines: 1,
+                                ),
+                              ])),
                             ],
                             mainAxisAlignment: MainAxisAlignment.center,
                           ),
@@ -135,29 +135,29 @@ class SupportScreenState extends State<SupportScreen> {
                                 elevation: 30,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
-                                    new BorderRadius.circular(width / 10)),
+                                        new BorderRadius.circular(width / 10)),
                               ),
                               SizedBox(height: 6.0),
                               Container(
 //                                    alignment: Alignment.center,
                                   child: Column(children: <Widget>[
-                                    AutoSizeText(
-                                      "Write to",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF433d3e),
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                    ),
-                                    AutoSizeText(
-                                      "mentor",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF433d3e),
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                    ),
-                                  ])),
+                                AutoSizeText(
+                                  "Write to",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Color(0xFF433d3e),
+                                      fontWeight: FontWeight.w600),
+                                  maxLines: 1,
+                                ),
+                                AutoSizeText(
+                                  "mentor",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Color(0xFF433d3e),
+                                      fontWeight: FontWeight.w600),
+                                  maxLines: 1,
+                                ),
+                              ])),
                             ],
                             mainAxisAlignment: MainAxisAlignment.center,
                           ),
@@ -186,29 +186,29 @@ class SupportScreenState extends State<SupportScreen> {
                                 elevation: 30,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
-                                    new BorderRadius.circular(width / 10)),
+                                        new BorderRadius.circular(width / 10)),
                               ),
                               SizedBox(height: 6.0),
                               Container(
 //                                    alignment: Alignment.center,
                                   child: Column(children: <Widget>[
-                                    AutoSizeText(
-                                      "Technical",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF433d3e),
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                    ),
-                                    AutoSizeText(
-                                      "Support",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF433d3e),
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                    ),
-                                  ])),
+                                AutoSizeText(
+                                  "Technical",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Color(0xFF433d3e),
+                                      fontWeight: FontWeight.w600),
+                                  maxLines: 1,
+                                ),
+                                AutoSizeText(
+                                  "Support",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Color(0xFF433d3e),
+                                      fontWeight: FontWeight.w600),
+                                  maxLines: 1,
+                                ),
+                              ])),
                             ],
                             mainAxisAlignment: MainAxisAlignment.center,
                           ),
@@ -224,97 +224,142 @@ class SupportScreenState extends State<SupportScreen> {
                     SizedBox(
                       height: height / 24,
                     ),
-                    Row(children: <Widget>[
-                      SizedBox(
-                        width: width / 4,
-                      ),
-                      GestureDetector(
-                        child: Column(
-                          children: <Widget>[
-                            Card(
-                              child: Container(
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: width / 10,
-                                  child: Image.asset(
-                                    'assets/images/volunteer.png',
-                                    height: width / 10,
-                                    width: width / 10,
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                          width: width / 12,
+                        ),
+                        GestureDetector(
+                          child: Column(
+                            children: <Widget>[
+                              Card(
+                                child: Container(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: width / 10,
+                                    child: Image.asset(
+                                      'assets/images/volunteer.png',
+                                      height: width / 10,
+                                      width: width / 10,
+                                    ),
                                   ),
                                 ),
+                                elevation: 30,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(width / 10)),
                               ),
-                              elevation: 30,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  new BorderRadius.circular(width / 10)),
-                            ),
-                            SizedBox(height: 6.0),
-                            Container(
+                              SizedBox(height: 6.0),
+                              Container(
 //                                    alignment: Alignment.center,
-                                child: Column(children: <Widget>[
-                                  AutoSizeText(
-                                    "Volunteer",
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Color(0xFF433d3e),
-                                        fontWeight: FontWeight.w600),
-                                    maxLines: 1,
-                                  ),
-                                ])),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.center,
+                                  child: Column(children: <Widget>[
+                                AutoSizeText(
+                                  "Vounteer",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Color(0xFF433d3e),
+                                      fontWeight: FontWeight.w600),
+                                  maxLines: 1,
+                                ),
+                              ])),
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.center,
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, VOLUNTEER_SUPPORT);
+                          },
                         ),
-                        onTap: () {
-                          Navigator.pushNamed(context, VOLUNTEER_SUPPORT);
-                        },
-                      ),
-                      SizedBox(
-                        width: width / 12,
-                      ),
-                      GestureDetector(
-                        child: Column(
-                          children: <Widget>[
-                            Card(
-                              child: Container(
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: width / 10,
-                                  child: Image.asset(
-                                    'assets/images/other.png',
-                                    height: width / 10,
-                                    width: width / 10,
+                        SizedBox(
+                          width: width / 12,
+                        ),
+                        GestureDetector(
+                          child: Column(
+                            children: <Widget>[
+                              Card(
+                                child: Container(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: width / 10,
+                                    child: Image.asset(
+                                      'assets/images/review.png',
+                                      height: width / 10,
+                                      width: width / 10,
+                                    ),
                                   ),
                                 ),
+                                elevation: 30,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(width / 10)),
                               ),
-                              elevation: 30,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  new BorderRadius.circular(width / 10)),
-                            ),
-                            SizedBox(height: 6.0),
-                            Container(
+                              SizedBox(height: 6.0),
+                              Container(
 //                                    alignment: Alignment.center,
-                                child: Column(children: <Widget>[
-                                  AutoSizeText(
-                                    "Others",
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Color(0xFF433d3e),
-                                        fontWeight: FontWeight.w600),
-                                    maxLines: 1,
-                                  ),
-                                ])),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.center,
+                                  child: Column(children: <Widget>[
+                                AutoSizeText(
+                                  "Feedback",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Color(0xFF433d3e),
+                                      fontWeight: FontWeight.w600),
+                                  maxLines: 1,
+                                ),
+                              ])),
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.center,
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, FEEDBACK_SUPPORT);
+                          },
                         ),
-                        onTap: () {
-                          Navigator.pushNamed(context, OTHER_SUPPORT);
-                        },
-                      ),
-                      SizedBox(
-                        width: width / 12,
-                      ),
-                    ])
+                        SizedBox(
+                          width: width / 12,
+                        ),
+                        GestureDetector(
+                          child: Column(
+                            children: <Widget>[
+                              Card(
+                                child: Container(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: width / 10,
+                                    child: Image.asset(
+                                      'assets/images/other.png',
+                                      height: width / 10,
+                                      width: width / 10,
+                                    ),
+                                  ),
+                                ),
+                                elevation: 30,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(width / 10)),
+                              ),
+                              SizedBox(height: 6.0),
+                              Container(
+//                                    alignment: Alignment.center,
+                                  child: Column(children: <Widget>[
+                                AutoSizeText(
+                                  "Other",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Color(0xFF433d3e),
+                                      fontWeight: FontWeight.w600),
+                                  maxLines: 1,
+                                ),
+                              ])),
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.center,
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, OTHER_SUPPORT);
+                          },
+                        ),
+                        SizedBox(
+                          width: width / 16,
+                        ),
+                      ],
+                    ),
                   ]),
                 ])))));
   }
