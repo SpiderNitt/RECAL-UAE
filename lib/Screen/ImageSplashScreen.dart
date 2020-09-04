@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -33,6 +34,7 @@ class SplashScreenState extends State<ImageSplashScreen> {
   }
 
   startTime() async {
+
   var _duration = new Duration(seconds:4);
     return new Timer(_duration, navigationPage);
   }
@@ -46,6 +48,7 @@ class SplashScreenState extends State<ImageSplashScreen> {
     prefs.setInt("first", 10);
     print("splash: " + email1);
     print("first: $flag");
+
     if(email1!="+9,q" && user_id!="+9,q")
     setState(() {
       email=email1;
@@ -95,7 +98,7 @@ class SplashScreenState extends State<ImageSplashScreen> {
      await _checkLogin();
     }
     else {
-   //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WalkThroughApp()));
+      //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WalkThroughApp()));
       Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
     }
   }
@@ -143,6 +146,7 @@ class SplashScreenState extends State<ImageSplashScreen> {
         fit: StackFit.expand,
         children: <Widget>[
           Column(
+
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Column(

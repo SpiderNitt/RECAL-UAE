@@ -1,105 +1,182 @@
-//import 'package:flutter/cupertino.dart';
-//import 'package:flutter/material.dart';
-//
-//import '../Constant/Constant.dart';
-//import 'SocialBusinessScreen.dart';
-//import '../Constant/HomeCards.dart';
-//import '../Constant/ColorGlobal.dart';
-//
-//class HomeScreen extends StatefulWidget {
-//  @override
-//  _HomeScreenState createState() => _HomeScreenState();
-//}
-//
-//class _HomeScreenState extends State<HomeScreen> {
-//  static List<String> _events = [
-//    "Social",
-//    "Events",
-//    "Mentor Support",
-//    "Employment",
-//  ];
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    final screeSize = MediaQuery.of(context).size;
-//    return SafeArea(
-//      child: Scaffold(
-//        appBar: AppBar(
-//          backgroundColor: ColorGlobal.whiteColor,
-//          title: Text(
-//            'Home',
-//            style: TextStyle(color: ColorGlobal.textColor),
-//          ),
-//        ),
-//        body: Stack(
-//          children: <Widget>[
-//
-//            ClipPath(
-//              child: Container(
-//                height: MediaQuery.of(context).size.height * 0.60,
-//                decoration: BoxDecoration(
-//                  image: DecorationImage(
-//                      image: AssetImage("assets/images/admin.jpeg"),
-//                      fit: BoxFit.cover),
+import 'package:flutter/services.dart';
+
+import '../Home/HomeActivity.dart';
+import '../Achievements/AchievementsScreen.dart';
+import '../Home/HomeScreen.dart';
+import '../Events/EventsScreen.dart';
+import '../UAEChapter/ChapterScreen.dart';
+import '../Profile/ProfileScreen.dart';
+import '../Home/SocialMedia.dart';
+import '../Constant/ColorGlobal.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import '../Support/supportScreen.dart';
+
+
+class HomePage extends StatefulWidget {
+  @override
+  HomePageState createState() => new HomePageState();
+}
+
+class HomePageState extends State<HomePage> {
+  int _index = 1;
+  Widget _showPage= Scaffold(
+    body: HomeActivity(),
+  );
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+//    Navigator.pushReplacement(
+//        context,
+//        PageTransition(
+//            type: PageTransitionType.rightToLeftWithFade,
+//            child: Login()));
+  }
+
+
+  static List<String> _pages = [
+    "UAE Chapter",
+    "Achievements",
+    "Home",
+    "Events",
+    "Profile",
+  ];
+
+  Widget _getHomeWidgets(index,context) {
+    switch(index) {
+      case 0: return (ChapterScreen());
+      break;
+//      case 1: return (AchievementsScreen());
+//      break;
+      case 1: return (HomeActivity());
+      break;
+      default:return(SupportScreen());
+//      case 3: return(EventsScreen());
+//      break;
+//      case 4: return(ProfileScreen());
+//      break;
+//      default: return(ProfileScreen());
+    }
+  }
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Are you sure?'),
+        content: new Text('Do you want to exit the App'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () => Navigator.of(context).pop(false),
+            child: FlatButton(
+              color: Colors.green,
+              child: Text("NO"),
+            ),
+          ),
+          new GestureDetector(
+            onTap: () => SystemNavigator.pop(),
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("YES"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+//        appBar: new AppBar(
+//          backgroundColor: Colors.black.withOpacity(0.5),
+//          actions: <Widget>[
+//            IconButton(
+//              icon: Container(
+//                child: SvgPicture.asset(
+//                  "assets/icons/Logout.svg",
+//                  color: Colors.white70,
 //                ),
+//                height: 20,
 //              ),
-//              clipper: Header(),
-//            ),
-//            Container(
-//              child: GridView.count(
-//                crossAxisCount: 2,
-//                childAspectRatio: 1.0,
-//                padding: const EdgeInsets.all(4.0),
-//                mainAxisSpacing: 4.0,
-//                crossAxisSpacing: 4.0,
-//                children: _events.map((title) {
-//                  return Container(
-//                    child: GestureDetector(
-//                      onTap: () {
-//                        if(title=="Social")
-//                          Navigator.pushNamed(context, SOCIAL_BUSINESS);
-//                        else if(title=="Employment")
-//                          Navigator.pushNamed(context, EMPLOYMENT_SUPPORT);
-//                        else if(title=="Mentor Support")
-//                          Navigator.pushNamed(context, MENTOR_GROUPS);
-//                      },
-//                      child: Card(
-//                        margin: EdgeInsets.all(25.0),
-//                        color: Colors.white.withOpacity(0.8),
-//                        shape: RoundedRectangleBorder(
-//                          borderRadius: BorderRadius.circular(30),
-//                        ),
-//                        elevation: 0.3,
-//                        child: HomeCards(title: title),
-//                      ),
-//                    ),
-//                  );
-//                }).toList(),
-//              ),
-//            ),
+//              onPressed: () {
+//                Navigator.of(context).pushReplacementNamed(LOGIN_SCREEN);
+//              },
+//            )
 //          ],
+//          title: Text(_pages[_index]),
+//          elevation: 0.0,
 //        ),
-//      ),
-//    );
-//  }
-//}
-//
-//class Header extends CustomClipper<Path> {
-//  @override
-//  Path getClip(Size size) {
-//    // TODO: implement getClip
-//    var path = new Path();
-//    path.lineTo(0.0, size.height - 20.0);
-//    path.quadraticBezierTo(
-//        size.width / 4, size.height, size.width / 2.25, size.height - 30);
-//    path.quadraticBezierTo(size.width - (size.width / 3.25), size.height - 65,
-//        size.width, size.height - 40);
-//    path.lineTo(size.width, size.height - 40);
-//    path.lineTo(size.width, 0.0);
-//    path.close();
-//    return path;
-//  }
-//
-//  @override
-//  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-//}
+          bottomNavigationBar: CurvedNavigationBar(
+            backgroundColor: ColorGlobal.whiteColor,
+            color: Colors.black,
+            buttonBackgroundColor: ColorGlobal.blueColor,
+            height: 50,
+            items: <Widget>[
+              Icon(
+                Icons.account_balance,
+                size: 30,
+                color: ColorGlobal.color3,
+              ),
+              //     SvgPicture.asset("assets/icons/ac.svg",color:color_shades.color4,height: 30,),
+//              Icon(
+//                Icons.assistant_photo,
+//                size: 30,
+//                color: ColorGlobal.color3,
+//              ),
+              Icon(
+                Icons.home,
+                size: 30,
+                color: ColorGlobal.color3,
+              ),
+              Icon(
+                Icons.rate_review,
+                size: 30,
+                color: ColorGlobal.color3,
+              ),
+//              Icon(
+//                Icons.person,
+//                size: 30,
+//                color: ColorGlobal.color3,
+//              ),
+            ],
+            animationCurve: Curves.bounceInOut,
+            index: _index,
+            animationDuration: Duration(milliseconds: 200),
+            onTap: (int tappedIndex) {
+              setState(() {
+                _showPage = _getHomeWidgets(tappedIndex, context);
+              });
+            },
+          ),
+          body: _showPage,
+//            Stack(
+//              children: [
+//                ClipPath(
+//                  child: Container(
+//                    height: MediaQuery.of(context).size.height / 2,
+//                    decoration: BoxDecoration(
+//                      image: DecorationImage(
+//                          image: AssetImage("assets/images/admin.jpeg"),
+//                          fit: BoxFit.cover),
+//                    ),
+//                  ),
+//                  clipper: Header(),
+//                ),
+//                Container(
+//                  child: _showPage,
+//                )
+//              ],
+//            ),
+        ),
+      ),
+    );
+  }
+}

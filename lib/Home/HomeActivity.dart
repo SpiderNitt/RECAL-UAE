@@ -267,7 +267,6 @@ class _HomeActivityState extends State<HomeActivity> {
   void initState()  {
     // TODO: implement initState
     super.initState();
-   // _corecomm();
     _getUserPicture();
     user = _fetchPrimaryDetails();
   }
@@ -431,6 +430,7 @@ class _HomeActivityState extends State<HomeActivity> {
                   child: Padding(
                     padding: const EdgeInsets.only(top:15.0,left: 20,right: 20),
                     child: GestureDetector(
+
                       onTap: (){
                       Navigator.pushNamed(context,PROFILE_SCREEN,arguments: {"picture": picture}).then((value) {
                         profile_pic_flag=0;
@@ -453,6 +453,7 @@ class _HomeActivityState extends State<HomeActivity> {
                             ),
                             borderRadius:
                             new BorderRadius.all(
+
                                  Radius.circular(
                                     width/8)),
                           ),
@@ -460,7 +461,6 @@ class _HomeActivityState extends State<HomeActivity> {
                       ),
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.only(top:10.0,left: 20,right: 20, bottom: 10),
                   child: Row(
@@ -596,14 +596,14 @@ class _HomeActivityState extends State<HomeActivity> {
                           children: <Widget>[
                             Card(
                               child: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: width / 10,
-                                  child: Image.asset(
-                                    'assets/images/calendar.png',
-                                    height: width / 8,
-                                    width: width / 8,
-                                    color: Colors.blue[700],
-                                  ),
+                                backgroundColor: Colors.white,
+                                radius: width / 10,
+                                child: Image.asset(
+                                  'assets/images/calendar.png',
+                                  height: width / 8,
+                                  width: width / 8,
+                                  color: Colors.blue[700],
+                                ),
                               ),
                               shape: RoundedRectangleBorder(
                                   borderRadius:
@@ -642,230 +642,232 @@ class _HomeActivityState extends State<HomeActivity> {
                 Container(
                   margin: EdgeInsets.only(top: height * 0.40),
                   child: Column(
-                      children: [Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          GestureDetector(
-                            child: Column(
-                              children: <Widget>[
-                                Card(
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: width / 10,
-                                    child: Image.asset(
-                                      'assets/images/social_media.png',
-                                      height: width / 9,
-                                      width: width / 9,
-                                      color: Colors.blue[800],
-                                    ),
-                                  ),
-                                  elevation: 5,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      new BorderRadius.circular(width / 10)),
-                                ),
-                                Text(
-                                  "Social Media",
-                                  style: TextStyle(
-                                      fontFamily: 'Pacifico',
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: ColorGlobal.textColor),
-                                ),
-                                Text(
-                                  "Social Network",
-                                  style: TextStyle(
-                                      fontFamily: 'Pacifico',
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                      color: ColorGlobal.textColor.withOpacity(0.7)),
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              Navigator.pushNamed(context, SOCIAL_MEDIA);
-                            },
-                          ),
-                          GestureDetector(
-                            child: Column(
-                              children: <Widget>[
-                                Card(
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: width / 10,
-                                    child: Image.asset(
-                                      'assets/images/application.png',
-                                      color: Colors.blue[800],
-                                      height: width / 10,
-                                      width: width / 10,
-                                    ),
-                                  ),
-                                  elevation: 5,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      new BorderRadius.circular(width / 10)),
-                                ),
-                                Text(
-                                  "Employment",
-                                  style: TextStyle(
-                                      fontFamily: 'Pacifico',
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: ColorGlobal.textColor),
-                                ),
-                                Text(
-                                  "Job Positions",
-                                  style: TextStyle(
-                                      fontFamily: 'Pacifico',
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                      color: ColorGlobal.textColor.withOpacity(0.7)),
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              Navigator.pushNamed(context,EMPLOYMENT_SUPPORT);
-                            },
-                          ),
-                          GestureDetector(
-                            child: Column(
-                              children: <Widget>[
-                                Card(
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: width / 10,
-                                    child: Image.asset(
-                                      'assets/images/scholarship.png',
-                                      color: Colors.blue[800],
-                                      height: width / 10,
-                                      width: width / 10,
-                                    ),
-                                  ),
-                                  elevation: 5,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      new BorderRadius.circular(width / 10)),
-                                ),
-                                Text(
-                                  "Mentorship",
-                                  style: TextStyle(
-                                      fontFamily: 'Pacifico',
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: ColorGlobal.textColor),
-                                ),
-                                Text(
-                                  "Mentor Groups",
-                                  style: TextStyle(
-                                      fontFamily: 'Pacifico',
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                      color: ColorGlobal.textColor.withOpacity(0.7)),
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              Navigator.pushNamed(context,MENTOR_GROUPS);
-                            },
-                          ),
-                        ],
-                      ),
-                        Padding(
-                          padding: const EdgeInsets.only(top:10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                    children: [Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        GestureDetector(
+                          child: Column(
                             children: <Widget>[
-                              GestureDetector(
-                                child: Column(
-                                  children: <Widget>[
-                                    Card(
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        radius: width / 10,
-                                        child: Image.asset(
-                                          'assets/images/network.png',
-                                          color: Colors.blue[800],
-                                          height: width / 10,
-                                          width: width / 10,
-                                        ),
-                                      ),
-                                      elevation: 5,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          new BorderRadius.circular(width / 10)),
-                                    ),
-                                    Text(
-                                      "Social",
-                                      style: TextStyle(
-                                          fontFamily: 'Pacifico',
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: ColorGlobal.textColor),
-                                    ),
-                                    Text(
-                                      "Go Social",
-                                      style: TextStyle(
-                                          fontFamily: 'Pacifico',
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w600,
-                                          color: ColorGlobal.textColor.withOpacity(0.7)),
-                                    ),
-                                  ],
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                              Card(
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: width / 10,
+                                  child: Image.asset(
+                                    'assets/images/social_media.png',
+                                    height: width / 9,
+                                    width: width / 9,
+                                    color: Colors.blue[800],
+                                  ),
                                 ),
-                                onTap: () {
-                                  Navigator.pushNamed(context,SOCIAL);
-                                },
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    new BorderRadius.circular(width / 10)),
                               ),
-                              SizedBox(
-                                width: 20,
+                              Text(
+                                "Social Media",
+                                style: TextStyle(
+                                    fontFamily: 'Pacifico',
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: ColorGlobal.textColor),
                               ),
-                              GestureDetector(
-                                child: Column(
-                                  children: <Widget>[
-                                    Card(
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        radius: width / 10,
-                                        child: Image.asset(
-                                          'assets/images/busi_group.png',
-                                          height: width / 9,
-                                          width: width / 9,
-                                          color: Colors.blue[800],
-                                        ),
-                                      ),
-                                      elevation: 5,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          new BorderRadius.circular(width / 10),
-                                      ),
-                                    ),
-                                    Text(
-                                      "Business",
-                                      style: TextStyle(
-                                          fontFamily: 'Pacifico',
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: ColorGlobal.textColor),
-                                    ),
-                                    Text(
-                                      "Business Group",
-                                      style: TextStyle(
-                                          fontFamily: 'Pacifico',
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w600,
-                                          color: ColorGlobal.textColor.withOpacity(0.7)),
-                                    ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  Navigator.pushNamed(context,BUSINESS);
-                                },
+                              Text(
+                                "Social Network",
+                                style: TextStyle(
+                                    fontFamily: 'Pacifico',
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorGlobal.textColor.withOpacity(0.7)),
                               ),
                             ],
                           ),
+                          onTap: () {
+                            Navigator.pushNamed(context, SOCIAL_MEDIA);
+                          },
+                        ),
+                        GestureDetector(
+                          child: Column(
+                            children: <Widget>[
+                              Card(
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: width / 10,
+                                  child: Image.asset(
+                                    'assets/images/application.png',
+                                    color: Colors.blue[800],
+                                    height: width / 10,
+                                    width: width / 10,
+                                  ),
+
+                                ),
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    new BorderRadius.circular(width / 10)),
+                              ),
+                              Text(
+                                "Employment",
+                                style: TextStyle(
+                                    fontFamily: 'Pacifico',
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: ColorGlobal.textColor),
+                              ),
+                              Text(
+                                "Job Positions",
+                                style: TextStyle(
+                                    fontFamily: 'Pacifico',
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorGlobal.textColor.withOpacity(0.7)),
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context,EMPLOYMENT_SUPPORT);
+                          },
+                        ),
+                        GestureDetector(
+                          child: Column(
+                            children: <Widget>[
+                              Card(
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: width / 10,
+                                  child: Image.asset(
+                                    'assets/images/scholarship.png',
+                                    color: Colors.blue[800],
+                                    height: width / 10,
+                                    width: width / 10,
+                                  ),
+
+                                ),
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    new BorderRadius.circular(width / 10)),
+                              ),
+                              Text(
+                                "Mentorship",
+                                style: TextStyle(
+                                    fontFamily: 'Pacifico',
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: ColorGlobal.textColor),
+                              ),
+                              Text(
+                                "Mentor Groups",
+                                style: TextStyle(
+                                    fontFamily: 'Pacifico',
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorGlobal.textColor.withOpacity(0.7)),
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context,MENTOR_GROUPS);
+                          },
                         ),
                       ],
+                    ),
+                      Padding(
+                        padding: const EdgeInsets.only(top:10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            GestureDetector(
+                              child: Column(
+                                children: <Widget>[
+                                  Card(
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: width / 10,
+                                      child: Image.asset(
+                                        'assets/images/network.png',
+                                        color: Colors.blue[800],
+                                        height: width / 10,
+                                        width: width / 10,
+                                      ),
+                        ),
+                                    elevation: 5,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        new BorderRadius.circular(width / 10)),
+                                  ),
+                                  Text(
+                                    "Social",
+                                    style: TextStyle(
+                                        fontFamily: 'Pacifico',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorGlobal.textColor),
+                                  ),
+                                  Text(
+                                    "Go Social",
+                                    style: TextStyle(
+                                        fontFamily: 'Pacifico',
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        color: ColorGlobal.textColor.withOpacity(0.7)),
+                                  ),
+                                ],
+                                mainAxisAlignment: MainAxisAlignment.center,
+                              ),
+                              onTap: () {
+                                Navigator.pushNamed(context,SOCIAL);
+                              },
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            GestureDetector(
+                              child: Column(
+                                children: <Widget>[
+                                  Card(
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: width / 10,
+                                      child: Image.asset(
+                                        'assets/images/busi_group.png',
+                                        height: width / 9,
+                                        width: width / 9,
+                                        color: Colors.blue[800],
+                                      ),
+                                    ),
+                                    elevation: 5,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      new BorderRadius.circular(width / 10),
+                                    ),
+                                  ),
+                                  Text(
+                                    "Business",
+                                    style: TextStyle(
+                                        fontFamily: 'Pacifico',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorGlobal.textColor),
+                                  ),
+                                  Text(
+                                    "Business Group",
+                                    style: TextStyle(
+                                        fontFamily: 'Pacifico',
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        color: ColorGlobal.textColor.withOpacity(0.7)),
+                                  ),
+                                ],
+                              ),
+                              onTap: () {
+                                Navigator.pushNamed(context,BUSINESS);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 //                FlatButton(

@@ -29,11 +29,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<dynamic> _fetchPrimaryDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String name =
-        prefs.getString("name") == null ? "+9,q" : prefs.getString("name");
+    prefs.getString("name") == null ? "+9,q" : prefs.getString("name");
     String email =
-        prefs.getString("email") == null ? "+9,q" : prefs.getString("email");
+    prefs.getString("email") == null ? "+9,q" : prefs.getString("email");
     String cookie_1 =
-        prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+    prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
     String profile_picture =
     prefs.getString("profile_picture") == null ? null : prefs.getString("profile_picture");
     setState(() {
@@ -44,25 +44,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   _logoutDialog(String show, String again, int flag) {
     return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: Text('Logout Check'),
-            content: new Text(show),
-            actions: <Widget>[
-              new GestureDetector(
-                onTap: () {
-                  flag != 1
-                      ? Navigator.of(context).pop(false)
-                      : Navigator.pushReplacementNamed(context, HOME_PAGE);
-                },
-                child: FlatButton(
-                  color: Colors.green,
-                  child: Text(again),
-                ),
-              ),
-            ],
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: Text('Logout Check'),
+        content: new Text(show),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () {
+              flag != 1
+                  ? Navigator.of(context).pop(false)
+                  : Navigator.pushReplacementNamed(context, HOME_PAGE);
+            },
+            child: FlatButton(
+              color: Colors.green,
+              child: Text(again),
+            ),
           ),
-        ) ??
+        ],
+      ),
+    ) ??
         false;
   }
 
@@ -76,6 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<bool> _onLogoutPressed() {
     return showDialog(
+
           context: context,
           builder: (context) => new AlertDialog(
             title: new Text('Are you sure?'),
@@ -103,29 +104,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Navigator.pop(context, true);
                         Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
                       } else {
-                        _deleteUserDetails();
-                        print("${responseBody.data}");
-                        SystemNavigator.pop();
-                      }
-                    } else {
-                      _deleteUserDetails();
-                      print("Server error");
-                      SystemNavigator.pop();
-                    }
-                  }).catchError((error) {
                     _deleteUserDetails();
-                    print("server error");
+                    print("${responseBody.data}");
                     SystemNavigator.pop();
-                  });
-                },
-                child: FlatButton(
-                  color: Colors.red,
-                  child: Text("YES"),
-                ),
-              ),
-            ],
+                  }
+                } else {
+                  _deleteUserDetails();
+                  print("Server error");
+                  SystemNavigator.pop();
+                }
+              }).catchError((error) {
+                _deleteUserDetails();
+                print("server error");
+                SystemNavigator.pop();
+              });
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("YES"),
+            ),
           ),
-        ) ??
+        ],
+      ),
+    ) ??
         false;
   }
 
@@ -265,7 +266,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-          ),
+                  ),
                   SizedBox(
                     height: 10,
                   ),
@@ -322,6 +323,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 //                      borderRadius: 5,
 //                      toAnimate: true,
 //                      badgeContent: Text('$_unfinished'),
+
                       child: FlatButton(
                         onPressed: () {
                           Navigator.pushNamed(
