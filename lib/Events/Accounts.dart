@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/models/AccountInfo.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,17 +25,14 @@ class _AccountsState extends State<Accounts> {
   bool isCompleted=false;
   List<int> accountIDList=new List<int>();
   List<AccountInfo> accountDetailsList=new List<AccountInfo>();
-
+  String baseURL = "https://delta.nitt.edu/recal-uae";
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery
+    final screenSize = MediaQuery
         .of(context)
-        .size
-        .width;
-    final height = MediaQuery
-        .of(context)
-        .size
-        .height;
+        .size;
+    UIUtills().updateScreenDimesion(
+        width: screenSize.width, height: screenSize.height);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -115,11 +114,17 @@ class _AccountsState extends State<Accounts> {
                     children: <Widget>[
                       SizedBox(height: 8,),
                       accountDetailsList[index]
-                          .payment_amount!=null?Text(accountDetailsList[index].payment_amount.toString(),
+                          .payment_amount!=null?Container(
+                        width:UIUtills().getProportionalWidth(width: 200),
+                        child: Text(accountDetailsList[index]
+                            .payment_amount.toString(),
+                        overflow:TextOverflow.ellipsis,
+                        maxLines: 2,
                         style: TextStyle(
-                            color: ColorGlobal.textColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),):Text("Payment amount not available",style:TextStyle(color: Colors.black38)),
+                              color: ColorGlobal.textColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),),
+                          ):Text("Payment amount not available",style:TextStyle(color: Colors.black38)),
                       SizedBox(height: 4,),
                       accountDetailsList[index].income_expense!=null?Text(accountDetailsList[index].income_expense.substring(0,1).toUpperCase()+accountDetailsList[index].income_expense.substring(1),
                         style: TextStyle(
@@ -174,19 +179,30 @@ class _AccountsState extends State<Accounts> {
 //Icon(Icons.payment,size: 36,color: Colors.blueGrey,),
                                         SizedBox(width: 4,),
                                         accountDetailsList[index].payment_type!=null&& accountDetailsList[index].payment_mode!=null?Column(
+                                         crossAxisAlignment: CrossAxisAlignment.start,
                                           children: <Widget>[
-                                            accountDetailsList[index].payment_type!=null?Text(
-                                              accountDetailsList[index].payment_type,
-                                              style: TextStyle(
-                                                  fontSize: 18
+                                            accountDetailsList[index].payment_type!=null?Container(
+                                            width:UIUtills().getProportionalWidth(width: 150),
+                                              child: Text(
+                                                accountDetailsList[index].payment_type,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                    fontSize: 18
+                                                ),
                                               ),
                                             ):SizedBox(),
                                             SizedBox(height: 4,),
-                                            accountDetailsList[index].payment_mode!=null? Text(
-                                              accountDetailsList[index].payment_mode,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.black45
+                                            accountDetailsList[index].payment_mode!=null? Container(
+                                              width:UIUtills().getProportionalWidth(width: 100),
+                                              child: Text(
+                                                accountDetailsList[index].payment_mode,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black45
+                                                ),
                                               ),
                                             ):SizedBox()
                                           ],
@@ -218,25 +234,42 @@ class _AccountsState extends State<Accounts> {
                                   SizedBox(height: 4,),
                                   Row(
                                     children: <Widget>[
-                                      Text("Paid by: ",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold
-                                        ),),
-                                      accountDetailsList[index].paid_user_name!=null?Text(
-                                          accountDetailsList[index].paid_user_name):Text("Not available"),
+                                      Container(
+
+                                        child: Text("Paid by: ",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                          ),),
+                                      ),
+                                      accountDetailsList[index].paid_user_name!=null?Container(
+                                        width:UIUtills().getProportionalWidth(width: 200),
+                                        child: Text(
+                                          accountDetailsList[index].paid_user_name,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,),
+                                      ):Text("Not available"),
                                     ],
                                   ),
 
                                   SizedBox(height: 20,),
+                                  accountDetailsList[index].invoice_file!=null?
                                   Container(
                                     child:FadeInImage.memoryNetwork(
                                       placeholder: kTransparentImage,
-                                      image: "https://picsum.photos/300",
+                                      image: baseURL+accountDetailsList[index].invoice_file,
                                       fit: BoxFit.fitWidth,
                                     ),
                                     width: MediaQuery.of(context).size.width,
-                                  ),
-
+                                  ):SizedBox(),
+                          // accountDetailsList[index]
+                          //     .invoice_file != null?Container(
+                          //     child:FadeInImage.memoryNetwork(
+                          //            placeholder: kTransparentImage,
+                          //            image: (baseURL +
+                          //                accountDetailsList[index].invoice_file),
+                          //            fit: BoxFit.fitWidth,
+                          //          ),
+                          //     ): SizedBox(),
                                 ],
                               )
                             ],

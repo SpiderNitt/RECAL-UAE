@@ -1,8 +1,13 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 <<<<<<< HEAD
+export "FLUTTER_ROOT=C:\src\flutter"
+export "FLUTTER_APPLICATION_PATH=C:\Users\SRINIDHI\flutter_projects\UAE_files\UAE_App_Spider"
+=======
+<<<<<<< HEAD
 export "FLUTTER_ROOT=C:\Users\Win-10\flutter"
 export "FLUTTER_APPLICATION_PATH=C:\Users\Win-10\UAE_App_Spider"
+>>>>>>> test2
 export "FLUTTER_TARGET=lib\main.dart"
 =======
 export "FLUTTER_ROOT=/home/narensairam/Downloads/flutter"

@@ -91,6 +91,7 @@ class _FelicitationsState extends State<Felicitations> {
                           title: snapshot.data[index].felicitated_person!=null?Text(
                             snapshot.data[index].felicitated_person,
                             maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                                 fontSize: 20.0, color: Colors.black87),
                           ):SizedBox(),
@@ -100,7 +101,7 @@ class _FelicitationsState extends State<Felicitations> {
                           ),
                           children: <Widget>[
                             Container(
-                                margin: EdgeInsets.all(6),child: snapshot.data[index].achievement!=null?Text(snapshot.data[index].achievement):Text("Not available"))
+                                margin: EdgeInsets.all(6),child: snapshot.data[index].achievement!=null?Text(snapshot.data[index].achievement,style: TextStyle(fontSize: 18),):Text("Not available"))
                           ],
                         ),
                       ),
@@ -117,7 +118,7 @@ class _FelicitationsState extends State<Felicitations> {
   Future<List<FelicitationModel>> getFelicitations() async{
     var params={'event_id':widget.event_id.toString()};
     List<FelicitationModel> felicitationList=[];
-    var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/events/felicitations/',params);
+    var uri=Uri.https('delta.nitt.edu','/recal-uae/api/events/felicitations/',params);
     SharedPreferences prefs=await SharedPreferences.getInstance();
     var response=await http.get(
         uri,
