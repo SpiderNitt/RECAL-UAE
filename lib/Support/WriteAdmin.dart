@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
-
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -9,6 +9,7 @@ import '../Constant/ColorGlobal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class WriteAdmin extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class WriteAdmin extends StatefulWidget {
 
 class AdminState extends State<WriteAdmin> {
   final TextEditingController messageController = TextEditingController();
-
+  ProgressDialog pr;
   Future<bool> _sendMessage(String body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String url =
@@ -47,32 +48,69 @@ class AdminState extends State<WriteAdmin> {
         return true;
       } else {
         print(responseBody.data);
-        Fluttertoast.showToast(
-            msg: "An error occured. Please try again",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        return false;
       }
     } else {
       print('Server error');
-      Fluttertoast.showToast(
-          msg: "An error occured. Please try again",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      return false;
     }
+  }
+
+  _loginDialog1(ProgressDialog pr, String show, String again, int flag) {
+    pr = new ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      textDirection: TextDirection.rtl,
+      showLogs: true,
+      isDismissible: false,
+//      customBody: LinearProgressIndicator(
+//        valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
+//        backgroundColor: Colors.white,
+//      ),
+    );
+
+    pr.style(
+      message: "Sending message",
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      progressWidget: Image.asset(
+        "assets/images/ring.gif",
+        height: 50,
+        width: 50,
+      ),
+      insetAnimCurve: Curves.easeInOut,
+      progressWidgetAlignment: Alignment.center,
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+    );
+    pr.show();
+    Future.delayed(Duration(milliseconds: 1000)).then((value) {
+      Widget prog = flag == 1
+          ? Icon(
+              Icons.check_circle,
+              size: 50,
+              color: Colors.green,
+            )
+          : Icon(
+              Icons.close,
+              size: 50,
+              color: Colors.red,
+            );
+      pr.update(message: show.replaceAll("!", ""), progressWidget: prog);
+    });
+    Future.delayed(Duration(milliseconds: 2000)).then((value) {
+      pr.update(progressWidget: null);
+      pr.hide();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    //pr = ProgressDialog(context, type: ProgressDialogType.Normal);
+
     return SafeArea(
         child: Scaffold(
       backgroundColor: Color(0xDDFFFFFF),
@@ -100,7 +138,7 @@ class AdminState extends State<WriteAdmin> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Text(
+                    AutoSizeText(
                       "NEED ADMIN HELP!!",
                       style: TextStyle(
                           fontSize: 25,
@@ -108,7 +146,7 @@ class AdminState extends State<WriteAdmin> {
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: height / 64),
-                    Text(
+                    AutoSizeText(
                       "Please write your message in the box below",
                       style: TextStyle(
                         fontSize: 15,
@@ -144,7 +182,25 @@ class AdminState extends State<WriteAdmin> {
                     RawMaterialButton(
                       onPressed: () async {
                         final String message = messageController.text;
-                        bool b = await _sendMessage(message);
+                        if (message != "") {
+                          bool b = await _sendMessage(message);
+                          ProgressDialog pr;
+                          if (b) {
+                            _loginDialog1(pr, "Message Sent", "Thank you", 1);
+                          } else {
+                            _loginDialog1(
+                                pr, "Message was not sent", "Try again", 0);
+                          }
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "Enter a message",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.blue,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        }
                       },
                       elevation: 2.0,
                       fillColor: Colors.blue,

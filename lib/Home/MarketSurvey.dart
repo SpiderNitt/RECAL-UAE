@@ -9,6 +9,7 @@ import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:flip_card/flip_card.dart';
 import './NoData.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 int num = 0;
 
@@ -139,7 +140,7 @@ class SurveyState extends State<SurveyScreen> {
                                 ],
                               ),
                               // SizedBox(height: height / 42),
-                              Text(
+                              AutoSizeText(
                                 positions[index].text.toUpperCase(),
                                 style: TextStyle(
                                   fontSize: 20.0,
@@ -183,7 +184,7 @@ class SurveyState extends State<SurveyScreen> {
                                     ),
                                   ],
                                 ),
-                                Text(
+                                AutoSizeText(
                                   positions[index].link,
                                   style: TextStyle(
                                     fontSize: 10.0,

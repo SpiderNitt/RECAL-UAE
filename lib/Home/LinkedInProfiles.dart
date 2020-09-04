@@ -8,7 +8,7 @@ import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:flip_card/flip_card.dart';
 import './NoData.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import 'package:auto_size_text/auto_size_text.dart';
 int num = 0;
 
 class LinkedinModel {
@@ -144,7 +144,7 @@ class LinkedinState extends State<LinkedIn> {
                                   SizedBox(
                                     height: height / 32,
                                   ),
-                                  Text(
+                                  AutoSizeText(
                                     positions[index].user.toUpperCase(),
                                     style: TextStyle(
                                       fontSize: 20.0,
@@ -198,7 +198,7 @@ class LinkedinState extends State<LinkedIn> {
                                         ),
                                       ],
                                     ),
-                                    Text(
+                                    AutoSizeText(
                                       positions[index].linkedin,
                                       //"Link",
                                       style: TextStyle(

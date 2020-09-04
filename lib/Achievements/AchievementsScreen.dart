@@ -21,21 +21,18 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
 
   Future<List<AchievementModel>> _getAchievements() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http.get(
-        "https://delta.nitt.edu/recal-uae/api/achievements/",
-        headers: {
-          "Accept": "application/json",
-          "Cookie": "${prefs.getString("cookie")}",
-        }
-    );
+    var response = await http
+        .get("https://delta.nitt.edu/recal-uae/api/achievements/", headers: {
+      "Accept": "application/json",
+      "Cookie": "${prefs.getString("cookie")}",
+    });
     if (response.statusCode == 200) {
-      ResponseBody responseBody = ResponseBody.fromJson(
-          json.decode(response.body));
+      ResponseBody responseBody =
+          ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
         print(list);
-        //groups = list.map((model) => MentorGroupModel.fromJson(model)).toList();
-        for(var group in list){
+        for (var group in list) {
           AchievementModel mentorGroupModel = AchievementModel(
               id: group["id"],
               name: group["name"],
@@ -76,7 +73,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
               return Container(
                 child: Center(child: CircularProgressIndicator()),
               );
-            }else{
+            } else {
               return PageView.builder(
                 itemCount: projectSnap.data.length,
                 controller: PageController(viewportFraction: 0.7),
@@ -92,20 +89,24 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                             Card(
                               elevation: 5,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.1)),
+                                  borderRadius: BorderRadius.circular(
+                                      MediaQuery.of(context).size.width * 0.1)),
                               child: Container(
                                 height: MediaQuery.of(context).size.width * 0.5,
                                 width: MediaQuery.of(context).size.width * 0.5,
                                 decoration: new BoxDecoration(
                                   color: ColorGlobal.colorPrimaryDark,
                                   image: new DecorationImage(
-                                    image: new AssetImage('assets/images/admin.jpeg'),
+                                    image: new AssetImage(
+                                        'assets/images/admin.jpeg'),
                                     fit: BoxFit.contain,
                                   ),
                                   border: Border.all(
                                       color: ColorGlobal.whiteColor, width: 2),
                                   borderRadius: new BorderRadius.all(
-                                      Radius.circular(MediaQuery.of(context).size.width * 0.1)),
+                                      Radius.circular(
+                                          MediaQuery.of(context).size.width *
+                                              0.1)),
                                 ),
                               ),
                             ),
@@ -124,11 +125,9 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                 ),
                               ),
                             ),
-
                             SizedBox(
                               height: 10,
                             ),
-
                             Card(
                               elevation: 2,
                               clipBehavior: Clip.antiAlias,
@@ -151,7 +150,6 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                 ),
                               ),
                             ),
-
                             SizedBox(
                               height: 5,
                             ),
@@ -163,7 +161,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     letterSpacing: 1,
-                                    color: ColorGlobal.textColor.withOpacity(0.6),
+                                    color:
+                                        ColorGlobal.textColor.withOpacity(0.6),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),

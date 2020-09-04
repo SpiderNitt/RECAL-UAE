@@ -9,6 +9,8 @@ import '../Constant/ColorGlobal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class FeedbackScreen extends StatefulWidget {
   @override
@@ -47,26 +49,57 @@ class FeedbackState extends State<FeedbackScreen> {
         return true;
       } else {
         print(responseBody.data);
-        Fluttertoast.showToast(
-            msg: "An error occured. Please try again",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        return false;
       }
     } else {
       print('Server error');
-      Fluttertoast.showToast(
-          msg: "An error occured. Please try again",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      return false;
     }
+  }
+
+  _loginDialog1(ProgressDialog pr, String show, String again, int flag) {
+    pr = new ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      textDirection: TextDirection.rtl,
+      showLogs: true,
+      isDismissible: false,
+    );
+
+    pr.style(
+      message: "Sending message",
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      progressWidget: Image.asset(
+        "assets/images/ring.gif",
+        height: 50,
+        width: 50,
+      ),
+      insetAnimCurve: Curves.easeInOut,
+      progressWidgetAlignment: Alignment.center,
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+    );
+    pr.show();
+    Future.delayed(Duration(milliseconds: 1000)).then((value) {
+      Widget prog = flag == 1
+          ? Icon(
+              Icons.check_circle,
+              size: 50,
+              color: Colors.green,
+            )
+          : Icon(
+              Icons.close,
+              size: 50,
+              color: Colors.red,
+            );
+      pr.update(message: show.replaceAll("!", ""), progressWidget: prog);
+    });
+    Future.delayed(Duration(milliseconds: 2000)).then((value) {
+      pr.update(progressWidget: null);
+      pr.hide();
+    });
   }
 
   @override
@@ -91,17 +124,16 @@ class FeedbackState extends State<FeedbackScreen> {
         child: Container(
           color: Colors.white,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
-                height: height,
                 margin: EdgeInsets.fromLTRB(
                     width / 12, height / 16, width / 12, 0.0),
                 child: Column(
-                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Text(
+                    AutoSizeText(
                       "FEEDBACK PLEASE!!",
                       style: TextStyle(
                           fontSize: 25,
@@ -109,8 +141,8 @@ class FeedbackState extends State<FeedbackScreen> {
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: height / 64),
-                    Text(
-                      "Please write your message in the box below",
+                    AutoSizeText(
+                      "Please write your feedback in the box below",
                       style: TextStyle(
                         fontSize: 15,
                         color: const Color(0xff3AAFFA),
@@ -145,7 +177,25 @@ class FeedbackState extends State<FeedbackScreen> {
                     RawMaterialButton(
                       onPressed: () async {
                         final String message = messageController.text;
-                        bool b = await _sendMessage(message);
+                        if (message != "") {
+                          bool b = await _sendMessage(message);
+                          ProgressDialog pr;
+                          if (b) {
+                            _loginDialog1(pr, "Message Sent", "Thank you", 1);
+                          } else {
+                            _loginDialog1(
+                                pr, "Message was not sent", "Try again", 0);
+                          }
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "Enter a message",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.blue,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        }
                       },
                       elevation: 2.0,
                       fillColor: Colors.blue,
@@ -166,7 +216,7 @@ class FeedbackState extends State<FeedbackScreen> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Image(
-                  height: height / 2,
+                  height: height / 2.75,
                   width: width,
                   fit: BoxFit.fitWidth,
                   image: AssetImage('assets/images/feed.jpg'),
