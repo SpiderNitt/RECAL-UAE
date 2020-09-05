@@ -127,11 +127,10 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                       leading: Icon(Icons.business_center),
                     ),
                     ListTile(
-                      title: new InkWell(
+                      title: new GestureDetector(
                           child: new Text(members[index].linkedIn_link),
                           onTap: () =>
-                              launch(
-                                  'https://docs.flutter.io/flutter/services/UrlLauncher-class.html')
+                              launch(members[index].linkedIn_link)
                       ),
                       leading: Icon(Icons.share),
                     ),

@@ -47,14 +47,7 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
           }
 
         });
-//        List names = List<String>();
-//        for(BusinessMemberModel model in members){
-//          if(names.contains(model.name)){
-//            members.remove(model);
-//          }else{
-//            names.add(model.name);
-//          }
-//        }
+
         setState(() {
           state = 1;
         });

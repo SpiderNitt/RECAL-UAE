@@ -1,8 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import './MemberDatabase.dart';
+import 'package:iosrecal/models/MemberModel.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import '../Constant/ColorGlobal.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'package:iosrecal/models/EventModel.dart';
+import 'package:iosrecal/models/BusinessMemberModel.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 
 class DashBoard extends StatefulWidget {
   @override
@@ -13,16 +22,135 @@ class _DashBoardState extends State<DashBoard> {
 
   List<charts.Series<Gender, String>> _seriesGenderPieData;
   List<charts.Series<SandB, String>> _seriesSAndBPieData;
+  var data =new Map<String, int>();
+  var events = new List<EventModel>();
+  var members = new List<BusinessMemberModel>();
+  var users = new List<MemberModel>();
+  var final_members = new List<BusinessMemberModel>();
+  int state = 0;
+
+  _fetchEvents() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var response = await http
+        .get(
+        "https://delta.nitt.edu/recal-uae/api/events/all_events/", headers: {
+      "Accept": "application/json",
+      "Cookie": "${prefs.getString("cookie")}",
+    });
+    ResponseBody responseBody = new ResponseBody();
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      responseBody = ResponseBody.fromJson(json.decode(response.body));
+      print(responseBody.status_code);
+      if (responseBody.status_code == 200) {
+        List list = responseBody.data;
+        events = list.map((model) => EventModel.fromJson(model)).toList();
+        data['All Events'] = events.length;
+        int social=0;
+        events.forEach((element) {
+          if(element.event_type=="Social"){
+            social++;
+          }
+          data['Social Events'] = social;
+          data['Business Events'] = events.length - social;
+
+        });
+
+        setState(() {
+          state += 1;
+        });
+      }
+    }
+  }
+
+  _fetchSpecificUsers() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var response = await http
+        .get(
+        "https://delta.nitt.edu/recal-uae/api/business/members/", headers: {
+      "Accept": "application/json",
+      "Cookie": "${prefs.getString("cookie")}",
+    });
+    ResponseBody responseBody = new ResponseBody();
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      responseBody = ResponseBody.fromJson(json.decode(response.body));
+      print(responseBody.status_code);
+      if (responseBody.status_code == 200) {
+        List list = responseBody.data;
+        members = list.map((model) => BusinessMemberModel.fromJson(model)).toList();
+        int dealValue=0;
+        List names = List<String>();
+        members.forEach((element) {
+          dealValue += int.parse(element.deal_value);
+          if(!names.contains(element.name)){
+            final_members.add(element);
+            names.add(element.name);
+          }
+
+        });
+        data['Business Members'] = final_members.length;
+        data['Social Members'] = data['All Members'] - final_members.length;
+        data['All Deals'] = members.length;
+        data['Deals Value'] = dealValue;
+        _generatePieData();
+
+      }
+
+      setState(() {
+        state += 1;
+      });
+    }
+  }
+
+  _fetchAllUsers() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var response = await http
+        .get(
+        "https://delta.nitt.edu/recal-uae/api/users/all_users/", headers: {
+      "Accept": "application/json",
+      "Cookie": "${prefs.getString("cookie")}",
+    });
+    ResponseBody responseBody = new ResponseBody();
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      responseBody = ResponseBody.fromJson(json.decode(response.body));
+      print(responseBody.status_code);
+      if (responseBody.status_code == 200) {
+        List list = responseBody.data;
+        users = list.map((model) => MemberModel.fromJson(model)).toList();
+        data['All Members'] = users.length;
+        int male = 0;
+        users.forEach((element) {
+          if(element.gender=="male"){
+            print(element.name);
+            male++;
+          }
+
+        });
+        data['Male'] = male;
+        data['Female'] = users.length - male;
+        print("values are ");
+        print(data['Male']);
+        print(data['Female']);
+        _fetchSpecificUsers();
+        }
+
+        setState(() {
+          state += 1;
+        });
+      }
+    }
 
   _generatePieData(){
     var genderPieData =[
-      new Gender('Male', 165, Color(0xcc3399fe)),
-      new Gender('Female', 100, Color(0xccff3266)),
+      new Gender('Male', data['Male'], Color(0xcc3399fe)),
+      new Gender('Female', data['Female'], Color(0xccff3266)),
     ];
 
     var sAndBPieData =[
-      new SandB('Social', 197, Color(0xcc982ef0)),
-      new SandB('Business', 68, Color(0xcc26cb3c)),
+      new SandB('Social', data['Social Members'], Color(0xcc982ef0)),
+      new SandB('Business', data['Business Members'], Color(0xcc26cb3c)),
     ];
 
     _seriesGenderPieData.add(
@@ -50,6 +178,9 @@ class _DashBoardState extends State<DashBoard> {
 
       ),
     );
+    setState(() {
+      state+=1;
+    });
   }
 
   @override
@@ -57,7 +188,9 @@ class _DashBoardState extends State<DashBoard> {
     super.initState();
     _seriesGenderPieData = List<charts.Series<Gender, String>>();
     _seriesSAndBPieData = List<charts.Series<SandB, String>>();
-    _generatePieData();
+    _fetchEvents();
+    _fetchAllUsers();
+    //_generatePieData();
   }
 
   Material myItems(IconData icon, String heading, int color) {
@@ -132,12 +265,12 @@ class _DashBoardState extends State<DashBoard> {
                     children: <Widget>
                     [
                       Text('Total deals', style: TextStyle(color: Color(color))),
-                      Text('17', style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 34.0)),
+                      Text(data['All Deals'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 34.0)),
                       SizedBox(
                         height: 24.0,
                       ),
                       Text('Total value', style: TextStyle(color: Color(color))),
-                      Text('13689', style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 34.0)),
+                      Text(data['Deals Value'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 34.0)),
                     ],
                   ),
                   Material
@@ -189,7 +322,7 @@ class _DashBoardState extends State<DashBoard> {
                     children: <Widget>
                     [
                       Text('Total events', style: TextStyle(color: Color(color))),
-                      Text('53', style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 34.0))
+                      Text(data['All Events'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 34.0))
                     ],
                   ),
                   Material
@@ -228,7 +361,7 @@ class _DashBoardState extends State<DashBoard> {
                       height: 8.0,
                     ),
                     Text(
-                        '37',
+                        data['Social Events'].toString(),
                         style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w400, fontSize: 22.0)
                     ),
                   ],
@@ -240,7 +373,7 @@ class _DashBoardState extends State<DashBoard> {
                       height: 8.0,
                     ),
                     Text(
-                        '16',
+                        data['Business Events'].toString(),
                         style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w400, fontSize: 22.0)
                     ),
                   ],
@@ -278,7 +411,7 @@ class _DashBoardState extends State<DashBoard> {
                     children: <Widget>
                     [
                       Text('Total members', style: TextStyle(color: Color(color))),
-                      Text('265', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 34.0))
+                      Text(data['All Members'].toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 34.0))
                     ],
                   ),
                   Material
@@ -364,6 +497,32 @@ class _DashBoardState extends State<DashBoard> {
     );
   }
 
+  Widget getBody(){
+    if(state<3){
+      return Center(
+        child: SpinKitDoubleBounce(
+          color: Colors.lightBlueAccent,
+        ),
+      );
+    }
+    return new StaggeredGridView.count(
+      crossAxisCount: 2,
+      crossAxisSpacing: 12.0,
+      mainAxisSpacing: 12.0,
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      children: <Widget>[
+        membersItem(0xfff4c83f),
+        eventsItem(0xffed622b),
+        dealsItem(0xff7297ff),
+      ],
+      staggeredTiles: [
+        StaggeredTile.extent(2, 550.0),
+        StaggeredTile.extent(2, 206.0),
+        StaggeredTile.extent(2, 204.0),
+
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -384,23 +543,7 @@ class _DashBoardState extends State<DashBoard> {
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: new StaggeredGridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 12.0,
-          mainAxisSpacing: 12.0,
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          children: <Widget>[
-            membersItem(0xfff4c83f),
-            eventsItem(0xffed622b),
-            dealsItem(0xff7297ff),
-          ],
-          staggeredTiles: [
-            StaggeredTile.extent(2, 550.0),
-            StaggeredTile.extent(2, 206.0),
-            StaggeredTile.extent(2, 204.0),
-
-          ],
-        ),
+        body: getBody(),
       ),
     );
   }

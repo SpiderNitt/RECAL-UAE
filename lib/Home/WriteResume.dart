@@ -154,7 +154,7 @@ class _WriteResumeState extends State<WriteResume> {
                                     ]
                                 ),
                                 SizedBox(
-                                  height: 24.0,
+                                  height: 12.0,
                                 ),
                                 Row
                                   (
@@ -213,7 +213,7 @@ class _WriteResumeState extends State<WriteResume> {
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 24.0,
+                                  height: 12.0,
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment
@@ -262,7 +262,7 @@ class _WriteResumeState extends State<WriteResume> {
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 24.0,
+                                  height: 12.0,
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment
@@ -297,7 +297,7 @@ class _WriteResumeState extends State<WriteResume> {
                                           .start,
                                       children: <Widget>
                                       [
-                                        Text('Email', style: TextStyle(
+                                        Text('Discounts', style: TextStyle(
                                             color: Color(0xcc3399fe),
                                             fontSize: 13.0)),
                                         Text(writers[index].discounts,
@@ -306,6 +306,60 @@ class _WriteResumeState extends State<WriteResume> {
                                                     .textColor,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 20.0))
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 12.0,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .center,
+                                  children: [
+                                    Material(
+                                      color: Color(0xcc26cb3c),
+                                      borderRadius: BorderRadius.circular(
+                                          24.0),
+                                      child: Center
+                                        (
+                                        child: Padding
+                                          (
+                                          padding: const EdgeInsets.all(
+                                              16.0),
+                                          child: Icon(
+                                            Icons.link,
+                                            size: 30.0,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 8.0,
+                                    ),
+                                    Column
+                                      (
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .center,
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
+                                      children: <Widget>
+                                      [
+                                        Text('Link', style: TextStyle(
+                                            color: Color(0xcc26cb3c),
+                                            fontSize: 13.0)),
+                                        GestureDetector(
+                                          onTap: () =>
+                                              launch(writers[index].link.toString()),
+                                          child: Text(writers[index].link,
+                                              style: TextStyle(
+                                                  color: ColorGlobal
+                                                      .textColor,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 20.0),
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ],
