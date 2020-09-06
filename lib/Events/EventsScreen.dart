@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/ColorGlobal.dart';
 import 'CompletedEvents.dart';
 import 'UpcomingEvents.dart';
+import 'UpcomingEvents.dart';
 import 'package:http/http.dart' as http;
 
 class EventsScreen extends StatefulWidget {
@@ -120,7 +121,7 @@ class _EventsScreenState extends State<EventsScreen> {
     //var uri='delta.nitt.edu/recal-uae/events/social_media/params?event_id=1';
     var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/events/all_events/');
     SharedPreferences prefs=await SharedPreferences.getInstance();
-    var response=await http.get(
+    await http.get(
         uri,
         headers: {
           "Accept" : "application/json",

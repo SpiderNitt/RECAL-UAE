@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../Constant/ColorGlobal.dart';
+import '../Events/EventPictureDisplay.dart';
 class EventPhotos extends StatefulWidget {
+  List<String> eventPictures;
+  EventPhotos(this.eventPictures);
   @override
   _EventPhotosState createState() => _EventPhotosState();
 }
-
 class _EventPhotosState extends State<EventPhotos> {
   @override
   Widget build(BuildContext context) {
@@ -29,11 +31,20 @@ class _EventPhotosState extends State<EventPhotos> {
     );
   }
   List<Widget> gridTiles(){
-    List<Container> containers=new List<Container>.generate(30, (index){
+    List<Container> containers=new List<Container>.generate(widget.eventPictures.length, (index){
       return Container(
-        child:ClipRRect(
-          child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: "https://picsum.photos/300",fit: BoxFit.cover,),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+        child:InkWell(
+          child: ClipRRect(
+            child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image:widget.eventPictures[index] ,fit: BoxFit.cover,),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+            onTap: () =>
+            {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EventPictureDisplay(widget.eventPictures[index])))
+            }
         ),
       );
     });

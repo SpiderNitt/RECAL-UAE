@@ -13,6 +13,7 @@ import './Event.dart';
 import '../Constant/ColorGlobal.dart';
 import '../Constant/ColorGlobal.dart';
 import 'dart:async';
+import '../Constant/utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,6 +39,11 @@ class _VolunteerCardState extends State<VolunteerCard> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
+    UIUtills().updateScreenDimesion(
+        width: screenSize.width, height: screenSize.height);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -101,13 +107,16 @@ class _VolunteerCardState extends State<VolunteerCard> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  widget.status==2?"Event Name":getDate(),
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                Container(
+    width:UIUtills().getProportionalWidth(width: 200),
+                                  child: Text(
+                                    widget.status==2?(widget.currEvent.event_name!=null?widget.currEvent.event_name:" "):getDate(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(top: 3),
@@ -125,7 +134,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
                       ),
                       Container(child: IconButton(icon:Icon(Icons.chevron_right),onPressed: (){
                         Navigator.push(context, MaterialPageRoute(builder:(context)=>
-                        widget.status==2?Felicitations(widget.currEvent.event_id):Event(widget.isCompleted,widget.currEvent)));
+                        widget.status==2?Felicitations(widget.currEvent.event_id):Event(widget.isCompleted,widget.currEvent))).then((value) => checkAttended());
                       },),margin: EdgeInsets.only(right: 8),),
                     ],
                   ),
@@ -137,7 +146,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
       ),
     );
   }
-  Widget getAttendWidget(){
+  Widget getAttendWidget() {
     if(widget.isCheckAttended){
       if(widget.isAttended){
         return Icon(Icons.check_circle,color: Colors.green,);
@@ -150,7 +159,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
       return SizedBox();
     }
   }
-  Future<void> checkAttended() async{
+  Future<void> checkAttended() async {
     var params={'id':widget.currEvent.event_id.toString()};
     var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/event/attendees/',params);
     SharedPreferences prefs=await SharedPreferences.getInstance();
@@ -172,7 +181,6 @@ class _VolunteerCardState extends State<VolunteerCard> {
                 setState(() {
                   widget.isAttended=true;
                 });
-
               }
             }
             setState(() {

@@ -299,7 +299,6 @@ class _HomeActivityState extends State<HomeActivity> {
   void initState()  {
     // TODO: implement initState
     super.initState();
-    // _corecomm();
     _getUserPicture();
     user = _fetchPrimaryDetails();
     _fetchUnreadMessages();
@@ -464,14 +463,15 @@ class _HomeActivityState extends State<HomeActivity> {
                   child: Padding(
                     padding: const EdgeInsets.only(top:15.0,left: 20,right: 20),
                     child: GestureDetector(
-                        onTap: (){
-                          Navigator.pushNamed(context,PROFILE_SCREEN,arguments: {"picture": picture}).then((value) {
-                            profile_pic_flag=0;
-                            getPic=0;
-                            user = _fetchPrimaryDetails();
-                            _getUserPicture();
-                          });
-                        },
+
+                      onTap: (){
+                      Navigator.pushNamed(context,PROFILE_SCREEN,arguments: {"picture": picture}).then((value) {
+                        profile_pic_flag=0;
+                        getPic=0;
+                        user = _fetchPrimaryDetails();
+                        _getUserPicture();
+                      });
+                      },
                         child: profile_pic_flag == 0 ?
                         CircularProgressIndicator() :
                         Container(
@@ -486,14 +486,14 @@ class _HomeActivityState extends State<HomeActivity> {
                             ),
                             borderRadius:
                             new BorderRadius.all(
-                                Radius.circular(
+
+                                 Radius.circular(
                                     width/8)),
                           ),
                         )
-                    ),
+                      ),
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.only(top:10.0,left: 20,right: 20, bottom: 10),
                   child: Row(
@@ -732,6 +732,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                     height: width / 10,
                                     width: width / 10,
                                   ),
+
                                 ),
                                 elevation: 5,
                                 shape: RoundedRectangleBorder(
@@ -773,6 +774,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                     height: width / 10,
                                     width: width / 10,
                                   ),
+
                                 ),
                                 elevation: 5,
                                 shape: RoundedRectangleBorder(
@@ -821,7 +823,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                         height: width / 10,
                                         width: width / 10,
                                       ),
-                                    ),
+                        ),
                                     elevation: 5,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:

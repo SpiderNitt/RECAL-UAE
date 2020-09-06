@@ -76,33 +76,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<bool> _onLogoutPressed() {
     return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to Logout?'),
-        actions: <Widget>[
-          new GestureDetector(
-            onTap: () => Navigator.of(context).pop(false),
-            child: FlatButton(
-              color: Colors.green,
-              child: Text("NO"),
-            ),
-          ),
-          new GestureDetector(
-            onTap: () async {
-              var url = "https://delta.nitt.edu/recal-uae/api/auth/logout/";
-              await http
-                  .post(url, headers: {'Cookie': cookie}).then((_response) {
-                if (_response.statusCode == 200) {
-                  ResponseBody responseBody =
-                  ResponseBody.fromJson(json.decode(_response.body));
 
-                  print(json.encode(responseBody.data));
-                  if (responseBody.status_code == 200) {
-                    _deleteUserDetails();
-                    Navigator.pop(context, true);
-                    Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
-                  } else {
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to Logout?'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () => Navigator.of(context).pop(false),
+                child: FlatButton(
+                  color: Colors.green,
+                  child: Text("NO"),
+                ),
+              ),
+              new GestureDetector(
+                onTap: () async {
+                  var url = "https://delta.nitt.edu/recal-uae/api/auth/logout/";
+                  await http
+                      .post(url, headers: {'Cookie': cookie}).then((_response) {
+                    if (_response.statusCode == 200) {
+                      ResponseBody responseBody =
+                          ResponseBody.fromJson(json.decode(_response.body));
+
+                      print(json.encode(responseBody.data));
+                      if (responseBody.status_code == 200) {
+                        _deleteUserDetails();
+                        Navigator.pop(context, true);
+                        Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
+                      } else {
                     _deleteUserDetails();
                     print("${responseBody.data}");
                     SystemNavigator.pop();
@@ -238,33 +239,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 30,
                   ),
                   Center(
-                    child: Hero(
-                      tag: 'profile_picture',
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, PICTURE_SCREEN,
-                              arguments: {"picture": picture});
-                        },
-                        child: profile_pic_flag == 0 ? CircularProgressIndicator() :  Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          height: 160,
-                          width: 160,
-                          decoration: new BoxDecoration(
-                            color: ColorGlobal.colorPrimaryDark,
-                            image: new DecorationImage(
-                              image : picture==null ?   AssetImage(
-                                  'assets/images/recal_circle.png') : NetworkImage(picture),
-                              fit: BoxFit.cover,
-                            ),
-                            border: Border.all(
-                                color: ColorGlobal.colorPrimaryDark,
-                                width: 2),
-                            borderRadius: new BorderRadius.all(
-                                const Radius.circular(80.0)),
+                      child: Hero(
+                    tag: 'profile_picture',
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, PICTURE_SCREEN,
+                            arguments: {"picture": picture});
+                      },
+                      child: profile_pic_flag == 0 ? CircularProgressIndicator() :  Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        height: 160,
+                        width: 160,
+                        decoration: new BoxDecoration(
+                          color: ColorGlobal.colorPrimaryDark,
+                          image: new DecorationImage(
+                            image : picture==null ?   AssetImage(
+                                'assets/images/recal_circle.png') : NetworkImage(picture),
+                            fit: BoxFit.cover,
                           ),
+                          border: Border.all(
+                              color: ColorGlobal.colorPrimaryDark,
+                              width: 2),
+                          borderRadius: new BorderRadius.all(
+                              const Radius.circular(80.0)),
                         ),
                       ),
                     ),
+                  ),
                   ),
                   SizedBox(
                     height: 10,
@@ -322,33 +323,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
 //                      borderRadius: 5,
 //                      toAnimate: true,
 //                      badgeContent: Text('$_unfinished'),
-                    child: FlatButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                            context,EDIT_PROFILE_SCREEN)
-                            .then((value) {
-                          profile_pic_flag=1;
-                          getPic=0;
-                          user = _fetchPrimaryDetails();
-                          _getUserPicture();
-                        });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: ColorGlobal.whiteColor,
-                          border: Border.all(color: ColorGlobal.textColor),
-                          borderRadius: BorderRadius.circular(5.0),
+
+                      child: FlatButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                                  context,EDIT_PROFILE_SCREEN)
+                              .then((value) {
+                            profile_pic_flag=1;
+                            getPic=0;
+                            user = _fetchPrimaryDetails();
+                            _getUserPicture();
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: ColorGlobal.whiteColor,
+                            border: Border.all(color: ColorGlobal.textColor),
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Edit Profile",
+                            style: TextStyle(
+                                color: ColorGlobal.textColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          height: 0.05 * height,
                         ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Edit Profile",
-                          style: TextStyle(
-                              color: ColorGlobal.textColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        height: 0.05 * height,
                       ),
-                    ),
 //                    ),
                   ),
                 ],
@@ -379,24 +381,24 @@ class PictureScreen extends StatelessWidget {
           child: Center(
             child: Hero(
               tag: 'profile_picture',
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                height: 300,
-                width: 300,
-                decoration: new BoxDecoration(
-                  color: ColorGlobal.colorPrimaryDark,
-                  image: new DecorationImage(
-                    image : picture == null ? AssetImage(
-                        'assets/images/nitt_logo.png') : NetworkImage(picture),
-                    fit: BoxFit.cover,
-                  ),
-                  border: Border.all(
-                      color: ColorGlobal.colorPrimaryDark,
-                      width: 2),
-                  borderRadius: new BorderRadius.all(
-                      const Radius.circular(150.0)),
-                ),
-              ),
+             child: Container(
+               padding: EdgeInsets.symmetric(horizontal: 20),
+               height: 300,
+               width: 300,
+               decoration: new BoxDecoration(
+                 color: ColorGlobal.colorPrimaryDark,
+                 image: new DecorationImage(
+                   image : picture == null ? AssetImage(
+                       'assets/images/nitt_logo.png') : NetworkImage(picture),
+                   fit: BoxFit.cover,
+                 ),
+                 border: Border.all(
+                     color: ColorGlobal.colorPrimaryDark,
+                     width: 2),
+                 borderRadius: new BorderRadius.all(
+                     const Radius.circular(150.0)),
+               ),
+             ),
             ),
           ),
         ),

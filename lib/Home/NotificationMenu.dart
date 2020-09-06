@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Home/NotificationDetail.dart';
+import 'package:iosrecal/Home/errorWrong.dart';
 import 'package:iosrecal/models/NotificationsModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/Home/errorWrong.dart';
@@ -28,6 +29,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
   bool _hasError = false;
   bool _noData = false;
   int page =1;
+  int error=0;
 
   initState() {
     super.initState();
@@ -43,9 +45,10 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
 
 
   Future<String> _notifications() async {
-
     notifications = new List<NotificationsModel>();
-    block_notification = new Map<String, List<NotificationsModel>>();
+    if(block_notification.length==0) {
+      block_notification = new Map<String, List<NotificationsModel>>();
+    }
     flag=0;
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -66,7 +69,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       print(responseBody.data);
       if (responseBody.status_code == 200) {
-        //setState(() {
+        setState(() {
           List list = responseBody.data["notifications"];
           notifications =
               list.map((model) => NotificationsModel.fromJson(model)).toList();
@@ -80,8 +83,6 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
             block_notification[element.created_at].add(element);
             print("length is : ");
             print(block_notification.keys.toList().length);
-
-          //});
 
           for(var i=0;i<block_notification.keys.toList().length;i++)
             print(block_notification.keys.toList().elementAt(i) + "  ${block_notification[(block_notification.keys.toList()).elementAt(i)].length}");
@@ -134,13 +135,16 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
         print("index1: $index1");
         if(index1 >= block_notification.keys.toList().length){
           if (flag==1) {
-            _notifications();
+             _notifications();
           }
           return Center(
             child:
-            SpinKitDoubleBounce(
-              color: Colors
-                  .lightBlueAccent,
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: SpinKitDoubleBounce(
+                color: Colors
+                    .lightBlueAccent,
+              ),
             ),
           );
         }
@@ -148,7 +152,6 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
         return Padding(
           padding: const EdgeInsets.only(top: 5),
           child: Column(
-
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),

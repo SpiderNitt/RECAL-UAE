@@ -44,6 +44,7 @@ class HomePageState extends State<HomePage> {
     "Events",
     "Profile",
   ];
+
   Widget _getHomeWidgets(index,context) {
     switch(index) {
       case 0: return (ChapterScreen());
@@ -60,7 +61,6 @@ class HomePageState extends State<HomePage> {
 //      default: return(ProfileScreen());
     }
   }
-
   Future<bool> _onBackPressed() {
     return showDialog(
           context: context,

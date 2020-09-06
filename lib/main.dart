@@ -16,6 +16,7 @@ import 'package:iosrecal/Home/SeekGuidance.dart';
 
 //import 'package:iosrecal/Home/WriteAdmin.dart';
 import 'package:iosrecal/Home/NotificationMenu.dart';
+import 'package:iosrecal/Profile/EditProfile.dart';
 import 'Support/WriteAdmin.dart';
 import 'Constant/Constant.dart';
 import 'Constant/Constant.dart';
