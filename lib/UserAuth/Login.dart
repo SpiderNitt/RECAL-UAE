@@ -304,7 +304,7 @@ class LoginState extends State<Login> {
         } else {
           print(responseBody.data);
           _loginDialog1(progressDialog,
-              responseBody.data, "Try again", 0);
+              "${responseBody.data}", "Try again", 0);
         }
       } else {
         print("server error");
