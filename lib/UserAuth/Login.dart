@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import '../models/User.dart';
@@ -39,16 +40,22 @@ class LoginState extends State<Login> {
       new TextEditingController(text: "someone@gmail.com");
   TextEditingController password =
       new TextEditingController(text: "1j7P1T3ync2I");
+  TextEditingController reEnterPassword =
+  new TextEditingController(text: "");
+
 
   FocusNode emailFocus = new FocusNode();
   FocusNode passwordFocus = new FocusNode();
+  FocusNode reEnterPasswordFocus = new FocusNode();
   List<String> result = new List<String>();
 
   getDisposeController() {
     email.clear();
     password.clear();
+    reEnterPassword.clear();
     emailFocus.unfocus();
     passwordFocus.unfocus();
+    reEnterPasswordFocus.unfocus();
   }
 
   _deleteUserDetails() async {
@@ -197,7 +204,7 @@ class LoginState extends State<Login> {
     }
   }
 
-  static loginUser(String email, String password) async {
+  Future<dynamic> loginUser(String email, String password) async {
     var url = "https://delta.nitt.edu/recal-uae/api/auth/login/";
     print("password: " + password);
     var body = {'email': email, 'password': password};
@@ -229,6 +236,8 @@ class LoginState extends State<Login> {
         print('Server error');
         return ["Server Error", 0];
       }
+    }).catchError((error) {
+      return ["$error",0];
     });
   }
 
@@ -273,7 +282,8 @@ class LoginState extends State<Login> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: ColorGlobal.whiteColor,
-          body: SingleChildScrollView(
+          body:
+          SingleChildScrollView(
             child: Container(
               child: Stack(
                 children: <Widget>[
@@ -317,8 +327,8 @@ class LoginState extends State<Login> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          'RECAL UAE',
-                          style: TextStyle(
+                          'RECAL UAE CHAPTER',
+                          style: GoogleFonts.lato(
                             color: ColorGlobal.textColor,
                             fontSize: 24.0,
                             letterSpacing: 2,
@@ -338,7 +348,8 @@ class LoginState extends State<Login> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Container(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
                           child: TextFieldWidget(
                             hintText: 'Email',
                             obscureText: false,
@@ -347,16 +358,24 @@ class LoginState extends State<Login> {
                             focusNode: emailFocus,
                           ),
                         ),
-                        SizedBox(
-                          height: 22,
-                        ),
-                        Container(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
                           child: TextFieldWidget(
                             hintText: 'Password',
                             obscureText: true,
                             prefixIconData: Icons.lock,
                             textEditingController: password,
                             focusNode: passwordFocus,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: TextFieldWidget(
+                            hintText: 'Re Enter Password',
+                            obscureText: true,
+                            prefixIconData: Icons.lock,
+                            textEditingController: reEnterPassword,
+                            focusNode: reEnterPasswordFocus,
                           ),
                         ),
                         Container(
@@ -514,105 +533,105 @@ class LoginState extends State<Login> {
               ),
             ),
           ),
-//          bottomNavigationBar: Container(
-//            color: ColorGlobal.whiteColor,
-//            height: 70,
-//            child: Column(
-//              children: <Widget>[
-//                Row(
-//                  mainAxisAlignment: MainAxisAlignment.end,
-//                  children: <Widget>[
-//                    InkWell(
-//                      onTap: () {
-//                        getDisposeController();
-//                        Navigator.push(
-//                                context,
-//                                PageTransition(
-//                                    type: PageTransitionType.rightToLeft,
-//                                    duration: Duration(milliseconds: 300),
-//                                    child: SignUp()))
-//                            .then((value) {
-//                          Future.delayed(Duration(milliseconds: 200), () {
-//                            setState(() {
-//                              width = accountSize;
-//                            });
-//                          });
-//                        });
-//                        setState(() {
-//                          width = screenWidth - 20;
-//                        });
-//                      },
-//                      child: AnimatedContainer(
-//                        height: 65.0,
-//                        width: width,
-//                        duration: Duration(milliseconds: 500),
-//                        child: Row(
-//                          children: <Widget>[
-//                            Container(
-//                              margin: EdgeInsets.only(left: 10),
-//                              child: Icon(
-//                                Icons.arrow_back_ios,
-//                                color: ColorGlobal.whiteColor,
-//                                size: 30,
-//                              ),
-//                            ),
-//                            Container(
-//                              child: Column(
-//                                mainAxisAlignment: MainAxisAlignment.center,
-//                                crossAxisAlignment: CrossAxisAlignment.start,
-//                                children: <Widget>[
-//                                  Container(
-////                          margin: EdgeInsets.only(right: 8,top: 15),
-//                                    child: Text(
-//                                      "Don't have an account?",
-//                                      textAlign: TextAlign.start,
-//                                      style: TextStyle(
-//                                        fontSize: 14,
-//                                        letterSpacing: 1,
-//                                        color: ColorGlobal.whiteColor
-//                                            .withOpacity(0.9),
-//                                        fontWeight: FontWeight.w400,
-//                                      ),
-//                                    ),
-//                                  ),
-//                                  SizedBox(height: 5),
-//                                  Container(
-////                          margin: EdgeInsets.only(right: 8,top: 15),
-//                                    child: AutoSizeText(
-//                                      "Sign Up",
-//                                      textAlign: TextAlign.end,
-//                                      style: TextStyle(
-//                                        fontSize: 16,
-//                                        letterSpacing: 1,
-//                                        color: ColorGlobal.whiteColor
-//                                            .withOpacity(0.9),
-//                                        fontWeight: FontWeight.w600,
-//                                      ),
-//                                      maxLines: 1,
-//                                    ),
-//                                  ),
-//                                ],
-//                              ),
-//                            ),
-//                          ],
-//                        ),
-//                        curve: Curves.linear,
-//                        decoration: BoxDecoration(
-//                          borderRadius: BorderRadius.only(
-//                            bottomLeft: Radius.circular(40),
-//                            topLeft: Radius.circular(40),
-//                          ),
-//                          color: ColorGlobal.colorPrimary,
-//                        ),
-//                      ),
-//                    ),
-//                  ],
-//                ),
-//              ],
-//            ),
-//          ),
-        ),
+          bottomNavigationBar: Container(
+            color: ColorGlobal.whiteColor,
+            height: 70,
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () {
+                        getDisposeController();
+                        Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.rightToLeft,
+                                    duration: Duration(milliseconds: 300),
+                                    child: SignUp()))
+                            .then((value) {
+                          Future.delayed(Duration(milliseconds: 200), () {
+                            setState(() {
+                              width = accountSize;
+                            });
+                          });
+                        });
+                        setState(() {
+                          width = screenWidth - 20;
+                        });
+                      },
+                      child: AnimatedContainer(
+                        height: 65.0,
+                        width: width,
+                        duration: Duration(milliseconds: 500),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(left: 10),
+                              child: Icon(
+                                Icons.arrow_back_ios,
+                                color: ColorGlobal.whiteColor,
+                                size: 30,
+                              ),
+                            ),
+                            Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+//                          margin: EdgeInsets.only(right: 8,top: 15),
+                                    child: Text(
+                                      "Don't have an account?",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        letterSpacing: 1,
+                                        color: ColorGlobal.whiteColor
+                                            .withOpacity(0.9),
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Container(
+//                          margin: EdgeInsets.only(right: 8,top: 15),
+                                    child: AutoSizeText(
+                                      "Sign Up",
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        letterSpacing: 1,
+                                        color: ColorGlobal.whiteColor
+                                            .withOpacity(0.9),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        curve: Curves.linear,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(40),
+                            topLeft: Radius.circular(40),
+                          ),
+                          color: ColorGlobal.colorPrimary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
       ),
+    )
     );
   }
 }

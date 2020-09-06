@@ -73,10 +73,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
     prefs.setInt("user_id", null);
     prefs.setString("cookie", null);
   }
+  _logoutUser() async {
+    var url = "https://delta.nitt.edu/recal-uae/api/auth/logout/";
+    await http
+        .post(url, headers: {'Cookie': cookie}).then((_response) {
+      if (_response.statusCode == 200) {
+        ResponseBody responseBody =
+        ResponseBody.fromJson(json.decode(_response.body));
+
+        print(json.encode(responseBody.data));
+        if (responseBody.status_code == 200) {
+          _deleteUserDetails();
+          Navigator.pop(context, true);
+          Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
+        } else {
+          _deleteUserDetails();
+          print("${responseBody.data}");
+          SystemNavigator.pop();
+        }
+      } else {
+        _deleteUserDetails();
+        print("Server error");
+        SystemNavigator.pop();
+      }
+    }).catchError((error) {
+      _deleteUserDetails();
+      print("server error");
+      SystemNavigator.pop();
+    });
+  }
+
 
   Future<bool> _onLogoutPressed() {
     return showDialog(
-
           context: context,
           builder: (context) => new AlertDialog(
             title: new Text('Are you sure?'),
@@ -91,33 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               new GestureDetector(
                 onTap: () async {
-                  var url = "https://delta.nitt.edu/recal-uae/api/auth/logout/";
-                  await http
-                      .post(url, headers: {'Cookie': cookie}).then((_response) {
-                    if (_response.statusCode == 200) {
-                      ResponseBody responseBody =
-                          ResponseBody.fromJson(json.decode(_response.body));
-
-                      print(json.encode(responseBody.data));
-                      if (responseBody.status_code == 200) {
-                        _deleteUserDetails();
-                        Navigator.pop(context, true);
-                        Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
-                      } else {
-                    _deleteUserDetails();
-                    print("${responseBody.data}");
-                    SystemNavigator.pop();
-                  }
-                } else {
-                  _deleteUserDetails();
-                  print("Server error");
-                  SystemNavigator.pop();
-                }
-              }).catchError((error) {
-                _deleteUserDetails();
-                print("server error");
-                SystemNavigator.pop();
-              });
+                 await _logoutUser();
             },
             child: FlatButton(
               color: Colors.red,
