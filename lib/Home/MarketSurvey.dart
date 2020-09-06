@@ -109,8 +109,8 @@ class SurveyState extends State<SurveyScreen> {
         final double width = MediaQuery.of(context).size.width;
         final double height = MediaQuery.of(context).size.height;
         return FlipCard(
-            //key: cardKey,
-            // flipOnTouch: false,
+          //key: cardKey,
+          // flipOnTouch: false,
             front: Container(
                 height: height / 8,
                 child: GestureDetector(
@@ -202,7 +202,7 @@ class SurveyState extends State<SurveyScreen> {
                       ),
                     ),
                     onLongPress: () =>
-                        {_launchyoutube(positions[index].link)})));
+                    {_launchyoutube(positions[index].link)})));
       },
     );
   }

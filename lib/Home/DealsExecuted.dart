@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import 'package:iosrecal/Home/errorWrong.dart';
+import 'package:iosrecal/Home/NoData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/BusinessMemberModel.dart';
-import 'package:iosrecal/models/MemberModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../Constant/ColorGlobal.dart';
 
 class DealsExecuted extends StatefulWidget {
@@ -19,6 +18,7 @@ class DealsExecuted extends StatefulWidget {
 
 class _DealsExecutedState extends State<DealsExecuted> {
   var members = new List<BusinessMemberModel>();
+  bool _hasError = false;
 
   initState() {
     super.initState();
@@ -44,7 +44,11 @@ class _DealsExecutedState extends State<DealsExecuted> {
           print('heys');
           //print(positions.length);
 
+      }else{
+        _hasError = true;
       }
+    }else{
+      _hasError = true;
     }
     return members;
   }
@@ -74,7 +78,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
             builder: (BuildContext context, AsyncSnapshot snapshot){
               switch(snapshot.connectionState){
                 case ConnectionState.none:
-                  return Center(child: Text("Try Again!"));
+                  return Center(child: Error8Screen());
                 case ConnectionState.waiting:
                 case ConnectionState.active:
                   return Center(
@@ -87,9 +91,12 @@ class _DealsExecutedState extends State<DealsExecuted> {
                   print("done");
                   if(snapshot.hasError){
                     print("error");
-                    return Center(child: Text("Try Again!"));
+                    return Center(child: Error8Screen());
                   }else{
                     print(members.length);
+                    if(members.length == 0){
+                      return Center(child: NodataScreen());
+                    }
                     return StaggeredGridView.countBuilder(
                       crossAxisCount: 2,
                       itemCount: members.length,

@@ -10,9 +10,9 @@ import 'package:iosrecal/Home/NotificationDetail.dart';
 import 'package:iosrecal/Home/errorWrong.dart';
 import 'package:iosrecal/models/NotificationsModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/models/PositionModel.dart';
+import 'package:iosrecal/Home/errorWrong.dart';
+import 'package:iosrecal/Home/NoData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../Constant/ColorGlobal.dart';
 
 class NotificationsMenu extends StatefulWidget {
@@ -26,6 +26,8 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
   var block_notification = new Map<String, List<NotificationsModel>>();
   int flag=0;
   bool _hasMore = true;
+  bool _hasError = false;
+  bool _noData = false;
   int page =1;
   int error=0;
 
@@ -86,39 +88,43 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
             print(block_notification.keys.toList().elementAt(i) + "  ${block_notification[(block_notification.keys.toList()).elementAt(i)].length}");
           print("dates: ${block_notification.keys.toList().length}");
         });
+          setState(() {
+            if(page==1 && notifications.length==0){
+              setState(() {
+                _noData = true;
+              });
+            }
+            if (notifications.length<15) {
+              _hasMore = false;
+            } else {
+              page++;
+              print("page updated");
+            }
+            flag=1;
           });
+
+      } else {
         setState(() {
-          if (notifications.length<15) {
-            _hasMore = false;
-          } else {
-            page++;
-            print("page updated");
-          }
-          flag=1;
+          _hasError= true;
         });
-          flag=1;
-          for(var i=0;i<block_notification.keys.toList().length;i++)
-            print(block_notification.keys.toList().elementAt(i) + "  ${block_notification[(block_notification.keys.toList()).elementAt(i)].length}");
-        print("dates: ${block_notification.keys.toList().length}");
-      } else if(responseBody.status_code==401) {
-        setState(() {
-          error=1;
-        });
-        print(responseBody.data);
-      }
-      else {
-        print(responseBody.data);
       }
     } else {
       setState(() {
-        error=1;
+        _hasError= true;
       });
-      print('Server error');
     }
   }
 
   Widget getBody(){
-    int entries = 0;
+    if(_hasError){
+      return Center(
+        child: Error8Screen(),
+      );
+    }else if(_noData){
+      return Center(
+          child: NodataScreen(),
+      );
+    }
     return ListView.separated(
       shrinkWrap: true,
       physics: AlwaysScrollableScrollPhysics(),
@@ -245,7 +251,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: error==1 ? Error8Screen() : (flag == 0 ? Center(child: CircularProgressIndicator()) : getBody()),
+        body: (flag == 0 && !_hasError && !_noData) ? Center(child: CircularProgressIndicator()) : getBody(),
       ),
     );
   }

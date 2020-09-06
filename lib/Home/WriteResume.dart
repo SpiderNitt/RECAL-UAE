@@ -8,7 +8,8 @@ import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/ResumeWriteModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:iosrecal/Home/errorWrong.dart';
+import 'package:iosrecal/Home/NoData.dart';
 import '../Constant/ColorGlobal.dart';
 
 class WriteResume extends StatefulWidget {
@@ -70,7 +71,7 @@ class _WriteResumeState extends State<WriteResume> {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
-                return Center(child: Text("Try Again!"));
+                return Center(child: Error8Screen());
               case ConnectionState.waiting:
               case ConnectionState.active:
                 return Center(
@@ -82,10 +83,12 @@ class _WriteResumeState extends State<WriteResume> {
               case ConnectionState.done:
                 print("done");
                 if (snapshot.hasError) {
-                  print("error");
-                  return Center(child: Text("Try Again!"));
+                  return Center(child: Error8Screen());
                 } else {
                   print(writers.length);
+                  if(writers.length==0){
+                    return Center(child: NodataScreen());
+                  }
                   return StaggeredGridView.countBuilder(
                     crossAxisCount: 2,
                     itemCount: writers.length,
@@ -154,7 +157,7 @@ class _WriteResumeState extends State<WriteResume> {
                                     ]
                                 ),
                                 SizedBox(
-                                  height: 24.0,
+                                  height: 12.0,
                                 ),
                                 Row
                                   (
@@ -213,7 +216,7 @@ class _WriteResumeState extends State<WriteResume> {
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 24.0,
+                                  height: 12.0,
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment
@@ -262,7 +265,7 @@ class _WriteResumeState extends State<WriteResume> {
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 24.0,
+                                  height: 12.0,
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment
@@ -297,7 +300,7 @@ class _WriteResumeState extends State<WriteResume> {
                                           .start,
                                       children: <Widget>
                                       [
-                                        Text('Email', style: TextStyle(
+                                        Text('Discounts', style: TextStyle(
                                             color: Color(0xcc3399fe),
                                             fontSize: 13.0)),
                                         Text(writers[index].discounts,
@@ -306,6 +309,60 @@ class _WriteResumeState extends State<WriteResume> {
                                                     .textColor,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 20.0))
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 12.0,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .center,
+                                  children: [
+                                    Material(
+                                      color: Color(0xcc26cb3c),
+                                      borderRadius: BorderRadius.circular(
+                                          24.0),
+                                      child: Center
+                                        (
+                                        child: Padding
+                                          (
+                                          padding: const EdgeInsets.all(
+                                              16.0),
+                                          child: Icon(
+                                            Icons.link,
+                                            size: 30.0,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 8.0,
+                                    ),
+                                    Column
+                                      (
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .center,
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
+                                      children: <Widget>
+                                      [
+                                        Text('Link', style: TextStyle(
+                                            color: Color(0xcc26cb3c),
+                                            fontSize: 13.0)),
+                                        GestureDetector(
+                                          onTap: () =>
+                                              launch(writers[index].link.toString()),
+                                          child: Text(writers[index].link,
+                                              style: TextStyle(
+                                                  color: ColorGlobal
+                                                      .textColor,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 20.0),
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ],
