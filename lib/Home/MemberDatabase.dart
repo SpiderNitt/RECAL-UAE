@@ -61,7 +61,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                 Navigator.pop(context);
               }),
           title: Text(
-            'Social Network Links',
+            'Social Network Lists',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
@@ -102,7 +102,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                   color = 0xbbff3266;
                   print("female");
                 }
-                return ExpansionTile(
+                return members[index].name !=null ? ExpansionTile(
                   title: Text(members[index].name,
                     style: TextStyle(
                       fontSize: 18.0,
@@ -119,32 +119,32 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                   ),
                   //backgroundColor: Colors.red,
                   children: [
-                    ListTile(
+                    members[index].email!=null ? ListTile(
                       title: Text(members[index].email),
                       leading: Icon(Icons.email),
-                    ),
+                    ) : Container(),
                     ListTile(
                       title: Text(members[index].organization),
                       leading: Icon(Icons.business),
                     ),
-                    ListTile(
+                    members[index].position!=null ? ListTile(
                       title: Text(members[index].position),
                       leading: Icon(Icons.business_center),
-                    ),
-                    ListTile(
+                    ) : Container(),
+                    members[index].linkedIn_link !=null ? ListTile(
                       title: new GestureDetector(
                           child: new Text(members[index].linkedIn_link),
                           onTap: () =>
                               launch(members[index].linkedIn_link)
                       ),
                       leading: Icon(Icons.share),
-                    ),
+                    ) : Container(),
                   ],
-                );
+                ) : Container();
                         },
                       );
                 }
-                };
+                }
                 return Center(child: Text("Try Again!"
                 )
                 );

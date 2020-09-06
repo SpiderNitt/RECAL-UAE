@@ -206,6 +206,37 @@ class _HomeActivityState extends State<HomeActivity> {
     prefs.setString("profile_picture", null);
 
   }
+  _logoutUser() async {
+    var url = "https://delta.nitt.edu/recal-uae/api/auth/logout/";
+    await http
+        .post(url, headers: {'Cookie': cookie}).then((_response) {
+      if (_response.statusCode == 200) {
+        ResponseBody responseBody =
+        ResponseBody.fromJson(json.decode(_response.body));
+
+        print(json.encode(responseBody.data));
+        if (responseBody.status_code == 200) {
+          _deleteUserDetails();
+          Navigator.pop(context,true);
+          Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
+        }
+        else {
+          _deleteUserDetails();
+          print("${responseBody.data}");
+          SystemNavigator.pop();
+        }
+      }
+      else {
+        _deleteUserDetails();
+        print("Server error");
+        SystemNavigator.pop();
+      }
+    }).catchError((error) {
+      _deleteUserDetails();
+      print("server error");
+      SystemNavigator.pop();
+    });
+  }
 
   _fetchUnreadMessages() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -254,35 +285,7 @@ class _HomeActivityState extends State<HomeActivity> {
           ),
           new GestureDetector(
             onTap: () async {
-              var url = "https://delta.nitt.edu/recal-uae/api/auth/logout/";
-              await http
-                  .post(url, headers: {'Cookie': cookie}).then((_response) {
-                if (_response.statusCode == 200) {
-                  ResponseBody responseBody =
-                  ResponseBody.fromJson(json.decode(_response.body));
-
-                  print(json.encode(responseBody.data));
-                  if (responseBody.status_code == 200) {
-                    _deleteUserDetails();
-                    Navigator.pop(context,true);
-                    Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
-                  }
-                  else {
-                    _deleteUserDetails();
-                    print("${responseBody.data}");
-                    SystemNavigator.pop();
-                  }
-                }
-                else {
-                  _deleteUserDetails();
-                  print("Server error");
-                  SystemNavigator.pop();
-                }
-              }).catchError((error) {
-                _deleteUserDetails();
-                print("server error");
-                SystemNavigator.pop();
-              });
+              await _logoutUser();
             },
             child: FlatButton(
               color: Colors.red,
@@ -576,7 +579,11 @@ class _HomeActivityState extends State<HomeActivity> {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, NOTIFICATION_MENU);
+                          Navigator.pushNamed(context, NOTIFICATION_MENU).then((value) {
+                          setState(() {
+                            _fetchUnreadMessages();
+                          });
+                          });
                         },
                         child: Column(
                           children: <Widget>[
@@ -584,7 +591,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: width / 10,
-                                child: Badge(
+                                child: unreadMessages !=0 ? Badge(
                                   badgeContent: Text(unreadMessages.toString(),style: TextStyle(color: Colors.white),),
                                   badgeColor: Colors.green,
                                   position: BadgePosition.topRight(top: -8, right: -8),
@@ -594,6 +601,11 @@ class _HomeActivityState extends State<HomeActivity> {
                                     height: width / 8,
                                     width: width / 8,
                                   ),
+                                ) : Image.asset(
+                                  'assets/images/chat.png',
+                                  color: Colors.blue[800],
+                                  height: width / 8,
+                                  width: width / 8,
                                 ),
                               ),
                               shape: RoundedRectangleBorder(

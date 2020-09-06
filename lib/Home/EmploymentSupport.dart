@@ -20,7 +20,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
     final double height = MediaQuery.of(context).size.height;
     return (WillPopScope(
         child: SafeArea(
-            child: new Scaffold(
+            child: Scaffold(
                 appBar: AppBar(
                   backgroundColor: ColorGlobal.whiteColor,
                   leading: IconButton(

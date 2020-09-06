@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import '../models/User.dart';
@@ -39,16 +40,38 @@ class LoginState extends State<Login> {
       new TextEditingController(text: "someone@gmail.com");
   TextEditingController password =
       new TextEditingController(text: "1j7P1T3ync2I");
+  TextEditingController newPassword =
+  new TextEditingController(text: "");
+  TextEditingController confirmPassword =
+  new TextEditingController(text: "");
+
+
 
   FocusNode emailFocus = new FocusNode();
   FocusNode passwordFocus = new FocusNode();
+  FocusNode newPasswordFocus = new FocusNode();
+  FocusNode confirmPasswordFocus = new FocusNode();
+
+  bool changePassword = false;
+  String primaryButtonText = "SIGN IN";
+  String secondaryButtonText = "Change Password";
+  String pageTitle = "SIGN IN";
+
   List<String> result = new List<String>();
+
+  Color getColorFromColorCode(String code){
+    return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
+  }
 
   getDisposeController() {
     email.clear();
     password.clear();
+    newPassword.clear();
+    confirmPassword.clear();
     emailFocus.unfocus();
     passwordFocus.unfocus();
+    newPasswordFocus.unfocus();
+    confirmPasswordFocus.unfocus();
   }
 
   _deleteUserDetails() async {
@@ -106,7 +129,7 @@ class LoginState extends State<Login> {
     );
 
     pr.style(
-      message: "..Logging In",
+      message:  changePassword == true ? "..Sending mail" : "..Logging In",
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       elevation: 10.0,
@@ -196,38 +219,97 @@ class LoginState extends State<Login> {
       print((index == -1) ? rawCookie : rawCookie.substring(0, index));
     }
   }
+  Widget primaryWidget() {
+    return Text(
+      primaryButtonText,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 15,
+        color: ColorGlobal.whiteColor,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+  }
+  Widget secondaryWidget() {
+    return Text(
+      secondaryButtonText,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 15,
+        color: ColorGlobal.textColor.withOpacity(0.9),
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
 
-  static loginUser(String email, String password) async {
-    var url = "https://delta.nitt.edu/recal-uae/api/auth/login/";
+  Future <dynamic> passwordReset(String email) async {
+    var url =
+        "https://delta.nitt.edu/recal-uae/api/auth/pass_reset/";
+    var body = {
+      'email': email,
+    };
+    await http
+        .post(
+      url,
+      body: body,
+    );
+
+  }
+
+  Future<dynamic> loginUser(String email, String password) async {
+    var url =
+        "https://delta.nitt.edu/recal-uae/api/auth/login/";
     print("password: " + password);
-    var body = {'email': email, 'password': password};
+
+    var body = {
+      'email': email,
+      'password': password
+    };
     await http
         .post(
       url,
       body: body,
     )
-        .then((_response) {
+        .then((_response) async {
+      ProgressDialog progressDialog;
       User user = new User();
-      ResponseBody responseBody = new ResponseBody();
+      ResponseBody responseBody =
+      new ResponseBody();
       print('Response body: ${_response.body}');
+
       if (_response.statusCode == 200) {
-//        updateCookie(_response);
-        responseBody = ResponseBody.fromJson(json.decode(_response.body));
+        responseBody = ResponseBody.fromJson(
+            json.decode(_response.body));
+        print(json.encode(responseBody.data));
         if (responseBody.status_code == 200) {
-          String rawCookie = _response.headers['set-cookie'];
-          String cookie = rawCookie.substring(0, rawCookie.indexOf(';'));
+          String rawCookie =
+          _response.headers['set-cookie'];
+          String cookie = rawCookie.substring(
+              0, rawCookie.indexOf(';'));
           print(cookie);
-          user = User.fromLogin(json.decode(responseBody.data));
+          user = User.fromLogin(json.decode(
+              json.encode(responseBody.data)));
           var userId = user.user_id;
-          _saveUserDetails(user.email, user.name, userId.toString(), cookie);
-          return [user.name, 1];
+           await _saveUserDetails(user.email, user.name,
+                userId.toString(), cookie);
+            _loginDialog1(progressDialog,
+                "Login Successful", "Proceed", 1);
+            if(changePassword==false) {
+              Future.delayed(
+                  Duration(milliseconds: 2000), () {
+                Navigator.pushReplacementNamed(
+                    context, HOME_PAGE);
+              });
+            }
         } else {
           print(responseBody.data);
-          return [responseBody.data, 0];
+          _loginDialog1(progressDialog,
+              responseBody.data, "Try again", 0);
         }
       } else {
-        print('Server error');
-        return ["Server Error", 0];
+        print("server error");
+        _loginDialog1(progressDialog,
+            "Server Error", "Try again", 0);
       }
     });
   }
@@ -273,30 +355,17 @@ class LoginState extends State<Login> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: ColorGlobal.whiteColor,
-          body: SingleChildScrollView(
-            child: Container(
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(),
-                    height: size.height - 90,
-                    decoration: BoxDecoration(
-                      color: ColorGlobal.whiteColor,
-//                  gradient: new LinearGradient(
-//                    colors: [
-//                      ColorGlobal.colorPrimaryDark.withOpacity(0.7),
-//                      ColorGlobal.colorPrimary,
-//                    ],
-//                    begin: Alignment.topLeft,
-//                    end: Alignment.bottomRight,
-//                  ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 70),
-                    child: Center(
+          body:
+          Center(
+            child: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 0.1*width),
                       child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 15),
                         width: width,
                         height: width * 0.4,
                         padding: EdgeInsets.symmetric(horizontal: 20),
@@ -310,309 +379,182 @@ class LoginState extends State<Login> {
                             borderRadius: BorderRadius.circular(width * 0.1)),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 200),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'RECAL UAE',
-                          style: TextStyle(
-                            color: ColorGlobal.textColor,
-                            fontSize: 24.0,
-                            letterSpacing: 2,
-                            fontWeight: FontWeight.w900,
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'RECAL UAE CHAPTER',
+                            style: GoogleFonts.lato(
+                              color: ColorGlobal.textColor,
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w900,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      right: 22,
-                      left: 22,
-                      bottom: 22,
-                      top: 270,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Container(
-                          child: TextFieldWidget(
-                            hintText: 'Email',
-                            obscureText: false,
-                            prefixIconData: Icons.mail,
-                            textEditingController: email,
-                            focusNode: emailFocus,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 22,
-                        ),
-                        Container(
-                          child: TextFieldWidget(
-                            hintText: 'Password',
-                            obscureText: true,
-                            prefixIconData: Icons.lock,
-                            textEditingController: password,
-                            focusNode: passwordFocus,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          color: Colors.transparent,
-                          margin: EdgeInsets.only(
-                            top: (15),
-                            right: (8),
-                            left: (8),
-                            bottom: (10),
-                          ),
-                          //child: AuthButton(),
-                          child: InkWell(
-                            onTap: () async {
-                              if (email.text != "" && password.text != "") {
-                                var url =
-                                    "https://delta.nitt.edu/recal-uae/api/auth/login/";
-                                print("password: " + password.text);
-
-                                var body = {
-                                  'email': email.text,
-                                  'password': password.text
-                                };
-                                await http
-                                    .post(
-                                  url,
-                                  body: body,
-                                )
-                                    .then((_response) {
-                                  ProgressDialog progressDialog;
-                                  User user = new User();
-                                  ResponseBody responseBody =
-                                      new ResponseBody();
-                                  print('Response body: ${_response.body}');
-
-                                  if (_response.statusCode == 200) {
-                                    responseBody = ResponseBody.fromJson(
-                                        json.decode(_response.body));
-                                    print(json.encode(responseBody.data));
-                                    if (responseBody.status_code == 200) {
-                                      String rawCookie =
-                                          _response.headers['set-cookie'];
-                                      String cookie = rawCookie.substring(
-                                          0, rawCookie.indexOf(';'));
-                                      print(cookie);
-                                      user = User.fromLogin(json.decode(
-                                          json.encode(responseBody.data)));
-                                      var userId = user.user_id;
-                                      _saveUserDetails(user.email, user.name,
-                                          userId.toString(), cookie);
-                                      _loginDialog1(progressDialog,
-                                          "Login Successful", "Proceed", 1);
-                                      Future.delayed(
-                                          Duration(milliseconds: 2000), () {
-                                        Navigator.pushReplacementNamed(
-                                            context, HOME_PAGE);
-                                      });
-                                    } else {
-                                      print(responseBody.data);
-                                      _loginDialog1(progressDialog,
-                                          responseBody.data, "Try again", 0);
-                                    }
-                                  } else {
-                                    print("server error");
-                                    _loginDialog1(progressDialog,
-                                        "Server Error", "Try again", 0);
-                                  }
-                                });
-                              } else {
-                                _loginDialog(
-                                    "Enter all fields", "Try again", 2);
-                              }
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                top: (30),
-                                right: (8),
-                                left: (8),
-                              ),
-                              height: (60.0),
-                              decoration: BoxDecoration(
-                                gradient: new LinearGradient(
-                                  colors: [
-                                    ColorGlobal.colorPrimary,
-                                    ColorGlobal.colorPrimary.withOpacity(0.7),
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: ColorGlobal.colorPrimary,
-                                    spreadRadius: 5,
-                                    blurRadius: 0,
-                                    // changes position of shadow
-                                  ),
-                                ],
-                                border: Border.all(
-                                  width: 2,
-                                  color: ColorGlobal
-                                      .colorPrimary, //                   <--- border width here
-                                ),
-                                color: ColorGlobal.colorPrimary,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(
-                                    (22.0),
-                                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(color: ColorGlobal.whiteColor.withOpacity(0.8), width: 0.5),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20),
+                              child: Text(
+                                pageTitle,
+                                style: GoogleFonts.josefinSans(
+                                  color: ColorGlobal.textColor,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              child: Container(
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: TextFieldWidget(
+                                hintText: 'Email',
+                                obscureText: false,
+                                prefixIconData: Icons.mail,
+                                textEditingController: email,
+                                focusNode: emailFocus,
+                              ),
+                            ),
+                           changePassword==false ? Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: TextFieldWidget(
+                                hintText: "Password",
+                                obscureText: true,
+                                prefixIconData: Icons.lock,
+                                textEditingController: password,
+                                focusNode: passwordFocus,
+                              ),
+                            ) : Container(),
+//                          changePassword == true ?  Padding(
+//                            padding: const EdgeInsets.all(10),
+//                            child: TextFieldWidget(
+//                              hintText: 'New Password',
+//                              obscureText: true,
+//                              prefixIconData: Icons.lock,
+//                              textEditingController: newPassword,
+//                              focusNode: newPasswordFocus,
+//                            ),
+//                          ) : Container(),
+//                          changePassword == true ?  Padding(
+//                            padding: const EdgeInsets.all(10),
+//                            child: TextFieldWidget(
+//                              hintText: 'Confirm Password',
+//                              obscureText: true,
+//                              prefixIconData: Icons.lock,
+//                              textEditingController: confirmPassword,
+//                              focusNode: confirmPasswordFocus,
+//                            ),
+//                          ) : Container(),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () async {
+                                      if(changePassword==false) {
+                                        if (email.text != "" &&
+                                            password.text != "") {
+                                          await loginUser(
+                                              email.text, password.text);
+                                        } else {
+                                          _loginDialog(
+                                              "Enter all fields", "Try again", 2);
+                                        }
+                                      }
+                                      else {
+                                        if(email.text!="") {
+                                          ProgressDialog pr;
+                                            _loginDialog1(pr,"Email has been sent", "", 1);
+                                          }
+                                        else {
+                                          _loginDialog(
+                                              "Enter all fields", "Try again",
+                                              2);
+                                        }
+                                      }
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: ColorGlobal.colorPrimary,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(
+                                            (10),
+                                          ),
+                                        ),
+                                      ),
+                                      child: Container(
 //                        margin: EdgeInsets.only(left: (10)),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "SIGN IN",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    letterSpacing: 1,
-                                    color: ColorGlobal.whiteColor,
-                                    fontWeight: FontWeight.w700,
+                                        alignment: Alignment.center,
+                                        child: AnimatedSwitcher(
+                                          duration: Duration(seconds: 1),
+                                          child: primaryWidget(),
+                                        ),
+                                      ),
+                                    ),
                                   ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20,bottom: 10),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    changePassword = !changePassword;
+                                    primaryButtonText = primaryButtonText == "SIGN IN" ? "SUBMIT" : "SIGN IN";
+                                    secondaryButtonText = secondaryButtonText == "Change Password" ? "Return to Sign in" : "Change Password";
+                                    pageTitle = pageTitle == "SIGN IN" ? "RESET PASSWORD" : "SIGN IN";
+                                    emailFocus.unfocus();
+                                    passwordFocus.unfocus();
+                                  });
+                                },
+                                child: AnimatedSwitcher(
+                                  duration: Duration(seconds: 1),
+                                  child: secondaryWidget() ,
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 15),
-                          child: Text(
-                            "Forgot Password?",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: ColorGlobal.textColor.withOpacity(0.9),
-                              fontWeight: FontWeight.w500,
+                            SizedBox(
+                              height: 10.0,
                             ),
-                          ),
+                           changePassword==false? Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: AutoSizeText(
+                                "Note: Don't have the credentials? Write an email to recaluaechapter@gmail.com",
+                                maxLines: 4,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: ColorGlobal.textColor.withOpacity(0.9),
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ) : Container(),
+                          ],
                         ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          "Note: Don't have the credentials? Write an email to recaluaechapter@gmail.com",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: ColorGlobal.textColor.withOpacity(0.9),
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-//          bottomNavigationBar: Container(
-//            color: ColorGlobal.whiteColor,
-//            height: 70,
-//            child: Column(
-//              children: <Widget>[
-//                Row(
-//                  mainAxisAlignment: MainAxisAlignment.end,
-//                  children: <Widget>[
-//                    InkWell(
-//                      onTap: () {
-//                        getDisposeController();
-//                        Navigator.push(
-//                                context,
-//                                PageTransition(
-//                                    type: PageTransitionType.rightToLeft,
-//                                    duration: Duration(milliseconds: 300),
-//                                    child: SignUp()))
-//                            .then((value) {
-//                          Future.delayed(Duration(milliseconds: 200), () {
-//                            setState(() {
-//                              width = accountSize;
-//                            });
-//                          });
-//                        });
-//                        setState(() {
-//                          width = screenWidth - 20;
-//                        });
-//                      },
-//                      child: AnimatedContainer(
-//                        height: 65.0,
-//                        width: width,
-//                        duration: Duration(milliseconds: 500),
-//                        child: Row(
-//                          children: <Widget>[
-//                            Container(
-//                              margin: EdgeInsets.only(left: 10),
-//                              child: Icon(
-//                                Icons.arrow_back_ios,
-//                                color: ColorGlobal.whiteColor,
-//                                size: 30,
-//                              ),
-//                            ),
-//                            Container(
-//                              child: Column(
-//                                mainAxisAlignment: MainAxisAlignment.center,
-//                                crossAxisAlignment: CrossAxisAlignment.start,
-//                                children: <Widget>[
-//                                  Container(
-////                          margin: EdgeInsets.only(right: 8,top: 15),
-//                                    child: Text(
-//                                      "Don't have an account?",
-//                                      textAlign: TextAlign.start,
-//                                      style: TextStyle(
-//                                        fontSize: 14,
-//                                        letterSpacing: 1,
-//                                        color: ColorGlobal.whiteColor
-//                                            .withOpacity(0.9),
-//                                        fontWeight: FontWeight.w400,
-//                                      ),
-//                                    ),
-//                                  ),
-//                                  SizedBox(height: 5),
-//                                  Container(
-////                          margin: EdgeInsets.only(right: 8,top: 15),
-//                                    child: AutoSizeText(
-//                                      "Sign Up",
-//                                      textAlign: TextAlign.end,
-//                                      style: TextStyle(
-//                                        fontSize: 16,
-//                                        letterSpacing: 1,
-//                                        color: ColorGlobal.whiteColor
-//                                            .withOpacity(0.9),
-//                                        fontWeight: FontWeight.w600,
-//                                      ),
-//                                      maxLines: 1,
-//                                    ),
-//                                  ),
-//                                ],
-//                              ),
-//                            ),
-//                          ],
-//                        ),
-//                        curve: Curves.linear,
-//                        decoration: BoxDecoration(
-//                          borderRadius: BorderRadius.only(
-//                            bottomLeft: Radius.circular(40),
-//                            topLeft: Radius.circular(40),
-//                          ),
-//                          color: ColorGlobal.colorPrimary,
-//                        ),
-//                      ),
-//                    ),
-//                  ],
-//                ),
-//              ],
-//            ),
-//          ),
-        ),
       ),
+    )
     );
   }
 }

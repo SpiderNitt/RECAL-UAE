@@ -67,7 +67,7 @@ class SplashScreenState extends State<ImageSplashScreen> {
         ResponseBody.fromJson(json.decode(_response.body));
         print(json.encode(responseBody.data));
         if (responseBody.status_code == 200) {
-          User user = User.fromCheckLogin(json.decode(responseBody.data));
+          User user = User.fromCheckLogin(responseBody.data);
           if(user.loggedIn==true)
             Navigator.pushReplacementNamed(context, HOME_PAGE);
           else

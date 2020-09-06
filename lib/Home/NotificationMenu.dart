@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,15 +20,14 @@ class NotificationsMenu extends StatefulWidget {
 }
 
 class _NotificationsMenuState extends State<NotificationsMenu> {
-
   var notifications = new List<NotificationsModel>();
   var block_notification = new Map<String, List<NotificationsModel>>();
-  int flag=0;
+  int flag = 0;
   bool _hasMore = true;
   bool _hasError = false;
   bool _noData = false;
-  int page =1;
-  int error=0;
+  int page = 1;
+  int error = 0;
 
   initState() {
     super.initState();
@@ -37,30 +35,29 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
     _hasMore = true;
     flag = 0;
     print(block_notification.keys.toList().length);
-
   }
+
   int Comparison(NotificationsModel a, NotificationsModel b) {
     return b.created_at.compareTo(a.created_at);
   }
 
-
   Future<String> _notifications() async {
     notifications = new List<NotificationsModel>();
-    if(block_notification.length==0) {
+    if (block_notification.length == 0) {
       block_notification = new Map<String, List<NotificationsModel>>();
     }
-    flag=0;
+    flag = 0;
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String URL = 'https://delta.nitt.edu/recal-uae/api/notifications/?id=' + "${prefs.getString("user_id")}" + '&page=' + "$page";
+    String URL = 'https://delta.nitt.edu/recal-uae/api/notifications/?id=' +
+        "${prefs.getString("user_id")}" +
+        '&page=' +
+        "$page";
     print(URL);
-    var response = await http.get(
-        URL,
-        headers: {
-          "Accept": "application/json",
-          "Cookie": "${prefs.getString("cookie")}",
-        }
-    );
+    var response = await http.get(URL, headers: {
+      "Accept": "application/json",
+      "Cookie": "${prefs.getString("cookie")}",
+    });
     ResponseBody responseBody = new ResponseBody();
 
     if (response.statusCode == 200) {
@@ -77,73 +74,77 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
 
           notifications.forEach((element) {
             print("${element.title} ${element.created_at}");
-            if(block_notification[element.created_at]==null) {
-              block_notification[element.created_at] = new List<NotificationsModel>();
+            if (block_notification[element.created_at] == null) {
+              block_notification[element.created_at] =
+                  new List<NotificationsModel>();
             }
             block_notification[element.created_at].add(element);
             print("length is : ");
             print(block_notification.keys.toList().length);
 
-          for(var i=0;i<block_notification.keys.toList().length;i++)
-            print(block_notification.keys.toList().elementAt(i) + "  ${block_notification[(block_notification.keys.toList()).elementAt(i)].length}");
-          print("dates: ${block_notification.keys.toList().length}");
-        });
+            for (var i = 0; i < block_notification.keys.toList().length; i++)
+              print(block_notification.keys.toList().elementAt(i) +
+                  "  ${block_notification[(block_notification.keys.toList()).elementAt(i)].length}");
+            print("dates: ${block_notification.keys.toList().length}");
+          });
           setState(() {
-            if(page==1 && notifications.length==0){
+            if (page == 1 && notifications.length == 0) {
               setState(() {
                 _noData = true;
               });
             }
-            if (notifications.length<15) {
+            if (notifications.length < 15) {
               _hasMore = false;
             } else {
               page++;
               print("page updated");
             }
-            flag=1;
+            flag = 1;
           });
-
+        });
       } else {
         setState(() {
-          _hasError= true;
+          _hasError = true;
         });
       }
     } else {
       setState(() {
-        _hasError= true;
+        _hasError = true;
       });
     }
   }
 
-  Widget getBody(){
-    if(_hasError){
+  Widget getBody() {
+    if (_hasError) {
       return Center(
         child: Error8Screen(),
       );
-    }else if(_noData){
+    } else if (_noData) {
       return Center(
-          child: NodataScreen(),
+        child: NodataScreen(),
       );
     }
     return ListView.separated(
       shrinkWrap: true,
       physics: AlwaysScrollableScrollPhysics(),
-      itemCount: _hasMore ? block_notification.keys.toList().length + 1 : block_notification.keys.toList().length,
-      itemBuilder: (context,index1) {
-        int total = _hasMore ? block_notification.keys.toList().length + 1 : block_notification.keys.toList().length;
+      itemCount: _hasMore
+          ? block_notification.keys.toList().length + 1
+          : block_notification.keys.toList().length,
+      itemBuilder: (context, index1) {
+        int total = _hasMore
+            ? block_notification.keys.toList().length + 1
+            : block_notification.keys.toList().length;
         print("total : $total");
         print("index1: $index1");
-        if(index1 >= block_notification.keys.toList().length){
-          if (flag==1) {
-             _notifications();
+        if (index1 >= block_notification.keys.toList().length) {
+          if (flag == 1) {
+            _notifications();
           }
           return Center(
-            child:
-            Padding(
+            child: Padding(
               padding: const EdgeInsets.only(top: 10),
               child: SpinKitDoubleBounce(
-                color: Colors
-                    .lightBlueAccent,
+                color: Colors.lightBlueAccent,
               ),
             ),
           );
@@ -158,33 +159,49 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("${date[2]}-${date[1]}-${date[0]}",
+                    Text(
+                      "${date[2]}-${date[1]}-${date[0]}",
                       style: GoogleFonts.lato(
                         fontWeight: FontWeight.w300,
                         fontSize: 15.0,
-                      ),),
+                      ),
+                    ),
                   ],
                 ),
               ),
               ListView.separated(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: block_notification[(block_notification.keys.toList()).elementAt(index1)].length,
+                itemCount: block_notification[
+                        (block_notification.keys.toList()).elementAt(index1)]
+                    .length,
                 itemBuilder: (context, index) {
                   print("index: $index");
                   IconData icon;
                   Color color;
-                  NotificationsModel notification = (block_notification[(block_notification.keys.toList()[index1])]).elementAt(index);
-                  if(notification.is_read){
+                  NotificationsModel notification = (block_notification[
+                          (block_notification.keys.toList()[index1])])
+                      .elementAt(index);
+                  if (notification.is_read) {
                     icon = Icons.notifications;
                     color = Colors.white;
-                  }
-                  else{
+                  } else {
                     icon = Icons.notifications_active;
                     color = Color(0xcc26cb3c);
                   }
                   return InkWell(
-                    onTap: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationDetail(notification))).then((value) => _notifications()),
+                    onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NotificationDetail(notification)))
+                        .then((value) {
+                          setState(() {
+                            (block_notification[
+                            (block_notification.keys.toList()[index1])])
+                                .elementAt(index).is_read = true;
+                          });
+                    }),
                     child: ListTile(
                       leading: CircleAvatar(
                         //backgroundColor: Color(color),
@@ -195,15 +212,18 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                         ),
                       ),
                       title: Hero(
-                        tag: "Notification_" + notification.notification_id.toString(),
+                        tag: "Notification_" +
+                            notification.notification_id.toString(),
                         child: Material(
                           type: MaterialType.transparency,
-                          child:
-                          Text(notification.title,
+                          child: Text(
+                            notification.title,
                             style: GoogleFonts.lato(
                               fontWeight: FontWeight.w500,
                               fontSize: 18.0,
-                              color: notification.is_read == true ? Colors.black : Color(0xcc26cb3c),
+                              color: notification.is_read == true
+                                  ? Colors.black
+                                  : Color(0xcc26cb3c),
                             ),
                           ),
                         ),
@@ -218,7 +238,6 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                   );
                 },
               ),
-
             ],
           ),
         );
@@ -234,24 +253,27 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
 
   @override
   Widget build(BuildContext context) {
-    String uri;
+    // TODO: implement build
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorGlobal.whiteColor,
           leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              icon: Icon(
+                Icons.arrow_back,
+                color: ColorGlobal.textColor,
               ),
               onPressed: () {
                 Navigator.pop(context);
-              }
-          ),
+              }),
           title: Text(
             'Notifications',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: (flag == 0 && !_hasError && !_noData) ? Center(child: CircularProgressIndicator()) : getBody(),
+        body: (flag == 0 && !_hasError && !_noData)
+            ? Center(child: CircularProgressIndicator())
+            : getBody(),
       ),
     );
   }

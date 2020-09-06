@@ -22,6 +22,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
     final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
+        backgroundColor: ColorGlobal.whiteColor,
         appBar: AppBar(
           backgroundColor: ColorGlobal.whiteColor,
           centerTitle: true,
@@ -63,8 +64,12 @@ class _ChapterScreenState extends State<ChapterScreen> {
                     child: ListBody(
                       children: <Widget>[
                         Text(
-                          "RECAL UAE CHAPTER",
-                          style: Theme.of(context).textTheme.title,
+                          'RECAL UAE CHAPTER',
+                          style: GoogleFonts.josefinSans(
+                            color: ColorGlobal.textColor,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                           Center(
