@@ -9,6 +9,11 @@ import '../Constant/ColorGlobal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class VolunteerScreen extends StatefulWidget {
   @override
@@ -21,10 +26,11 @@ class VolunteerState extends State<VolunteerScreen> {
   Future<bool> _sendMessage(String body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String url =
-        "https://delta.nitt.edu/recal-uae/api/employment/write_admin";
+        "https://delta.nitt.edu/recal-uae/api/employment/volunteer";
     final response = await http.post(url, body: {
       "user_id": "${prefs.getString("user_id")}",
       "body": body,
+      "type": "volunteer",
     }, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
@@ -35,37 +41,60 @@ class VolunteerState extends State<VolunteerScreen> {
           ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         print("worked!");
-        Fluttertoast.showToast(
-            msg: "Message sent",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0);
         return true;
       } else {
         print(responseBody.data);
-        Fluttertoast.showToast(
-            msg: "An error occured. Please try again",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        return false;
       }
     } else {
       print('Server error');
-      Fluttertoast.showToast(
-          msg: "An error occured. Please try again",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      return false;
     }
+  }
+
+  _loginDialog1(ProgressDialog pr, String show, String again, int flag) {
+    pr = new ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      textDirection: TextDirection.rtl,
+      showLogs: true,
+      isDismissible: false,
+    );
+
+    pr.style(
+      message: "Sending message",
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      progressWidget: Image.asset(
+        "assets/images/ring.gif",
+        height: 50,
+        width: 50,
+      ),
+      insetAnimCurve: Curves.easeInOut,
+      progressWidgetAlignment: Alignment.center,
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+    );
+    pr.show();
+    Future.delayed(Duration(milliseconds: 1000)).then((value) {
+      Widget prog = flag == 1
+          ? Icon(
+              Icons.check_circle,
+              size: 50,
+              color: Colors.green,
+            )
+          : Icon(
+              Icons.close,
+              size: 50,
+              color: Colors.red,
+            );
+      pr.update(message: show.replaceAll("!", ""), progressWidget: prog);
+    });
+    Future.delayed(Duration(milliseconds: 2000)).then((value) {
+      pr.update(progressWidget: null);
+      pr.hide();
+    });
   }
 
   @override
@@ -99,16 +128,20 @@ class VolunteerState extends State<VolunteerScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Text(
-                      "WANT TO VOLUNTEER?",
+
+                    AutoSizeText(
+                      "WANT TO VOLUNTEER!!",
+
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: height / 64),
-                    Text(
-                      "Send us a message to volunteer for events, committee and sponsors.",
+
+                    AutoSizeText(
+                      "Please write your message in the box below",
+
                       style: TextStyle(
                         fontSize: 15,
                         color: const Color(0xff3AAFFA),
@@ -143,7 +176,25 @@ class VolunteerState extends State<VolunteerScreen> {
                     RawMaterialButton(
                       onPressed: () async {
                         final String message = messageController.text;
-                        bool b = await _sendMessage(message);
+                        if (message != "") {
+                          bool b = await _sendMessage(message);
+                          ProgressDialog pr;
+                          if (b) {
+                            _loginDialog1(pr, "Message Sent", "Thank you", 1);
+                          } else {
+                            _loginDialog1(
+                                pr, "Message was not sent", "Try again", 0);
+                          }
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "Enter a message",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.blue,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        }
                       },
                       elevation: 2.0,
                       fillColor: Colors.blue,

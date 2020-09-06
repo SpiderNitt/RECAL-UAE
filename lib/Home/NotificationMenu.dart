@@ -9,9 +9,9 @@ import 'package:http/http.dart' as http;
 import 'package:iosrecal/Home/NotificationDetail.dart';
 import 'package:iosrecal/models/NotificationsModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/models/PositionModel.dart';
+import 'package:iosrecal/Home/errorWrong.dart';
+import 'package:iosrecal/Home/NoData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../Constant/ColorGlobal.dart';
 
 class NotificationsMenu extends StatefulWidget {
@@ -25,6 +25,8 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
   var block_notification = new Map<String, List<NotificationsModel>>();
   int flag=0;
   bool _hasMore = true;
+  bool _hasError = false;
+  bool _noData = false;
   int page =1;
 
   initState() {
@@ -86,6 +88,11 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
           print("dates: ${block_notification.keys.toList().length}");
         });
           setState(() {
+            if(page==1 && notifications.length==0){
+              setState(() {
+                _noData = true;
+              });
+            }
             if (notifications.length<15) {
               _hasMore = false;
             } else {
@@ -96,15 +103,27 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
           });
 
       } else {
-        print(responseBody.data);
+        setState(() {
+          _hasError= true;
+        });
       }
     } else {
-      print('Server error');
+      setState(() {
+        _hasError= true;
+      });
     }
   }
 
   Widget getBody(){
-    int entries = 0;
+    if(_hasError){
+      return Center(
+        child: Error8Screen(),
+      );
+    }else if(_noData){
+      return Center(
+          child: NodataScreen(),
+      );
+    }
     return ListView.separated(
       shrinkWrap: true,
       physics: AlwaysScrollableScrollPhysics(),
@@ -229,7 +248,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: flag == 0 ? Center(child: CircularProgressIndicator()) : getBody(),
+        body: (flag == 0 && !_hasError && !_noData) ? Center(child: CircularProgressIndicator()) : getBody(),
       ),
     );
   }

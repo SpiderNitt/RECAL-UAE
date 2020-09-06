@@ -8,7 +8,8 @@ import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/ResumeWriteModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:iosrecal/Home/errorWrong.dart';
+import 'package:iosrecal/Home/NoData.dart';
 import '../Constant/ColorGlobal.dart';
 
 class WriteResume extends StatefulWidget {
@@ -70,7 +71,7 @@ class _WriteResumeState extends State<WriteResume> {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
-                return Center(child: Text("Try Again!"));
+                return Center(child: Error8Screen());
               case ConnectionState.waiting:
               case ConnectionState.active:
                 return Center(
@@ -82,10 +83,12 @@ class _WriteResumeState extends State<WriteResume> {
               case ConnectionState.done:
                 print("done");
                 if (snapshot.hasError) {
-                  print("error");
-                  return Center(child: Text("Try Again!"));
+                  return Center(child: Error8Screen());
                 } else {
                   print(writers.length);
+                  if(writers.length==0){
+                    return Center(child: NodataScreen());
+                  }
                   return StaggeredGridView.countBuilder(
                     crossAxisCount: 2,
                     itemCount: writers.length,

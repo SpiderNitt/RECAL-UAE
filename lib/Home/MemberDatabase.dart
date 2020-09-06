@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Constant/ColorGlobal.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:iosrecal/Home/errorWrong.dart';
+import 'package:iosrecal/Home/NoData.dart';
 
 class MemberDatabase extends StatefulWidget {
   @override
@@ -71,7 +73,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
-                    return Center(child: Text("Try Again!"));
+                    return Center(child: Error8Screen());
                   case ConnectionState.waiting:
                   case ConnectionState.active:
                     return Center(
@@ -81,9 +83,12 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                     );
                   case ConnectionState.done:
                     if (snapshot.hasError) {
-                      return Center(child: Text("Try Again!"));
+                      return Center(child: Error8Screen());
                     } else {
                       print("members length" + members.length.toString());
+                      if(members.length==0){
+                        return Center(child: NodataScreen());
+                      }
                       return ListView.separated(
                         itemCount: members.length,
                         separatorBuilder: (context, index) {

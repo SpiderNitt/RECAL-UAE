@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/BusinessMemberModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:iosrecal/Home/errorWrong.dart';
+import 'package:iosrecal/Home/NoData.dart';
 import '../Constant/ColorGlobal.dart';
 
 class BusinessDatabase extends StatefulWidget {
@@ -17,6 +18,8 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
   var members = new List<BusinessMemberModel>();
   var final_members = new List<BusinessMemberModel>();
   var state = 0;
+  bool _hasError = false;
+
   initState() {
     super.initState();
     _positions();
@@ -51,23 +54,30 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
         setState(() {
           state = 1;
         });
+      }else{
+        setState(() {
+          _hasError = true;
+        });
       }
       //return members;
+    }else{
+      setState(() {
+        _hasError = true;
+      });
     }
   }
 
 
   Widget getBody() {
+    if(_hasError){
+      return Center(child: Error8Screen());
+    }
     if (state == 0) {
       return SpinKitDoubleBounce(
         color: Colors.lightBlueAccent,
       );
     } else if (state == 1 && members.length == 0) {
-      return Center(child: Text(
-        "Try Again!",
-        style: TextStyle(fontSize: 20.0),
-      ),
-      );
+      return Center(child: NodataScreen());
     }
     return ListView.separated(
       itemCount: final_members.length,

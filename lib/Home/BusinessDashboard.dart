@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:iosrecal/Home/errorWrong.dart';
 import 'package:iosrecal/models/MemberModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -19,7 +20,6 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
-
   List<charts.Series<Gender, String>> _seriesGenderPieData;
   List<charts.Series<SandB, String>> _seriesSAndBPieData;
   var data =new Map<String, int>();
@@ -28,6 +28,7 @@ class _DashBoardState extends State<DashBoard> {
   var users = new List<MemberModel>();
   var final_members = new List<BusinessMemberModel>();
   int state = 0;
+  bool _hasError = false;
 
   _fetchEvents() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,7 +60,17 @@ class _DashBoardState extends State<DashBoard> {
         setState(() {
           state += 1;
         });
+      }else{
+        setState(() {
+          state+=1;
+          _hasError = true;
+        });
       }
+    }else{
+      setState(() {
+        state+=1;
+        _hasError = true;
+      });
     }
   }
 
@@ -95,10 +106,20 @@ class _DashBoardState extends State<DashBoard> {
         data['Deals Value'] = dealValue;
         _generatePieData();
 
-      }
+        setState(() {
+          state += 1;
+        });
 
+      }else{
+        setState(() {
+          state+=1;
+          _hasError = true;
+        });
+      }
+    }else{
       setState(() {
-        state += 1;
+        state+=1;
+        _hasError = true;
       });
     }
   }
@@ -134,12 +155,23 @@ class _DashBoardState extends State<DashBoard> {
         print(data['Male']);
         print(data['Female']);
         _fetchSpecificUsers();
-        }
 
         setState(() {
           state += 1;
         });
+
+        }else{
+        setState(() {
+          state+=1;
+          _hasError = true;
+        });
       }
+      }else{
+      setState(() {
+        state+=1;
+        _hasError = true;
+      });
+    }
     }
 
   _generatePieData(){
@@ -161,8 +193,7 @@ class _DashBoardState extends State<DashBoard> {
         colorFn: (Gender gender, _) =>
             charts.ColorUtil.fromDartColor(gender.colorval),
         id: 'Gender distribution',
-        labelAccessorFn: (Gender row, _)=>'${row.gender}',
-
+        labelAccessorFn: (Gender row, _) => '${row.gender}',
       ),
     );
 
@@ -174,8 +205,7 @@ class _DashBoardState extends State<DashBoard> {
         colorFn: (SandB sandB, _) =>
             charts.ColorUtil.fromDartColor(sandB.colorval),
         id: 'Gender distribution',
-        labelAccessorFn: (SandB row, _)=>'${row.types}',
-
+        labelAccessorFn: (SandB row, _) => '${row.types}',
       ),
     );
     setState(() {
@@ -184,7 +214,7 @@ class _DashBoardState extends State<DashBoard> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _seriesGenderPieData = List<charts.Series<Gender, String>>();
     _seriesSAndBPieData = List<charts.Series<SandB, String>>();
@@ -241,25 +271,21 @@ class _DashBoardState extends State<DashBoard> {
     );
   }
 
-  Material dealsItem(int color){
+  Material dealsItem(int color) {
     return Material(
       color: Colors.white,
       elevation: 14.0,
       shadowColor: Color(0x802196F3),
       borderRadius: BorderRadius.circular(24.0),
-      child: Padding
-        (
+      child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            Row
-              (
+            Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>
-                [
-                  Column
-                    (
+                children: <Widget>[
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>
@@ -273,77 +299,61 @@ class _DashBoardState extends State<DashBoard> {
                       Text(data['Deals Value'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 34.0)),
                     ],
                   ),
-                  Material
-                    (
+                  Material(
                       color: Color(color),
                       borderRadius: BorderRadius.circular(24.0),
-                      child: Center
-                        (
-                          child: Padding
-                            (
-                            padding: const EdgeInsets.all(16.0),
-                            child: Image(
-                              image: AssetImage('assets/images/deals.png'),
-                              height: 30.0,
-                              width: 30.0,
-                            ),
-                          )
-                      )
-                  )
-                ]
-            ),
+                      child: Center(
+                          child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Image(
+                          image: AssetImage('assets/images/deals.png'),
+                          height: 30.0,
+                          width: 30.0,
+                        ),
+                      )))
+                ]),
           ],
         ),
       ),
     );
   }
 
-  Material eventsItem(int color){
+  Material eventsItem(int color) {
     return Material(
       color: Colors.white,
       elevation: 14.0,
       shadowColor: Color(0x802196F3),
       borderRadius: BorderRadius.circular(24.0),
-      child: Padding
-        (
+      child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            Row
-              (
+            Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>
-                [
-                  Column
-                    (
+                children: <Widget>[
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>
                     [
                       Text('Total events', style: TextStyle(color: Color(color))),
-                      Text(data['All Events'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 34.0))
+                      Text(data['All Events'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 34.0)),
                     ],
                   ),
-                  Material
-                    (
+                  Material(
                       color: Color(color),
                       borderRadius: BorderRadius.circular(24.0),
-                      child: Center
-                        (
-                          child: Padding
-                            (
-                            padding: const EdgeInsets.all(16.0),
-                            child: Image(
-                              image: AssetImage('assets/images/events.png'),
-                              height: 30.0,
-                              width: 30.0,
-                            ),
-                          )
-                      )
-                  )
-                ]
-            ),
+                      child: Center(
+                          child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Image(
+                          image: AssetImage('assets/images/events.png'),
+                          height: 30.0,
+                          width: 30.0,
+                        ),
+                      )))
+                ]),
             SizedBox(
               height: 24.0,
             ),
@@ -368,7 +378,11 @@ class _DashBoardState extends State<DashBoard> {
                 ),
                 Column(
                   children: [
-                    Image.asset('assets/images/business_db.png', height: 30.0, width: 30.0,),
+                    Image.asset(
+                      'assets/images/business_db.png',
+                      height: 30.0,
+                      width: 30.0,
+                    ),
                     SizedBox(
                       height: 8.0,
                     ),
@@ -393,42 +407,33 @@ class _DashBoardState extends State<DashBoard> {
       elevation: 14.0,
       shadowColor: Color(0x802196F3),
       borderRadius: BorderRadius.circular(24.0),
-      child: Padding
-        (
+      child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            Row
-              (
+            Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>
-                [
-                  Column
-                    (
+                children: <Widget>[
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>
                     [
                       Text('Total members', style: TextStyle(color: Color(color))),
-                      Text(data['All Members'].toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 34.0))
+                      Text(data['All Members'].toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 34.0)),
                     ],
                   ),
-                  Material
-                    (
+                  Material(
                       color: Color(color),
                       borderRadius: BorderRadius.circular(24.0),
-                      child: Center
-                        (
-                          child: Padding
-                            (
-                            padding: const EdgeInsets.all(16.0),
-                            child: Icon(Icons.group, color: Colors.white, size: 30.0),
-                          )
-                      )
-                  )
-                ]
-            ),
+                      child: Center(
+                          child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child:
+                            Icon(Icons.group, color: Colors.white, size: 30.0),
+                      )))
+                ]),
             SizedBox(
               height: 24.0,
             ),
@@ -436,10 +441,11 @@ class _DashBoardState extends State<DashBoard> {
               child: charts.PieChart(
                 _seriesGenderPieData,
                 animate: true,
-                animationDuration: Duration(seconds : 1),
+                animationDuration: Duration(seconds: 1),
                 behaviors: [
                   new charts.DatumLegend(
-                    outsideJustification: charts.OutsideJustification.startDrawArea,
+                    outsideJustification:
+                        charts.OutsideJustification.startDrawArea,
                     horizontalFirst: true,
                     desiredMaxRows: 1,
                     cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
@@ -454,8 +460,7 @@ class _DashBoardState extends State<DashBoard> {
                   arcWidth: 50,
                   arcRendererDecorators: [
                     new charts.ArcLabelDecorator(
-                        labelPosition: charts.ArcLabelPosition.inside
-                    ),
+                        labelPosition: charts.ArcLabelPosition.inside),
                   ],
                 ),
               ),
@@ -467,10 +472,11 @@ class _DashBoardState extends State<DashBoard> {
               child: charts.PieChart(
                 _seriesSAndBPieData,
                 animate: true,
-                animationDuration: Duration(seconds : 1),
+                animationDuration: Duration(seconds: 1),
                 behaviors: [
                   new charts.DatumLegend(
-                    outsideJustification: charts.OutsideJustification.startDrawArea,
+                    outsideJustification:
+                        charts.OutsideJustification.startDrawArea,
                     horizontalFirst: true,
                     desiredMaxRows: 1,
                     cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
@@ -485,8 +491,7 @@ class _DashBoardState extends State<DashBoard> {
                   arcWidth: 50,
                   arcRendererDecorators: [
                     new charts.ArcLabelDecorator(
-                        labelPosition: charts.ArcLabelPosition.inside
-                    ),
+                        labelPosition: charts.ArcLabelPosition.inside),
                   ],
                 ),
               ),
@@ -498,6 +503,11 @@ class _DashBoardState extends State<DashBoard> {
   }
 
   Widget getBody(){
+    if(_hasError){
+      return Center(
+        child: Error8Screen(),
+      );
+    }
     if(state<3){
       return Center(
         child: SpinKitDoubleBounce(
@@ -549,7 +559,7 @@ class _DashBoardState extends State<DashBoard> {
   }
 }
 
-class Gender{
+class Gender {
   String gender;
   int genderval;
   Color colorval;
@@ -557,7 +567,7 @@ class Gender{
   Gender(this.gender, this.genderval, this.colorval);
 }
 
-class SandB{
+class SandB {
   String types;
   int typeval;
   Color colorval;

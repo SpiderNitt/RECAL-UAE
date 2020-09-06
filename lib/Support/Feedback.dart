@@ -12,12 +12,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-class TechnicalSupport extends StatefulWidget {
+class FeedbackScreen extends StatefulWidget {
   @override
-  TechnicalState createState() => TechnicalState();
+  FeedbackState createState() => FeedbackState();
 }
 
-class TechnicalState extends State<TechnicalSupport> {
+class FeedbackState extends State<FeedbackScreen> {
   final TextEditingController messageController = TextEditingController();
 
   Future<bool> _sendMessage(String body) async {
@@ -27,7 +27,7 @@ class TechnicalState extends State<TechnicalSupport> {
     final response = await http.post(url, body: {
       "user_id": "${prefs.getString("user_id")}",
       "body": body,
-      "type": "technical support",
+      "type": "feedback",
     }, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
@@ -38,6 +38,14 @@ class TechnicalState extends State<TechnicalSupport> {
           ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         print("worked!");
+        Fluttertoast.showToast(
+            msg: "Message sent",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
         return true;
       } else {
         print(responseBody.data);
@@ -108,7 +116,7 @@ class TechnicalState extends State<TechnicalSupport> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'Technical Support',
+          'Feedback',
           style: TextStyle(color: ColorGlobal.textColor),
         ),
       ),
@@ -126,7 +134,7 @@ class TechnicalState extends State<TechnicalSupport> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     AutoSizeText(
-                      "NEED TECHNICAL HELP!!",
+                      "FEEDBACK PLEASE!!",
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),
@@ -134,7 +142,7 @@ class TechnicalState extends State<TechnicalSupport> {
                     ),
                     SizedBox(height: height / 64),
                     AutoSizeText(
-                      "Please write your message in the box below",
+                      "Please write your feedback in the box below",
                       style: TextStyle(
                         fontSize: 15,
                         color: const Color(0xff3AAFFA),
@@ -147,7 +155,7 @@ class TechnicalState extends State<TechnicalSupport> {
                       maxLines: 5,
                       controller: messageController,
                       decoration: InputDecoration(
-                        hintText: 'Enter message',
+                        hintText: 'Enter feedback',
                         hintStyle: TextStyle(color: Colors.grey[500]),
                         filled: true,
                         fillColor: Colors.white70,
@@ -211,7 +219,7 @@ class TechnicalState extends State<TechnicalSupport> {
                   height: height / 2.75,
                   width: width,
                   fit: BoxFit.fitWidth,
-                  image: AssetImage('assets/images/technicalSupport.jpg'),
+                  image: AssetImage('assets/images/feed.jpg'),
                   alignment: Alignment.bottomCenter,
                 ),
               )
