@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../Constant/Constant.dart';
 import '../Constant/ColorGlobal.dart';
 import 'WriteAdmin.dart';
@@ -26,11 +27,18 @@ class SupportScreenState extends State<SupportScreen> {
     return (WillPopScope(
         child: SafeArea(
             child: new Scaffold(
+                backgroundColor: ColorGlobal.whiteColor,
                 appBar: AppBar(
                   backgroundColor: ColorGlobal.whiteColor,
-                  title: Text(
-                    'Support',
-                    style: TextStyle(color: ColorGlobal.textColor),
+                  centerTitle: true,
+                  title: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'SUPPORT',
+                        style: GoogleFonts.josefinSans(color: ColorGlobal.textColor, fontWeight: FontWeight.bold,fontSize: 20),
+                      ),
+                    ],
                   ),
                 ),
                 body: Stack(children: <Widget>[
@@ -81,7 +89,7 @@ class SupportScreenState extends State<SupportScreen> {
                                     ),
                                   ),
                                 ),
-                                elevation: 30,
+                                elevation: 5,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(width / 10)),
@@ -132,7 +140,7 @@ class SupportScreenState extends State<SupportScreen> {
                                     ),
                                   ),
                                 ),
-                                elevation: 30,
+                                elevation: 5,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(width / 10)),
@@ -183,7 +191,7 @@ class SupportScreenState extends State<SupportScreen> {
                                     ),
                                   ),
                                 ),
-                                elevation: 30,
+                                elevation: 5,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(width / 10)),
@@ -244,7 +252,7 @@ class SupportScreenState extends State<SupportScreen> {
                                     ),
                                   ),
                                 ),
-                                elevation: 30,
+                                elevation: 5,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(width / 10)),
@@ -287,7 +295,7 @@ class SupportScreenState extends State<SupportScreen> {
                                     ),
                                   ),
                                 ),
-                                elevation: 30,
+                                elevation: 5,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(width / 10)),
@@ -330,7 +338,7 @@ class SupportScreenState extends State<SupportScreen> {
                                     ),
                                   ),
                                 ),
-                                elevation: 30,
+                                elevation: 5,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(width / 10)),

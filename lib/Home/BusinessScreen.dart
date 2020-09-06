@@ -37,10 +37,12 @@ class _WaveHeaderState extends State<BusinessScreen> {
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: Container(
-          height: height,
-          child: Center(
-            child: FoldingCellMultipleCardsDemo(),
+        body: SingleChildScrollView(
+          child: Container(
+            height: height,
+            child: Center(
+              child: FoldingCellMultipleCardsDemo(),
+            ),
           ),
         ),
       ),

@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Constant/ColorGlobal.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:iosrecal/Home/errorWrong.dart';
+import 'package:iosrecal/Home/NoData.dart';
 
 class MemberDatabase extends StatefulWidget {
   @override
@@ -59,7 +61,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                 Navigator.pop(context);
               }),
           title: Text(
-            'Social Network Links',
+            'Social Network Lists',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
@@ -71,7 +73,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
-                    return Center(child: Text("Try Again!"));
+                    return Center(child: Error8Screen());
                   case ConnectionState.waiting:
                   case ConnectionState.active:
                     return Center(
@@ -81,9 +83,12 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                     );
                   case ConnectionState.done:
                     if (snapshot.hasError) {
-                      return Center(child: Text("Try Again!"));
+                      return Center(child: Error8Screen());
                     } else {
                       print("members length" + members.length.toString());
+                      if(members.length==0){
+                        return Center(child: NodataScreen());
+                      }
                       return ListView.separated(
                         itemCount: members.length,
                         separatorBuilder: (context, index) {
@@ -97,7 +102,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                   color = 0xbbff3266;
                   print("female");
                 }
-                return ExpansionTile(
+                return members[index].name !=null ? ExpansionTile(
                   title: Text(members[index].name,
                     style: TextStyle(
                       fontSize: 18.0,
@@ -114,33 +119,32 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                   ),
                   //backgroundColor: Colors.red,
                   children: [
-                    ListTile(
+                    members[index].email!=null ? ListTile(
                       title: Text(members[index].email),
                       leading: Icon(Icons.email),
-                    ),
+                    ) : Container(),
                     ListTile(
                       title: Text(members[index].organization),
                       leading: Icon(Icons.business),
                     ),
-                    ListTile(
+                    members[index].position!=null ? ListTile(
                       title: Text(members[index].position),
                       leading: Icon(Icons.business_center),
-                    ),
-                    ListTile(
-                      title: new InkWell(
+                    ) : Container(),
+                    members[index].linkedIn_link !=null ? ListTile(
+                      title: new GestureDetector(
                           child: new Text(members[index].linkedIn_link),
                           onTap: () =>
-                              launch(
-                                  'https://docs.flutter.io/flutter/services/UrlLauncher-class.html')
+                              launch(members[index].linkedIn_link)
                       ),
                       leading: Icon(Icons.share),
-                    ),
+                    ) : Container(),
                   ],
-                );
+                ) : Container();
                         },
                       );
                 }
-                };
+                }
                 return Center(child: Text("Try Again!"
                 )
                 );

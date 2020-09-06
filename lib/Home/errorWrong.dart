@@ -81,6 +81,12 @@ class Error8Screen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                            ]))))));
+                            ],
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    );
   }
 }

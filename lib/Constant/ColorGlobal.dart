@@ -15,5 +15,5 @@ class ColorGlobal {
   static const Color color3=Color(0xffDAD8D9);
   static const Color color4=Color(0xff544F50);
   static const Color color5=Color(0xffEAE3E3);
-
+  static const Color recalLogo =  Color(0xff6289ce);
 }

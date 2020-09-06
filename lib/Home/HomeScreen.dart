@@ -94,7 +94,7 @@ class HomePageState extends State<HomePage> {
       onWillPop: _onBackPressed,
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: ColorGlobal.whiteColor,
 //        appBar: new AppBar(
 //          backgroundColor: Colors.black.withOpacity(0.5),
 //          actions: <Widget>[

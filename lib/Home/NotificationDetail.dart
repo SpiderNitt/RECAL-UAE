@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/NotificationDetailModel.dart';
 import 'package:iosrecal/models/NotificationsModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/models/PositionModel.dart';
+import 'package:iosrecal/Home/errorWrong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Constant/ColorGlobal.dart';
@@ -24,6 +24,7 @@ class NotificationDetail extends StatefulWidget {
 class _NotificationDetailState extends State<NotificationDetail> {
   final NotificationsModel notificationsModel;
   _NotificationDetailState(this.notificationsModel);
+  bool _hasError = false;
 
   var notification = new NotificationDetailModel();
   int state = 0;
@@ -50,15 +51,22 @@ class _NotificationDetailState extends State<NotificationDetail> {
 //        updateCookie(_response);
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
+        print("in here");
         notification = NotificationDetailModel.fromJson(responseBody.data);
         setState(() {
           state = 1;
         });
       } else {
-        print(responseBody.data);
+        print("set error");
+        setState(() {
+          _hasError =  true;
+        });
       }
     } else {
-      print('Server error');
+      print("set error");
+      setState(() {
+        _hasError =  true;
+      });
     }
   }
 
@@ -103,7 +111,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
+          child: !_hasError ? Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -147,7 +155,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                 ),
               )
             ],
-          ),
+          ) : Error8Screen(),
         ),
       ),
     );

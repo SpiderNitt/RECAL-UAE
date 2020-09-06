@@ -34,6 +34,7 @@ class _HomeActivityState extends State<HomeActivity> {
   String picture;
   int getPic = 0;
   String cookie = "";
+  int unreadMessages=0;
 
   Future<dynamic> _fetchPrimaryDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -237,6 +238,37 @@ class _HomeActivityState extends State<HomeActivity> {
     });
   }
 
+  _fetchUnreadMessages() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String URL = 'https://delta.nitt.edu/recal-uae/api/notifications/?id=' + "${prefs.getString("user_id")}" + '&page=1';
+    print(URL);
+    var response = await http.get(
+        URL,
+        headers: {
+          "Accept": "application/json",
+          "Cookie": "${prefs.getString("cookie")}",
+        }
+    );
+    ResponseBody responseBody = new ResponseBody();
+
+    if (response.statusCode == 200) {
+      print("got response");
+//        updateCookie(_response);
+      responseBody = ResponseBody.fromJson(json.decode(response.body));
+      print(responseBody.data);
+      if (responseBody.status_code == 200) {
+        setState(() {
+          unreadMessages = responseBody.data["unread"];
+        });
+
+      } else {
+        print(responseBody.data);
+      }
+    } else {
+      print('Server error');
+    }
+  }
+
   Future<bool> _onLogoutPressed() {
     return showDialog(
       context: context,
@@ -272,6 +304,7 @@ class _HomeActivityState extends State<HomeActivity> {
     super.initState();
     _getUserPicture();
     user = _fetchPrimaryDetails();
+    _fetchUnreadMessages();
   }
   var dropdownItems=["Volunteer","Write to admin","Write to mentor","Survey"];
   var _currentItemSelected="Volunteer";
@@ -546,7 +579,11 @@ class _HomeActivityState extends State<HomeActivity> {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, NOTIFICATION_MENU);
+                          Navigator.pushNamed(context, NOTIFICATION_MENU).then((value) {
+                          setState(() {
+                            _fetchUnreadMessages();
+                          });
+                          });
                         },
                         child: Column(
                           children: <Widget>[
@@ -554,8 +591,8 @@ class _HomeActivityState extends State<HomeActivity> {
                               child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: width / 10,
-                                child: Badge(
-                                  badgeContent: Text('5',style: TextStyle(color: Colors.white),),
+                                child: unreadMessages !=0 ? Badge(
+                                  badgeContent: Text(unreadMessages.toString(),style: TextStyle(color: Colors.white),),
                                   badgeColor: Colors.green,
                                   position: BadgePosition.topRight(top: -8, right: -8),
                                   child: Image.asset(
@@ -564,6 +601,11 @@ class _HomeActivityState extends State<HomeActivity> {
                                     height: width / 8,
                                     width: width / 8,
                                   ),
+                                ) : Image.asset(
+                                  'assets/images/chat.png',
+                                  color: Colors.blue[800],
+                                  height: width / 8,
+                                  width: width / 8,
                                 ),
                               ),
                               shape: RoundedRectangleBorder(

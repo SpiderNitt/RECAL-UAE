@@ -289,6 +289,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.1"
+  keyboard_avoider:
+    dependency: "direct main"
+    description:
+      name: keyboard_avoider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   lazy_load_scrollview:
     dependency: "direct main"
     description:

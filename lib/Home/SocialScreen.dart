@@ -35,10 +35,12 @@ class _SocialScreenState extends State<SocialScreen> {
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: Container(
-          height: height,
-          child: Center(
-            child: FoldingCellMultipleCardsDemo(),
+        body: SingleChildScrollView(
+          child: Container(
+            height: height,
+            child: Center(
+              child: FoldingCellMultipleCardsDemo(),
+            ),
           ),
         ),
       ),
