@@ -47,6 +47,7 @@ class _HomeActivityState extends State<HomeActivity> {
     setState(() {
       cookie = cookie_1;
     });
+
     return {"name": name, "email": email};
   }
   Future<dynamic> _getUserPicture() async {
@@ -467,14 +468,14 @@ class _HomeActivityState extends State<HomeActivity> {
                     padding: const EdgeInsets.only(top:15.0,left: 20,right: 20),
                     child: GestureDetector(
 
-                      onTap: (){
-                      Navigator.pushNamed(context,PROFILE_SCREEN,arguments: {"picture": picture}).then((value) {
-                        profile_pic_flag=0;
-                        getPic=0;
-                        user = _fetchPrimaryDetails();
-                        _getUserPicture();
-                      });
-                      },
+                        onTap: (){
+                          Navigator.pushNamed(context,PROFILE_SCREEN,arguments: {"picture": picture}).then((value) {
+                            profile_pic_flag=0;
+                            getPic=0;
+                            user = _fetchPrimaryDetails();
+                            _getUserPicture();
+                          });
+                        },
                         child: profile_pic_flag == 0 ?
                         CircularProgressIndicator() :
                         Container(
@@ -490,11 +491,11 @@ class _HomeActivityState extends State<HomeActivity> {
                             borderRadius:
                             new BorderRadius.all(
 
-                                 Radius.circular(
+                                Radius.circular(
                                     width/8)),
                           ),
                         )
-                      ),
+                    ),
                   ),
                 ),
                 Padding(
@@ -532,46 +533,6 @@ class _HomeActivityState extends State<HomeActivity> {
                     ],
                   ),
                 ),
-//                Container(
-//                  margin: EdgeInsets.only(top: 0.1 * height, left: 20),
-//                  child: Column(
-//                    crossAxisAlignment: CrossAxisAlignment.start,
-//                    children: <Widget>[
-//                      Row(
-//                        mainAxisAlignment: MainAxisAlignment.start,
-//                        children: <Widget>[
-////                          Card(
-////                            child: Container(
-////                              padding: EdgeInsets.only(top: 10),
-////                              height: 0.1 * height,
-////                              width: 0.1 * height,
-////                              decoration: new BoxDecoration(
-////                                color: ColorGlobal.colorPrimaryDark,
-////                                image: new DecorationImage(
-////                                  image: new AssetImage(
-////                                      'assets/images/spiderlogo.png'),
-////                                  fit: BoxFit.contain,
-////                                ),
-////                                border: Border.all(
-////                                    color: ColorGlobal.colorPrimaryDark,
-////                                    width: 2),
-////                                borderRadius: new BorderRadius.all(
-////                                    Radius.circular(0.1 * height)),
-////                              ),
-////                            ),
-////                            elevation: 15,
-////                            shape: RoundedRectangleBorder(
-////                                borderRadius:
-////                                    new BorderRadius.circular(width / 6)),
-////                          ),
-////                          SizedBox(
-////                            width: 10,
-////                          ),
-//                        ],
-//                      ),
-//                    ],
-//                  ),
-//                ),
                 Padding(
                   padding: const EdgeInsets.only(top:10.0),
                   child: Row(
@@ -580,9 +541,9 @@ class _HomeActivityState extends State<HomeActivity> {
                       GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, NOTIFICATION_MENU).then((value) {
-                          setState(() {
-                            _fetchUnreadMessages();
-                          });
+                            setState(() {
+                              _fetchUnreadMessages();
+                            });
                           });
                         },
                         child: Column(
@@ -835,7 +796,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                         height: width / 10,
                                         width: width / 10,
                                       ),
-                        ),
+                                    ),
                                     elevation: 5,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -915,58 +876,6 @@ class _HomeActivityState extends State<HomeActivity> {
                     ],
                   ),
                 ),
-//                FlatButton(
-//                  onPressed: () async {
-//                    List<String> branch = [
-//                      "ECE",
-//                      "EEE",
-//                      "MECH",
-//                      "PROD",
-//                      "CHEM",
-//                      "META",
-//                      "ARCHI",
-//                      "PhD/MSc/MS",
-//                      "M.DOMS",
-//                      "MCA",
-//                      "MTECH"
-//                    ];
-//                    int i=0;
-//                    for(i=0;i<branch.length;i++) {
-//
-//                      SharedPreferences prefs = await SharedPreferences.getInstance();
-//                      var url = "https://delta.nitt.edu/recal-uae/api/branch/add/";
-//                      var body = {'branch_name': branch[i]};
-//                      await http
-//                          .post(
-//                        url,
-//                        body: body,
-//                          headers: {
-//                            "Accept": "application/json",
-//                            "Cookie": "${prefs.getString("cookie")}",
-//                          }
-//                      )
-//                          .then((_response) {
-//                        ResponseBody responseBody = new ResponseBody();
-//                        print('Response body: ${_response.body}');
-//                        if (_response.statusCode == 200) {
-////        updateCookie(_response);
-//                          responseBody = ResponseBody.fromJson(
-//                              json.decode(_response.body));
-//                          if (responseBody.status_code == 200) {
-//                            print("success ${branch[i]}");
-//                          } else {
-//                            print("fail ${branch[i]}");
-//                            print(responseBody.data);
-//                          }
-//                        } else {
-//                          print("fail ${branch[i]}");
-//                          print('Server error');
-//                        }
-//                      });
-//                    }
-//                  },
-//                  child: Text("Update branch"),
-//                ),
               ],
             ),
             (height -

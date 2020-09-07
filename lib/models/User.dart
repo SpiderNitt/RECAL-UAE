@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class User extends Equatable{
+class User  {
   String email;
-   String password;
+  String password;
   String name;
   int user_id;
   String cookie;
@@ -19,7 +19,32 @@ class User extends Equatable{
   bool loggedIn;
   String profile_pic;
 
-  User({this.email, this.password, this.name, this.user_id, this.cookie, this.year_of_graduation, this.mobile_no, this.organization, this.position, this.gender, this.is_registered, this.linkedIn_link, this.branch, this.emirate, this.profile_pic,this.loggedIn});
+  User({this.email, this.password, this.name, this.user_id, this.cookie,
+      this.year_of_graduation, this.mobile_no, this.organization, this.position,
+      this.gender, this.is_registered, this.linkedIn_link, this.branch,
+      this.emirate, this.loggedIn,
+      this.profile_pic});
+
+  saveUserDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("Login email before:  ${prefs.getString("email")}");
+    print("Login name before:  ${prefs.getString("name")}");
+    prefs.setString("email", email);
+    prefs.setString("name", name);
+    prefs.setString("user_id", user_id.toString());
+    prefs.setString("cookie", cookie);
+    print("cookie: " + cookie);
+    print("login after name ${prefs.getString("name")}");
+  }
+
+  Future<User> getUserDetails () async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    this.name = prefs.getString("name") == null ? "+9,q" : prefs.getString("name");
+    this.email = prefs.getString("email") == null ? "+9,q" : prefs.getString("email");
+    this.cookie = prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+    this.user_id = prefs.getString("user_id") == null ? -1 : int.parse(prefs.getString("user_id"));
+    return this;
+  }
   factory User.fromLogin(Map<String, dynamic> json) {
     return User(
       name: json['name'],
@@ -61,8 +86,4 @@ class User extends Equatable{
       profile_pic: json['profile_pic'],
     );
   }
-
-  @override
-  // TODO: implement props
-  List<Object> get props => [email, password, name, user_id, cookie, year_of_graduation, mobile_no, organization, position, gender, is_registered, linkedIn_link, branch, emirate, profile_pic,loggedIn];
 }

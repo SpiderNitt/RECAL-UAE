@@ -37,6 +37,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   int dialog = 0;
   String previous = "", after = "";
   int change_dp=0;
+  int clickSave=0;
 
   TextEditingController name;
   TextEditingController email;
@@ -48,7 +49,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController emirate;
   TextEditingController gender;
   String picture;
-  ProgressDialog pr;
+  ProgressDialog progressDialog;
   int getPic=0;
 
   Future getImageCamera() async {
@@ -61,7 +62,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     PickedFile pickedFile = await picker.getImage(source: ImageSource.camera);
 
     print(pickedFile.path);
-    setState(() {
+    if (!mounted) return; setState(() {
       _image = File(pickedFile.path);
       change_dp=1;
     });
@@ -77,7 +78,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
     PickedFile pickedFile = await picker.getImage(source: ImageSource.gallery);
     print(pickedFile.path);
-    setState(() {
+    if (!mounted) return; setState(() {
       _image = File(pickedFile.path);
       change_dp=1;
     });
@@ -199,35 +200,45 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   _userDialog(String show, String again, int flag) {
-    pr = ProgressDialog(
-      context,
-      type: ProgressDialogType.Normal,
-      textDirection: TextDirection.rtl,
-      showLogs: true,
-      isDismissible: false,
-    );
+    if(progressDialog==null) {
+      progressDialog = ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        textDirection: TextDirection.rtl,
+        showLogs: true,
+        isDismissible: false,
+      );
 
-    pr.style(
-      message: "Saving details",
-      borderRadius: 10.0,
-      backgroundColor: Colors.white,
-      elevation: 10.0,
-      insetAnimCurve: Curves.easeInOut,
-      progressWidget: Image.asset("assets/images/ring.gif",height: 50,width: 50,),
-      progressWidgetAlignment: Alignment.center,
-      messageTextStyle: TextStyle(
-          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
-      progressTextStyle: TextStyle(
-          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
-    );
-    pr.show();
-    Future.delayed(Duration(milliseconds: 1000)).then((value) {
-      Widget prog = flag==1? Icon(Icons.check_circle,size: 50,color: Colors.green,) : Icon(Icons.close,size: 50,color: Colors.red,);
-      pr.update(message: show.replaceAll("!", ""),progressWidget: prog);
-    });
-    Future.delayed(Duration(milliseconds: 2500)).then((value) {
-      pr.hide();
-    });
+      progressDialog.style(
+        message: "Saving details",
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progressWidget: Image.asset(
+          "assets/images/ring.gif", height: 50, width: 50,),
+        progressWidgetAlignment: Alignment.center,
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+      );
+      progressDialog.show();
+      Future.delayed(Duration(milliseconds: 1000)).then((value) {
+        Widget prog = flag == 1 ? Icon(
+          Icons.check_circle, size: 50, color: Colors.green,) : Icon(
+          Icons.close, size: 50, color: Colors.red,);
+        progressDialog.update(
+            message: show.replaceAll("!", ""), progressWidget: prog);
+      });
+      Future.delayed(Duration(milliseconds: 2000)).then((value) {
+
+        progressDialog.hide();
+        if (!mounted) return; setState(() {
+          progressDialog = null;
+        });
+      });
+    }
   }
 
 
@@ -252,12 +263,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         list[i] = 1;
     }
 
-    setState(() {
+    if (!mounted) return; setState(() {
       color:
       list;
     });
   }
-  Future<bool> uploadProfilePic (String user_id, String cookie) async {
+  Future<bool> _uploadProfilePic (String user_id, String cookie) async {
 
     print("image: " + _image.path);
     final length = await _image.length();
@@ -280,11 +291,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           FocusManager.instance.primaryFocus.unfocus();
           print("yess correct");
           _userDialog("Details Updated", "Okay", 1);
-          Future.delayed(Duration(milliseconds: 2500), () {
-            var count=0;
-            Navigator.popUntil(context, (route) {
-              return count++==1;
-            });
+          Future.delayed(Duration(milliseconds: 2000), () {
+            Navigator.pop(context);
           });
           return true;
         } else if (responseBody.status_code == 500) {
@@ -337,7 +345,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               User.fromProfile(json.decode(json.encode(responseBody.data)));
           print(user.organization);
 
-          setState(() {
+          if (!mounted) return; setState(() {
             flag = 1;
             name = new TextEditingController(text: user.name);
             email = new TextEditingController(text: user.email);
@@ -352,7 +360,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             picture = user.profile_pic;
 
             if(picture!=null)
-              setState(() {
+              if (!mounted) return; setState(() {
                 picture = "https://delta.nitt.edu/recal-uae" + user.profile_pic;
                 getPic=1;
               });
@@ -382,13 +390,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           DropDown.year = int.parse(year.text);
           DropDown.branch = branch.text;
         } else {
-          setState(() {
+          if (!mounted) return; setState(() {
             flag = 2;
           });
           print("${responseBody.data}");
         }
       } else {
-        setState(() {
+        if (!mounted) return; setState(() {
           flag = 2;
         });
         print("Server error");
@@ -467,7 +475,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 }
                 print("display picture get after upload: $picture1");
               } else {
-
                 print("${responseBody.data}");
               }
             } else {
@@ -478,21 +485,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           });
         } else if (responseBody.status_code == 500) {
           print(responseBody.data);
-          var response = json.decode(json.encode(responseBody.data));
-          String exception = response["exception_message"];
+          if (!mounted) return;
           setState(() {
             dialog = 1;
           });
           _userDialog("Please provide unique details", "Try again", 0);
         } else {
           print("${responseBody.status_code}");
+          if (!mounted) return;
           setState(() {
             dialog = 1;
           });
           _userDialog("Error saving details", "Try again", 0);
         }
       } else {
-        setState(() {
+        if (!mounted) return; setState(() {
           dialog = 1;
         });
         _userDialog("Server error, could not save details", "Try again", 0);
@@ -501,11 +508,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
     if(yes==1) {
       if (change_dp == 1) {
-        await uploadProfilePic(user_id, cookie);
+        await _uploadProfilePic(user_id, cookie);
       }
       else {
         _userDialog("Details Updated", "Okay", 1);
-        Future.delayed(Duration(milliseconds: 2500), () {
+        Future.delayed(Duration(milliseconds: 2000), () {
           Navigator.pop(context);
         });
       }
@@ -558,25 +565,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   icon: Icon(Icons.check),
                   iconSize: 30,
                   onPressed: () {
-                    if (flag == 1) {
-                      after = name.text +
-                          email.text +
-                          DropDown.branch +
-                          DropDown.year.toString() +
-                          phone.text +
-                          organization.text +
-                          position.text +
-                          DropDown.emirate +
-                          DropDown.gender;
-                      print(previous);
-                      print(after);
-                      if (previous == after && change_dp==0)
-                        Navigator.of(context).pop();
-                      else {
-                        _postUserDetails();
+                    if(progressDialog==null && clickSave==0) {
+                      setState(() {
+                        clickSave=1;
+                      });
+                      if (flag == 1) {
+                        after = name.text +
+                            email.text +
+                            DropDown.branch +
+                            DropDown.year.toString() +
+                            phone.text +
+                            organization.text +
+                            position.text +
+                            DropDown.emirate +
+                            DropDown.gender;
+                        print(previous);
+                        print(after);
+                        if (previous == after && change_dp == 0)
+                          Navigator.of(context).pop();
+                        else {
+                          _postUserDetails();
+                        }
+                      } else {
+                        Navigator.pop(context);
                       }
-                    } else {
-                      Navigator.pop(context);
                     }
                   },
                   color: ColorGlobal.blueColor,
@@ -909,7 +921,7 @@ class _DropDownState extends State<DropDown> {
             elevation: 10,
             style: TextStyle(color: Colors.black, fontSize: 15.0),
             onChanged: (String newValue) {
-              setState(() {
+              if (!mounted) return; setState(() {
                 _branch = newValue;
                 DropDown.branch = newValue;
               });
@@ -949,7 +961,7 @@ class _DropDownState extends State<DropDown> {
             elevation: 10,
             style: TextStyle(color: Colors.black, fontSize: 15.0),
             onChanged: (int newValue) {
-              setState(() {
+              if (!mounted) return; setState(() {
                 _year = newValue;
                 DropDown.year = newValue;
               });
@@ -991,7 +1003,7 @@ class _DropDownState extends State<DropDown> {
             isExpanded: true,
             style: TextStyle(color: Colors.black, fontSize: 15.0),
             onChanged: (String newValue) {
-              setState(() {
+              if (!mounted) return; setState(() {
                 _emirate = newValue;
                 DropDown.emirate = newValue;
               });
@@ -1033,7 +1045,7 @@ class _DropDownState extends State<DropDown> {
             isExpanded: true,
             style: TextStyle(color: Colors.black, fontSize: 15.0),
             onChanged: (String newValue) {
-              setState(() {
+              if (!mounted) return; setState(() {
                 _gender = newValue;
                 DropDown.gender = newValue;
               });
