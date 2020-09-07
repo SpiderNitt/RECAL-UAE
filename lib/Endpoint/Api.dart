@@ -3,6 +3,8 @@ class Api {
   static final String host = "https://delta.nitt.edu/recal-uae/api/";
   static final String checkLogin = host + "auth/check_login";
   static final String login = host + "auth/login";
+  static final String passwordReset = host + "auth/pass_reset";
+  static final String passwordUpdate = host + "auth/pass_update";
   static final String feedbackMessage = host + "feedback/send";
   static final String chapterCore = host + "chapter/core/";
   static final String chapterVisionMission = host + "chapter/";
