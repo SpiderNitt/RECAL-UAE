@@ -3,42 +3,32 @@ import 'package:flutter/services.dart';
 
 import 'ColorGlobal.dart';
 
-class TextFieldWidget extends StatelessWidget {
-  final String hintText;
-  final IconData prefixIconData;
-  final IconData suffixIconData;
-  final bool obscureText;
-  final Function onChanged;
-  final FocusNode focusNode;
-  final TextEditingController textEditingController;
-  final Color borderColor;
-  final bool visible;
-
-  TextFieldWidget({
-    this.hintText,
-    this.prefixIconData,
-    this.suffixIconData,
-    this.obscureText,
-    this.onChanged,
-    this.textEditingController,
-    this.focusNode, this.borderColor,
-    this.visible = true
-  });
-  bool isValidEmail(input) {
-    return RegExp(
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-        .hasMatch(input);
-}
+class TextFieldWidget extends StatefulWidget {
+   String hintText;
+   IconData prefixIconData;
+   IconData suffixIconData;
+   bool obscureText;
+   Function onChanged;
+   FocusNode focusNode;
+   TextEditingController textEditingController;
+   Color borderColor;
+   bool passwordVisible = false;
+   TextFieldWidget({this.hintText,this.prefixIconData,this.suffixIconData,this.obscureText,this.passwordVisible,this.onChanged,this.textEditingController,this.borderColor,this.focusNode});
 
   @override
+  _TextFieldWidgetState createState() => _TextFieldWidgetState();
+}
+
+class _TextFieldWidgetState extends State<TextFieldWidget> {
+  @override
   Widget build(BuildContext context) {
-    return visible==false ? Container() : TextFormField(
-      onChanged: onChanged,
-      obscureText: obscureText,
-      controller: textEditingController,
+    return TextFormField(
+      onChanged: widget.onChanged,
+      obscureText: !widget.passwordVisible,
+      controller: widget.textEditingController,
       cursorColor: ColorGlobal.textColor,
-      focusNode:  focusNode,
-      keyboardType: hintText=='Email'? TextInputType.emailAddress : null,
+      focusNode:  widget.focusNode,
+      keyboardType: widget.hintText=='Email'? TextInputType.emailAddress : null,
       style: TextStyle(
         color: ColorGlobal.textColor,
         fontWeight: FontWeight.w600,
@@ -55,27 +45,36 @@ class TextFieldWidget extends StatelessWidget {
         filled: true,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: borderColor==null ? ColorGlobal.textColor : borderColor),
+          borderSide: BorderSide(color: widget.borderColor==null ? ColorGlobal.textColor : widget.borderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(color: ColorGlobal.blueColor),
         ),
-        labelText: hintText,
+        labelText: widget.hintText,
         hintStyle: TextStyle(color: ColorGlobal.colorPrimary, fontSize: 14),
         prefixIcon: Icon(
-          prefixIconData,
+          widget.prefixIconData,
           size: 20,
           color: ColorGlobal.textColor,
         ),
-        suffixIcon: GestureDetector(
-          child: Icon(
-            suffixIconData,
+        suffixIcon: widget.hintText=="Password" ? IconButton(
+          icon: Icon(
+            widget.passwordVisible
+                ? Icons.visibility
+                : Icons.visibility_off,
             size: 20,
-            color: ColorGlobal.textColor,
+            color: Theme.of(context).primaryColorDark,
           ),
-        ),
+          onPressed: () {
+            setState(() {
+              widget.passwordVisible = !widget.passwordVisible;
+            });
+          },
+        ) : null,
       ),
     );
   }
 }
+
+

@@ -1,12 +1,6 @@
 import 'package:flutter/services.dart';
-
 import '../Home/HomeActivity.dart';
-import '../Achievements/AchievementsScreen.dart';
-import '../Home/HomeScreen.dart';
-import '../Events/EventsScreen.dart';
 import '../UAEChapter/ChapterScreen.dart';
-import '../Profile/ProfileScreen.dart';
-import '../Home/SocialMedia.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,36 +23,15 @@ class HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-//    Navigator.pushReplacement(
-//        context,
-//        PageTransition(
-//            type: PageTransitionType.rightToLeftWithFade,
-//            child: Login()));
   }
-
-
-  static List<String> _pages = [
-    "UAE Chapter",
-    "Achievements",
-    "Home",
-    "Events",
-    "Profile",
-  ];
 
   Widget _getHomeWidgets(index,context) {
     switch(index) {
       case 0: return (ChapterScreen());
       break;
-//      case 1: return (AchievementsScreen());
-//      break;
       case 1: return (HomeActivity());
       break;
-      default:return(SupportScreen());
-//      case 3: return(EventsScreen());
-//      break;
-//      case 4: return(ProfileScreen());
-//      break;
-//      default: return(ProfileScreen());
+      default: return(SupportScreen());
     }
   }
   Future<bool> _onBackPressed() {
@@ -68,19 +41,15 @@ class HomePageState extends State<HomePage> {
             title: new Text('Are you sure?'),
             content: new Text('Do you want to exit the App'),
             actions: <Widget>[
-              new GestureDetector(
-                onTap: () => Navigator.of(context).pop(false),
-                child: FlatButton(
-                  color: Colors.green,
-                  child: Text("NO"),
-                ),
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                color: Colors.green,
+                child: Text("NO"),
               ),
-              new GestureDetector(
-                onTap: () => SystemNavigator.pop(),
-                child: FlatButton(
-                  color: Colors.red,
-                  child: Text("YES"),
-                ),
+              FlatButton(
+                onPressed: () => SystemNavigator.pop(),
+                color: Colors.red,
+                child: Text("YES"),
               ),
             ],
           ),
@@ -95,25 +64,6 @@ class HomePageState extends State<HomePage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.transparent,
-//        appBar: new AppBar(
-//          backgroundColor: Colors.black.withOpacity(0.5),
-//          actions: <Widget>[
-//            IconButton(
-//              icon: Container(
-//                child: SvgPicture.asset(
-//                  "assets/icons/Logout.svg",
-//                  color: Colors.white70,
-//                ),
-//                height: 20,
-//              ),
-//              onPressed: () {
-//                Navigator.of(context).pushReplacementNamed(LOGIN_SCREEN);
-//              },
-//            )
-//          ],
-//          title: Text(_pages[_index]),
-//          elevation: 0.0,
-//        ),
           bottomNavigationBar: CurvedNavigationBar(
             backgroundColor: ColorGlobal.whiteColor,
             color: Colors.black,
@@ -125,12 +75,6 @@ class HomePageState extends State<HomePage> {
                 size: 30,
                 color: ColorGlobal.color3,
               ),
-              //     SvgPicture.asset("assets/icons/ac.svg",color:color_shades.color4,height: 30,),
-//              Icon(
-//                Icons.assistant_photo,
-//                size: 30,
-//                color: ColorGlobal.color3,
-//              ),
               Icon(
                 Icons.home,
                 size: 30,
@@ -141,40 +85,16 @@ class HomePageState extends State<HomePage> {
                 size: 30,
                 color: ColorGlobal.color3,
               ),
-//              Icon(
-//                Icons.person,
-//                size: 30,
-//                color: ColorGlobal.color3,
-//              ),
             ],
-            animationCurve: Curves.bounceInOut,
+            animationCurve: Curves.easeInOutCubic,
             index: _index,
             animationDuration: Duration(milliseconds: 200),
-            onTap: (int tappedIndex) {
+            onTap: (int tappedIndex) =>
               setState(() {
                 _showPage = _getHomeWidgets(tappedIndex, context);
-              });
-            },
+              }),
           ),
           body: _showPage,
-//            Stack(
-//              children: [
-//                ClipPath(
-//                  child: Container(
-//                    height: MediaQuery.of(context).size.height / 2,
-//                    decoration: BoxDecoration(
-//                      image: DecorationImage(
-//                          image: AssetImage("assets/images/admin.jpeg"),
-//                          fit: BoxFit.cover),
-//                    ),
-//                  ),
-//                  clipper: Header(),
-//                ),
-//                Container(
-//                  child: _showPage,
-//                )
-//              ],
-//            ),
         ),
       ),
     );
