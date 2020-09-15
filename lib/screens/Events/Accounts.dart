@@ -3,7 +3,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/models/AccountInfo.dart';
@@ -55,19 +57,13 @@ class _AccountsState extends State<Accounts> {
       if(accountID==-2||isAccountEmpty){
         return Center(
             child: Text(
-                "No account information for this event", style: TextStyle(
-                color: Colors.blueGrey,
-                fontSize: 16
-            ))
+                "No account information for this event!!", style: GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor))
         );
       }
       else if(accountID==-3||accountServerError){
         return Center(
             child: Text(
-                "Server Error", style: TextStyle(
-                color: Colors.blueGrey,
-                fontSize: 16
-            ))
+                "Server Error", style: GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor))
         );
       }
       else   if(accountID==-1||accountID==null){
@@ -116,8 +112,13 @@ class _AccountsState extends State<Accounts> {
                       accountDetailsList[index]
                           .payment_amount!=null?Container(
                         width:UIUtills().getProportionalWidth(width: 200),
-                        child: Text(accountDetailsList[index]
-                            .payment_amount.toString(),
+                        child: Text(
+                          accountDetailsList[index].income_expense!=null?
+                          (accountDetailsList[index].income_expense.toUpperCase()=="INCOME"?
+                          "+" +accountDetailsList[index]
+                            .payment_amount.toString():"-"+accountDetailsList[index]
+                              .payment_amount.toString()):accountDetailsList[index]
+                              .payment_amount.toString(),
                         overflow:TextOverflow.ellipsis,
                         maxLines: 2,
                         style: TextStyle(
@@ -128,7 +129,7 @@ class _AccountsState extends State<Accounts> {
                       SizedBox(height: 4,),
                       accountDetailsList[index].income_expense!=null?Text(accountDetailsList[index].income_expense.substring(0,1).toUpperCase()+accountDetailsList[index].income_expense.substring(1),
                         style: TextStyle(
-                            color: Colors.blueGrey,
+                            color: accountDetailsList[index].income_expense.toUpperCase()=="INCOME"?Colors.green[800]:Colors.red[800],
                             fontStyle: FontStyle.italic,
                             fontSize: 16),):SizedBox(),
                       SizedBox(height: 8,)
@@ -211,7 +212,7 @@ class _AccountsState extends State<Accounts> {
                                     ),
                                   ),
                                   accountDetailsList[index].date!=null? Text(
-                                    accountDetailsList[index].date,
+                                    getDate(accountDetailsList[index].date),
                                     style: TextStyle(
                                         color: Colors.black54
                                     ),
@@ -357,7 +358,11 @@ class _AccountsState extends State<Accounts> {
     }
   }
 
+String getDate(String date){
+  final DateFormat formatter = DateFormat('dd-MM-yyyy');
+return formatter.format(DateFormat('yyyy-MM-dd').parse(date));
 
+}
   @override
   void initState() {
     super.initState();

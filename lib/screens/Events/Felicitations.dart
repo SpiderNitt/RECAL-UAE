@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/ResponseBody.dart';
@@ -40,21 +41,18 @@ class _FelicitationsState extends State<Felicitations> {
               if(snapshot.data==null){
                 if(isEmpty){
                   return Center(
-                      child:Text("No felicitations for this event",style:TextStyle(
-                          color: Colors.blueGrey,
-                          fontSize: 16
-                      ))
+                      child:Text("No felicitations for this event!!",style:GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor))
                   );
                 }
                 else if(serverError){
                   return Center(
-                      child:Text("Server Error..Try again after some time",style: TextStyle(color: Colors.blueGrey,fontSize: 16),)
+                      child:Text("Server Error..Try again after some time",style: GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor))
                   );
                 }
                 else {
                   return Center(
                     child: SpinKitDoubleBounce(
-                      color: Colors.lightBlueAccent,
+                      color: ColorGlobal.blueColor,
                     ),
                   );
                 }

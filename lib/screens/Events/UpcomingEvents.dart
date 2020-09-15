@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/models/EventInfo.dart';
+import 'package:iosrecal/screens/Home/NoData.dart';
 import 'VolunteerCard.dart';
 class UpcomingEvents extends StatefulWidget {
   List<EventInfo> eventlist;
@@ -30,8 +33,7 @@ class _UpcomingEventsState extends State<UpcomingEvents> with TickerProviderStat
 
   Widget EmptyList(){
     return Center(
-      child: FadeTransition(child: Text("No events yet!!"),
-        opacity: emptyController,),
+      child: Text("No events yet !!",style: GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor)),
     );
   }
   @override

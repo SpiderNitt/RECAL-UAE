@@ -16,6 +16,7 @@ import 'package:iosrecal/models/FelicitationInfo.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/SponsorInfo.dart';
 import 'package:iosrecal/models/Socialmedia_feed.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
 import 'EventPhotos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -49,6 +50,9 @@ class _EventState extends State<Event> {
   String reminderUrl;
   List<String> picturesListUrl = [];
   List<String> carouselListUrl = [];
+  String firstHalf;
+  String secondHalf;
+  bool flag = true;
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery
@@ -71,7 +75,170 @@ class _EventState extends State<Event> {
             ),
             backgroundColor: ColorGlobal.whiteColor,
           ),
-          body: getBody()
+          body: (widget.isCompleted!=true&& (!detailsLoading&& !(filesLoading[0]) &&!(filesLoading[1])&&!(filesLoading[2])))?
+          SlidingSheet(
+            body: getBody(),
+            elevation: 4,
+            cornerRadius: 16,
+            snapSpec: const SnapSpec(
+              snap: true,
+              snappings: [0.05, 0.05, 1.0],
+              positioning: SnapPositioning.relativeToAvailableSpace,
+            ),
+            builder: (context, state) {
+              return Stack(
+                children: <Widget>[
+                  Container(
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        FloatingActionButton(
+                          child:Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(height: 4,),
+                              Icon(Icons.keyboard_arrow_up,size: 30,),
+                            ],
+                          ),
+                          onPressed: (){},
+                          backgroundColor: ColorGlobal.blueColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0,50,10,10),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(height: 4,),
+                        // Divider(
+                        //   thickness: 3,
+                        //   color: Colors.black54,
+                        //   indent: UIUtills()
+                        //       .getProportionalWidth(
+                        //       width: 160),
+                        //   endIndent: UIUtills()
+                        //       .getProportionalWidth(
+                        //       width: 160),
+                        // ),
+                        detailsInfo != null ? detailsInfo.volunteer_message ==
+                            "" ?
+                        CircleAvatar(
+                          radius: 40,
+                          child: Container(
+                              child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
+                          ),
+                        ):SizedBox():SizedBox(),
+                        detailsInfo != null ? detailsInfo.volunteer_message ==
+                            "" ? SizedBox()
+                            : SizedBox(height: 10) : SizedBox(),
+                        detailsInfo != null ?
+                        (detailsInfo.volunteer_message != "" ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            CircleAvatar(
+                              radius: 30,
+                              child: Container(
+                                  child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                  margin: EdgeInsets.only(left: 6),
+                                  child: Text(
+                                    "dkfj hufrg hgdfjr gj ewfhfwdnq weunrew wuynewudl wqunrenda wdeyrun wyunfyu adnef nadyel aewbg",
+                                    style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 16),
+                                  )),
+                            ),
+                          ],
+                        ) : SizedBox()) : SizedBox(),
+                        SizedBox(height: 10,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  child: detailsInfo != null ? Container(
+                                    child: detailsInfo.registration_link == ""
+                                        ? SizedBox() :
+                                    OutlineButton(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          // Icon(
+                                          //   Icons.pan_tool,
+                                          //   color: Colors.blue[800],
+                                          // ),
+                                          SizedBox(
+                                            width: 4,
+                                          ),
+                                          Text(
+                                            "Register here",
+                                            style: TextStyle(color: Colors.blue[900],fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                      onPressed: ()=>launch(detailsInfo.registration_link),
+                                      color: Colors.white,
+                                      borderSide: BorderSide(
+                                          color: Colors.blue[900],
+                                          style: BorderStyle.solid,
+                                          width: UIUtills()
+                                              .getProportionalWidth(width: 0.8)),
+                                    ),
+                                  ) : SizedBox(),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: RaisedButton(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.check_circle,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Volunteer",
+                                        style: TextStyle(color: Colors.white,fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, VOLUNTEER_SUPPORT);
+                                  },
+                                  color: Colors.blue[800],
+                                  // borderSide: BorderSide(
+                                  //     color: Colors.green,
+                                  //     style: BorderStyle.solid,
+                                  //     width: UIUtills()
+                                  //         .getProportionalWidth(width: 0.8)),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ):getBody()
       ),
     );
   }
@@ -82,28 +249,36 @@ class _EventState extends State<Event> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
+            InkWell(
+              child:Container(
               margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      color: ColorGlobal.blueColor.withOpacity(0.5),
-                      width: 2)),
+              // decoration: BoxDecoration(
+              //     border: Border.all(
+              //         color: ColorGlobal.blueColor.withOpacity(0.5),
+              //         width: 2)),
               child: (!filesLoading[0] && !fileServerError[0]&&flyerUrl!=null) ?
               FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
                 image: flyerUrl,
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.contain,
               ) : SizedBox(),
               width: MediaQuery
                   .of(context)
                   .size
                   .width,
             ),
+                onTap: () =>
+                {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EventPictureDisplay(flyerUrl)))
+                }
+            ),
             Column(
               children: <Widget>[
                 Padding(
-                  padding:
-                  const EdgeInsets.only(top: 8.0, left: 10, right: 10),
+                  padding:const EdgeInsets.only(top: 8.0, left: 10, right: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -144,10 +319,11 @@ class _EventState extends State<Event> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
+                            margin:EdgeInsets.only(left:5),
                             child: Icon(
                               Icons.place,
                               size: 36,
-                              color: ColorGlobal.color2,
+                              color: ColorGlobal.blueColor
                             ),
                           ),
 
@@ -198,7 +374,7 @@ class _EventState extends State<Event> {
                                         null
                                         ? TextStyle(
                                         color: Colors.black45,
-                                        fontSize: 16)
+                                        fontSize: 18)
                                         : TextStyle(
                                         color: Colors.black54,
                                         fontSize: 22,
@@ -216,50 +392,95 @@ class _EventState extends State<Event> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      detailsInfo != null ? detailsInfo.detail_message == ""
+                      widget.currEvent.event_description!=""?
+                      secondHalf.isEmpty
+    ? Container(
+                          margin:EdgeInsets.only(left:5),
+                          child: Text(firstHalf,style: TextStyle(fontSize: 18),))
+        :  Column(
+    children: <Widget>[
+     Container(
+         margin:EdgeInsets.only(left:5),
+         child: Text(flag ? (firstHalf + "...") : (firstHalf + secondHalf),style: TextStyle(fontSize: 18),)),
+     InkWell(
+    child: Row(
+    mainAxisAlignment: MainAxisAlignment.end,
+    children: <Widget>[
+      Text(
+    flag ? "show more" : "show less",
+    style: new TextStyle(color: Colors.blue),
+    ),
+    ],
+    ),
+    onTap: () {
+    setState(() {
+    flag = !flag;
+    });
+    },
+    ),
+    ],
+    ):SizedBox(),
+                      detailsInfo != null ? detailsInfo.detail_message ==""
                           ? SizedBox()
                           : Container(
-                          margin: EdgeInsets.only(top: 6,left: 2),
+                          margin: EdgeInsets.only(top: 6,left: 5,bottom: 6),
                           child: Text(
-                            detailsInfo.detail_message,
+                                 detailsInfo.detail_message,
                             style: TextStyle(
-                                color: Colors.blueGrey, fontSize: 17),
+                                color: Colors.black54, fontSize: 17),
                           )) : SizedBox(),
+                      SizedBox(
+                        height: 4,
+                      ),
+
                       detailsInfo != null ? detailsInfo
-                          .detail_amendment_message == ""
-                          ? SizedBox()
-                          : Container(
-                          margin: EdgeInsets.only(top: 6),
-                          child: Text(
-                            detailsInfo.detail_amendment_message,
-                            style: TextStyle(
-                                color: Colors.black54, fontSize: 16),
-                          )) : SizedBox(),
+                          .detail_amendment_message ==""
+                          ? SizedBox(height: 4)
+                          : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              margin: EdgeInsets.only(top: 2,left:5),
+                              child: Stack(
+    children: <Widget>[
+      Card(child:Padding(
+          padding:EdgeInsets.fromLTRB(20,12,8,8),
+          child:Text(
+            detailsInfo.detail_amendment_message,
+            style: TextStyle(
+                color: Colors.black54, fontSize: 16),
+          )  )
+      ),
+      Container(margin: EdgeInsets.only(left: 0),child:Icon(Icons.add_to_photos,color: Colors.green,),)
+    ],
+    ))
+                        ],
+                      ) : SizedBox(),
                       widget.isCompleted
                           ? Column(
                         children: <Widget>[
                           detailsInfo.detail_amendment_message != "" ?
                           SizedBox(
-                            height: 20,
+                            height: 10,
                           ) : SizedBox(height: 4,),
-                          Row(
+picturesListUrl.length>0?  Row(
                             mainAxisAlignment:
                             MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Container(
-                                  margin: EdgeInsets.only(left: 4),
+                                  margin: EdgeInsets.only(left: 5),
                                   child: Text(
-                                    "Event Photos",
-                                    style: TextStyle(fontSize: 16),
+                                    "Event Gallery",
+                                    style: TextStyle(fontSize: 18,),
                                   )),
-                              InkWell(
+                              carouselListUrl.length>5?InkWell(
                                   child: Text("More",
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
+                                          fontWeight: FontWeight.bold,color:Colors.indigo)),
                                   onTap: () =>
                                   {
                                     Navigator.push(
@@ -267,10 +488,10 @@ class _EventState extends State<Event> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 EventPhotos(picturesListUrl)))
-                                  })
+                                  }):SizedBox(),
                             ],
-                          ),
-                          Column(
+                          ):SizedBox(),
+                          picturesListUrl.length>0? Column(
                             crossAxisAlignment:
                             CrossAxisAlignment.start,
                             children: <Widget>[
@@ -282,144 +503,96 @@ class _EventState extends State<Event> {
                                   crossAxisAlignment:
                                   CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    CarouselSlider(
-                                      options: CarouselOptions(
-                                          height: UIUtills()
-                                              .getProportionalHeight(
-                                              height: 180),
-                                          initialPage: 0,
-                                          enlargeCenterPage: true,
-                                          enableInfiniteScroll: false),
-                                      items: carouselListUrl.map((photo) {
-                                        return Builder(
-                                          builder:
-                                              (BuildContext context) {
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 4.0),
+                                      height: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width/3,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: carouselListUrl.length>5?5:carouselListUrl.length,
+                                          itemBuilder: (context, index) {
                                             return InkWell(
-                                              child: Container(
-                                                  width: UIUtills()
-                                                      .getProportionalWidth(
-                                                      width: 300),
-                                                  margin: EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 6),
-                                                  decoration:
-                                                  BoxDecoration(
-                                                      color: Colors
-                                                          .white),
-                                                  child: Image.network(
-                                                     photo,
-                                                      fit: BoxFit.cover)),
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                                  child: Container(
+                                                      width: UIUtills()
+                                                          .getProportionalWidth(
+                                                          width: 120),
+                                                      height: UIUtills()
+                                                          .getProportionalWidth(
+                                                          width: 120),
+                                                      margin: EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 6),
+                                                      decoration: BoxDecoration(
+                                                          border: Border.all(
+                                                              color: ColorGlobal.blueColor.withOpacity(0.5),
+                                                              width: 2)),
+                                                      child: Image.network(
+                                                          carouselListUrl[index],
+                                                          fit: BoxFit.cover)),
+                                                ),
                                                 onTap: () =>
                                                 {
                                                   Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
-                                                          builder: (context) => EventPictureDisplay(photo)))
+                                                          builder: (context) => EventPictureDisplay(carouselListUrl[index])))
                                                 }
                                             );
-                                          },
-                                        );
-                                      }).toList(),
-                                    )
+                                          }),
+                                    ),
+
                                   ],
                                 ),
                               ),
+                              SizedBox(height: 10,),
                             ],
-                          ),
+                          ):SizedBox(height: 0,),
                         ],
                       )
                           : SizedBox(),
+                      Divider(
+                        thickness: 1,
+                        indent: UIUtills()
+                            .getProportionalWidth(
+                            width: 10),
+                        endIndent: UIUtills()
+                            .getProportionalWidth(
+                            width: 10),
+                      ),
                       Container(
-                        margin: EdgeInsets.all(10),
+                        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                         child: (!filesLoading[1] && reminderUrl!=null) ?
-                        FadeInImage.memoryNetwork(
-                          placeholder: kTransparentImage,
-                          image: reminderUrl,
-                          fit: BoxFit.fitWidth,
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.width/2,
+                              child: FadeInImage.memoryNetwork(
+                                placeholder: kTransparentImage,
+                                image: reminderUrl,
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
+                            SizedBox(height: 10,),
+                          ],
                         ) : SizedBox(),
                         width: MediaQuery
                             .of(context)
                             .size
-                            .width,
-                      ),
-                      widget.isCompleted
-                          ? SizedBox()
-                          : Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                            .width,),
+                      Column(
                         children: <Widget>[
-                          detailsInfo != null ? Container(
-                              margin: EdgeInsets.only(top: 4),
-                              child: detailsInfo.registration_link == ""
-                                  ? SizedBox()
-                                  : InkWell(
-                                child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(Icons.touch_app,
-                                          color:
-                                          ColorGlobal.color2),
-                                      Text("Register here",
-                                          style: TextStyle(
-                                              color: ColorGlobal
-                                                  .color2,
-                                              fontSize: 16))
-                                    ]),
-                                onTap: () =>
-                                    launch(detailsInfo.registration_link),
-                              )) : SizedBox(),
-                        ],
-                      ),
-                      widget.isCompleted
-                          ? SizedBox(height: 0)
-                          : Column(
-                        children: <Widget>[
-                          detailsInfo != null ? detailsInfo.volunteer_message ==
-                              "" ? SizedBox()
-                              : SizedBox(height: 10) : SizedBox(),
-                          detailsInfo != null ?
-                          (detailsInfo.volunteer_message != "" ? Container(
-                              child: Text(
-                                detailsInfo.volunteer_message,
-                                style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 16),
-                              )) : SizedBox()) : SizedBox(),
-                          OutlineButton(
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.check_circle,
-                                  color: Colors.green,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "Volunteer",
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                              ],
-                            ),
-                            onPressed: () {
-                  Navigator.pushNamed(context, VOLUNTEER_SUPPORT);
-                                          },
-                            color: Colors.white,
-                            borderSide: BorderSide(
-                                color: Colors.green,
-                                style: BorderStyle.solid,
-                                width: UIUtills()
-                                    .getProportionalWidth(width: 0.8)),
-                          ),
-                        ],
-                      ),
                       widget.isCompleted
                           ? Column(
                         children: <Widget>[
                           SizedBox(
-                            height: 20,
+                            height: 0,
                           ),
                           Card(
                             child: InkWell(
@@ -430,9 +603,14 @@ class _EventState extends State<Event> {
                                   children: <Widget>[
                                     Row(
                                       children: <Widget>[
-                                        Image.asset(
-                                          "assets/images/felicitation.png",
-                                          fit: BoxFit.cover,
+                                        Container(
+                                          child: Image.asset(
+                                            "assets/images/felicitation.png",
+                                            fit: BoxFit.cover,
+                                          ),
+                                          height:  UIUtills()
+                                              .getProportionalHeight(
+                                              height: 36),
                                         ),
                                         Container(
                                           height: UIUtills()
@@ -503,7 +681,7 @@ class _EventState extends State<Event> {
                                         fit: BoxFit.cover,
                                       ),
                                       height: UIUtills().getProportionalHeight(
-                                          height: 40),
+                                          height: 36),
                                     ),
                                     Container(
                                       height: UIUtills()
@@ -560,6 +738,7 @@ class _EventState extends State<Event> {
                       SizedBox(
                         height: 10,
                       ),
+
                       FutureBuilder(
                         future: getSponsors(),
                         builder:
@@ -572,7 +751,7 @@ class _EventState extends State<Event> {
                                     children: <Widget>[
                                       Container(
                                           margin: EdgeInsets.only(left: 4),
-                                          child: Text("Sponsors : ")),
+                                          child: Text("Sponsors : ",style: TextStyle(fontSize: 16),)),
                                     ],
                                   ),
                                   Text(
@@ -590,7 +769,7 @@ class _EventState extends State<Event> {
                             } else {
                               return Center(
                                 child: SpinKitDoubleBounce(
-                                  color: Colors.lightBlueAccent,
+                                  color: ColorGlobal.blueColor,
                                 ),
                               );
                             }
@@ -605,7 +784,9 @@ class _EventState extends State<Event> {
                                         child: Text(
                                           "Sponsors",
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold,
+                                              fontStyle: FontStyle.italic,
+                                              fontSize: 16),
                                         )),
                                   ],
                                 ),
@@ -616,7 +797,7 @@ class _EventState extends State<Event> {
                                       vertical: UIUtills()
                                           .getProportionalHeight(height: 6)),
                                   height: UIUtills()
-                                      .getProportionalHeight(height: 288),
+                                      .getProportionalHeight(height: 200),
                                   child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       itemCount: snapshot.data.length,
@@ -624,7 +805,7 @@ class _EventState extends State<Event> {
                                         return Container(
                                           width: UIUtills()
                                               .getProportionalWidth(
-                                              width: 216),
+                                              width: 150),
                                           child: Card(
                                             //color: Colors.blue,
                                             child: Column(
@@ -634,38 +815,48 @@ class _EventState extends State<Event> {
                                                 Expanded(
                                                   child: Container(
                                                     //color:Colors.black,
-                                                    margin: EdgeInsets.only(
-                                                        bottom: UIUtills()
-                                                            .getProportionalHeight(
-                                                            height: 6)),
-                                                    child: snapshot.data[index]
-                                                        .brochure != null
-                                                        ? Image.network(
-                                                      (baseURL+
-                                                          snapshot.data[index]
-                                                              .brochure
-                                                              .toString()),
-                                                      fit: BoxFit.cover,
-                                                      loadingBuilder:
-                                                          (BuildContext ctx,
-                                                          Widget child,
-                                                          ImageChunkEvent
-                                                          loadingProgress) {
-                                                        if (loadingProgress ==
-                                                            null) {
-                                                          return child;
-                                                        } else {
-                                                          return Center(
-                                                            child:
-                                                            SpinKitDoubleBounce(
-                                                              color: Colors
-                                                                  .lightBlueAccent,
-                                                            ),
-                                                          );
-                                                        }
-                                                      },
-                                                    ):Container(height:UIUtills().getProportionalHeight(height: 300),color: Color(0xff4a4a4d),child:Image.asset("assets/images/sponsors.png",fit: BoxFit.scaleDown,)
-                                                    )
+                                                      margin: EdgeInsets.only(
+                                                          bottom: UIUtills()
+                                                              .getProportionalHeight(
+                                                              height: 6)),
+                                                      child: snapshot.data[index]
+                                                          .brochure != null
+                                                          ? InkWell(
+                                                            child: Image.network(
+                                                        (baseURL+
+                                                              snapshot.data[index]
+                                                                  .brochure
+                                                                  .toString()),
+                                                        fit: BoxFit.cover,
+                                                        loadingBuilder:
+                                                              (BuildContext ctx,
+                                                              Widget child,
+                                                              ImageChunkEvent
+                                                              loadingProgress) {
+                                                            if (loadingProgress ==
+                                                                null) {
+                                                              return child;
+                                                            } else {
+                                                              return Center(
+                                                                child:
+                                                                SpinKitDoubleBounce(
+                                                                  color: ColorGlobal.blueColor,
+                                                                ),
+                                                              );
+                                                            }
+                                                        },
+                                                      ),
+                                                        onTap: ()=>{
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) => EventPictureDisplay(baseURL+
+                                                                      snapshot.data[index]
+                                                                          .brochure
+                                                                          .toString())))
+                                                        },
+                                                          ) :Container(height:UIUtills().getProportionalHeight(height: 300),color: Color(0xff4a4a4d),child:Image.asset("assets/images/sponsors.png",fit: BoxFit.scaleDown,)
+                                                      )
                                                   ),
                                                 ),
                                                 snapshot.data[index]
@@ -698,7 +889,7 @@ class _EventState extends State<Event> {
                                                   mainAxisAlignment: MainAxisAlignment
                                                       .center,
                                                   children: <Widget>[
-                                                    Icon(Icons.phone),
+                                                    Icon(Icons.phone,size: 20,),
                                                     Container(
                                                       margin: EdgeInsets.only(
                                                           left: 4),
@@ -760,10 +951,10 @@ class _EventState extends State<Event> {
                                 Container(
                                   child: Row(
                                     children: <Widget>[
-                                      Text("Event Links"),
+                                      Text("Event Links",style:TextStyle(fontStyle: FontStyle.italic)),
                                     ],
                                   ),
-                                  margin: EdgeInsets.only(left: 4),),
+                                  margin: EdgeInsets.only(left: 4,top:4),),
                                 Container(
                                   padding: EdgeInsets.symmetric(
                                       vertical: 4.0),
@@ -788,9 +979,11 @@ class _EventState extends State<Event> {
                       )
                     ],
                   ),
-                )
-              ],
+                ])
+                )],
             ),
+            SizedBox(height:  widget.isCompleted!=true?
+            UIUtills().getProportionalHeight(height: 30):UIUtills().getProportionalHeight(height: 0))
           ],
         ),
       );
@@ -798,7 +991,7 @@ class _EventState extends State<Event> {
     else if (detailsLoading || filesLoading[0]||filesLoading[1]||filesLoading[2]) {
       return Center(
         child: SpinKitDoubleBounce(
-          color: Colors.lightBlueAccent,
+          color: ColorGlobal.blueColor,
         ),
       );
     }
@@ -903,6 +1096,13 @@ class _EventState extends State<Event> {
     getEventFile("pictures");
    getEventFile("reminder");
     getEventDetails();
+    if (widget.currEvent.event_description!=""&&widget.currEvent.event_description.length > 200) {
+      firstHalf = widget.currEvent.event_description.substring(0, 200);
+      secondHalf = widget.currEvent.event_description.substring(200, widget.currEvent.event_description.length);
+    } else {
+      firstHalf = widget.currEvent.event_description;
+      secondHalf = "";
+    }
   }
 
   Widget getIcon(String socialMediaName, String feed_url) {
@@ -923,8 +1123,10 @@ class _EventState extends State<Event> {
         child: Container(
           margin: EdgeInsets.only(left: 8, right: 8),
           child: Image(
-            height: 26.0,
-            width: 26.0,
+            height:  UIUtills()
+                .getProportionalHeight(height: 26),
+            width:  UIUtills()
+                .getProportionalWidth(width: 26),
             fit: BoxFit.scaleDown,
             image: AssetImage(
                 iconLocation),
@@ -934,44 +1136,49 @@ class _EventState extends State<Event> {
         onTap: () => launch(feed_url),
       );
     } else {
-      return Card(
-        color: ColorGlobal.color2,
+      return Tooltip(
         child: Container(
+          margin: EdgeInsets.only(left: 4),
           child: Card(
-            elevation: 2,
-            clipBehavior: Clip.antiAlias,
-            shape: RoundedRectangleBorder(
-                borderRadius:
-                BorderRadius.circular(10)),
+            color: ColorGlobal.color2,
             child: Container(
-              color: ColorGlobal.textColor,
-              padding: EdgeInsets.all(5),
-              child: FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Center(
-                    child: InkWell(
-                      child: Text(
-                        socialMediaName,
-                        style: TextStyle(
-                            color: ColorGlobal
-                                .whiteColor,
-                            fontSize: 15,
-                            fontWeight:
-                            FontWeight.bold),
-                      ),
-                      onTap: () => launch(feed_url),
-                    )),
+              child: Card(
+                elevation: 2,
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(10)),
+                child: Container(
+                  color: ColorGlobal.textColor,
+                  padding: EdgeInsets.all(5),
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Center(
+                        child: InkWell(
+                          child: Text(
+                            socialMediaName,
+                            style: TextStyle(
+                                color: ColorGlobal
+                                    .whiteColor,
+                                fontSize:24,
+                                fontWeight:
+                                FontWeight.bold),
+                          ),
+                          onTap: () => launch(feed_url),
+                        )),
+                  ),
+                ),
               ),
             ),
           ),
         ),
+        message:socialMediaName ,
       );
     }
   }
 
   Future<dynamic> getEventDetails() async {
     var params = {'event_id': widget.currEvent.event_id.toString()};
-
     var uri = Uri.https(
         'delta.nitt.edu', '/recal-uae/api/events/manage/', params);
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -1015,7 +1222,6 @@ class _EventState extends State<Event> {
       }
     });
   }
-
   Future<List<SponsorInfo>> getSponsors() async {
     var params = {'event_id': widget.currEvent.event_id.toString()};
     List<SponsorInfo> sponsorsList = [];
@@ -1061,6 +1267,8 @@ class _EventState extends State<Event> {
       return sponsorsList;
     }
   }
+
+
   Future<List<String>> getEventFile(String file_type) async {
     var params = {
       'event_id': widget.currEvent.event_id.toString(),

@@ -5,6 +5,7 @@ class EventInfo{
   String event_name;
   String datetime;
   String emirate;
+  String event_description;
   String flyer_file_id;
   String reminder_file_id;
 
@@ -16,6 +17,7 @@ class EventInfo{
     this.emirate,
     this.flyer_file_id,
     this.event_name,
+    this.event_description,
     this.reminder_file_id});
   factory EventInfo.fromJson(Map<String, dynamic> json) {
     return EventInfo(
@@ -25,6 +27,7 @@ class EventInfo{
         location:json['location'],
         datetime:json['datetime'],
         emirate:json['emirate'],
+        event_description: json['event_description'],
         flyer_file_id:json['flyer_file_id'],
         reminder_file_id:json['reminder_file_id']
     );
