@@ -47,23 +47,22 @@ class _AccountsState extends State<Accounts> {
               color: ColorGlobal.textColor
           ),
         ),
-        body:DisplayAccount(),
+        body:displayAccount(),
       ),
     );
   }
 
-  Widget DisplayAccount(){
+  Widget displayAccount(){
     if(!isCompleted){
       if(accountID==-2||isAccountEmpty){
         return Center(
-            child: Text(
-                "No account information for this event!!", style: GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor))
+            child: Text("No account information for this event", style: GoogleFonts.josefinSans(fontSize: 20,color: ColorGlobal.textColor))
         );
       }
       else if(accountID==-3||accountServerError){
         return Center(
             child: Text(
-                "Server Error", style: GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor))
+                "Server Error", style: GoogleFonts.josefinSans(fontSize: 20,color: ColorGlobal.textColor))
         );
       }
       else   if(accountID==-1||accountID==null){
@@ -438,7 +437,8 @@ return formatter.format(DateFormat('yyyy-MM-dd').parse(date));
         } else {
           print(responseBody.data);
         }
-      } else {
+        }
+      else {
         print('Server error');
         setState(() {
           accountServerError=true;

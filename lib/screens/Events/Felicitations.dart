@@ -41,12 +41,12 @@ class _FelicitationsState extends State<Felicitations> {
               if(snapshot.data==null){
                 if(isEmpty){
                   return Center(
-                      child:Text("No felicitations for this event!!",style:GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor))
+                      child:Text("No felicitations for this event",style:GoogleFonts.josefinSans(fontSize: 20,color: ColorGlobal.textColor))
                   );
                 }
                 else if(serverError){
                   return Center(
-                      child:Text("Server Error..Try again after some time",style: GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor))
+                      child:Text("Server Error.. Try again after some time",style: GoogleFonts.josefinSans(fontSize: 20,color: ColorGlobal.textColor))
                   );
                 }
                 else {

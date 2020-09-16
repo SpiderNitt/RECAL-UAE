@@ -343,6 +343,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         if (responseBody.status_code == 200) {
           user =
               User.fromProfile(json.decode(json.encode(responseBody.data)));
+
           print(user.organization);
 
           if (!mounted) return; setState(() {
@@ -359,11 +360,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             position = new TextEditingController(text: user.position);
             picture = user.profile_pic;
 
-            if(picture!=null)
-              if (!mounted) return; setState(() {
-                picture = "https://delta.nitt.edu/recal-uae" + user.profile_pic;
-                getPic=1;
-              });
+            if(user.profile_pic!=null)
+              setState(() {
+              picture = "https://delta.nitt.edu/recal-uae" + user.profile_pic;
+              getPic=1;
+            });
 
             previous = name.text +
                 email.text +
@@ -619,27 +620,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               _settingModalBottomSheet(context);
                             },
                             child: getPic == 0 && change_dp==0
-                                ? new Container(
-                              height: 120,
-                              width: 120,
-                              decoration: new BoxDecoration(
-                                color: ColorGlobal
-                                    .colorPrimaryDark,
-                                image: new DecorationImage(
-                                  image: new AssetImage(
-                                      'assets/images/spiderlogo.png'),
-                                  fit: BoxFit.contain,
-                                ),
-                                border: Border.all(
-                                    color: ColorGlobal
-                                        .colorPrimaryDark,
-                                    width: 2),
-                                borderRadius:
-                                new BorderRadius.all(
-                                    const Radius.circular(
-                                        60.0)),
-                              ),
-                            )
+                                ? CircleAvatar(
+                              radius: 60,
+                              backgroundColor: Colors.orange,
+                              child: Text(name.text.toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: 60),)
+                              )
                                 : new Container(
                                 width: 120.0,
                                 height: 120.0,

@@ -82,160 +82,137 @@ class _EventState extends State<Event> {
             cornerRadius: 16,
             snapSpec: const SnapSpec(
               snap: true,
-              snappings: [0.05, 0.05, 1.0],
+              snappings: [0.15, 0.15, 1.0],
               positioning: SnapPositioning.relativeToAvailableSpace,
             ),
             builder: (context, state) {
-              return Stack(
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+              return Container(
+                height: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                          SizedBox(height: 4,),
+//                        // Divider(
+//                        //   thickness: 3,
+//                        //   color: Colors.black54,
+//                        //   indent: UIUtills()
+//                        //       .getProportionalWidth(
+//                        //       width: 160),
+//                        //   endIndent: UIUtills()
+//                        //       .getProportionalWidth(
+//                        //       width: 160),
+//                        // ),
+//                        detailsInfo != null ? detailsInfo.volunteer_message ==
+//                            "" ?
+//                        CircleAvatar(
+//                          radius: 40,
+//                          child: Container(
+//                              child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
+//                          ),
+//                        ):SizedBox():SizedBox(),
+//                        detailsInfo != null ? detailsInfo.volunteer_message ==
+//                            "" ? SizedBox()
+//                            : SizedBox(height: 10) : SizedBox(),
+//                        detailsInfo != null ?
+//                        (detailsInfo.volunteer_message != "" ? Row(
+//                          crossAxisAlignment: CrossAxisAlignment.start,
+//                          children: <Widget>[
+//                            CircleAvatar(
+//                              radius: 30,
+//                              child: Container(
+//                                  child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
+//                              ),
+//                            ),
+//                            Expanded(
+//                              child: Container(
+//                                  margin: EdgeInsets.only(left: 6),
+//                                  child: Text(
+//                                    "dkfj hufrg hgdfjr gj ewfhfwdnq weunrew wuynewudl wqunrenda wdeyrun wyunfyu adnef nadyel aewbg",
+//                                    style: TextStyle(
+//                                        color: Colors.black87,
+//                                        fontSize: 16),
+//                                  )),
+//                            ),
+//                          ],
+//                        ) : SizedBox()) : SizedBox(),
+//                        SizedBox(height: 10,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        FloatingActionButton(
-                          child:Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(height: 4,),
-                              Icon(Icons.keyboard_arrow_up,size: 30,),
-                            ],
-                          ),
-                          onPressed: (){},
-                          backgroundColor: ColorGlobal.blueColor,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10.0,50,10,10),
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(height: 4,),
-                        // Divider(
-                        //   thickness: 3,
-                        //   color: Colors.black54,
-                        //   indent: UIUtills()
-                        //       .getProportionalWidth(
-                        //       width: 160),
-                        //   endIndent: UIUtills()
-                        //       .getProportionalWidth(
-                        //       width: 160),
-                        // ),
-                        detailsInfo != null ? detailsInfo.volunteer_message ==
-                            "" ?
-                        CircleAvatar(
-                          radius: 40,
-                          child: Container(
-                              child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
-                          ),
-                        ):SizedBox():SizedBox(),
-                        detailsInfo != null ? detailsInfo.volunteer_message ==
-                            "" ? SizedBox()
-                            : SizedBox(height: 10) : SizedBox(),
-                        detailsInfo != null ?
-                        (detailsInfo.volunteer_message != "" ? Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            CircleAvatar(
-                              radius: 30,
-                              child: Container(
-                                  child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                  margin: EdgeInsets.only(left: 6),
-                                  child: Text(
-                                    "dkfj hufrg hgdfjr gj ewfhfwdnq weunrew wuynewudl wqunrenda wdeyrun wyunfyu adnef nadyel aewbg",
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: 16),
-                                  )),
-                            ),
-                          ],
-                        ) : SizedBox()) : SizedBox(),
-                        SizedBox(height: 10,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  child: detailsInfo != null ? Container(
-                                    child: detailsInfo.registration_link == ""
-                                        ? SizedBox() :
-                                    OutlineButton(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          // Icon(
-                                          //   Icons.pan_tool,
-                                          //   color: Colors.blue[800],
-                                          // ),
-                                          SizedBox(
-                                            width: 4,
-                                          ),
-                                          Text(
-                                            "Register here",
-                                            style: TextStyle(color: Colors.blue[900],fontSize: 16),
-                                          ),
-                                        ],
-                                      ),
-                                      onPressed: ()=>launch(detailsInfo.registration_link),
-                                      color: Colors.white,
-                                      borderSide: BorderSide(
-                                          color: Colors.blue[900],
-                                          style: BorderStyle.solid,
-                                          width: UIUtills()
-                                              .getProportionalWidth(width: 0.8)),
-                                    ),
-                                  ) : SizedBox(),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: RaisedButton(
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              child: detailsInfo != null ? Container(
+                                child: detailsInfo.registration_link == ""
+                                    ? SizedBox() :
+                                OutlineButton(
                                   child: Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Icon(
-                                        Icons.check_circle,
-                                        color: Colors.white,
-                                      ),
+                                      // Icon(
+                                      //   Icons.pan_tool,
+                                      //   color: Colors.blue[800],
+                                      // ),
                                       SizedBox(
-                                        width: 10,
+                                        width: 4,
                                       ),
                                       Text(
-                                        "Volunteer",
-                                        style: TextStyle(color: Colors.white,fontSize: 16),
+                                        "Register here",
+                                        style: TextStyle(color: Colors.blue[900],fontSize: 16),
                                       ),
                                     ],
                                   ),
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, VOLUNTEER_SUPPORT);
-                                  },
-                                  color: Colors.blue[800],
-                                  // borderSide: BorderSide(
-                                  //     color: Colors.green,
-                                  //     style: BorderStyle.solid,
-                                  //     width: UIUtills()
-                                  //         .getProportionalWidth(width: 0.8)),
+                                  onPressed: ()=>launch(detailsInfo.registration_link),
+                                  color: Colors.white,
+                                  borderSide: BorderSide(
+                                      color: Colors.blue[900],
+                                      style: BorderStyle.solid,
+                                      width: UIUtills()
+                                          .getProportionalWidth(width: 0.8)),
                                 ),
-                              ),
+                              ) : SizedBox(),
                             ),
-                          ],
+                          ),
                         ),
-
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: RaisedButton(
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.check_circle,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Volunteer",
+                                    style: TextStyle(color: Colors.white,fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              onPressed: () {
+                                Navigator.pushNamed(context, VOLUNTEER_SUPPORT);
+                              },
+                              color: Colors.blue[800],
+                              // borderSide: BorderSide(
+                              //     color: Colors.green,
+                              //     style: BorderStyle.solid,
+                              //     width: UIUtills()
+                              //         .getProportionalWidth(width: 0.8)),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           ):getBody()
@@ -983,7 +960,7 @@ picturesListUrl.length>0?  Row(
                 )],
             ),
             SizedBox(height:  widget.isCompleted!=true?
-            UIUtills().getProportionalHeight(height: 30):UIUtills().getProportionalHeight(height: 0))
+            100:UIUtills().getProportionalHeight(height: 0)),
           ],
         ),
       );
