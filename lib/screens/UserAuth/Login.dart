@@ -2,13 +2,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/models/LoginData.dart';
+import 'package:iosrecal/screens/Home/Arguments.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:iosrecal/models/User.dart';
 import 'package:iosrecal/Constant/Constant.dart';
-
-import 'package:iosrecal/screens/Home/Arguments.dart';
-import '../Profile/ProfileScreen.dart';
-
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Constant/TextField.dart';
 import 'package:http/http.dart' as http;
@@ -23,14 +20,13 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  TimeoutArguments args;
   var top = FractionalOffset.topCenter;
   var bottom = FractionalOffset.bottomCenter;
-
+  TimeoutArguments args;
   TextEditingController email =
-      new TextEditingController(text: "someone2@gmail.com");
+  new TextEditingController(text: "someone2@gmail.com");
   TextEditingController password =
-      new TextEditingController(text: "1j7P1T3ync2I");
+  new TextEditingController(text: "1j7P1T3ync2I");
   TextEditingController newPassword = new TextEditingController(text: "");
   TextEditingController confirmPassword = new TextEditingController(text: "");
 
@@ -85,57 +81,29 @@ class LoginState extends State<Login> {
 
   Future<bool> _onBackPressed() {
     return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Are you sure?'),
-            content: new Text('Do you want to exit the App'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                color: Colors.green,
-                child: Text("NO"),
-              ),
-              new GestureDetector(
-                child: FlatButton(
-                  onPressed: () => Navigator.of(context, rootNavigator: true).pop(true),
-                  color: Colors.red,
-                  child: Text("YES"),
-                ),
-              ),
-            ],
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Are you sure?'),
+        content: new Text('Do you want to exit the App'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            color: Colors.green,
+            child: Text("NO"),
           ),
-        ) ??
+          new GestureDetector(
+            child: FlatButton(
+              onPressed: () => Navigator.of(context, rootNavigator: true).pop(true),
+              color: Colors.red,
+              child: Text("YES"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
         false;
   }
-static _saveUserDetails(
-      String email, String name, String userId, String cookie) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("Login email before:  ${prefs.getString("email")}");
-    print("Login name before:  ${prefs.getString("name")}");
-    prefs.setString("email", email);
-    prefs.setString("name", name);
-    prefs.setString("user_id", userId);
-    prefs.setString("cookie", cookie);
-    print("cookie: " + cookie);
-    print("login after name ${prefs.getString("name")}");
-  }
 
-  static Size _textSize(String text, TextStyle style) {
-    final TextPainter textPainter = TextPainter(
-        text: TextSpan(text: text, style: style),
-        maxLines: 1,
-        textDirection: TextDirection.ltr)
-      ..layout(minWidth: 0, maxWidth: double.infinity);
-    return textPainter.size;
-  }
-
-  void updateCookie(http.Response response) {
-    String rawCookie = response.headers['set-cookie'];
-    if (rawCookie != null) {
-      int index = rawCookie.indexOf(';');
-//      headers['cookie'] =
-//      (index == -1) ? rawCookie : rawCookie.substring(0, index);
-      print((index == -1) ? rawCookie : rawCookie.substring(0, index));
   _loginDialog(String show, String again, int flag) {
     if (progressDialog == null) {
       progressDialog = new ProgressDialog(
@@ -149,8 +117,9 @@ static _saveUserDetails(
 //        backgroundColor: Colors.white,
 //      ),
       );
+
       progressDialog.style(
-        message: changePassword == true ? "Sending mail.." : "Logging In..",
+        message: changePassword == true ? "Sending mail" : "Logging In",
         borderRadius: 10.0,
         backgroundColor: Colors.white,
         elevation: 10.0,
@@ -168,15 +137,15 @@ static _saveUserDetails(
       Future.delayed(Duration(milliseconds: 1000)).then((value) {
         Widget prog = flag == 1
             ? Icon(
-                Icons.check_circle,
-                size: 50,
-                color: Colors.green,
-              )
+          Icons.check_circle,
+          size: 50,
+          color: Colors.green,
+        )
             : Icon(
-                Icons.close,
-                size: 50,
-                color: Colors.red,
-              );
+          Icons.close,
+          size: 50,
+          color: Colors.red,
+        );
         progressDialog.update(
             message: show.replaceAll("!", ""), progressWidget: prog);
       });
@@ -223,73 +192,6 @@ static _saveUserDetails(
       url,
       body: body,
     );
-
-  }
-
-  Future<dynamic> loginUser(String email, String password) async {
-
-    var url =
-        "https://delta.nitt.edu/recal-uae/api/auth/app_login/";
-    print("password: " + password);
-
-    var body = {
-      'email': email,
-      'password': password
-    };
-    await http
-        .post(
-      url,
-      body: body,
-    )
-        .then((_response) async {
-      ProgressDialog progressDialog;
-      User user = new User();
-      ResponseBody responseBody =
-      new ResponseBody();
-      print('Response body: ${_response.body}');
-
-      if (_response.statusCode == 200) {
-        responseBody = ResponseBody.fromJson(
-            json.decode(_response.body));
-        print(json.encode(responseBody.data));
-        if (responseBody.status_code == 200) {
-          String rawCookie =
-          _response.headers['set-cookie'];
-          String cookie = rawCookie.substring(
-              0, rawCookie.indexOf(';'));
-          print(cookie);
-          user = User.fromLogin(json.decode(
-              json.encode(responseBody.data)));
-          var userId = user.user_id;
-           await _saveUserDetails(user.email, user.name,
-                userId.toString(), cookie);
-            _loginDialog1(progressDialog,
-                "Login Successful", "Proceed", 1);
-            if(changePassword==false) {
-              Future.delayed(
-                  Duration(milliseconds: 2000), () {
-                    print("make decision");
-                    if(args!=null && args.auth){
-                      Navigator.pop(context, TimeoutArguments(true));
-                    }else{
-                      Navigator.pushReplacementNamed(
-                          context, HOME_PAGE);
-                    }
-
-              });
-            }
-        } else {
-          print(responseBody.data);
-          _loginDialog1(progressDialog,
-              "${responseBody.data}", "Try again", 0);
-
-        }
-      } else {
-        print("server error");
-        _loginDialog1(progressDialog,
-            "Server Error", "Try again", 0);
-      }
-    });
   }
 
   @override
@@ -308,65 +210,40 @@ static _saveUserDetails(
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final screenWidth = size.width;
-    final screenHeight = size.height;
-    final bool keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    final width = size.width;
     args = ModalRoute.of(context).settings.arguments;
     if(args!=null && args.auth){
       print("auth is true");
     }
-    final accountSize = _textSize(
-            "Don't have an account?",
-            TextStyle(
-              fontSize: 14,
-              letterSpacing: 1,
-              color: ColorGlobal.whiteColor.withOpacity(0.9),
-              fontWeight: FontWeight.w400,
-            )).width +
-        50;
-    print(width);
-
-    return WillPopScope(
-      onWillPop: _onBackPressed,
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: ColorGlobal.whiteColor,
-          body:
-          Center(
-            child: SingleChildScrollView(
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 0.1*width),
-                      child: Container(
-                        width: width,
-                        height: width * 0.4,
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        decoration: new BoxDecoration(
-                            color: ColorGlobal.colorPrimaryDark,
-                            image: new DecorationImage(
-                              image: new AssetImage(
-                                  'assets/images/recal_logo.jpg'),
-                              fit: BoxFit.fill,
-                            ),
-                            borderRadius: BorderRadius.circular(width * 0.1)),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'RECAL UAE CHAPTER',
-                            style: GoogleFonts.lato(
-                              color: ColorGlobal.textColor,
-                              fontSize: 22.0,
-                              fontWeight: FontWeight.w900,
-                            ),
+    return Provider<LoginData>(
+      create: (context) => LoginData(),
+      child: WillPopScope(
+          onWillPop: _onBackPressed,
+          child: SafeArea(
+            child: Scaffold(
+              backgroundColor: ColorGlobal.whiteColor,
+              body: Center(
+                child: SingleChildScrollView(
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(0.05 * width),
+                          child: Container(
+                            width: width,
+                            height: width * 0.35,
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            decoration: new BoxDecoration(
+                                color: ColorGlobal.colorPrimaryDark,
+                                image: new DecorationImage(
+                                  image: new AssetImage(
+                                      'assets/images/recal_logo.jpg'),
+                                  fit: BoxFit.fill,
+                                ),
+                                borderRadius:
+                                BorderRadius.circular(width * 0.1)),
                           ),
                         ),
                         Padding(
@@ -392,7 +269,7 @@ static _saveUserDetails(
                             shape: RoundedRectangleBorder(
                                 side: BorderSide(
                                     color:
-                                        ColorGlobal.whiteColor.withOpacity(0.8),
+                                    ColorGlobal.whiteColor.withOpacity(0.8),
                                     width: 0.5),
                                 borderRadius: BorderRadius.circular(20)),
                             child: Column(
@@ -422,16 +299,16 @@ static _saveUserDetails(
                                 ),
                                 changePassword == false
                                     ? Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child: TextFieldWidget(
-                                          hintText: "Password",
-                                          obscureText: true,
-                                          prefixIconData: Icons.lock,
-                                          passwordVisible: false,
-                                          textEditingController: password,
-                                          focusNode: passwordFocus,
-                                        ),
-                                      )
+                                  padding: const EdgeInsets.all(10),
+                                  child: TextFieldWidget(
+                                    hintText: "Password",
+                                    obscureText: true,
+                                    prefixIconData: Icons.lock,
+                                    passwordVisible: false,
+                                    textEditingController: password,
+                                    focusNode: passwordFocus,
+                                  ),
+                                )
                                     : Container(),
 //                          changePassword == true ?  Padding(
 //                            padding: const EdgeInsets.all(10),
@@ -482,15 +359,27 @@ static _saveUserDetails(
                                                         "Login Successful",
                                                         "Proceed",
                                                         1);
-                                                    Future.delayed(
-                                                        Duration(
-                                                            milliseconds: 2000),
-                                                        () {
-                                                      Navigator
-                                                          .pushReplacementNamed(
-                                                              context,
-                                                              HOME_PAGE);
-                                                    });
+                                                    if (args != null &&
+                                                        args.auth) {
+                                                      Future.delayed(
+                                                          Duration(
+                                                              milliseconds: 2000),
+                                                              () {
+                                                            Navigator
+                                                                .pop(context);
+                                                          });
+                                                    }
+                                                    else {
+                                                      Future.delayed(
+                                                          Duration(
+                                                              milliseconds: 2000),
+                                                              () {
+                                                            Navigator
+                                                                .pushReplacementNamed(
+                                                                context,
+                                                                HOME_PAGE);
+                                                          });
+                                                    }
                                                   }
                                                 } else {
                                                   await _loginDialog(
@@ -528,7 +417,7 @@ static _saveUserDetails(
                                                 alignment: Alignment.center,
                                                 child: AnimatedSwitcher(
                                                   duration:
-                                                      Duration(seconds: 1),
+                                                  Duration(seconds: 1),
                                                   child: primaryWidget(),
                                                 ),
                                               ),
@@ -547,14 +436,14 @@ static _saveUserDetails(
                                       setState(() {
                                         changePassword = !changePassword;
                                         primaryButtonText =
-                                            primaryButtonText == "SIGN IN"
-                                                ? "SUBMIT"
-                                                : "SIGN IN";
+                                        primaryButtonText == "SIGN IN"
+                                            ? "SUBMIT"
+                                            : "SIGN IN";
                                         secondaryButtonText =
-                                            secondaryButtonText ==
-                                                    "Change Password"
-                                                ? "Return to Sign in"
-                                                : "Change Password";
+                                        secondaryButtonText ==
+                                            "Change Password"
+                                            ? "Return to Sign in"
+                                            : "Change Password";
                                         pageTitle = pageTitle == "SIGN IN"
                                             ? "RESET PASSWORD"
                                             : "SIGN IN";

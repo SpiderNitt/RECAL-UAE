@@ -224,18 +224,21 @@ class _HomeActivityState extends State<HomeActivity> {
         else {
           _deleteUserDetails();
           print("${responseBody.data}");
-          SystemNavigator.pop();
+          Navigator.pop(context,true);
+          Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
         }
       }
       else {
         _deleteUserDetails();
         print("Server error");
-        SystemNavigator.pop();
+        Navigator.pop(context,true);
+        Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
       }
     }).catchError((error) {
       _deleteUserDetails();
       print("server error");
-      SystemNavigator.pop();
+      Navigator.pop(context,true);
+      Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
     });
   }
 
