@@ -71,25 +71,25 @@ class OtherState extends State<OtherScreen> {
     });
   }
 
-  Future<bool> onTimeOut() {
+  Future<bool> onTimeOut(){
     return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Session Timeout'),
-            content: new Text('Login to continue'),
-            actions: <Widget>[
-              new GestureDetector(
-                onTap: () async {
-                  navigateAndReload();
-                },
-                child: FlatButton(
-                  color: Colors.red,
-                  child: Text("OK"),
-                ),
-              ),
-            ],
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
           ),
-        ) ??
+        ],
+      ),
+    ) ??
         false;
   }
 

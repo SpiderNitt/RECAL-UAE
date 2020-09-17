@@ -7,6 +7,7 @@ import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class AchievementsScreen extends StatefulWidget {
   @override
@@ -65,16 +66,21 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: FutureBuilder(
-        future: _getAchievements(),
-        builder: (BuildContext context, AsyncSnapshot projectSnap) {
-          if (projectSnap.data == null) {
-            return Container(
-              child: Center(child: CircularProgressIndicator()),
-            );
-          } else {
-            return Center(
-              child: PageView.builder(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.symmetric(vertical: 20),
+        child: FutureBuilder(
+          future: _getAchievements(),
+          builder: (BuildContext context, AsyncSnapshot projectSnap) {
+            if (projectSnap.data == null) {
+              return Center(
+                child: SpinKitDoubleBounce(
+                  color: Colors.lightBlueAccent,
+                ),
+              );
+            } else {
+              return PageView.builder(
                 itemCount: projectSnap.data.length,
                 controller: PageController(viewportFraction: 0.7),
                 onPageChanged: (int index) => setState(() => _index = index),
@@ -171,11 +177,11 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                     ),
                   );
                 },
-              ),
-            );
+              );
           }
         },
       ),
+    )
     );
   }
 }
