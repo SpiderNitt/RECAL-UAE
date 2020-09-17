@@ -335,14 +335,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20),
-//                    child: Badge(
-//                      badgeColor: Colors.red,
-//                      position: BadgePosition.bottomRight(bottom: 27, right: 5),
-//                      shape: BadgeShape.circle,
-//                      borderRadius: 5,
-//                      toAnimate: true,
-//                      badgeContent: Text('$_unfinished'),
-
                       child: FlatButton(
                         onPressed: () {
                           Navigator.pushNamed(
