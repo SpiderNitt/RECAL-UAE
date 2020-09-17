@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/BusinessMemberModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/screens/Home/Arguments.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
@@ -29,10 +28,10 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
 
   initState() {
     super.initState();
-    _positions();
+    _members();
   }
 
-  Future<List> _positions() async {
+  Future<List> _members() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
@@ -82,6 +81,17 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
     }
   }
 
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      _members();
+    });
+  }
+
   Future<bool> onTimeOut(){
     return showDialog(
       context: context,
@@ -92,8 +102,7 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
           new GestureDetector(
             onTap: () async {
               //await _logoutUser();
-              Navigator.pushReplacementNamed(context, LOGIN_SCREEN, arguments: TimeoutArguments(true));
-
+              navigateAndReload();
             },
             child: FlatButton(
               color: Colors.red,

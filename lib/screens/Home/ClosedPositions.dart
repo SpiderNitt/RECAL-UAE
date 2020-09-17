@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/PositionModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/screens/Home/Arguments.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
@@ -17,6 +16,7 @@ import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ClosedPositions extends StatefulWidget {
   @override
@@ -99,12 +99,13 @@ class _ClosedPositionsState extends State<ClosedPositions> {
   }
 
   navigateAndReload(){
-    final result = Navigator.pushReplacementNamed(context, LOGIN_SCREEN, arguments: TimeoutArguments(true));
-    print("dude just work");
-    Scaffold.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text("Got it")));
-    print("hello");
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+          Navigator.pop(context);
+          setState(() {
+
+          });
+          _positions();});
   }
 
   @override

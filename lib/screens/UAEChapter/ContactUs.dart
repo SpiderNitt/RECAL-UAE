@@ -9,6 +9,8 @@ import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:connectivity/connectivity.dart';
+
 
 class ContactUs extends StatefulWidget {
   @override
@@ -18,8 +20,13 @@ class ContactUs extends StatefulWidget {
 class _ContactUsState extends State<ContactUs> {
   String uri;
   final TextEditingController messageController = TextEditingController();
+  int internet = 1;
 
   Future<bool> _sendMessage(String body) async{
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      internet = 0;
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String url = "https://delta.nitt.edu/recal-uae/api/feedback/send";
     final response = await http.post(url, body: {

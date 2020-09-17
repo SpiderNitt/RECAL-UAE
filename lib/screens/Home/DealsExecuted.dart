@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iosrecal/Constant/Constant.dart';
-import 'package:iosrecal/screens/Home/Arguments.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
@@ -32,7 +31,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
 //    _positions();
   }
 
-  Future<List> _positions() async {
+  Future<List> _deals() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       internet = 0;
@@ -66,6 +65,17 @@ class _DealsExecutedState extends State<DealsExecuted> {
     return members;
   }
 
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      _deals();
+    });
+  }
+
   Future<bool> onTimeOut(){
     return showDialog(
       context: context,
@@ -76,8 +86,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
           new GestureDetector(
             onTap: () async {
               //await _logoutUser();
-              Navigator.pushReplacementNamed(context, LOGIN_SCREEN, arguments: TimeoutArguments(true));
-
+              navigateAndReload();
             },
             child: FlatButton(
               color: Colors.red,
@@ -111,7 +120,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
         ),
         body: Center(
           child: FutureBuilder(
-            future: _positions(),
+            future: _deals(),
             builder: (BuildContext context, AsyncSnapshot snapshot){
               switch(snapshot.connectionState){
                 case ConnectionState.none:

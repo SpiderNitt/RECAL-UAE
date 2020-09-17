@@ -10,7 +10,6 @@ import 'package:page_transition/page_transition.dart';
 import '../Home/HomeActivity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/Constant.dart';
-import 'package:iosrecal/screens/Home/Arguments.dart';
 import '../Profile/ProfileScreen.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Constant/TextField.dart';
@@ -26,7 +25,7 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  TimeoutArguments args;
+  bool args;
   var top = FractionalOffset.topCenter;
   var bottom = FractionalOffset.bottomCenter;
   double width = _textSize(
@@ -309,9 +308,8 @@ class LoginState extends State<Login> {
             if(changePassword==false) {
               Future.delayed(
                   Duration(milliseconds: 2000), () {
-                    print("make decision");
-                    if(args!=null && args.auth){
-                      Navigator.pop(context, TimeoutArguments(true));
+                    if(args!=null && args==true){
+                      Navigator.pop(context);
                     }else{
                       Navigator.pushReplacementNamed(
                           context, HOME_PAGE);
@@ -359,7 +357,7 @@ class LoginState extends State<Login> {
     final screenHeight = size.height;
     final bool keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
     args = ModalRoute.of(context).settings.arguments;
-    if(args!=null && args.auth){
+    if(args!=null && args==true){
       print("auth is true");
     }
     final accountSize = _textSize(
