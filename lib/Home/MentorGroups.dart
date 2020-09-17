@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:iosrecal/Home/NoData.dart';
-import 'package:iosrecal/Home/errorWrong.dart';
+import 'package:iosrecal/screens//Home/NoData.dart';
+import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/ResponseBody.dart';

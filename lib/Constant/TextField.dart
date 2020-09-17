@@ -12,6 +12,7 @@ class TextFieldWidget extends StatelessWidget {
   final FocusNode focusNode;
   final TextEditingController textEditingController;
   final Color borderColor;
+  final bool visible;
 
   TextFieldWidget({
     this.hintText,
@@ -21,6 +22,7 @@ class TextFieldWidget extends StatelessWidget {
     this.onChanged,
     this.textEditingController,
     this.focusNode, this.borderColor,
+    this.visible = true
   });
   bool isValidEmail(input) {
     return RegExp(
@@ -30,10 +32,8 @@ class TextFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return visible==false ? Container() : TextFormField(
       onChanged: onChanged,
-//      autovalidate: (hintText=="Email" && textEditingController.text!="") ? true : false,
-//      validator: (hintText=="Email" && textEditingController.text!="") ? ( (input) => isValidEmail(input) ? null : "Check your Email") : null,
       obscureText: obscureText,
       controller: textEditingController,
       cursorColor: ColorGlobal.textColor,

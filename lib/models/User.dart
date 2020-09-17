@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:equatable/equatable.dart';
 
-class User {
+class User extends Equatable{
   String email;
    String password;
   String name;
@@ -15,9 +16,10 @@ class User {
   String linkedIn_link;
   String branch;
   String emirate;
+  bool loggedIn;
   String profile_pic;
 
-  User({this.email, this.password, this.name, this.user_id, this.cookie, this.year_of_graduation, this.mobile_no, this.organization, this.position, this.gender, this.is_registered, this.linkedIn_link, this.branch, this.emirate, this.profile_pic});
+  User({this.email, this.password, this.name, this.user_id, this.cookie, this.year_of_graduation, this.mobile_no, this.organization, this.position, this.gender, this.is_registered, this.linkedIn_link, this.branch, this.emirate, this.profile_pic,this.loggedIn});
   factory User.fromLogin(Map<String, dynamic> json) {
     return User(
       name: json['name'],
@@ -30,6 +32,11 @@ class User {
       name: json['name'],
       email: json['email'],
       cookie: json['cookie'],
+    );
+  }
+  factory User.fromCheckLogin(Map<String, dynamic> json) {
+    return User(
+      loggedIn: json['loggedIn'],
     );
   }
   factory User.fromNormal(Map<String, dynamic> json) {
@@ -54,4 +61,8 @@ class User {
       profile_pic: json['profile_pic'],
     );
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [email, password, name, user_id, cookie, year_of_graduation, mobile_no, organization, position, gender, is_registered, linkedIn_link, branch, emirate, profile_pic,loggedIn];
 }
