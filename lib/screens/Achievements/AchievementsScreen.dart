@@ -7,6 +7,7 @@ import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class AchievementsScreen extends StatefulWidget {
   @override
@@ -69,8 +70,10 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
           future: _getAchievements(),
           builder: (BuildContext context, AsyncSnapshot projectSnap) {
             if (projectSnap.data == null) {
-              return Container(
-                child: Center(child: CircularProgressIndicator()),
+              return Center(
+                child: SpinKitDoubleBounce(
+                  color: Colors.lightBlueAccent,
+                ),
               );
             } else {
               return PageView.builder(

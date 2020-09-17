@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -47,6 +48,36 @@ class OtherState extends State<OtherScreen> {
       print('Server error');
       return false;
     }
+  }
+
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      print("step 1");
+      Navigator.pop(context);
+    });
+  }
+
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
   }
 
   _loginDialog1(ProgressDialog pr, String show, String again, int flag) {
