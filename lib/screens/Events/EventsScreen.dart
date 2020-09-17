@@ -119,7 +119,7 @@ class _EventsScreenState extends State<EventsScreen> {
   void getData() async{
     //var params={'event_id':'1'};
     //var uri='delta.nitt.edu/recal-uae/events/social_media/params?event_id=1';
-    var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/events/all_events/');
+    var uri=Uri.https('delta.nitt.edu','/recal-uae/api/events/all_events/');
     SharedPreferences prefs=await SharedPreferences.getInstance();
     await http.get(
         uri,
