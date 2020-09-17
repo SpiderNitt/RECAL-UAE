@@ -101,6 +101,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                   "  ${block_notification[(block_notification.keys.toList()).elementAt(i)].length}");
             print("dates: ${block_notification.keys.toList().length}");
           });
+
           setState(() {
             if (page == 1 && notifications.length == 0) {
               setState(() {
