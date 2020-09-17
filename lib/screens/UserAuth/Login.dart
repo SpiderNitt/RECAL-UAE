@@ -118,7 +118,7 @@ class LoginState extends State<Login> {
       );
 
       progressDialog.style(
-        message: changePassword == true ? "Sending mail.." : "Logging In..",
+        message: changePassword == true ? "Sending mail" : "Logging In",
         borderRadius: 10.0,
         backgroundColor: Colors.white,
         elevation: 10.0,
