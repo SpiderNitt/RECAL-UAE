@@ -331,7 +331,7 @@ class Search extends SearchDelegate {
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(10.0),
         child: ListView.builder(
           itemCount: modelSuggestionList.length,
           itemBuilder: (context, index) {
