@@ -9,7 +9,6 @@ import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:flip_card/flip_card.dart';
 import 'NoData.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 int num = 0;
 

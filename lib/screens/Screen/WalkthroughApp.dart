@@ -18,7 +18,7 @@ class WalkThroughApp extends StatelessWidget {
       content: "Get details about upcoming networking events, felicitations and alumni achievements",
       imageIcon: Icons.event,
       imagecolor: Colors.purple,
-      asset: "assets/images/feed.jpg",
+      asset: "assets/images/feed.png",
 
     ),
     Walkthrough(

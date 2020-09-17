@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/screens/Home/Arguments.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +13,9 @@ import 'package:iosrecal/models/BusinessMemberModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:connectivity/connectivity.dart';
+
 
 class DealsExecuted extends StatefulWidget {
   @override
@@ -19,6 +25,7 @@ class DealsExecuted extends StatefulWidget {
 class _DealsExecutedState extends State<DealsExecuted> {
   var members = new List<BusinessMemberModel>();
   bool _hasError = false;
+  int internet = 1;
 
   initState() {
     super.initState();
@@ -26,9 +33,13 @@ class _DealsExecutedState extends State<DealsExecuted> {
   }
 
   Future<List> _positions() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      internet = 0;
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http
-        .get("https://delta.nitt.edu/recal-uae/api/business/members/", headers: {
+        .get(Api.businessMembers, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
@@ -44,6 +55,8 @@ class _DealsExecutedState extends State<DealsExecuted> {
           print('heys');
           //print(positions.length);
 
+      }else if(responseBody.status_code==401){
+        onTimeOut();
       }else{
         _hasError = true;
       }
@@ -51,6 +64,30 @@ class _DealsExecutedState extends State<DealsExecuted> {
       _hasError = true;
     }
     return members;
+  }
+
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              Navigator.pushReplacementNamed(context, LOGIN_SCREEN, arguments: TimeoutArguments(true));
+
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
   }
 
   @override
@@ -78,7 +115,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
             builder: (BuildContext context, AsyncSnapshot snapshot){
               switch(snapshot.connectionState){
                 case ConnectionState.none:
-                  return Center(child: Error8Screen());
+                  return Center(child: NoInternetScreen());
                 case ConnectionState.waiting:
                 case ConnectionState.active:
                   return Center(
@@ -91,9 +128,12 @@ class _DealsExecutedState extends State<DealsExecuted> {
                   print("done");
                   if(snapshot.hasError){
                     print("error");
-                    return Center(child: Error8Screen());
+                    return internet == 1 ? Center(child: Error8Screen()) : Center(child: NoInternetScreen());
                   }else{
                     print(members.length);
+                    if(_hasError){
+                      return Center(child: Error8Screen());
+                    }
                     if(members.length == 0){
                       return Center(child: NodataScreen());
                     }

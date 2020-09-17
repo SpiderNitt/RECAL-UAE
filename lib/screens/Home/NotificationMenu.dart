@@ -5,14 +5,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/screens/Home/Arguments.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/NotificationDetail.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/models/NotificationsModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/screens/Home/errorWrong.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'package:connectivity/connectivity.dart';
 
 class NotificationsMenu extends StatefulWidget {
   @override
@@ -26,6 +30,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
   bool _hasMore = true;
   bool _hasError = false;
   bool _noData = false;
+  bool _hasInternet = true;
   int page = 1;
   int error = 0;
 
@@ -42,6 +47,15 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
   }
 
   Future<String> _notifications() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        _hasInternet=false;
+        flag = 1;
+        print("set flas");
+      });
+
+    }
     notifications = new List<NotificationsModel>();
     if (block_notification.length == 0) {
       block_notification = new Map<String, List<NotificationsModel>>();
@@ -49,7 +63,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
     flag = 0;
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String URL = 'https://delta.nitt.edu/recal-uae/api/notifications/?id=' +
+    String URL = Api.getAllNotifications +
         "${prefs.getString("user_id")}" +
         '&page=' +
         "$page";
@@ -76,7 +90,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
             print("${element.title} ${element.created_at}");
             if (block_notification[element.created_at] == null) {
               block_notification[element.created_at] =
-                  new List<NotificationsModel>();
+              new List<NotificationsModel>();
             }
             block_notification[element.created_at].add(element);
             print("length is : ");
@@ -87,6 +101,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                   "  ${block_notification[(block_notification.keys.toList()).elementAt(i)].length}");
             print("dates: ${block_notification.keys.toList().length}");
           });
+
           setState(() {
             if (page == 1 && notifications.length == 0) {
               setState(() {
@@ -102,7 +117,9 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
             flag = 1;
           });
         });
-      } else {
+      } else if(responseBody.status_code==401){
+        onTimeOut();
+      }else {
         setState(() {
           _hasError = true;
         });
@@ -114,7 +131,35 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
     }
   }
 
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              Navigator.pushReplacementNamed(context, LOGIN_SCREEN, arguments: TimeoutArguments(true));
+
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
   Widget getBody() {
+    print("get body");
+    if(!_hasInternet){
+      return Center(child: NoInternetScreen());
+    }
     if (_hasError) {
       return Center(
         child: Error8Screen(),
@@ -173,14 +218,14 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: block_notification[
-                        (block_notification.keys.toList()).elementAt(index1)]
+                (block_notification.keys.toList()).elementAt(index1)]
                     .length,
                 itemBuilder: (context, index) {
                   print("index: $index");
                   IconData icon;
                   Color color;
                   NotificationsModel notification = (block_notification[
-                          (block_notification.keys.toList()[index1])])
+                  (block_notification.keys.toList()[index1])])
                       .elementAt(index);
                   if (notification.is_read) {
                     icon = Icons.notifications;
@@ -191,16 +236,16 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                   }
                   return InkWell(
                     onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    NotificationDetail(notification)))
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                NotificationDetail(notification)))
                         .then((value) {
-                          setState(() {
-                            (block_notification[
-                            (block_notification.keys.toList()[index1])])
-                                .elementAt(index).is_read = true;
-                          });
+                      setState(() {
+                        (block_notification[
+                        (block_notification.keys.toList()[index1])])
+                            .elementAt(index).is_read = true;
+                      });
                     }),
                     child: ListTile(
                       leading: CircleAvatar(
@@ -271,7 +316,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: (flag == 0 && !_hasError && !_noData)
+        body: (flag == 0 && _hasInternet && !_hasError)
             ? Center(child: CircularProgressIndicator())
             : getBody(),
       ),

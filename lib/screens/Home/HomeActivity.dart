@@ -224,18 +224,21 @@ class _HomeActivityState extends State<HomeActivity> {
         else {
           _deleteUserDetails();
           print("${responseBody.data}");
-          SystemNavigator.pop();
+          Navigator.pop(context,true);
+          Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
         }
       }
       else {
         _deleteUserDetails();
         print("Server error");
-        SystemNavigator.pop();
+        Navigator.pop(context,true);
+        Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
       }
     }).catchError((error) {
       _deleteUserDetails();
       print("server error");
-      SystemNavigator.pop();
+      Navigator.pop(context,true);
+      Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
     });
   }
 
@@ -605,7 +608,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                 backgroundColor: Colors.white,
                                 radius: width / 10,
                                 child: Image.asset(
-                                  'assets/images/calendar.png',
+                                  'assets/images/events.png',
                                   height: width / 8,
                                   width: width / 8,
                                   color: Colors.blue[700],

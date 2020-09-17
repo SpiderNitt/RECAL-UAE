@@ -179,6 +179,7 @@ class LinkedinState extends State<LinkedIn> {
                         //color: ColorGlobal.blueColor,
                         elevation: 5,
 //                              shadowColor: const Color(0x802196F3),
+                      
                         margin: const EdgeInsets.all(8),
                         child: Padding(
                         padding: const EdgeInsets.all(8.0),

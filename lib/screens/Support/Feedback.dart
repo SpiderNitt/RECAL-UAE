@@ -219,7 +219,7 @@ class FeedbackState extends State<FeedbackScreen> {
                   height: height / 2.75,
                   width: width,
                   fit: BoxFit.fitWidth,
-                  image: AssetImage('assets/images/feed.jpg'),
+                  image: AssetImage('assets/images/feed.png'),
                   alignment: Alignment.bottomCenter,
                 ),
               )
