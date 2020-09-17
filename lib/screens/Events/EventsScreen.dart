@@ -41,7 +41,7 @@ class _EventsScreenState extends State<EventsScreen> {
         ),
         body: isLoading?
         SpinKitDoubleBounce(
-          color:ColorGlobal.color2,
+          color:ColorGlobal.blueColor,
         )
             :widget.status==1?DefaultTabController(
           length: 2,

@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/models/EventInfo.dart';
 import 'VolunteerCard.dart';
 class CompletedEvents extends StatefulWidget {
@@ -31,7 +33,7 @@ class _CompletedEventsState extends State<CompletedEvents> with TickerProviderSt
   }
   Widget EmptyList(){
     return Center(
-      child: FadeTransition(child: Text("No events to show!!"),
+      child: FadeTransition(child: Text("No events to show!!",style: GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor),),
         opacity: emptyController,),
     );
   }

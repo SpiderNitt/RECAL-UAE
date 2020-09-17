@@ -480,24 +480,37 @@ class _HomeActivityState extends State<HomeActivity> {
                           });
                         },
                         child: profile_pic_flag == 0 ?
-                        CircularProgressIndicator() :
+                        CircularProgressIndicator(backgroundColor: Colors.orange) :
+                            picture != null ?
                         Container(
                           height: width/8,
                           width: width/8,
                           decoration: new BoxDecoration(
-
                             image: new DecorationImage(
-                              image: picture==null ? AssetImage(
-                                  'assets/images/nitt_logo.png') : NetworkImage(picture),
+                              image: NetworkImage(picture),
                               fit: BoxFit.cover,
                             ),
                             borderRadius:
                             new BorderRadius.all(
-
                                 Radius.circular(
                                     width/8)),
                           ),
-                        )
+                        ) : CircleAvatar(
+                              radius: width/16,
+                              backgroundColor: Colors.orange,
+                              child: FutureBuilder<dynamic> (
+                                future: user,
+                                builder: (context,snapshot) {
+                                  if(snapshot.hasData) {
+                                    return Text("${snapshot.data["name"]}".toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: width/16),);
+                                  }
+                                  else if (snapshot.hasError) {
+                                    return Text("X", style: TextStyle(color: Colors.white, fontSize: width/16),);
+                                  }
+                                  return CircularProgressIndicator();
+                                },
+                              ),
+                            )
                     ),
                   ),
                 ),

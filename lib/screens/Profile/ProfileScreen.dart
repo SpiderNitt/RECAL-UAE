@@ -247,17 +247,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, PICTURE_SCREEN,
-                            arguments: {"picture": picture});
+                            arguments: {"picture": picture, "user": user});
                       },
-                      child: profile_pic_flag == 0 ? CircularProgressIndicator() :  Container(
+                      child: profile_pic_flag == 0 ? CircularProgressIndicator() :
+                          picture!=null?
+                      Container(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         height: 160,
                         width: 160,
                         decoration: new BoxDecoration(
                           color: ColorGlobal.colorPrimaryDark,
                           image: new DecorationImage(
-                            image : picture==null ?   AssetImage(
-                                'assets/images/recal_circle.png') : NetworkImage(picture),
+                            image : NetworkImage(picture),
                             fit: BoxFit.cover,
                           ),
                           border: Border.all(
@@ -266,7 +267,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: new BorderRadius.all(
                               const Radius.circular(80.0)),
                         ),
-                      ),
+                      ) : CircleAvatar(
+                            radius: 80,
+                            backgroundColor: Colors.orange,
+                            child: FutureBuilder<dynamic> (
+                              future: user,
+                              builder: (context,snapshot) {
+                                if(snapshot.hasData) {
+                                  return Text("${snapshot.data["name"]}".toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: 80),);
+                                }
+                                else if (snapshot.hasError) {
+                                  return Text("X", style: TextStyle(color: Colors.white, fontSize: 80),);
+                                }
+                                return CircularProgressIndicator();
+                              },
+                            ),
+                          ),
                     ),
                   ),
                   ),
@@ -370,8 +386,10 @@ class PictureScreen extends StatelessWidget {
     final Map<String, Object> getData =
         ModalRoute.of(context).settings.arguments;
     String picture=null;
+    Future <dynamic> user;
     if (getData != null) {
       picture = getData["picture"];
+      user = getData["user"];
     }
     return Scaffold(
       body: GestureDetector(
@@ -384,15 +402,14 @@ class PictureScreen extends StatelessWidget {
           child: Center(
             child: Hero(
               tag: 'profile_picture',
-             child: Container(
+             child: picture!=null?  Container(
                padding: EdgeInsets.symmetric(horizontal: 20),
                height: 300,
                width: 300,
                decoration: new BoxDecoration(
                  color: ColorGlobal.colorPrimaryDark,
                  image: new DecorationImage(
-                   image : picture == null ? AssetImage(
-                       'assets/images/nitt_logo.png') : NetworkImage(picture),
+                   image : NetworkImage(picture),
                    fit: BoxFit.cover,
                  ),
                  border: Border.all(
@@ -400,6 +417,21 @@ class PictureScreen extends StatelessWidget {
                      width: 2),
                  borderRadius: new BorderRadius.all(
                      const Radius.circular(150.0)),
+               ),
+             ) : CircleAvatar(
+               radius: 150,
+               backgroundColor: Colors.orange,
+               child: FutureBuilder<dynamic> (
+                 future: user,
+                 builder: (context,snapshot) {
+                   if(snapshot.hasData) {
+                     return Text("${snapshot.data["name"]}".toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: 150),);
+                   }
+                   else if (snapshot.hasError) {
+                     return Text("X", style: TextStyle(color: Colors.white, fontSize: 150),);
+                   }
+                   return CircularProgressIndicator();
+                 },
                ),
              ),
             ),
