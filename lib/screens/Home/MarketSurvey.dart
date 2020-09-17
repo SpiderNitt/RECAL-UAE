@@ -10,6 +10,7 @@ import 'package:flip_card/flip_card.dart';
 import 'NoData.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 
 int num = 0;
 
@@ -62,12 +63,10 @@ class SurveyState extends State<SurveyScreen> {
 
   Future<String> _positions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http.get(
-        "https://delta.nitt.edu/recal-uae/api/employment/market_survey",
-        headers: {
-          "Accept": "application/json",
-          "Cookie": "${prefs.getString("cookie")}",
-        });
+    var response = await http.get(Api.marketSurvey, headers: {
+      "Accept": "application/json",
+      "Cookie": "${prefs.getString("cookie")}",
+    });
     ResponseBody responseBody = new ResponseBody();
 
     if (response.statusCode == 200) {
@@ -109,15 +108,15 @@ class SurveyState extends State<SurveyScreen> {
         final double width = MediaQuery.of(context).size.width;
         final double height = MediaQuery.of(context).size.height;
         return FlipCard(
-          //key: cardKey,
-          // flipOnTouch: false,
+            //key: cardKey,
+            // flipOnTouch: false,
             front: Container(
-                height: height / 8,
+                height: height / 7,
                 child: GestureDetector(
                   child: Card(
                     //color: ColorGlobal.blueColor,
                     elevation: 20,
-//                            shadowColor: const Color(0x802196F3),
+                    shadowColor: const Color(0x802196F3),
                     margin: const EdgeInsets.all(8),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -146,12 +145,11 @@ class SurveyState extends State<SurveyScreen> {
                                   fontSize: 20.0,
                                   color: ColorGlobal.textColor,
                                   fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
                                 ),
+                                maxLines: 3,
                               ),
                             ],
                           ),
-                          SizedBox(height: 12.0),
                         ],
                       ),
                     ),
@@ -159,50 +157,31 @@ class SurveyState extends State<SurveyScreen> {
                   // onTap: () => cardKey.currentState.toggleCard(),
                 )),
             back: Container(
-                height: height / 8,
+                height: height / 7,
                 child: GestureDetector(
                     child: Card(
                       //color: ColorGlobal.blueColor,
                       elevation: 20,
-//                              shadowColor: const Color(0x802196F3),
+                      shadowColor: const Color(0x802196F3),
                       margin: const EdgeInsets.all(8),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                //SizedBox(height: height / 32),
-                                Row(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: width - width / 5,
-                                    ),
-                                    Icon(
-                                      Icons.swap_horiz,
-                                      color: ColorGlobal.blueColor,
-                                    ),
-                                  ],
-                                ),
-                                AutoSizeText(
-                                  positions[index].link,
-                                  style: TextStyle(
-                                    fontSize: 10.0,
-                                    color: ColorGlobal.textColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                                  maxLines: 2,
-                                  textAlign: TextAlign.start,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                      child: Center(
+                        child: Expanded(
+                            child: Text(
+                          positions[index].link,
+                          style: TextStyle(
+                            fontSize: 10.0,
+                            color: ColorGlobal.textColor,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                          ),
+                          maxLines: 3,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.fade,
+                        )),
                       ),
                     ),
                     onLongPress: () =>
-                    {_launchyoutube(positions[index].link)})));
+                        {_launchyoutube(positions[index].link)})));
       },
     );
   }

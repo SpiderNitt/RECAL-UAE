@@ -13,6 +13,7 @@ import 'package:flip_card/flip_card.dart';
 import 'NoData.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 
 class LinkedinModel {
   final int id;
@@ -55,12 +56,10 @@ class LinkedinState extends State<LinkedIn> {
 
   Future<String> _positions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http.get(
-        "https://delta.nitt.edu/recal-uae/api/employment/linked_profiles",
-        headers: {
-          "Accept": "application/json",
-          "Cookie": "${prefs.getString("cookie")}",
-        });
+    var response = await http.get(Api.linkedinProfile, headers: {
+      "Accept": "application/json",
+      "Cookie": "${prefs.getString("cookie")}",
+    });
     ResponseBody responseBody = new ResponseBody();
 
     if (response.statusCode == 200) {
@@ -72,9 +71,11 @@ class LinkedinState extends State<LinkedIn> {
           List list = responseBody.data;
           positions =
               list.map((model) => LinkedinModel.fromJson(model)).toList();
-          positions.removeWhere((element) => element.linkedin==null || element.linkedin.trim()=="");
+          positions.removeWhere((element) =>
+              element.linkedin == null || element.linkedin.trim() == "");
           fullList = positions.map((e) => e.user).toList();
-          cardKey =  List<GlobalKey<FlipCardState>>.generate(positions.length, (index) => new GlobalObjectKey(index));
+          cardKey = List<GlobalKey<FlipCardState>>.generate(
+              positions.length, (index) => new GlobalObjectKey(index));
           print("Answer");
           print(positions.length);
           state = 1;
@@ -104,7 +105,7 @@ class LinkedinState extends State<LinkedIn> {
             final double width = MediaQuery.of(context).size.width;
             final double height = MediaQuery.of(context).size.height;
             return FlipCard(
-              key: cardKey[index],
+                key: cardKey[index],
                 front: Container(
                     height: height / 8,
                     alignment: Alignment.topRight,
@@ -176,52 +177,53 @@ class LinkedinState extends State<LinkedIn> {
                 back: Container(
                     height: height / 8,
                     child: Card(
-                        //color: ColorGlobal.blueColor,
-                        elevation: 5,
+                      //color: ColorGlobal.blueColor,
+                      elevation: 5,
 //                              shadowColor: const Color(0x802196F3),
-                        margin: const EdgeInsets.all(8),
-                        child: Padding(
+                      margin: const EdgeInsets.all(8),
+                      child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
-                        children: <Widget>[
-                        Column(
-                        children: <Widget>[
-                        //SizedBox(height: height / 32),
-                        Row(
-                        children: <Widget>[
-                        SizedBox(
-                        width: width - width / 5,
-                        ),
-                        Icon(
-                        Icons.swap_horiz,
-                        color: ColorGlobal.blueColor,
-                        ),
-                        ],
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            await _launchLinked(positions[index].linkedin);
-                            cardKey[index].currentState.toggleCard();
-                          },
-                          child: AutoSizeText(
-                                      positions[index].linkedin,
-                                      //"Link",
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        color: ColorGlobal.textColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                      maxLines: 2,
-                                      textAlign: TextAlign.start,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                //SizedBox(height: height / 32),
+                                Row(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: width - width / 5,
                                     ),
+                                    Icon(
+                                      Icons.swap_horiz,
+                                      color: ColorGlobal.blueColor,
+                                    ),
+                                  ],
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await _launchLinked(
+                                        positions[index].linkedin);
+                                    cardKey[index].currentState.toggleCard();
+                                  },
+                                  child: AutoSizeText(
+                                    positions[index].linkedin,
+                                    //"Link",
+                                    style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: ColorGlobal.textColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      )));
+                      ),
+                    )));
           },
         ),
       ),
@@ -230,7 +232,6 @@ class LinkedinState extends State<LinkedIn> {
 
   @override
   Widget build(BuildContext context) {
-
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     return SafeArea(
@@ -247,11 +248,17 @@ class LinkedinState extends State<LinkedIn> {
               }),
           actions: [
             IconButton(
-              onPressed: () => showSearch(context: context, delegate: Search(positions)).then((value) { setState(() {
-                state=0;
-                _positions();
-              });}),
-              icon: Icon(Icons.search,color: ColorGlobal.textColor,
+              onPressed: () =>
+                  showSearch(context: context, delegate: Search(positions))
+                      .then((value) {
+                setState(() {
+                  state = 0;
+                  _positions();
+                });
+              }),
+              icon: Icon(
+                Icons.search,
+                color: ColorGlobal.textColor,
               ),
             )
           ],
@@ -265,11 +272,12 @@ class LinkedinState extends State<LinkedIn> {
     );
   }
 }
+
 class Search extends SearchDelegate {
   List<GlobalKey<FlipCardState>> cardKey;
   @override
   List<Widget> buildActions(BuildContext context) {
-    return <Widget> [
+    return <Widget>[
 //      IconButton(
 //        icon: Icon(Icons.remove_circle,color: ColorGlobal.textColor,),
 //        onPressed: () => query="",
@@ -282,38 +290,44 @@ class Search extends SearchDelegate {
     return Padding(
       padding: EdgeInsets.only(right: 10),
       child: IconButton(
-          icon: Icon(Icons.close,color: ColorGlobal.textColor),
-          onPressed: () => Navigator.pop(context),
-        ),
+        icon: Icon(Icons.close, color: ColorGlobal.textColor),
+        onPressed: () => Navigator.pop(context),
+      ),
     );
   }
-  String selectedResult="";
+
+  String selectedResult = "";
   @override
   Widget buildResults(BuildContext context) {
     return Container(
       child: Center(
-        child: Text(selectedResult,style: TextStyle(color:ColorGlobal.textColor),),
+        child: Text(
+          selectedResult,
+          style: TextStyle(color: ColorGlobal.textColor),
+        ),
       ),
     );
   }
+
   final List<LinkedinModel> listExample;
   Search(this.listExample);
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> suggestionList= new List<String>();
-    List <LinkedinModel> modelSuggestionList = new List<LinkedinModel>();
-    if(query.isEmpty) {
+    List<String> suggestionList = new List<String>();
+    List<LinkedinModel> modelSuggestionList = new List<LinkedinModel>();
+    if (query.isEmpty) {
       suggestionList = listExample.map((e) => e.user).toList();
       modelSuggestionList = listExample.map((e) => e).toList();
-    }
-    else {
+    } else {
       suggestionList.addAll(listExample.map((e) => e.user).toList().where(
-            (element) => element.toLowerCase().contains(query.toLowerCase())));
+          (element) => element.toLowerCase().contains(query.toLowerCase())));
       modelSuggestionList.addAll(listExample.map((e) => e).toList().where(
-              (element) => element.user.toLowerCase().contains(query.toLowerCase())));
+          (element) =>
+              element.user.toLowerCase().contains(query.toLowerCase())));
     }
-    cardKey =  List<GlobalKey<FlipCardState>>.generate(modelSuggestionList.length, (index) => new GlobalObjectKey(index));
+    cardKey = List<GlobalKey<FlipCardState>>.generate(
+        modelSuggestionList.length, (index) => new GlobalObjectKey(index));
 
     return Center(
       child: Padding(
@@ -324,7 +338,7 @@ class Search extends SearchDelegate {
             final double width = MediaQuery.of(context).size.width;
             final double height = MediaQuery.of(context).size.height;
             return FlipCard(
-              key: cardKey[index],
+                key: cardKey[index],
                 front: Container(
                     height: height / 8,
                     alignment: Alignment.topRight,
@@ -344,8 +358,8 @@ class Search extends SearchDelegate {
                               height: width / 8,
                               width: width / 8,
                               fit: BoxFit.cover,
-                              image: AssetImage(
-                                  'assets/images/linkedinIcon.png'),
+                              image:
+                                  AssetImage('assets/images/linkedinIcon.png'),
                               //alignment: Alignment.bottomCenter,
                             ),
                             SizedBox(
@@ -418,7 +432,8 @@ class Search extends SearchDelegate {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    await _launchLinked(modelSuggestionList[index].linkedin);
+                                    await _launchLinked(
+                                        modelSuggestionList[index].linkedin);
                                     cardKey[index].currentState.toggleCard();
                                   },
                                   child: AutoSizeText(
@@ -445,5 +460,4 @@ class Search extends SearchDelegate {
       ),
     );
   }
-  
 }
