@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
-
+import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/ChapterModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'dart:convert';
 import '../Home/NoData.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
+import '../Home/errorWrong.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class VisionMission extends StatefulWidget {
   @override
@@ -21,25 +25,113 @@ class _VisionMissionState extends State<VisionMission> {
   int _currentPage = 0;
   String vision;
   String mission;
+  var state = 0;
+  bool error = false;
 
   initState() {
     super.initState();
     _chapter();
   }
 
-  Future<ChapterModel> _chapter() async {
+  Future<String> _chapter() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http
-        .get("https://delta.nitt.edu/recal-uae/api/chapter/", headers: {
+
+    print("hey1");
+    var response = await http.get(Api.chapterVisionMission, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
+    ResponseBody responseBody = new ResponseBody();
+    print("hey2");
     if (response.statusCode == 200) {
-      Map<String, dynamic> jsonChapter = jsonDecode(response.body);
-      return ChapterModel.fromJson(jsonChapter);
-    } else {
-      throw Exception('Failed to load data');
+      print("success");
+//        updateCookie(_response);
+      responseBody = ResponseBody.fromJson(json.decode(response.body));
+      if (responseBody.status_code == 200) {
+        ChapterModel chapterDetails = ChapterModel.fromJson(responseBody.data);
+        print(chapterDetails);
+        vision = chapterDetails.vision;
+        mission = chapterDetails.mission;
+        if (vision != null && mission != null) {
+          setState(() {
+            state = 1;
+          });
+        } else {
+          setState(() {
+            state = 1;
+            error = true;
+          });
+        }
+      } else {
+        setState(() {
+          state = 2;
+        });
+      }
     }
+  }
+
+  Widget getBody() {
+    if (state == 0) {
+      return SpinKitDoubleBounce(
+        color: Colors.lightBlueAccent,
+      );
+    } else if (state == 1 && error == false) {
+      return Center(
+          child: FadeIn(
+              child: AutoSizeText(
+        vision,
+        style: TextStyle(
+          fontSize: 15,
+          color: ColorGlobal.textColor,
+        ),
+        textAlign: TextAlign.center,
+        maxLines: 5,
+      )));
+    } else if (state == 1 && error == true) {
+      return FadeIn(
+        child: Center(
+            child: Text(
+          "NO DATA AVAILABLE",
+          style: TextStyle(
+              fontSize: 18,
+              color: const Color(0xff3AAFFA),
+              fontWeight: FontWeight.bold),
+        )),
+      );
+    }
+    return Error8Screen();
+  }
+
+  Widget getBody1() {
+    if (state == 0) {
+      return SpinKitDoubleBounce(
+        color: Colors.lightBlueAccent,
+      );
+    } else if (state == 1 && error == false) {
+      return Center(
+          child: FadeIn(
+              child: AutoSizeText(
+        mission,
+        style: TextStyle(
+          fontSize: 20,
+          color: ColorGlobal.textColor,
+        ),
+        textAlign: TextAlign.center,
+        maxLines: 5,
+      )));
+    } else if (state == 1 && error == true) {
+      return FadeIn(
+        child: Center(
+            child: Text(
+          "NO DATA AVAILABLE",
+          style: TextStyle(
+              fontSize: 18,
+              color: const Color(0xff3AAFFA),
+              fontWeight: FontWeight.bold),
+        )),
+      );
+    }
+    return Error8Screen();
   }
 
   List<Widget> _buildPageIndicator() {
@@ -135,43 +227,7 @@ class _VisionMissionState extends State<VisionMission> {
                               ),
                             ),
                             SizedBox(height: 12.0),
-                            FadeIn(
-                              child: FutureBuilder<ChapterModel>(
-                                future: _chapter(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    if (snapshot.data.vision != null) {
-                                      return Center(
-                                          child: Text(
-                                        snapshot.data.vision,
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: ColorGlobal.textColor,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ));
-                                    } else {
-                                      return Center(
-                                          child: Text(
-                                        "NO DATA AVAILABLE",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: const Color(0xff3AAFFA),
-                                            fontWeight: FontWeight.bold),
-                                      ));
-                                    }
-                                  } else if (snapshot.hasError) {
-                                    return Center(
-                                        child: Text(
-                                            "Error loading data, Please try again"));
-                                  }
-                                  // By default, show a loading spinner.
-                                  return CircularProgressIndicator();
-                                },
-                              ),
-                              duration: Duration(milliseconds: 2000),
-                              curve: Curves.easeIn,
-                            ),
+                            getBody(),
                           ],
                         ),
                       ),
@@ -214,44 +270,7 @@ class _VisionMissionState extends State<VisionMission> {
                                 SizedBox(
                                   height: height / 40,
                                 ),
-                                FadeIn(
-                                  child: FutureBuilder<ChapterModel>(
-                                    future: _chapter(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        if (snapshot.data.vision != null) {
-                                          return Center(
-                                              child: Text(
-                                            snapshot.data.mission,
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: ColorGlobal.textColor,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ));
-                                        } else {
-                                          return Center(
-                                              child: Text(
-                                            "NO DATA AVAILABLE",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: const Color(0xff3AAFFA),
-                                                fontWeight: FontWeight.bold),
-                                          ));
-                                        }
-                                      } else if (snapshot.hasError) {
-                                        return Center(
-                                            child: Text(
-                                                "Error loading data, Please try again"));
-                                      }
-                                      // By default, show a loading spinner.
-                                      return CircularProgressIndicator();
-                                    },
-                                  ),
-                                  // Optional paramaters
-                                  duration: Duration(milliseconds: 2000),
-                                  curve: Curves.easeIn,
-                                ),
+                                getBody1()
                               ],
                             ),
                           )),

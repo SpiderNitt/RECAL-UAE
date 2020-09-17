@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 class WriteMentorScreen extends StatefulWidget {
@@ -36,8 +37,7 @@ class MentorState extends State<WriteMentorScreen> {
       );
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String url =
-        "https://delta.nitt.edu/recal-uae/api/employment/support";
+    final String url = Api.getSupport;
     final response = await http.post(url, body: {
       "user_id": "${prefs.getString("user_id")}",
       "body": body,
@@ -191,7 +191,7 @@ class MentorState extends State<WriteMentorScreen> {
                     SizedBox(height: 20.0),
                     TextField(
                       autocorrect: true,
-                      maxLines: 5,
+                      maxLines: 8,
                       controller: messageController,
                       decoration: InputDecoration(
                         hintText: 'Enter message to mentor',

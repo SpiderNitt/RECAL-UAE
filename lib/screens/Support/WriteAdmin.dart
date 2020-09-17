@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
 
 class WriteAdmin extends StatefulWidget {
@@ -31,12 +32,10 @@ class AdminState extends State<WriteAdmin> {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.orange,
           textColor: Colors.white,
-          fontSize: 16.0
-      );
+          fontSize: 16.0);
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String url =
-        "https://delta.nitt.edu/recal-uae/api/employment/support";
+    final String url = Api.getSupport;
     final response = await http.post(url, body: {
       "user_id": "${prefs.getString("user_id")}",
       "body": body,
@@ -185,20 +184,16 @@ class AdminState extends State<WriteAdmin> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-
                     AutoSizeText(
                       "NEED ADMIN HELP!!",
-
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: height / 64),
-
                     AutoSizeText(
                       "Please write your message in the box below",
-
                       style: TextStyle(
                         fontSize: 15,
                         color: const Color(0xff3AAFFA),
@@ -208,7 +203,7 @@ class AdminState extends State<WriteAdmin> {
                     SizedBox(height: 20.0),
                     TextField(
                       autocorrect: true,
-                      maxLines: 5,
+                      maxLines: 8,
                       controller: messageController,
                       decoration: InputDecoration(
                         hintText: 'Enter message to admin',
