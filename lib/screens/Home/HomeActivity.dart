@@ -91,11 +91,16 @@ class _HomeActivityState extends State<HomeActivity> {
               });
             }
           });
-        } else {
+        }
+        else if(responseBody.status_code==401){
+          onTimeOut();
+        }
+        else {
           profile_pic_flag=2;
           print("${responseBody.data}");
         }
-      } else {
+      }
+      else {
         profile_pic_flag=2;
         print("Server error");
       }
@@ -264,8 +269,8 @@ class _HomeActivityState extends State<HomeActivity> {
         setState(() {
           unreadMessages = responseBody.data["unread"];
         });
-
-      } else {
+      }
+      else {
         print(responseBody.data);
       }
     } else {
@@ -301,6 +306,40 @@ class _HomeActivityState extends State<HomeActivity> {
     ) ??
         false;
   }
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+        _getUserPicture();
+        user = _fetchPrimaryDetails();
+        _fetchUnreadMessages();
+      });
+    });
+  }
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
 
   @override
   void initState()  {
