@@ -55,6 +55,7 @@ dependencies:
   equatable: ^1.2.4
   keyboard_avoider: ^0.1.2
   connectivity: ^0.4.8+2
+  provider: ^4.3.2+2
 
 
 
