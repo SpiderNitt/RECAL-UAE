@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -12,6 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:connectivity/connectivity.dart';
 
 class OtherScreen extends StatefulWidget {
   @override
@@ -22,6 +24,17 @@ class OtherState extends State<OtherScreen> {
   final TextEditingController messageController = TextEditingController();
 
   Future<bool> _sendMessage(String body) async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(
+          msg: "Please connect to internet",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.orange,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String url = Api.getSupport;
     final response = await http.post(url, body: {
@@ -39,6 +52,8 @@ class OtherState extends State<OtherScreen> {
       if (responseBody.status_code == 200) {
         print("worked!");
         return true;
+      } else if (responseBody.status_code == 401) {
+        onTimeOut();
       } else {
         print(responseBody.data);
         return false;
@@ -47,6 +62,35 @@ class OtherState extends State<OtherScreen> {
       print('Server error');
       return false;
     }
+  }
+
+  navigateAndReload() {
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true).then((value) {
+      print("step 1");
+      Navigator.pop(context);
+    });
+  }
+
+  Future<bool> onTimeOut() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Session Timeout'),
+            content: new Text('Login to continue'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () async {
+                  navigateAndReload();
+                },
+                child: FlatButton(
+                  color: Colors.red,
+                  child: Text("OK"),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 
   _loginDialog1(ProgressDialog pr, String show, String again, int flag) {

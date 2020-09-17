@@ -21,11 +21,11 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   var top = FractionalOffset.topCenter;
   var bottom = FractionalOffset.bottomCenter;
-
+  bool args;
   TextEditingController email =
-      new TextEditingController(text: "someone2@gmail.com");
+  new TextEditingController(text: "someone2@gmail.com");
   TextEditingController password =
-      new TextEditingController(text: "1j7P1T3ync2I");
+  new TextEditingController(text: "1j7P1T3ync2I");
   TextEditingController newPassword = new TextEditingController(text: "");
   TextEditingController confirmPassword = new TextEditingController(text: "");
 
@@ -80,26 +80,26 @@ class LoginState extends State<Login> {
 
   Future<bool> _onBackPressed() {
     return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Are you sure?'),
-            content: new Text('Do you want to exit the App'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                color: Colors.green,
-                child: Text("NO"),
-              ),
-              new GestureDetector(
-                child: FlatButton(
-                  onPressed: () => Navigator.of(context, rootNavigator: true).pop(true),
-                  color: Colors.red,
-                  child: Text("YES"),
-                ),
-              ),
-            ],
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Are you sure?'),
+        content: new Text('Do you want to exit the App'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            color: Colors.green,
+            child: Text("NO"),
           ),
-        ) ??
+          new GestureDetector(
+            child: FlatButton(
+              onPressed: () => Navigator.of(context, rootNavigator: true).pop(true),
+              color: Colors.red,
+              child: Text("YES"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
         false;
   }
 
@@ -118,7 +118,7 @@ class LoginState extends State<Login> {
       );
 
       progressDialog.style(
-        message: changePassword == true ? "Sending mail.." : "Logging In..",
+        message: changePassword == true ? "Sending mail" : "Logging In",
         borderRadius: 10.0,
         backgroundColor: Colors.white,
         elevation: 10.0,
@@ -136,15 +136,15 @@ class LoginState extends State<Login> {
       Future.delayed(Duration(milliseconds: 1000)).then((value) {
         Widget prog = flag == 1
             ? Icon(
-                Icons.check_circle,
-                size: 50,
-                color: Colors.green,
-              )
+          Icons.check_circle,
+          size: 50,
+          color: Colors.green,
+        )
             : Icon(
-                Icons.close,
-                size: 50,
-                color: Colors.red,
-              );
+          Icons.close,
+          size: 50,
+          color: Colors.red,
+        );
         progressDialog.update(
             message: show.replaceAll("!", ""), progressWidget: prog);
       });
@@ -210,6 +210,10 @@ class LoginState extends State<Login> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final width = size.width;
+    args = ModalRoute.of(context).settings.arguments;
+    if(args!=null && args==true){
+      print("auth is true");
+    }
     return Provider<LoginData>(
       create: (context) => LoginData(),
       child: WillPopScope(
@@ -238,7 +242,7 @@ class LoginState extends State<Login> {
                                   fit: BoxFit.fill,
                                 ),
                                 borderRadius:
-                                    BorderRadius.circular(width * 0.1)),
+                                BorderRadius.circular(width * 0.1)),
                           ),
                         ),
                         Padding(
@@ -264,7 +268,7 @@ class LoginState extends State<Login> {
                             shape: RoundedRectangleBorder(
                                 side: BorderSide(
                                     color:
-                                        ColorGlobal.whiteColor.withOpacity(0.8),
+                                    ColorGlobal.whiteColor.withOpacity(0.8),
                                     width: 0.5),
                                 borderRadius: BorderRadius.circular(20)),
                             child: Column(
@@ -294,16 +298,16 @@ class LoginState extends State<Login> {
                                 ),
                                 changePassword == false
                                     ? Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child: TextFieldWidget(
-                                          hintText: "Password",
-                                          obscureText: true,
-                                          prefixIconData: Icons.lock,
-                                          passwordVisible: false,
-                                          textEditingController: password,
-                                          focusNode: passwordFocus,
-                                        ),
-                                      )
+                                  padding: const EdgeInsets.all(10),
+                                  child: TextFieldWidget(
+                                    hintText: "Password",
+                                    obscureText: true,
+                                    prefixIconData: Icons.lock,
+                                    passwordVisible: false,
+                                    textEditingController: password,
+                                    focusNode: passwordFocus,
+                                  ),
+                                )
                                     : Container(),
 //                          changePassword == true ?  Padding(
 //                            padding: const EdgeInsets.all(10),
@@ -354,15 +358,27 @@ class LoginState extends State<Login> {
                                                         "Login Successful",
                                                         "Proceed",
                                                         1);
-                                                    Future.delayed(
-                                                        Duration(
-                                                            milliseconds: 2000),
-                                                        () {
-                                                      Navigator
-                                                          .pushReplacementNamed(
-                                                              context,
-                                                              HOME_PAGE);
-                                                    });
+                                                    if (args != null &&
+                                                        args==true) {
+                                                      Future.delayed(
+                                                          Duration(
+                                                              milliseconds: 2000),
+                                                              () {
+                                                            Navigator
+                                                                .pop(context);
+                                                          });
+                                                    }
+                                                    else {
+                                                      Future.delayed(
+                                                          Duration(
+                                                              milliseconds: 2000),
+                                                              () {
+                                                            Navigator
+                                                                .pushReplacementNamed(
+                                                                context,
+                                                                HOME_PAGE);
+                                                          });
+                                                    }
                                                   }
                                                 } else {
                                                   await _loginDialog(
@@ -400,7 +416,7 @@ class LoginState extends State<Login> {
                                                 alignment: Alignment.center,
                                                 child: AnimatedSwitcher(
                                                   duration:
-                                                      Duration(seconds: 1),
+                                                  Duration(seconds: 1),
                                                   child: primaryWidget(),
                                                 ),
                                               ),
@@ -419,14 +435,14 @@ class LoginState extends State<Login> {
                                       setState(() {
                                         changePassword = !changePassword;
                                         primaryButtonText =
-                                            primaryButtonText == "SIGN IN"
-                                                ? "SUBMIT"
-                                                : "SIGN IN";
+                                        primaryButtonText == "SIGN IN"
+                                            ? "SUBMIT"
+                                            : "SIGN IN";
                                         secondaryButtonText =
-                                            secondaryButtonText ==
-                                                    "Change Password"
-                                                ? "Return to Sign in"
-                                                : "Change Password";
+                                        secondaryButtonText ==
+                                            "Change Password"
+                                            ? "Return to Sign in"
+                                            : "Change Password";
                                         pageTitle = pageTitle == "SIGN IN"
                                             ? "RESET PASSWORD"
                                             : "SIGN IN";

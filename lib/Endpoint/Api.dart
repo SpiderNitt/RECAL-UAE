@@ -19,8 +19,9 @@ class Api {
   static final String marketSurvey = host + "employment/market_survey";
   static final String allUsers = host + "users/all_users/";
   static final String mentorGroups = host + "mentor_group/groups";
-  static final String getNotification = host + "notifications/get_notification";
-  static final String getAllNotifications = host + "notifications/";
+  static final String getNotification =
+      host + "notifications/get_notification?id=";
+  static final String getAllNotifications = host + "notifications/?id=";
   static final String getPosition = host + "employment/positions";
   static final String seekGuidance = host + "employment/seek_guidance";
   static final String writeResume = host + "employment/write_resume";

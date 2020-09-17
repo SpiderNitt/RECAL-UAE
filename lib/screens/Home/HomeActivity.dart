@@ -605,7 +605,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                 backgroundColor: Colors.white,
                                 radius: width / 10,
                                 child: Image.asset(
-                                  'assets/images/calendar.png',
+                                  'assets/images/events.png',
                                   height: width / 8,
                                   width: width / 8,
                                   color: Colors.blue[700],

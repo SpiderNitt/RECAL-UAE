@@ -3,14 +3,16 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/NotificationDetailModel.dart';
 import 'package:iosrecal/models/NotificationsModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
-import 'package:iosrecal/models/NotificationDetailModel.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:connectivity/connectivity.dart';
 
 class NotificationDetail extends StatefulWidget {
   final NotificationsModel notificationsModel;
@@ -23,6 +25,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
   final NotificationsModel notificationsModel;
   _NotificationDetailState(this.notificationsModel);
   bool _hasError = false;
+  bool _hasInternet = true;
 
   var notification = new NotificationDetailModel();
   int state = 0;
@@ -32,8 +35,15 @@ class _NotificationDetailState extends State<NotificationDetail> {
   }
 
   Future<String> _notification() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        _hasInternet=false;
+      });
+
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String URL = 'https://delta.nitt.edu/recal-uae/api/notifications/get_notification?id=' + notificationsModel.notification_id.toString() + '&user_id=' + "${prefs.getString("user_id")}";
+    String URL = Api.getNotification + notificationsModel.notification_id.toString() + '&user_id=' + "${prefs.getString("user_id")}";
     print(URL);
     var response = await http.get(
         URL,
@@ -54,7 +64,9 @@ class _NotificationDetailState extends State<NotificationDetail> {
         setState(() {
           state = 1;
         });
-      } else {
+      } else if(responseBody.status_code==401){
+        onTimeOut();
+      }else {
         print("set error");
         setState(() {
           _hasError =  true;
@@ -66,6 +78,39 @@ class _NotificationDetailState extends State<NotificationDetail> {
         _hasError =  true;
       });
     }
+  }
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      _notification();
+    });
+  }
+
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
   }
 
   Widget _notificationText(){
@@ -109,9 +154,10 @@ class _NotificationDetailState extends State<NotificationDetail> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: !_hasError ? Column(
+          child: !_hasError ? !_hasInternet ? Center(child: NoInternetScreen()) :
+          Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Material(
                 color: Colors.white,
@@ -121,7 +167,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Column(
-                    //mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Hero(
                         tag: "Notification_" + notificationsModel.notification_id.toString(),
@@ -144,13 +190,10 @@ class _NotificationDetailState extends State<NotificationDetail> {
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Image(
-                  fit: BoxFit.fitWidth,
-                  image: AssetImage('assets/images/notification_bg.png'),
-                  alignment: Alignment.bottomCenter,
-                ),
+              Image(
+                fit: BoxFit.fitWidth,
+                image: AssetImage('assets/images/notification_bg.png'),
+                //alignment: Alignment.bottomCenter,
               )
             ],
           ) : Error8Screen(),

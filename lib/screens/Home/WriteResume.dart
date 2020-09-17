@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/ResumeWriteModel.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:connectivity/connectivity.dart';
 
 class WriteResume extends StatefulWidget {
   @override
@@ -19,15 +23,54 @@ class WriteResume extends StatefulWidget {
 
 class _WriteResumeState extends State<WriteResume> {
   var writers = new List<ResumeWriteModel>();
+  int internet = 1;
+  int error = 0;
 
   initState() {
     super.initState();
   }
 
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      getResumeWriters();});
+  }
+
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
   Future<List> getResumeWriters() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      internet = 0;
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(
-        "https://delta.nitt.edu/recal-uae/api/employment/write_resume",
+        Api.writeResume,
         headers: {
           "Accept": "application/json",
           "Cookie": "${prefs.getString("cookie")}",
@@ -42,7 +85,13 @@ class _WriteResumeState extends State<WriteResume> {
           List list = responseBody.data;
           writers =
               list.map((model) => ResumeWriteModel.fromJson(model)).toList();
+      }else if(responseBody.status_code == 401){
+        onTimeOut();
+      }else {
+        error = 1;
       }
+    }else{
+      error = 1;
     }
     return writers;
   }
@@ -71,7 +120,7 @@ class _WriteResumeState extends State<WriteResume> {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
-                return Center(child: Error8Screen());
+                return Center(child: NoInternetScreen());
               case ConnectionState.waiting:
               case ConnectionState.active:
                 return Center(
@@ -83,9 +132,12 @@ class _WriteResumeState extends State<WriteResume> {
               case ConnectionState.done:
                 print("done");
                 if (snapshot.hasError) {
-                  return Center(child: Error8Screen());
+                  return internet==0 ? Center(child: NoInternetScreen()) : Center(child: Error8Screen());
                 } else {
                   print(writers.length);
+                  if(error == 1){
+                    return Center(child: Error8Screen());
+                  }
                   if(writers.length==0){
                     return Center(child: NodataScreen());
                   }

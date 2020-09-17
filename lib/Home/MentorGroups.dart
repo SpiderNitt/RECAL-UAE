@@ -1,14 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:iosrecal/screens/Home/NoData.dart';
+import 'package:iosrecal/screens//Home/NoData.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/MentorGroupModel.dart';
-import 'package:iosrecal/Constant/ColorGlobal.dart';
-import 'package:iosrecal/Endpoint/Api.dart';
+import '../Constant/ColorGlobal.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class MentorGroups extends StatefulWidget {
@@ -28,7 +27,7 @@ class _MentorGroupsState extends State<MentorGroups> {
   Future<List> _groups() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(
-        Api.mentorGroups,
+        "https://delta.nitt.edu/recal-uae/api/mentor_group/groups",
         headers: {
           "Accept": "application/json",
           "Cookie": "${prefs.getString("cookie")}",

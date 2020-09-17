@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:connectivity/connectivity.dart';
 
 class WriteAdmin extends StatefulWidget {
   @override
@@ -21,6 +22,17 @@ class AdminState extends State<WriteAdmin> {
   final TextEditingController messageController = TextEditingController();
   ProgressDialog pr;
   Future<bool> _sendMessage(String body) async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(
+          msg: "Please connect to internet",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.orange,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String url = Api.getSupport;
     final response = await http.post(url, body: {

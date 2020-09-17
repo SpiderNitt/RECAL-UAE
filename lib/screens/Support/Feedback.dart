@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -219,7 +218,7 @@ class FeedbackState extends State<FeedbackScreen> {
                   height: height / 2,
                   width: width,
                   fit: BoxFit.fitWidth,
-                  image: AssetImage('assets/images/feed.jpg'),
+                  image: AssetImage('assets/images/feed.png'),
                   alignment: Alignment.bottomCenter,
                 ),
               )

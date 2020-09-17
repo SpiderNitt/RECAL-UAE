@@ -6,7 +6,6 @@ import 'package:iosrecal/models/AchievementModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 
 class AchievementsScreen extends StatefulWidget {
@@ -28,7 +27,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
     });
     if (response.statusCode == 200) {
       ResponseBody responseBody =
-          ResponseBody.fromJson(json.decode(response.body));
+      ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
         print(list);
@@ -162,7 +161,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                     fontSize: 16,
                                     letterSpacing: 1,
                                     color:
-                                        ColorGlobal.textColor.withOpacity(0.6),
+                                    ColorGlobal.textColor.withOpacity(0.6),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
