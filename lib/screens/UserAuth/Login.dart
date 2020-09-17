@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/models/LoginData.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:iosrecal/models/User.dart';
 import 'package:iosrecal/Constant/Constant.dart';
@@ -183,14 +186,33 @@ class LoginState extends State<Login> {
   }
 
   Future<dynamic> passwordReset(String email) async {
-    var url = "https://delta.nitt.edu/recal-uae/api/auth/pass_reset/";
+
+    var url = "https://delta.nitt.edu/api/auth/pass_reset/";
     var body = {
       'email': email,
     };
     await http.post(
       url,
       body: body,
-    );
+    ).then((_response) async {
+      ResponseBody responseBody =
+      new ResponseBody();
+      print('Response body: ${_response.body}');
+
+      if (_response.statusCode == 200) {
+        responseBody = ResponseBody.fromJson(
+            json.decode(_response.body));
+        print(json.encode(responseBody.data));
+        if (responseBody.status_code == 200) {
+          print(responseBody.data);
+
+        } else {
+          print(responseBody.data);
+        }
+      } else {
+        print("server error");
+      }
+    });
   }
 
   @override
@@ -372,10 +394,11 @@ class LoginState extends State<Login> {
                                                 }
                                               } else {
                                                 if (email.text != "") {
-                                                  _loginDialog(
-                                                      "Email has been sent",
-                                                      "",
-                                                      1);
+                                                  passwordReset(email.text);
+//                                                  _loginDialog(
+//                                                      "Email has been sent",
+//                                                      "",
+//                                                      1);
                                                 } else {
                                                   _loginDialog(
                                                       "Enter all fields",

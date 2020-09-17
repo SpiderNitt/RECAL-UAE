@@ -467,7 +467,6 @@ class _HomeActivityState extends State<HomeActivity> {
                   child: Padding(
                     padding: const EdgeInsets.only(top:15.0,left: 20,right: 20),
                     child: GestureDetector(
-
                         onTap: (){
                           Navigator.pushNamed(context,PROFILE_SCREEN,arguments: {"picture": picture}).then((value) {
                             profile_pic_flag=0;
@@ -480,8 +479,8 @@ class _HomeActivityState extends State<HomeActivity> {
                         CircularProgressIndicator(backgroundColor: Colors.orange) :
                             picture != null ?
                         Container(
-                          height: width/8,
-                          width: width/8,
+                          height: width/7,
+                          width: width/7,
                           decoration: new BoxDecoration(
                             image: new DecorationImage(
                               image: NetworkImage(picture),
@@ -490,19 +489,19 @@ class _HomeActivityState extends State<HomeActivity> {
                             borderRadius:
                             new BorderRadius.all(
                                 Radius.circular(
-                                    width/8)),
+                                    width/7)),
                           ),
                         ) : CircleAvatar(
-                              radius: width/16,
+                              radius: width/14,
                               backgroundColor: Colors.orange,
                               child: FutureBuilder<dynamic> (
                                 future: user,
                                 builder: (context,snapshot) {
                                   if(snapshot.hasData) {
-                                    return Text("${snapshot.data["name"]}".toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: width/16),);
+                                    return Text("${snapshot.data["name"]}".toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: width/14),);
                                   }
                                   else if (snapshot.hasError) {
-                                    return Text("X", style: TextStyle(color: Colors.white, fontSize: width/16),);
+                                    return Text("X", style: TextStyle(color: Colors.white, fontSize: width/14),);
                                   }
                                   return CircularProgressIndicator();
                                 },
