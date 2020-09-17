@@ -1,6 +1,6 @@
-# iosrecal
+# RECAL_UAE
 
-IOS build
+Alumni App
 
 ## Getting Started
 
