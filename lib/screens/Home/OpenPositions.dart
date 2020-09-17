@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/PositionModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/screens/Home/Arguments.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
@@ -75,6 +74,19 @@ class _OpenPositionsState extends State<OpenPositions> {
     return positions;
   }
 
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      print("step 1");
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      print("step 2");
+
+      _positions();});
+  }
+
   Future<bool> onTimeOut(){
     return showDialog(
       context: context,
@@ -84,8 +96,7 @@ class _OpenPositionsState extends State<OpenPositions> {
         actions: <Widget>[
           new GestureDetector(
             onTap: () async {
-              //await _logoutUser();
-              Navigator.pushReplacementNamed(context, LOGIN_SCREEN, arguments: TimeoutArguments(true));
+              navigateAndReload();
             },
             child: FlatButton(
               color: Colors.red,

@@ -22,6 +22,7 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   var top = FractionalOffset.topCenter;
   var bottom = FractionalOffset.bottomCenter;
+
   TimeoutArguments args;
   TextEditingController email =
   new TextEditingController(text: "someone2@gmail.com");
@@ -90,7 +91,7 @@ class LoginState extends State<Login> {
             onPressed: () => Navigator.of(context).pop(false),
             color: Colors.green,
             child: Text("NO"),
-          ),
+
           new GestureDetector(
             child: FlatButton(
               onPressed: () => Navigator.of(context, rootNavigator: true).pop(true),
@@ -212,7 +213,7 @@ class LoginState extends State<Login> {
     final size = MediaQuery.of(context).size;
     final width = size.width;
     args = ModalRoute.of(context).settings.arguments;
-    if(args!=null && args.auth){
+    if(args!=null && args==true){
       print("auth is true");
     }
     return Provider<LoginData>(
@@ -361,6 +362,7 @@ class LoginState extends State<Login> {
                                                         1);
                                                     if (args != null &&
                                                         args.auth) {
+
                                                       Future.delayed(
                                                           Duration(
                                                               milliseconds: 2000),

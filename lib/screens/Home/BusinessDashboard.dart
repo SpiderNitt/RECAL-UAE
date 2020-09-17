@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:iosrecal/screens/Home/Arguments.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/models/MemberModel.dart';
@@ -89,6 +88,21 @@ class _DashBoardState extends State<DashBoard> {
     }
   }
 
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      state = 0;
+      _hasError = false;
+      _internet = true;
+      _fetchEvents();
+      _fetchAllUsers();
+        });
+  }
+
   Future<bool> onTimeOut(){
     return showDialog(
       context: context,
@@ -99,8 +113,7 @@ class _DashBoardState extends State<DashBoard> {
           new GestureDetector(
             onTap: () async {
               //await _logoutUser();
-              Navigator.pushReplacementNamed(context, LOGIN_SCREEN, arguments: TimeoutArguments(true));
-
+              navigateAndReload();
             },
             child: FlatButton(
               color: Colors.red,

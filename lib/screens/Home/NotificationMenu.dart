@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
-import 'package:iosrecal/screens/Home/Arguments.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/NotificationDetail.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
@@ -141,8 +140,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
           new GestureDetector(
             onTap: () async {
               //await _logoutUser();
-              Navigator.pushReplacementNamed(context, LOGIN_SCREEN, arguments: TimeoutArguments(true));
-
+              navigateAndReload();
             },
             child: FlatButton(
               color: Colors.red,
@@ -153,6 +151,17 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
       ),
     ) ??
         false;
+  }
+
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      _notifications();
+    });
   }
 
   Widget getBody() {

@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/MemberModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/screens/Home/Arguments.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,7 +29,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
     //_positions();
   }
 
-  Future<List> _positions() async {
+  Future<List> _members() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       internet = 0;
@@ -73,8 +72,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
           new GestureDetector(
             onTap: () async {
               //await _logoutUser();
-              Navigator.pushReplacementNamed(context, LOGIN_SCREEN, arguments: TimeoutArguments(true));
-
+              navigateAndReload();
             },
             child: FlatButton(
               color: Colors.red,
@@ -85,6 +83,15 @@ class _MemberDatabaseState extends State<MemberDatabase> {
       ),
     ) ??
         false;
+  }
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      _members();});
   }
 
   @override
@@ -110,7 +117,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: FutureBuilder(
-              future: _positions(),
+              future: _members(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
