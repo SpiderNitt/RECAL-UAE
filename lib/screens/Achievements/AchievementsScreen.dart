@@ -6,7 +6,6 @@ import 'package:iosrecal/models/AchievementModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 
 class AchievementsScreen extends StatefulWidget {
@@ -28,7 +27,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
     });
     if (response.statusCode == 200) {
       ResponseBody responseBody =
-          ResponseBody.fromJson(json.decode(response.body));
+      ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
         print(list);
@@ -61,20 +60,21 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
           'Achievements',
           style: TextStyle(color: ColorGlobal.textColor),
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.symmetric(vertical: 20),
-        child: FutureBuilder(
-          future: _getAchievements(),
-          builder: (BuildContext context, AsyncSnapshot projectSnap) {
-            if (projectSnap.data == null) {
-              return Container(
-                child: Center(child: CircularProgressIndicator()),
-              );
-            } else {
-              return PageView.builder(
+      body: FutureBuilder(
+        future: _getAchievements(),
+        builder: (BuildContext context, AsyncSnapshot projectSnap) {
+          if (projectSnap.data == null) {
+            return Container(
+              child: Center(child: CircularProgressIndicator()),
+            );
+          } else {
+            return Center(
+              child: PageView.builder(
                 itemCount: projectSnap.data.length,
                 controller: PageController(viewportFraction: 0.7),
                 onPageChanged: (int index) => setState(() => _index = index),
@@ -82,102 +82,99 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                   return Transform.scale(
                     scale: i == _index ? 0.95 : 0.85,
                     child: Container(
-                      color: Colors.transparent,
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            Card(
-                              elevation: 5,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      MediaQuery.of(context).size.width * 0.1)),
-                              child: Container(
-                                height: MediaQuery.of(context).size.width * 0.5,
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                decoration: new BoxDecoration(
-                                  color: ColorGlobal.colorPrimaryDark,
-                                  image: new DecorationImage(
-                                    image: new AssetImage(
-                                        'assets/images/admin.jpeg'),
-                                    fit: BoxFit.contain,
+                      child: Column(
+                        children: <Widget>[
+                          Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    MediaQuery.of(context).size.width * 0.1)),
+                            child: Container(
+                              height: MediaQuery.of(context).size.width * 0.5,
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              decoration: new BoxDecoration(
+                                color: ColorGlobal.colorPrimaryDark,
+                                image: new DecorationImage(
+                                  image: new AssetImage(
+                                      'assets/images/admin.jpeg'),
+                                  fit: BoxFit.contain,
+                                ),
+                                border: Border.all(
+                                    color: ColorGlobal.whiteColor, width: 2),
+                                borderRadius: new BorderRadius.all(
+                                    Radius.circular(
+                                        MediaQuery.of(context).size.width *
+                                            0.1)),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            child: Text(
+                              projectSnap.data[i].name,
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                fontSize: 18,
+                                letterSpacing: 1,
+                                color: ColorGlobal.textColor.withOpacity(0.9),
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Card(
+                            elevation: 2,
+                            clipBehavior: Clip.antiAlias,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Container(
+                              color: ColorGlobal.textColor,
+                              padding: EdgeInsets.all(5),
+                              child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Center(
+                                  child: Text(
+                                    projectSnap.data[i].category,
+                                    style: TextStyle(
+                                        color: ColorGlobal.whiteColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  border: Border.all(
-                                      color: ColorGlobal.whiteColor, width: 2),
-                                  borderRadius: new BorderRadius.all(
-                                      Radius.circular(
-                                          MediaQuery.of(context).size.width *
-                                              0.1)),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
                               child: Text(
-                                projectSnap.data[i].name,
-                                textAlign: TextAlign.end,
+                                projectSnap.data[i].description,
+                                textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   letterSpacing: 1,
-                                  color: ColorGlobal.textColor.withOpacity(0.9),
-                                  fontWeight: FontWeight.w400,
+                                  color:
+                                  ColorGlobal.textColor.withOpacity(0.6),
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Card(
-                              elevation: 2,
-                              clipBehavior: Clip.antiAlias,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Container(
-                                color: ColorGlobal.textColor,
-                                padding: EdgeInsets.all(5),
-                                child: FittedBox(
-                                  fit: BoxFit.fitWidth,
-                                  child: Center(
-                                    child: Text(
-                                      projectSnap.data[i].category,
-                                      style: TextStyle(
-                                          color: ColorGlobal.whiteColor,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Expanded(
-                              child: SingleChildScrollView(
-                                child: Text(
-                                  projectSnap.data[i].description,
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    letterSpacing: 1,
-                                    color:
-                                        ColorGlobal.textColor.withOpacity(0.6),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                          )
+                        ],
                       ),
                     ),
                   );
                 },
-              );
-            }
-          },
-        ),
+              ),
+            );
+          }
+        },
       ),
     );
   }

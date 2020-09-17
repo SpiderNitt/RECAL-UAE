@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -25,8 +25,7 @@ class VolunteerState extends State<VolunteerScreen> {
 
   Future<bool> _sendMessage(String body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String url =
-        "https://delta.nitt.edu/recal-uae/api/employment/volunteer";
+    final String url = Api.getSupport;
     final response = await http.post(url, body: {
       "user_id": "${prefs.getString("user_id")}",
       "body": body,
@@ -128,20 +127,16 @@ class VolunteerState extends State<VolunteerScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-
                     AutoSizeText(
                       "WANT TO VOLUNTEER!!",
-
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: height / 64),
-
                     AutoSizeText(
                       "Please write your message in the box below",
-
                       style: TextStyle(
                         fontSize: 15,
                         color: const Color(0xff3AAFFA),
@@ -151,7 +146,7 @@ class VolunteerState extends State<VolunteerScreen> {
                     SizedBox(height: 20.0),
                     TextField(
                       autocorrect: true,
-                      maxLines: 5,
+                      maxLines: 8,
                       controller: messageController,
                       decoration: InputDecoration(
                         hintText: 'Enter details',
@@ -215,7 +210,7 @@ class VolunteerState extends State<VolunteerScreen> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Image(
-                  height: height / 2.75,
+                  height: height / 2,
                   width: width,
                   fit: BoxFit.fitWidth,
                   image: AssetImage('assets/images/volunteerScreen.jpg'),

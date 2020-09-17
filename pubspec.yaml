@@ -54,6 +54,7 @@ dependencies:
   flutter_bloc: ^6.0.5
   equatable: ^1.2.4
   keyboard_avoider: ^0.1.2
+  connectivity: ^0.4.8+2
   provider: ^4.3.2+2
   sliding_sheet: ^0.4.0
 
@@ -124,3 +125,4 @@ flutter:
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
+

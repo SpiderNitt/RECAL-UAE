@@ -4,14 +4,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/PositionModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ClosedPositions extends StatefulWidget {
   @override
@@ -21,6 +26,8 @@ class ClosedPositions extends StatefulWidget {
 class _ClosedPositionsState extends State<ClosedPositions> {
   var positions = new List<PositionModel>();
   var closedPositions = new List<PositionModel>();
+  int internet = 1;
+  int error = 0;
 
   initState() {
     super.initState();
@@ -28,41 +35,89 @@ class _ClosedPositionsState extends State<ClosedPositions> {
   }
 
   Future<List> _positions() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      internet = 0;
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(
-        "https://delta.nitt.edu/recal-uae/api/employment/positions",
+        Api.getPosition,
         headers: {
           "Accept": "application/json",
           "Cookie": "${prefs.getString("cookie")}",
         });
     ResponseBody responseBody = new ResponseBody();
-
     if (response.statusCode == 200) {
-      print("success");
 //        updateCookie(_response);
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
         positions = list.map((model) => PositionModel.fromJson(model)).toList();
 
+        positions.forEach((element) {
+          print(element.company);
+          if(DateTime.now().isAfter(DateTime.parse(element.open_until))){
+            closedPositions.add(element);
+          }
+
+        });
+
+      }else if(responseBody.status_code==401){
+        onTimeOut();
+      }else{
+        error =1;
       }
       //print("Intial length : " + positions.length.toString());
-      positions.forEach((element) {
-        print(element.company);
-        if(DateTime.now().isAfter(DateTime.parse(element.open_until))){
-          closedPositions.add(element);
-        }
 
-      });
+    }else{
+      error = 1;
     }
     return positions;
+  }
+
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+          Navigator.pop(context);
+          setState(() {
+
+          });
+          _positions();});
   }
 
   @override
   Widget build(BuildContext context) {
     String uri;
     final double width = MediaQuery.of(context).size.width;
-
+//    TimeoutArguments args = ModalRoute.of(context).settings.arguments;
+//    print("checking args");
+//    if(args!=null && args.auth){
+//      print("positions again");
+//      _positions();
+//    }
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -86,7 +141,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
-                  return Center(child: Error8Screen());
+                  return Center(child: NoInternetScreen());
                 case ConnectionState.waiting:
                 case ConnectionState.active:
                   return Center(
@@ -96,10 +151,15 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                   );
                 case ConnectionState.done:
                   if (snapshot.hasError) {
-                    return Center(child: Error8Screen());
-                  } else {
+                    return internet == 1 ? Center(child: Error8Screen()) : Center(child: NoInternetScreen());
+                  }
+                  else {
+                    print("error is : " + error.toString());
                     print(closedPositions.length);
-                    if(closedPositions.length==0){
+                    if(error==1){
+                      return Center(child: Error8Screen());
+                    }
+                    else if(closedPositions.length==0){
                       return Center(child: NodataScreen());
                     }
                     return ListView.builder(
@@ -185,21 +245,12 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                     ],
                                   ),
                                   SizedBox(height: 24.0),
-                                  Row(
-                                    children: <Widget>[
-                                      Flexible(
-                                        child: Text(
-                                          closedPositions[index].description,
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              color: ColorGlobal.textColor,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16.0,
-                                          ),
-                                          overflow: TextOverflow.fade,
-                                        ),
-                                      ),
-                                    ],
+                                  AutoSizeText(
+                                    closedPositions[index].description,
+                                    style: TextStyle(color: ColorGlobal.textColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20.0),
+                                    maxLines: 10,
                                   ),
                                   SizedBox(
                                     height: 24.0,
