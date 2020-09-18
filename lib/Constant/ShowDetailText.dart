@@ -27,6 +27,18 @@ class ShowDetailTextWidget extends StatelessWidget {
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
         .hasMatch(input);
   }
+  String validateMobile(String value) {
+    if (value.length == 0) {
+      print("zero");
+      return 'Please enter mobile number';
+    }
+    else if (double.tryParse(value)==null) {
+      print("not valid");
+      return 'Please enter valid mobile number';
+    }
+    print("valid");
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +46,10 @@ class ShowDetailTextWidget extends StatelessWidget {
       onChanged: onChanged,
       cursorColor: ColorGlobal.textColor,
       focusNode:  focusNode,
-//      autovalidate: hintText=="Email" && controller.text!=""  ?  true : false,
-//      validator: hintText=="Email" && controller.text!="" ?  (input) => isValidEmail(input) ? null : "Check your email" : null,
         controller: controller,
         keyboardType: type=='number'? TextInputType.numberWithOptions(signed: false,decimal: false) : type=='phone' ? TextInputType.phone : TextInputType.text,
         inputFormatters: type=='number' ? [WhitelistingTextInputFormatter.digitsOnly] : null ,
+        validator: type=="phone" ? (value) => validateMobile(controller.text) : null,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 10),   //  <- you can it to 0.0 for no space
           enabledBorder: UnderlineInputBorder(

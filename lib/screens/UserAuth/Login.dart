@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iosrecal/bloc/KeyboardBloc.dart';
 import 'package:iosrecal/models/LoginData.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/screens/Home/Arguments.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:iosrecal/models/User.dart';
 import 'package:iosrecal/Constant/Constant.dart';
@@ -25,8 +27,10 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   var top = FractionalOffset.topCenter;
   var bottom = FractionalOffset.bottomCenter;
-
+  bool _keyboard=false;
   bool args;
+  KeyboardBloc _bloc = new KeyboardBloc();
+
 
   TextEditingController email =
   new TextEditingController(text: "someone2@gmail.com");
@@ -63,6 +67,29 @@ class LoginState extends State<Login> {
     passwordFocus = new FocusNode();
     newPasswordFocus = new FocusNode();
     confirmPasswordFocus = new FocusNode();
+    _bloc.start();
+//    emailFocus.addListener(() {
+//      if(emailFocus.hasFocus)
+//        setState(() {
+//          _keyboard=true;
+//        });
+//      else
+//        setState(() {
+//          _keyboard=false;
+//        });
+//        print("emailFocus: ${emailFocus.hasFocus}");
+//    });
+//    passwordFocus.addListener(() {
+//      if(passwordFocus.hasFocus)
+//        setState(() {
+//          _keyboard=true;
+//        });
+//      else
+//        setState(() {
+//          _keyboard=false;
+//        });
+//      print("passwordFocus: ${passwordFocus.hasFocus}");
+//    });
   }
 
   _disposeController() {
@@ -74,6 +101,7 @@ class LoginState extends State<Login> {
     passwordFocus.unfocus();
     newPasswordFocus.unfocus();
     confirmPasswordFocus.unfocus();
+    _bloc.dispose();
   }
 
   _deleteUserDetails() async {
@@ -235,71 +263,69 @@ class LoginState extends State<Login> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final width = size.width;
+    final height = size.height;
     args = ModalRoute.of(context).settings.arguments;
     if(args==true) {
       print("auth is true");
     }
-    return Provider<LoginData>(
-      create: (context) => LoginData(),
-      child: WillPopScope(
+    return  Scaffold(
+        body: WillPopScope(
           onWillPop: _onBackPressed,
-          child: SafeArea(
-            child: Scaffold(
-              backgroundColor: ColorGlobal.whiteColor,
-              body: Center(
+          child: Provider<LoginData>(
+            create: (context) => LoginData(),
+              child: Center(
                 child: SingleChildScrollView(
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(0.05 * width),
-                          child: Container(
-                            width: width,
-                            height: width * 0.35,
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            decoration: new BoxDecoration(
-                                color: ColorGlobal.colorPrimaryDark,
-                                image: new DecorationImage(
-                                  image: new AssetImage(
-                                      'assets/images/recal_logo.jpg'),
-                                  fit: BoxFit.fill,
-                                ),
-                                borderRadius:
-                                BorderRadius.circular(width * 0.1)),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                'RECAL UAE CHAPTER',
-                                style: GoogleFonts.lato(
-                                  color: ColorGlobal.textColor,
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.w900,
-                                ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(0.05 * width),
+                        child: Container(
+                          width: width,
+                          height: width * 0.35,
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          decoration: new BoxDecoration(
+                              color: ColorGlobal.colorPrimaryDark,
+                              image: new DecorationImage(
+                                image: new AssetImage(
+                                    'assets/images/recal_logo.jpg'),
+                                fit: BoxFit.fill,
                               ),
-                            ],
-                          ),
+                              borderRadius:
+                              BorderRadius.circular(width * 0.1)),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Card(
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    color:
-                                    ColorGlobal.whiteColor.withOpacity(0.8),
-                                    width: 0.5),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Padding(
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'RECAL UAE CHAPTER',
+                              style: GoogleFonts.lato(
+                                color: ColorGlobal.textColor,
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color:
+                                  ColorGlobal.whiteColor.withOpacity(0.8),
+                                  width: 0.5),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Column(
+                            children: <Widget>[
+                              Center(
+                                child: Padding(
                                   padding: EdgeInsets.symmetric(vertical: 20),
                                   child: Text(
                                     pageTitle,
@@ -310,7 +336,9 @@ class LoginState extends State<Login> {
                                     ),
                                   ),
                                 ),
-                                Padding(
+                              ),
+                              Center(
+                                child: Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: TextFieldWidget(
                                     hintText: 'Email',
@@ -321,29 +349,22 @@ class LoginState extends State<Login> {
                                     focusNode: emailFocus,
                                   ),
                                 ),
-                                changePassword == false
-                                    ? Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: TextFieldWidget(
+                              ),
+                              changePassword == false
+                                  ? Center(
+                                    child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: TextFieldWidget(
                                     hintText: "Password",
                                     obscureText: true,
                                     prefixIconData: Icons.lock,
                                     passwordVisible: false,
                                     textEditingController: password,
                                     focusNode: passwordFocus,
-                                  ),
-                                )
-                                    : Container(),
-//                          changePassword == true ?  Padding(
-//                            padding: const EdgeInsets.all(10),
-//                            child: TextFieldWidget(
-//                              hintText: 'New Password',
-//                              obscureText: true,
-//                              prefixIconData: Icons.lock,
-//                              textEditingController: newPassword,
-//                              focusNode: newPasswordFocus,
-//                            ),
-//                          ) : Container(),
+                                ),
+                              ),
+                                  )
+                                  : Container(),
 //                          changePassword == true ?  Padding(
 //                            padding: const EdgeInsets.all(10),
 //                            child: TextFieldWidget(
@@ -354,162 +375,168 @@ class LoginState extends State<Login> {
 //                              focusNode: confirmPasswordFocus,
 //                            ),
 //                          ) : Container(),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      color: Colors.transparent,
-                                      child: Consumer<LoginData>(
-                                        builder: (context, loginData, child) {
-                                          return InkWell(
-                                            onTap: () async {
-                                              if (changePassword == false) {
-                                                if (email.text != "" &&
-                                                    password.text != "") {
-                                                  await loginData.loginUser(
-                                                      email.text,
-                                                      password.text);
-                                                  if (loginData.user == null) {
-                                                    await _loginDialog(
-                                                        "Invalid Credentials",
-                                                        "Try again",
-                                                        2);
-                                                  } else {
-                                                    User user = loginData.user;
-                                                    await user
-                                                        .saveUserDetails();
-                                                    await _loginDialog(
-                                                        "Login Successful",
-                                                        "Proceed",
-                                                        1);
-                                                    if (args != null &&
-                                                        args==true) {
-
-                                                      Future.delayed(
-                                                          Duration(
-                                                              milliseconds: 2000),
-                                                              () {
-                                                            Navigator
-                                                                .pop(context);
-                                                          });
-                                                    }
-                                                    else {
-                                                      Future.delayed(
-                                                          Duration(
-                                                              milliseconds: 2000),
-                                                              () {
-                                                            Navigator
-                                                                .pushReplacementNamed(
-                                                                context,
-                                                                HOME_PAGE);
-                                                          });
-                                                    }
-                                                  }
-                                                } else {
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    color: Colors.transparent,
+                                    child: Consumer<LoginData>(
+                                      builder: (context, loginData, child) {
+                                        return InkWell(
+                                          onTap: () async {
+                                            if (changePassword == false) {
+                                              if (email.text != "" &&
+                                                  password.text != "") {
+                                                await loginData.loginUser(
+                                                    email.text,
+                                                    password.text);
+                                                if (loginData.user == null) {
                                                   await _loginDialog(
-                                                      "Enter all fields",
+                                                      "Invalid Credentials",
                                                       "Try again",
                                                       2);
+                                                } else {
+                                                  User user = loginData.user;
+                                                  await user
+                                                      .saveUserDetails();
+                                                  await _loginDialog(
+                                                      "Login Successful",
+                                                      "Proceed",
+                                                      1);
+                                                  if (args != null &&
+                                                      args==true) {
+
+                                                    Future.delayed(
+                                                        Duration(
+                                                            milliseconds: 2000),
+                                                            () {
+                                                          Navigator
+                                                              .pop(context);
+                                                        });
+                                                  }
+                                                  else {
+                                                    Future.delayed(
+                                                        Duration(
+                                                            milliseconds: 2000),
+                                                            () {
+                                                          Navigator
+                                                              .pushReplacementNamed(
+                                                              context,
+                                                              HOME_PAGE);
+                                                        });
+                                                  }
                                                 }
                                               } else {
-                                                if (email.text != "") {
-                                                  passwordReset(email.text);
+                                                await _loginDialog(
+                                                    "Enter all fields",
+                                                    "Try again",
+                                                    2);
+                                              }
+                                            } else {
+                                              if (email.text != "") {
+                                                passwordReset(email.text);
 //                                                  _loginDialog(
 //                                                      "Email has been sent",
 //                                                      "",
 //                                                      1);
-                                                } else {
-                                                  _loginDialog(
-                                                      "Enter all fields",
-                                                      "Try again",
-                                                      2);
-                                                }
+                                              } else {
+                                                _loginDialog(
+                                                    "Enter all fields",
+                                                    "Try again",
+                                                    2);
                                               }
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              padding: EdgeInsets.all(10),
-                                              decoration: BoxDecoration(
-                                                color: ColorGlobal.colorPrimary,
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(
-                                                    (10),
-                                                  ),
-                                                ),
-                                              ),
-                                              child: Container(
-//                        margin: EdgeInsets.only(left: (10)),
-                                                alignment: Alignment.center,
-                                                child: AnimatedSwitcher(
-                                                  duration:
-                                                  Duration(seconds: 1),
-                                                  child: primaryWidget(),
+                                            }
+                                          },
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: ColorGlobal.colorPrimary,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                  (10),
                                                 ),
                                               ),
                                             ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 20, bottom: 10),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        changePassword = !changePassword;
-                                        primaryButtonText =
-                                        primaryButtonText == "SIGN IN"
-                                            ? "SUBMIT"
-                                            : "SIGN IN";
-                                        secondaryButtonText =
-                                        secondaryButtonText ==
-                                            "Change Password"
-                                            ? "Return to Sign in"
-                                            : "Change Password";
-                                        pageTitle = pageTitle == "SIGN IN"
-                                            ? "RESET PASSWORD"
-                                            : "SIGN IN";
-                                        emailFocus.unfocus();
-                                        passwordFocus.unfocus();
-                                      });
-                                    },
-                                    child: AnimatedSwitcher(
-                                      duration: Duration(seconds: 1),
-                                      child: secondaryWidget(),
+                                            child: Container(
+//                        margin: EdgeInsets.only(left: (10)),
+                                              alignment: Alignment.center,
+                                              child: AnimatedSwitcher(
+                                                duration:
+                                                Duration(seconds: 1),
+                                                child: primaryWidget(),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 10.0,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: AutoSizeText(
-                                    "Note: Don't have the credentials? Write an email to recaluaechapter@gmail.com",
-                                    maxLines: 4,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: ColorGlobal.textColor
-                                          .withOpacity(0.9),
-                                      fontWeight: FontWeight.w300,
-                                    ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 20, bottom: 10),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      changePassword = !changePassword;
+                                      primaryButtonText =
+                                      primaryButtonText == "SIGN IN"
+                                          ? "SUBMIT"
+                                          : "SIGN IN";
+                                      secondaryButtonText =
+                                      secondaryButtonText ==
+                                          "Change Password"
+                                          ? "Return to Sign in"
+                                          : "Change Password";
+                                      pageTitle = pageTitle == "SIGN IN"
+                                          ? "RESET PASSWORD"
+                                          : "SIGN IN";
+                                      emailFocus.unfocus();
+                                      passwordFocus.unfocus();
+                                    });
+                                  },
+                                  child: AnimatedSwitcher(
+                                    duration: Duration(seconds: 1),
+                                    child: secondaryWidget(),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: AutoSizeText(
+                                  "Note: Don't have the credentials? Write an email to recaluaechapter@gmail.com",
+                                  maxLines: 4,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: ColorGlobal.textColor
+                                        .withOpacity(0.9),
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      StreamBuilder<double>(
+                          stream: _bloc.stream,
+                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                            print('is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
+                                'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                            return Container(height: _bloc.keyboardUtils.keyboardHeight,);
+                          }),
+                    ],
                   ),
                 ),
               ),
             ),
-          )),
+      ),
     );
   }
 }
