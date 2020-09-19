@@ -87,55 +87,54 @@ class _EventState extends State<Event> {
             ),
             builder: (context, state) {
               return Container(
-                height: 100,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                           SizedBox(height: 4,),
-//                        // Divider(
-//                        //   thickness: 3,
-//                        //   color: Colors.black54,
-//                        //   indent: UIUtills()
-//                        //       .getProportionalWidth(
-//                        //       width: 160),
-//                        //   endIndent: UIUtills()
-//                        //       .getProportionalWidth(
-//                        //       width: 160),
-//                        // ),
-//                        detailsInfo != null ? detailsInfo.volunteer_message ==
-//                            "" ?
-//                        CircleAvatar(
-//                          radius: 40,
-//                          child: Container(
-//                              child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
-//                          ),
-//                        ):SizedBox():SizedBox(),
-//                        detailsInfo != null ? detailsInfo.volunteer_message ==
-//                            "" ? SizedBox()
-//                            : SizedBox(height: 10) : SizedBox(),
-//                        detailsInfo != null ?
-//                        (detailsInfo.volunteer_message != "" ? Row(
-//                          crossAxisAlignment: CrossAxisAlignment.start,
-//                          children: <Widget>[
-//                            CircleAvatar(
-//                              radius: 30,
-//                              child: Container(
-//                                  child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
-//                              ),
-//                            ),
-//                            Expanded(
-//                              child: Container(
-//                                  margin: EdgeInsets.only(left: 6),
-//                                  child: Text(
-//                                    "dkfj hufrg hgdfjr gj ewfhfwdnq weunrew wuynewudl wqunrenda wdeyrun wyunfyu adnef nadyel aewbg",
-//                                    style: TextStyle(
-//                                        color: Colors.black87,
-//                                        fontSize: 16),
-//                                  )),
-//                            ),
-//                          ],
-//                        ) : SizedBox()) : SizedBox(),
-//                        SizedBox(height: 10,),
+                         Divider(
+                           thickness: 3,
+                           color: Colors.black54,
+                           indent: UIUtills()
+                               .getProportionalWidth(
+                               width: 160),
+                           endIndent: UIUtills()
+                               .getProportionalWidth(
+                               width: 160),
+                         ),
+                        detailsInfo != null ? detailsInfo.volunteer_message ==
+                            "" ?
+                        CircleAvatar(
+                          radius: 40,
+                          child: Container(
+                              child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
+                          ),
+                        ):SizedBox():SizedBox(),
+                        detailsInfo != null ? detailsInfo.volunteer_message ==
+                            "" ? SizedBox()
+                            : SizedBox(height: 10) : SizedBox(),
+                        detailsInfo != null ?
+                        (detailsInfo.volunteer_message != "" ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            CircleAvatar(
+                              radius: 30,
+                              child: Container(
+                                  child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                  margin: EdgeInsets.only(left: 6),
+                                  child: Text(
+                                    "dkfj hufrg hgdfjr gj ewfhfwdnq weunrew wuynewudl wqunrenda wdeyrun wyunfyu adnef nadyel aewbg",
+                                    style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 16),
+                                  )),
+                            ),
+                          ],
+                        ) : SizedBox()) : SizedBox(),
+                        SizedBox(height: 10,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[

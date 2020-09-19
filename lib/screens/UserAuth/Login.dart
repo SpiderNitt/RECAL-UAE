@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/bloc/KeyboardBloc.dart';
 import 'package:iosrecal/models/LoginData.dart';
+
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/screens/Home/Arguments.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -130,7 +131,19 @@ class LoginState extends State<Login> {
               color: Colors.red,
               child: Text("YES"),
             ),
-          ),
+          )
+
+//          onPressed: () => Navigator.of(context).pop(false),
+//    color: Colors.green,
+//    child: Text("NO"),
+//
+//          new GestureDetector(
+//            child: FlatButton(
+//              onPressed: () => Navigator.of(context, rootNavigator: true).pop(true),
+//              color: Colors.red,
+//              child: Text("YES"),
+//            ),
+//          ),
         ],
       ),
     ) ??

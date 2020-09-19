@@ -40,36 +40,35 @@ class _ChapterScreenState extends State<ChapterScreen> {
 
         body: Column(
           children: <Widget>[
-            SizedBox(height: 24.0),
-//                Center(
-//                  child: Container(
-//                    margin: EdgeInsets.symmetric(vertical: 15),
-//                    width: width*0.7,
-//                    height: width*0.3,
-//                    padding: EdgeInsets.symmetric(horizontal: 20),
-//                    decoration: new BoxDecoration(
-//                      color: ColorGlobal.colorPrimaryDark,
-//                      image: new DecorationImage(
-//                        image: new AssetImage('assets/images/recal_logo.jpg'),
-//                        fit: BoxFit.fill,
-//                      ),
-//                      borderRadius: BorderRadius.circular(width*0.1)
-//                      ),
-//                  ),
-//      ),
-//                  Padding(
-//                    padding: const EdgeInsets.symmetric(horizontal: 20),
-//                    child: ListBody(
-//                      children: <Widget>[
-//                        Text(
-//                          'RECAL UAE CHAPTER',
-//                          style: GoogleFonts.josefinSans(
-//                            color: ColorGlobal.textColor,
-//                            fontSize: 20.0,
-//                            fontWeight: FontWeight.w600,
-//                          ),
-//                          textAlign: TextAlign.center,
-//                        ),
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 15),
+                    width: width*0.6,
+                    height: width*0.3,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: new BoxDecoration(
+                      color: ColorGlobal.colorPrimaryDark,
+                      image: new DecorationImage(
+                        image: new AssetImage('assets/images/recal_logo.jpg'),
+                        fit: BoxFit.fill,
+                      ),
+                      borderRadius: BorderRadius.circular(width*0.1)
+                      ),
+                  ),
+      ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: ListBody(
+                      children: <Widget>[
+                        Text(
+                          'RECAL UAE CHAPTER',
+                          style: GoogleFonts.josefinSans(
+                            color: ColorGlobal.textColor,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
 //                          Center(
 //                            child: Padding(
 //                              padding: const EdgeInsets.only(top: 10),
@@ -82,13 +81,13 @@ class _ChapterScreenState extends State<ChapterScreen> {
 //                                    ),
 //                                  ),
 //                                  child: Text("REC's (NIT Trichy) Alumni Association (RECAL).",
-//                                  style: TextStyle(fontSize: 15),),
+//                                  style: TextStyle(fontSize: 12),),
 //                              ),
 //                            ),
 //                          ),
-//                      ],
-//                    ),
-//                  ),
+                      ],
+                    ),
+                  ),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.symmetric(horizontal: 10),

@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:folding_cell/folding_cell.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/screens/Events/EventsScreen.dart';
-import 'package:iosrecal/screens/Home/MemberDatabase.dart';
+import 'package:iosrecal/screens/Home/SocialNetworkList.dart';
 
 class SocialScreen extends StatefulWidget {
   @override

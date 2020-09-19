@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -133,13 +134,15 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
       itemCount: final_members.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(final_members[index].name,
-            style: TextStyle(
-              color: ColorGlobal.textColor,
-              fontWeight: FontWeight.w700,
-              fontSize: 18.0,
+          title: AutoSizeText(
+            final_members[index].name,
+              style: TextStyle(
+                color: ColorGlobal.textColor,
+                fontWeight: FontWeight.w700,
+                fontSize: 18.0,
+              ),
+            maxLines: 1,
             ),
-          ),
           leading: CircleAvatar(
             backgroundColor: ColorGlobal.blueColor,
             child: Icon(
@@ -171,7 +174,7 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
                 Navigator.pop(context);
               }),
           title: Text(
-            'Member Database',
+            'Business Network List',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),

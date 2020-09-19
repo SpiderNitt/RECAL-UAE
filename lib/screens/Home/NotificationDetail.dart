@@ -148,20 +148,21 @@ class _NotificationDetailState extends State<NotificationDetail> {
               }
           ),
           title: Text(
-            'Notifications',
+            'Message',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: !_hasError ? !_hasInternet ? Center(child: NoInternetScreen()) :
-          Column(
+          SingleChildScrollView(
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Material(
                 color: Colors.white,
-                elevation: 14.0,
+                elevation: 5.0,
                 shadowColor: Color(0x802196F3),
                 borderRadius: BorderRadius.circular(24.0),
                 child: Padding(
@@ -173,7 +174,8 @@ class _NotificationDetailState extends State<NotificationDetail> {
                         tag: "Notification_" + notificationsModel.notification_id.toString(),
                         child: Material(
                           type: MaterialType.transparency,
-                          child: Text(notificationsModel.title,
+                          child: Text(
+                           notificationsModel.title,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 24.0,
@@ -196,6 +198,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                 //alignment: Alignment.bottomCenter,
               )
             ],
+              ),
           ) : Error8Screen(),
         ),
       ),
