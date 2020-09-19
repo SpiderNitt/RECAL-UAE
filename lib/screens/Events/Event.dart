@@ -48,8 +48,6 @@ class _EventState extends State<Event> {
   List<bool> filesLoading = [true,true,true];
   bool detailsServerError = false;
   EventDetailsInfo detailsInfo;
-  bool isTimeOut=false;
-  String baseURL = "https://delta.nitt.edu/recal-uae";
   String reminderUrl;
   List<String> picturesListUrl = [];
   List<String> carouselListUrl = [];
@@ -739,7 +737,7 @@ picturesListUrl.length>0?  Row(
                                                           .brochure != null
                                                           ? InkWell(
                                                             child: Image.network(
-                                                        (baseURL+
+                                                        (Api.getBaseFileUrl+
                                                               snapshot.data[index]
                                                                   .brochure
                                                                   .toString()),
@@ -766,7 +764,7 @@ picturesListUrl.length>0?  Row(
                                                           Navigator.push(
                                                               context,
                                                               MaterialPageRoute(
-                                                                  builder: (context) => EventPictureDisplay(baseURL+
+                                                                  builder: (context) => EventPictureDisplay(Api.getBaseFileUrl+
                                                                       snapshot.data[index]
                                                                           .brochure
                                                                           .toString())))
@@ -978,14 +976,7 @@ picturesListUrl.length>0?  Row(
             isSocialMediaEmpty = true;
             return 1;
           }
-        }else if(responseBody.status_code==401){
-          if(isTimeOut==false)
-          {
-            onTimeOut();
-            isTimeOut=true;
-          }
-
-        } else {
+        }else {
           print(responseBody.data);
           return 2;
         }
@@ -1155,14 +1146,7 @@ picturesListUrl.length>0?  Row(
             });
             return 1;
           }
-        } else if(responseBody.status_code==401){
-          if(isTimeOut==false)
-          {
-            onTimeOut();
-            isTimeOut=true;
-          }
-
-        }else {
+        } else {
           print(responseBody.data);
           return 2;
         }
@@ -1209,13 +1193,7 @@ picturesListUrl.length>0?  Row(
             isEmpty = true;
             return 1;
           }
-        } else if(responseBody.status_code==401){
-          if(isTimeOut==false)
-          {
-            onTimeOut();
-            isTimeOut=true;
-          }
-        }else {
+        } else {
           print(responseBody.data);
           return 2;
         }
@@ -1258,11 +1236,11 @@ picturesListUrl.length>0?  Row(
               if (file_type == "flyer") {
                 if(responseBody.data['file']!=null)
                 { filesLoading[0] = false;
-                  flyerUrl = baseURL + responseBody.data['file'].toString();}
+                  flyerUrl = Api.getBaseFileUrl + responseBody.data['file'].toString();}
               }else if(file_type=="reminder"){
                 filesLoading[1]=false;
                 if(responseBody.data['file']!=null)
-                {reminderUrl = baseURL + responseBody.data['file'].toString();}
+                {reminderUrl = Api.getBaseFileUrl + responseBody.data['file'].toString();}
               }else{
                 if(responseBody.data['file']!=null)
                   {filesLoading[2]=false;
@@ -1270,10 +1248,10 @@ picturesListUrl.length>0?  Row(
                   for(var u in responseBody.data['file']) {
                     cnt++;
                     if(cnt<=10){
-                      carouselListUrl.add(baseURL+u.toString());
+                      carouselListUrl.add(Api.getBaseFileUrl+u.toString());
                     }
                     print(u.toString());
-                   picturesListUrl.add(baseURL+u.toString());
+                   picturesListUrl.add(Api.getBaseFileUrl+u.toString());
               print("picturesList"+picturesListUrl.length.toString());}
               }}
             });
@@ -1291,12 +1269,7 @@ picturesListUrl.length>0?  Row(
             return 1;
           }
         } else if(responseBody.status_code==401){
-          if(isTimeOut==false)
-          {
             onTimeOut();
-            isTimeOut=true;
-          }
-
         }else {
           print(responseBody.data);
           return 2;

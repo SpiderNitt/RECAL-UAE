@@ -36,4 +36,5 @@ class Api {
   static final String getAllEvents = host + "events/all_events/";
   static final String getAttendees = host + "event/attendees/";
   static final String getFile=host+"events/get_file/";
+  static final String getBaseFileUrl = "https://delta.nitt.edu/recal-uae";
 }
