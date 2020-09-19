@@ -1,10 +1,15 @@
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/screens/Events/Event.dart';
 import 'package:iosrecal/models/EventInfo.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
+import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'CompletedEvents.dart';
@@ -24,7 +29,9 @@ class _EventsScreenState extends State<EventsScreen> {
   List<EventInfo> completedEventsList=[];
   List<EventInfo> socialEvents =[];
   double position=1;
-  bool isLoading=true;
+  int internet = 1;
+  bool isLoadingData=true;
+  bool isServerError=false;
   @override
   Widget build(BuildContext context) {
     return SafeArea (
@@ -39,7 +46,8 @@ class _EventsScreenState extends State<EventsScreen> {
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: isLoading?
+        body: isLoadingData?
+        internet==0?Center(child: NoInternetScreen()):isServerError?Error8Screen():
         SpinKitDoubleBounce(
           color:ColorGlobal.blueColor,
         )
@@ -117,12 +125,15 @@ class _EventsScreenState extends State<EventsScreen> {
     getData();
   }
   void getData() async{
-    //var params={'event_id':'1'};
-    //var uri='delta.nitt.edu/recal-uae/events/social_media/params?event_id=1';
-    var uri=Uri.https('delta.nitt.edu','/recal-uae/api/events/all_events/');
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        internet = 0;
+      });
+    }
     SharedPreferences prefs=await SharedPreferences.getInstance();
     await http.get(
-        uri,
+        Api.getAllEvents,
         headers: {
           "Accept" : "application/json",
           "Cookie" : "${prefs.getString("cookie")}",
@@ -134,8 +145,6 @@ class _EventsScreenState extends State<EventsScreen> {
       if (_response.statusCode == 200) {
         responseBody = ResponseBody.fromJson(json.decode(_response.body));
         if (responseBody.status_code == 200) {
-          //eventinfo=EventInfo.fromJson(json.decode(responseBody.data));
-          //return [eventinfo.name, 1];
           if(responseBody.data!=[]) {
             for (var u in responseBody.data) {
               EventInfo currInfo = EventInfo.fromJson(u);
@@ -147,17 +156,51 @@ class _EventsScreenState extends State<EventsScreen> {
             print("Eventlist length=" + eventinfo.length.toString());
           }
           setState(() {
-            isLoading=false;
+            isLoadingData=false;
           });
+        }else if(responseBody.status_code==401){
+          onTimeOut();
         } else {
           print(responseBody.data);
-          //return [responseBody.data, 0];
         }
-      } else {
+      }else {
         print('Server error');
-        //return ["Server Error", 0];
+        setState(() {
+          isServerError=true;
+        });
       }
     });
+  }
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      print("step 1");
+      int param=widget.status;
+      Navigator.pop(context);
+      print("step 2");
+      EventsScreen(param);});
   }
   void checkSocial(List<EventInfo> eventinfo){
     for(var curr in eventinfo){

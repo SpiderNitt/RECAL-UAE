@@ -5,6 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/screens/Events/Felicitations.dart';
 import 'package:iosrecal/models/EventInfo.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
@@ -159,8 +160,8 @@ class _VolunteerCardState extends State<VolunteerCard> {
     }
   }
   Future<void> checkAttended() async {
-    var params={'id':widget.currEvent.event_id.toString()};
-    var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/event/attendees/',params);
+    var uri=Uri.parse(Api.getAttendees);
+    uri = uri.replace(query: "id="+widget.currEvent.event_id.toString());
     SharedPreferences prefs=await SharedPreferences.getInstance();
     var response=await http.get(
         uri,

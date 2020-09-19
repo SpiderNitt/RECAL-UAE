@@ -35,4 +35,5 @@ class Api {
   static final String getFelicitations = host + "events/felicitations/";
   static final String getAllEvents = host + "events/all_events/";
   static final String getAttendees = host + "event/attendees/";
+  static final String getFile=host+"events/get_file/";
 }

@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/Constant/utils.dart';
@@ -13,10 +14,11 @@ import 'package:iosrecal/screens/Events/EventPictureDisplay.dart';
 import 'package:iosrecal/screens/Events/Felicitations.dart';
 import 'package:iosrecal/models/EventDetailsInfo.dart';
 import 'package:iosrecal/models/EventInfo.dart';
-import 'package:iosrecal/models/FelicitationInfo.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/SponsorInfo.dart';
 import 'package:iosrecal/models/Socialmedia_feed.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
+import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 import 'EventPhotos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +39,6 @@ class Event extends StatefulWidget {
 }
 
 class _EventState extends State<Event> {
-  final List<int> numbers = [1, 2, 3, 4, 5, 5, 2, 3, 5];
   bool isEmpty = false;
   String flyerUrl;
   bool isSocialMediaEmpty = false;
@@ -47,12 +48,14 @@ class _EventState extends State<Event> {
   List<bool> filesLoading = [true,true,true];
   bool detailsServerError = false;
   EventDetailsInfo detailsInfo;
+  bool isTimeOut=false;
   String baseURL = "https://delta.nitt.edu/recal-uae";
   String reminderUrl;
   List<String> picturesListUrl = [];
   List<String> carouselListUrl = [];
   String firstHalf;
   String secondHalf;
+  int internet=1;
   bool flag = true;
   @override
   Widget build(BuildContext context) {
@@ -76,7 +79,7 @@ class _EventState extends State<Event> {
             ),
             backgroundColor: ColorGlobal.whiteColor,
           ),
-          body: (widget.isCompleted!=true&& (!detailsLoading&& !(filesLoading[0]) &&!(filesLoading[1])&&!(filesLoading[2])))?
+          body:internet==0?NoInternetScreen():(widget.isCompleted!=true&& (!detailsLoading&& !(filesLoading[0]) &&!(filesLoading[1])&&!(filesLoading[2])))?
           SlidingSheet(
             body: getBody(),
             elevation: 4,
@@ -88,55 +91,20 @@ class _EventState extends State<Event> {
             ),
             builder: (context, state) {
               return Container(
-                height: 100,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                          SizedBox(height: 4,),
-//                        // Divider(
-//                        //   thickness: 3,
-//                        //   color: Colors.black54,
-//                        //   indent: UIUtills()
-//                        //       .getProportionalWidth(
-//                        //       width: 160),
-//                        //   endIndent: UIUtills()
-//                        //       .getProportionalWidth(
-//                        //       width: 160),
-//                        // ),
-//                        detailsInfo != null ? detailsInfo.volunteer_message ==
-//                            "" ?
-//                        CircleAvatar(
-//                          radius: 40,
-//                          child: Container(
-//                              child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
-//                          ),
-//                        ):SizedBox():SizedBox(),
-//                        detailsInfo != null ? detailsInfo.volunteer_message ==
-//                            "" ? SizedBox()
-//                            : SizedBox(height: 10) : SizedBox(),
-//                        detailsInfo != null ?
-//                        (detailsInfo.volunteer_message != "" ? Row(
-//                          crossAxisAlignment: CrossAxisAlignment.start,
-//                          children: <Widget>[
-//                            CircleAvatar(
-//                              radius: 30,
-//                              child: Container(
-//                                  child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
-//                              ),
-//                            ),
-//                            Expanded(
-//                              child: Container(
-//                                  margin: EdgeInsets.only(left: 6),
-//                                  child: Text(
-//                                    "dkfj hufrg hgdfjr gj ewfhfwdnq weunrew wuynewudl wqunrenda wdeyrun wyunfyu adnef nadyel aewbg",
-//                                    style: TextStyle(
-//                                        color: Colors.black87,
-//                                        fontSize: 16),
-//                                  )),
-//                            ),
-//                          ],
-//                        ) : SizedBox()) : SizedBox(),
-//                        SizedBox(height: 10,),
+                         SizedBox(height: 4,),
+                       Divider(
+                         thickness: 3,
+                         color: Colors.grey.withOpacity(0.8),
+                         indent: UIUtills()
+                             .getProportionalWidth(
+                             width: 165),
+                         endIndent: UIUtills()
+                             .getProportionalWidth(
+                             width: 165),
+                       ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
@@ -152,10 +120,6 @@ class _EventState extends State<Event> {
                                     mainAxisAlignment:
                                     MainAxisAlignment.center,
                                     children: <Widget>[
-                                      // Icon(
-                                      //   Icons.pan_tool,
-                                      //   color: Colors.blue[800],
-                                      // ),
                                       SizedBox(
                                         width: 4,
                                       ),
@@ -202,16 +166,37 @@ class _EventState extends State<Event> {
                                 Navigator.pushNamed(context, VOLUNTEER_SUPPORT);
                               },
                               color: Colors.blue[800],
-                              // borderSide: BorderSide(
-                              //     color: Colors.green,
-                              //     style: BorderStyle.solid,
-                              //     width: UIUtills()
-                              //         .getProportionalWidth(width: 0.8)),
                             ),
                           ),
                         ),
                       ],
                     ),
+                       detailsInfo != null ?
+                       (detailsInfo.volunteer_message != "" ? Padding(
+                         padding: const EdgeInsets.all(8.0),
+                         child: Row(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: <Widget>[
+                             CircleAvatar(
+                               radius: 30,
+                               child: Container(
+                                   child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
+                               ),
+                             ),
+                             Expanded(
+                               child: Container(
+                                   margin: EdgeInsets.only(left: 6),
+                                   child: Text(
+                                     detailsInfo.volunteer_message,
+                                     style: TextStyle(
+                                         color: Colors.black87,
+                                         fontSize: 16),
+                                   )),
+                             ),
+                           ],
+                         ),
+                       ) : SizedBox()) : SizedBox(),
+                       SizedBox(height: 10,),
                   ],
                 ),
               );
@@ -230,20 +215,24 @@ class _EventState extends State<Event> {
             InkWell(
               child:Container(
               margin: EdgeInsets.all(10),
-              // decoration: BoxDecoration(
-              //     border: Border.all(
-              //         color: ColorGlobal.blueColor.withOpacity(0.5),
-              //         width: 2)),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                      color: ColorGlobal.blueColor.withOpacity(0.5),
+                      width: 2)),
               child: (!filesLoading[0] && !fileServerError[0]&&flyerUrl!=null) ?
               FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
                 image: flyerUrl,
-                fit: BoxFit.contain,
+                fit: BoxFit.cover,
               ) : SizedBox(),
               width: MediaQuery
                   .of(context)
                   .size
                   .width,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .width/2,
             ),
                 onTap: () =>
                 {
@@ -276,8 +265,8 @@ class _EventState extends State<Event> {
                   children: <Widget>[
                     SizedBox(height: 4,),
                     Container(
-                      margin: EdgeInsets.only(left: 8,right:8),
-                      child: AutoSizeText(widget.currEvent.event_name,
+                      margin: EdgeInsets.only(left: 8,right:8,top:4),
+                      child: AutoSizeText(widget.currEvent.event_name.toUpperCase(),
                         textAlign: TextAlign.center,
                         //overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -370,20 +359,19 @@ class _EventState extends State<Event> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.fromLTRB(12,0,8,8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      widget.currEvent.event_description!=""?Container(margin:EdgeInsets.only(top: 8,bottom: 4),child: Text("DESCRIPTION",style:TextStyle(fontWeight: FontWeight.bold,color:ColorGlobal.textColor.withOpacity(0.85),fontSize:16))):SizedBox(),
                       widget.currEvent.event_description!=""?
                       secondHalf.isEmpty
     ? Container(
-                          margin:EdgeInsets.only(left:5),
-                          child: Text(firstHalf,style: TextStyle(fontSize: 18),))
+                          child: Text(firstHalf,style:  GoogleFonts.roboto(fontSize: 18,color: ColorGlobal.textColor),))
         :  Column(
     children: <Widget>[
      Container(
-         margin:EdgeInsets.only(left:5),
-         child: Text(flag ? (firstHalf + "...") : (firstHalf + secondHalf),style: TextStyle(fontSize: 18),)),
+         child: Text(flag ? (firstHalf + "...") : (firstHalf + secondHalf),style:  GoogleFonts.roboto(fontSize: 18,color: ColorGlobal.textColor),)),
      InkWell(
     child: Row(
     mainAxisAlignment: MainAxisAlignment.end,
@@ -402,10 +390,17 @@ class _EventState extends State<Event> {
     ),
     ],
     ):SizedBox(),
+                      Divider(
+                        thickness: 1,
+                        endIndent: UIUtills()
+                            .getProportionalWidth(
+                            width: 5),
+                        color: Colors.grey.withOpacity(0.2),
+                      ),
                       detailsInfo != null ? detailsInfo.detail_message ==""
                           ? SizedBox()
                           : Container(
-                          margin: EdgeInsets.only(top: 6,left: 5,bottom: 6),
+                        margin: EdgeInsets.only(bottom: 4),
                           child: Text(
                                  detailsInfo.detail_message,
                             style: TextStyle(
@@ -422,15 +417,31 @@ class _EventState extends State<Event> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                              margin: EdgeInsets.only(top: 2,left:5),
+                              margin: EdgeInsets.only(top: 2),
                               child: Stack(
     children: <Widget>[
       Card(child:Padding(
           padding:EdgeInsets.fromLTRB(20,12,8,8),
-          child:Text(
-            detailsInfo.detail_amendment_message,
-            style: TextStyle(
-                color: Colors.black54, fontSize: 16),
+          child:Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: <Widget>[
+                Text(
+                "AMENDMENT MESSAGE",
+                  style: TextStyle(
+                      color: ColorGlobal.textColor.withOpacity(0.85), fontSize: 18,fontWeight: FontWeight.bold),
+                ),
+                Column(
+                  children: <Widget>[
+                    Text(
+                      detailsInfo.detail_amendment_message,
+                      style: TextStyle(
+                          color: Colors.black54, fontSize: 16),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           )  )
       ),
       Container(margin: EdgeInsets.only(left: 0),child:Icon(Icons.add_to_photos,color: Colors.green,),)
@@ -536,12 +547,10 @@ picturesListUrl.length>0?  Row(
                           : SizedBox(),
                       Divider(
                         thickness: 1,
-                        indent: UIUtills()
-                            .getProportionalWidth(
-                            width: 10),
                         endIndent: UIUtills()
                             .getProportionalWidth(
-                            width: 10),
+                            width: 5),
+                        color: Colors.grey.withOpacity(0.2),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -554,7 +563,7 @@ picturesListUrl.length>0?  Row(
                               child: FadeInImage.memoryNetwork(
                                 placeholder: kTransparentImage,
                                 image: reminderUrl,
-                                fit: BoxFit.fitWidth,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             SizedBox(height: 10,),
@@ -641,78 +650,7 @@ picturesListUrl.length>0?  Row(
                         ],
                       )
                           : SizedBox(),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Card(
-                        child: InkWell(
-                          child: Container(
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Container(
-                                      child: Image.asset(
-                                        "assets/images/survey.png",
-                                        fit: BoxFit.cover,
-                                      ),
-                                      height: UIUtills().getProportionalHeight(
-                                          height: 36),
-                                    ),
-                                    Container(
-                                      height: UIUtills()
-                                          .getProportionalHeight(height: 50),
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            ColorGlobal.whiteColor,
-                                            ColorGlobal.whiteColor
-                                          ],
-                                          begin: Alignment.centerLeft,
-                                          end: Alignment.centerRight,
-                                        ),
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Container(
-                                            margin: EdgeInsets.only(left: 12),
-                                            child: Text(
-                                              "Accounts",
-                                              style: TextStyle(
-                                                  color:
-                                                  ColorGlobal.textColor,
-                                                  fontSize: 20),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                    margin: EdgeInsets.only(right: 4),
-                                    child: Icon(Icons.keyboard_arrow_right))
-                              ],
-                            ),
-                            height:
-                            UIUtills().getProportionalHeight(height: 50),
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        Accounts(
-                                            widget.currEvent.event_id)));
-                          },
-                        ),
-                      ),
+
                       SizedBox(
                         height: 10,
                       ),
@@ -910,18 +848,6 @@ picturesListUrl.length>0?  Row(
                             AsyncSnapshot snapshot) {
                           if (snapshot.data == null) {
                               return Container(width: 0, height: 2,);
-                            // else if(serverError){
-                            //   return Center(
-                            //       child:Text("Server Error..Try again after some time",style: TextStyle(color: Colors.blueGrey,fontSize: 16),)
-                            //   );
-                            // }
-                            // else {
-                            //   return Center(
-                            //     child: SpinKitDoubleBounce(
-                            //       color: Colors.lightBlueAccent,
-                            //     ),
-                            //   );
-                            // }
                           }
                           else {
                             return Column(
@@ -975,11 +901,7 @@ picturesListUrl.length>0?  Row(
     }
     else if (detailsServerError || fileServerError[0]||fileServerError[1]||fileServerError[2]) {
       return Center(
-          child: Text(
-              "Server Error..Try again after sometime", style: TextStyle(
-              color: Colors.blueGrey,
-              fontSize: 16
-          ))
+          child: Error8Screen()
       );
     }
   }
@@ -1027,10 +949,13 @@ picturesListUrl.length>0?  Row(
   }
 
   Future<List<SocialMediaFeed>> getSocialMediaLinks() async {
-    var params = {'event_id': widget.currEvent.event_id.toString()};
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+        internet = 0;
+    }
+    var uri=Uri.parse(Api.getSocialMedia);
+    uri = uri.replace(query: "event_id="+widget.currEvent.event_id.toString());
     List<SocialMediaFeed> socialmediafeeds = [];
-    var uri = Uri.https(
-        'delta.nitt.edu', '/recal-uae/api/events/social_media/', params);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(uri, headers: {
       "Accept": "application/json",
@@ -1053,6 +978,13 @@ picturesListUrl.length>0?  Row(
             isSocialMediaEmpty = true;
             return 1;
           }
+        }else if(responseBody.status_code==401){
+          if(isTimeOut==false)
+          {
+            onTimeOut();
+            isTimeOut=true;
+          }
+
         } else {
           print(responseBody.data);
           return 2;
@@ -1082,7 +1014,38 @@ picturesListUrl.length>0?  Row(
       secondHalf = "";
     }
   }
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
 
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      print("step 1");
+      bool param1 = widget.isCompleted;
+      EventInfo param2=widget.currEvent;
+      Navigator.pop(context,true);
+      print("step 2");
+      Event(param1,param2);});
+  }
   Widget getIcon(String socialMediaName, String feed_url) {
     String iconLocation;
     if (socialMediaName.toLowerCase() == "instagram") {
@@ -1156,9 +1119,14 @@ picturesListUrl.length>0?  Row(
   }
 
   Future<dynamic> getEventDetails() async {
-    var params = {'event_id': widget.currEvent.event_id.toString()};
-    var uri = Uri.https(
-        'delta.nitt.edu', '/recal-uae/api/events/manage/', params);
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        internet = 0;
+      });
+    }
+    var uri=Uri.parse(Api.getManage);
+    uri = uri.replace(query: "event_id="+widget.currEvent.event_id.toString());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(uri, headers: {
       "Accept": "application/json",
@@ -1187,7 +1155,14 @@ picturesListUrl.length>0?  Row(
             });
             return 1;
           }
-        } else {
+        } else if(responseBody.status_code==401){
+          if(isTimeOut==false)
+          {
+            onTimeOut();
+            isTimeOut=true;
+          }
+
+        }else {
           print(responseBody.data);
           return 2;
         }
@@ -1201,10 +1176,13 @@ picturesListUrl.length>0?  Row(
     });
   }
   Future<List<SponsorInfo>> getSponsors() async {
-    var params = {'event_id': widget.currEvent.event_id.toString()};
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+        internet = 0;
+    }
+    var uri=Uri.parse(Api.getSponsors);
+    uri = uri.replace(query: "event_id="+widget.currEvent.event_id.toString());
     List<SponsorInfo> sponsorsList = [];
-    var uri = Uri.https(
-        'delta.nitt.edu', '/recal-uae/api/events/sponsors/', params);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(
         uri,
@@ -1231,7 +1209,13 @@ picturesListUrl.length>0?  Row(
             isEmpty = true;
             return 1;
           }
-        } else {
+        } else if(responseBody.status_code==401){
+          if(isTimeOut==false)
+          {
+            onTimeOut();
+            isTimeOut=true;
+          }
+        }else {
           print(responseBody.data);
           return 2;
         }
@@ -1248,13 +1232,14 @@ picturesListUrl.length>0?  Row(
 
 
   Future<List<String>> getEventFile(String file_type) async {
-    var params = {
-      'event_id': widget.currEvent.event_id.toString(),
-      'file_type': file_type
-    };
-    
-    var uri = Uri.https(
-        'delta.nitt.edu', '/recal-uae/api/events/get_file/', params);
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+     setState(() {
+       internet = 0;
+     });
+    }
+    String url=Api.getFile+"?event_id="+widget.currEvent.event_id.toString()+"&file_type="+file_type;
+    var uri=Uri.parse(url);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(
         uri,
@@ -1305,7 +1290,14 @@ picturesListUrl.length>0?  Row(
             });
             return 1;
           }
-        } else {
+        } else if(responseBody.status_code==401){
+          if(isTimeOut==false)
+          {
+            onTimeOut();
+            isTimeOut=true;
+          }
+
+        }else {
           print(responseBody.data);
           return 2;
         }
