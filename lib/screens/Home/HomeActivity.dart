@@ -91,11 +91,16 @@ class _HomeActivityState extends State<HomeActivity> {
               });
             }
           });
-        } else {
+        }
+        else if(responseBody.status_code==401){
+          onTimeOut();
+        }
+        else {
           profile_pic_flag=2;
           print("${responseBody.data}");
         }
-      } else {
+      }
+      else {
         profile_pic_flag=2;
         print("Server error");
       }
@@ -264,8 +269,8 @@ class _HomeActivityState extends State<HomeActivity> {
         setState(() {
           unreadMessages = responseBody.data["unread"];
         });
-
-      } else {
+      }
+      else {
         print(responseBody.data);
       }
     } else {
@@ -301,6 +306,40 @@ class _HomeActivityState extends State<HomeActivity> {
     ) ??
         false;
   }
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+        _getUserPicture();
+        user = _fetchPrimaryDetails();
+        _fetchUnreadMessages();
+      });
+    });
+  }
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
 
   @override
   void initState()  {
@@ -470,7 +509,6 @@ class _HomeActivityState extends State<HomeActivity> {
                   child: Padding(
                     padding: const EdgeInsets.only(top:15.0,left: 20,right: 20),
                     child: GestureDetector(
-
                         onTap: (){
                           Navigator.pushNamed(context,PROFILE_SCREEN,arguments: {"picture": picture}).then((value) {
                             profile_pic_flag=0;
@@ -483,8 +521,8 @@ class _HomeActivityState extends State<HomeActivity> {
                         CircularProgressIndicator(backgroundColor: Colors.orange) :
                             picture != null ?
                         Container(
-                          height: width/8,
-                          width: width/8,
+                          height: width/7,
+                          width: width/7,
                           decoration: new BoxDecoration(
                             image: new DecorationImage(
                               image: NetworkImage(picture),
@@ -493,19 +531,19 @@ class _HomeActivityState extends State<HomeActivity> {
                             borderRadius:
                             new BorderRadius.all(
                                 Radius.circular(
-                                    width/8)),
+                                    width/7)),
                           ),
                         ) : CircleAvatar(
-                              radius: width/16,
+                              radius: width/14,
                               backgroundColor: Colors.orange,
                               child: FutureBuilder<dynamic> (
                                 future: user,
                                 builder: (context,snapshot) {
                                   if(snapshot.hasData) {
-                                    return Text("${snapshot.data["name"]}".toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: width/16),);
+                                    return Text("${snapshot.data["name"]}".toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: width/14),);
                                   }
                                   else if (snapshot.hasError) {
-                                    return Text("X", style: TextStyle(color: Colors.white, fontSize: width/16),);
+                                    return Text("X", style: TextStyle(color: Colors.white, fontSize: width/14),);
                                   }
                                   return CircularProgressIndicator();
                                 },
@@ -621,10 +659,10 @@ class _HomeActivityState extends State<HomeActivity> {
                                 backgroundColor: Colors.white,
                                 radius: width / 10,
                                 child: Image.asset(
-                                  'assets/images/events.png',
+                                  'assets/images/calendar.png',
                                   height: width / 8,
                                   width: width / 8,
-                                  color: Colors.blue[700],
+                                  color: Colors.blue[600],
                                 ),
                               ),
                               shape: RoundedRectangleBorder(
