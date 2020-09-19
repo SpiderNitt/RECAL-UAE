@@ -13,6 +13,7 @@ class ShowDetailTextWidget extends StatelessWidget {
   final FocusNode focusNode;
   final Color color;
   final String type;
+  final bool readOnly;
 
 
   ShowDetailTextWidget({
@@ -21,6 +22,7 @@ class ShowDetailTextWidget extends StatelessWidget {
     this.onChanged,
     this.focusNode,
     this.color, this.controller, this.type,
+    this.readOnly
   });
   bool isValidEmail(input) {
     return RegExp(
@@ -47,6 +49,7 @@ class ShowDetailTextWidget extends StatelessWidget {
       cursorColor: ColorGlobal.textColor,
       focusNode:  focusNode,
         controller: controller,
+        readOnly: readOnly==null? false : true,
         keyboardType: type=='number'? TextInputType.numberWithOptions(signed: false,decimal: false) : type=='phone' ? TextInputType.phone : TextInputType.text,
         inputFormatters: type=='number' ? [WhitelistingTextInputFormatter.digitsOnly] : null ,
         validator: type=="phone" ? (value) => validateMobile(controller.text) : null,

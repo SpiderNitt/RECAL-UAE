@@ -209,6 +209,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     ) ??
         false;
   }
+  navigateAndReload() {
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+    });
+  }
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
+
 
   _userDialog(String show, String again, int flag) {
     if(progressDialog==null) {
@@ -296,7 +326,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (_response.statusCode == 200) {
         responseBody = ResponseBody.fromJson(json.decode(_response.body));
 
-        print(json.encode(responseBody.data));
+        print(responseBody);
 
         if (responseBody.status_code == 200) {
           FocusManager.instance.primaryFocus.unfocus();
@@ -306,7 +336,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             Navigator.pop(context);
           });
           return true;
-        } else if (responseBody.status_code == 500) {
+        }
+        else if (responseBody.status_code == 401) {
+          onTimeOut();
+        }
+        else if (responseBody.status_code == 500) {
           print(responseBody);
           var response = json.decode(json.encode(responseBody.data));
           String exception = response["exception_message"];
@@ -401,7 +435,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           DropDown.emirate = emirate.text;
           DropDown.year = int.parse(year.text);
           DropDown.branch = branch.text;
-        } else {
+        }
+        else if (responseBody.status_code == 401) {
+          onTimeOut();
+        }
+        else {
           if (!mounted) return; setState(() {
             flag = 2;
           });
@@ -486,7 +524,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   prefs.setString("profile_picture","https://delta.nitt.edu/recal-uae" + picture1);
                 }
                 print("display picture get after upload: $picture1");
-              } else {
+              }
+              else if (responseBody.status_code == 401) {
+                onTimeOut();
+              }
+              else {
                 print("${responseBody.data}");
               }
             } else {
@@ -689,6 +731,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ShowDetailTextWidget(
                           hintText: 'Email',
                           controller: email,
+                          readOnly: true,
                           color: color[4] == 0
                               ? Colors.red
                               : ColorGlobal.blueColor,
@@ -784,7 +827,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ))),
       ),
     );
-
   }
 }
 
