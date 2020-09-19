@@ -35,6 +35,8 @@ class _ClosedPositionsState extends State<ClosedPositions> {
   }
 
   Future<List> _positions() async {
+    closedPositions = new List<PositionModel>();
+    positions = new List<PositionModel>();
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       internet = 0;
@@ -59,7 +61,6 @@ class _ClosedPositionsState extends State<ClosedPositions> {
           if(DateTime.now().isAfter(DateTime.parse(element.open_until))){
             closedPositions.add(element);
           }
-
         });
 
       }else if(responseBody.status_code==401){
@@ -72,7 +73,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
     }else{
       error = 1;
     }
-    return positions;
+    return closedPositions;
   }
 
   Future<bool> onTimeOut(){
@@ -133,7 +134,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
           ),
         ),
         body: Center(
-          child: FutureBuilder(
+          child: FutureBuilder (
             future: _positions(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               switch (snapshot.connectionState) {
@@ -201,7 +202,8 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                                       fontSize: 13.0),
                                                 maxLines: 1,
                                               ),
-                                              AutoSizeText(closedPositions[index].position,
+                                              AutoSizeText(
+                                                closedPositions[index].position,
                                                   style: TextStyle(
                                                       color:
                                                           ColorGlobal.textColor,

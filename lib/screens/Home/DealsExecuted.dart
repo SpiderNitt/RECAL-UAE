@@ -173,15 +173,15 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                         Material
                                           (
                                             color: Color(0xfff4c83f),
-                                            borderRadius: BorderRadius.circular(3*width/50),
+                                            borderRadius: BorderRadius.circular(2*width/50),
                                             child: Center
                                               (
                                                 child: Padding
                                                   (
-                                                  padding: EdgeInsets.all(width/25),
+                                                  padding: EdgeInsets.all(10),
                                                   child: Icon(
                                                     Icons.person,
-                                                    size: 7*width/100,
+                                                    size: 5*width/100,
                                                     color: Colors.white,
                                                   ),
                                                 )
@@ -199,29 +199,29 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                             children: <Widget>
                                             [
                                               AutoSizeText('Name', style: TextStyle(color: Color(0xfff4c83f), fontSize: 13.0), maxLines: 1,),
-                                              AutoSizeText(members[index].name, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 20.0), maxLines: 1,)
+                                              AutoSizeText(members[index].name, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 18.0), maxLines: 1,)
                                             ],
                                           ),
                                         ),
                                       ]
                                   ),
                                   SizedBox(
-                                    height: 3*width/50,
+                                    height: 2*width/50,
                                   ),
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Material(
                                         color: Color(0xffed622b),
-                                        borderRadius: BorderRadius.circular(3*width/50),
+                                        borderRadius: BorderRadius.circular(2*width/50),
                                         child: Center
                                           (
                                           child: Padding
                                             (
-                                            padding: EdgeInsets.all(width/25),
+                                            padding: EdgeInsets.all(10),
                                             child: Icon(
                                               Icons.business,
-                                              size: 7*width/100,
+                                              size: 5*width/100,
                                               color: Colors.white,
                                             ),
                                           ),
@@ -239,29 +239,29 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                           children: <Widget>
                                           [
                                             AutoSizeText('Industry', style: TextStyle(color: Color(0xffed622b), fontSize: 13.0), maxLines: 1,),
-                                            AutoSizeText(members[index].industry, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 20.0), maxLines: 5,)
+                                            AutoSizeText(members[index].industry, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 18.0), maxLines: 5,)
                                           ],
                                         ),
                                       ),
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 3*width/50,
+                                    height: 2*width/50,
                                   ),
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Material(
                                         color: Color(0xcc26cb3c),
-                                        borderRadius: BorderRadius.circular(3*width/50),
+                                        borderRadius: BorderRadius.circular(2*width/50),
                                         child: Center
                                           (
                                           child: Padding
                                             (
-                                            padding: EdgeInsets.all(width/25),
+                                            padding: EdgeInsets.all(10),
                                             child: Icon(
                                               Icons.business_center,
-                                              size: 7*width/100,
+                                              size: 5*width/100,
                                               color: Colors.white,
                                             ),
                                           ),
@@ -279,29 +279,29 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                           children: <Widget>
                                           [
                                             AutoSizeText('Business Type', style: TextStyle(color: Color(0xcc26cb3c), fontSize: 13.0), maxLines: 1,),
-                                            AutoSizeText(members[index].business_type, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 20.0), maxLines: 5,)
+                                            AutoSizeText(members[index].business_type, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 18.0), maxLines: 5,)
                                           ],
                                         ),
                                       ),
                                     ],
                                   ),
                                   SizedBox(
-                                      height: 3*width/50,
+                                      height: 2*width/50,
                                   ),
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Material(
                                         color: Color(0xccff3266),
-                                        borderRadius: BorderRadius.circular(3*width/50),
+                                        borderRadius: BorderRadius.circular(2*width/50),
                                         child: Center
                                           (
                                           child: Padding
                                             (
-                                            padding: EdgeInsets.all(width/25),
+                                            padding: EdgeInsets.all(10),
                                             child: Icon(
                                               Icons.assignment,
-                                              size: 7*width/100,
+                                              size: 5*width/100,
                                               color: Colors.white,
                                             ),
                                           ),
@@ -319,14 +319,14 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                           children: <Widget>
                                           [
                                             AutoSizeText('Company Brief', style: TextStyle(color: Color(0xccff3266), fontSize: 13.0), maxLines: 1,),
-                                            AutoSizeText(members[index].company_brief, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 20.0), maxLines: 5,)
+                                            AutoSizeText(members[index].company_brief, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 18.0), maxLines: 5,)
                                           ],
                                         ),
                                       ),
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 3*width/50,
+                                    height: 2*width/50,
                                   ),
                                   Row
                                     (
@@ -337,16 +337,16 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                         Material
                                           (
                                             color: Color(0xcc982ef0),
-                                            borderRadius: BorderRadius.circular(3*width/50),
+                                            borderRadius: BorderRadius.circular(2*width/50),
                                             child: Center
                                               (
                                                 child: Padding
                                                   (
-                                                  padding: EdgeInsets.all(width/25),
+                                                  padding: EdgeInsets.all(10),
                                                   child: Image(
                                                     image: AssetImage('assets/images/deals.png'),
-                                                    height: 7*width/100,
-                                                    width: 7*width/100,
+                                                    height: 5*width/100,
+                                                    width: 5*width/100,
                                                   ),
                                                 )
                                             )
@@ -363,12 +363,12 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                             children: <Widget>
                                             [
                                               AutoSizeText('Deal Value', style: TextStyle(color: Color(0xcc982ef0), fontSize: 13.0), maxLines: 1,),
-                                              AutoSizeText(members[index].deal_value, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 20.0), maxLines: 1,),
+                                              AutoSizeText(members[index].deal_value, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 18.0), maxLines: 1,),
                                               SizedBox(
-                                                height: 3*width/50,
+                                                height: width/50,
                                               ),
                                               AutoSizeText('Deal Details', style: TextStyle(color: Color(0xcc982ef0), fontSize: 13.0), maxLines: 5,),
-                                              AutoSizeText(members[index].deal_details, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 20.0), maxLines: 1,),
+                                              AutoSizeText(members[index].deal_details, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 18.0), maxLines: 1,),
                                             ],
                                           ),
                                         ),

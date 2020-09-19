@@ -180,15 +180,15 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                             children: [
                               members[index].email!=null ? ListTile(
                                 title: AutoSizeText(members[index].email, maxLines: 1,),
-                                leading: Icon(Icons.email, color: Colors.grey),
+                                leading: Icon(Icons.email, color: Colors.indigoAccent),
                               ) : Container(),
                               ListTile(
                                 title: AutoSizeText(members[index].organization, maxLines: 1,),
-                                leading: Icon(Icons.business, color: Colors.grey),
+                                leading: Icon(Icons.business, color: Colors.orange),
                               ),
                               members[index].position!=null ? ListTile(
                                 title: AutoSizeText(members[index].position, maxLines: 1,),
-                                leading: Icon(Icons.business_center, color: Colors.grey),
+                                leading: Icon(Icons.business_center, color: Colors.green),
                               ) : Container(),
                               !isEmpty(members[index].linkedIn_link) ? ListTile(
                                 title: new GestureDetector(
