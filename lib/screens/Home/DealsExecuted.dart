@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iosrecal/Constant/Constant.dart';
@@ -28,7 +29,6 @@ class _DealsExecutedState extends State<DealsExecuted> {
 
   initState() {
     super.initState();
-//    _positions();
   }
 
   Future<List> _deals() async {
@@ -101,6 +101,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -152,15 +153,15 @@ class _DealsExecutedState extends State<DealsExecuted> {
                       itemBuilder: (BuildContext context, int index){
                         print("right here");
                         return Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                          padding: EdgeInsets.symmetric(horizontal: width/25, vertical: width/50),
                           child: Material(
                             color: Colors.white,
                             elevation: 14.0,
                             shadowColor: Color(0x802196F3),
-                            borderRadius: BorderRadius.circular(24.0),
+                            borderRadius: BorderRadius.circular(3*width/50),
                             child: Padding
                               (
-                              padding: const EdgeInsets.all(24.0),
+                              padding: EdgeInsets.all(3*width/50),
                               child: Column(
                                 children: [
                                   Row
@@ -172,198 +173,206 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                         Material
                                           (
                                             color: Color(0xfff4c83f),
-                                            borderRadius: BorderRadius.circular(24.0),
+                                            borderRadius: BorderRadius.circular(3*width/50),
                                             child: Center
                                               (
                                                 child: Padding
                                                   (
-                                                  padding: const EdgeInsets.all(16.0),
+                                                  padding: EdgeInsets.all(width/25),
                                                   child: Icon(
                                                     Icons.person,
-                                                    size: 30.0,
+                                                    size: 7*width/100,
                                                     color: Colors.white,
                                                   ),
                                                 )
                                             )
                                         ),
                                         SizedBox(
-                                          width: 8.0,
+                                          width: width/50,
                                         ),
-                                        Column
-                                          (
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>
-                                          [
-                                            Text('Name', style: TextStyle(color: Color(0xfff4c83f), fontSize: 13.0)),
-                                            Text(members[index].name, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 20.0))
-                                          ],
+                                        Container(
+                                          width: 63*width/100,
+                                          child: Column
+                                            (
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>
+                                            [
+                                              AutoSizeText('Name', style: TextStyle(color: Color(0xfff4c83f), fontSize: 13.0), maxLines: 1,),
+                                              AutoSizeText(members[index].name, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 20.0), maxLines: 1,)
+                                            ],
+                                          ),
                                         ),
                                       ]
                                   ),
                                   SizedBox(
-                                    height: 24.0,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Material(
-                                            color: Color(0xcced622b),
-                                            borderRadius: BorderRadius.circular(24.0),
-                                            child: Center
-                                              (
-                                              child: Padding
-                                                (
-                                                padding: const EdgeInsets.all(16.0),
-                                                child: Icon(
-                                                  Icons.business,
-                                                  size: 30.0,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 8.0,
-                                          ),
-                                          Column
-                                            (
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: <Widget>
-                                            [
-                                              Text('Industry', style: TextStyle(color: Color(0xffed622b), fontSize: 13.0)),
-                                              Text(members[index].industry, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 20.0))
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Column
-                                            (
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: <Widget>
-                                            [
-                                              Text('Business Type', style: TextStyle(color: Color(0xffed622b), fontSize: 13.0)),
-                                              Text(members[index].business_type, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 20.0))
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            width: 8.0,
-                                          ),
-                                          Material(
-                                            color: Color(0xcced622b),
-                                            borderRadius: BorderRadius.circular(24.0),
-                                            child: Center
-                                              (
-                                              child: Padding
-                                                (
-                                                padding: const EdgeInsets.all(16.0),
-                                                child: Icon(
-                                                  Icons.business_center,
-                                                  size: 30.0,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                      height: 24.0
+                                    height: 3*width/50,
                                   ),
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Material(
-                                        color: Color(0xcc26cb3c),
-                                        borderRadius: BorderRadius.circular(24.0),
+                                        color: Color(0xffed622b),
+                                        borderRadius: BorderRadius.circular(3*width/50),
                                         child: Center
                                           (
                                           child: Padding
                                             (
-                                            padding: const EdgeInsets.all(16.0),
+                                            padding: EdgeInsets.all(width/25),
                                             child: Icon(
-                                              Icons.assignment,
-                                              size: 30.0,
+                                              Icons.business,
+                                              size: 7*width/100,
                                               color: Colors.white,
                                             ),
                                           ),
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 8.0,
+                                        width: width/50,
                                       ),
-                                      Column
-                                        (
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>
-                                        [
-                                          Text('Company Brief', style: TextStyle(color: Color(0xcc26cb3c), fontSize: 13.0)),
-                                          Text(members[index].company_brief, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w400, fontSize: 20.0))
-                                        ],
+                                      Container(
+                                        width: 63*width/100,
+                                        child: Column
+                                          (
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>
+                                          [
+                                            AutoSizeText('Industry', style: TextStyle(color: Color(0xffed622b), fontSize: 13.0), maxLines: 1,),
+                                            AutoSizeText(members[index].industry, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 20.0), maxLines: 5,)
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 24.0,
+                                    height: 3*width/50,
                                   ),
-                                  Column(
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Row
-                                        (
-                                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                      Material(
+                                        color: Color(0xcc26cb3c),
+                                        borderRadius: BorderRadius.circular(3*width/50),
+                                        child: Center
+                                          (
+                                          child: Padding
+                                            (
+                                            padding: EdgeInsets.all(width/25),
+                                            child: Icon(
+                                              Icons.business_center,
+                                              size: 7*width/100,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: width/50,
+                                      ),
+                                      Container(
+                                        width: 63*width/100,
+                                        child: Column
+                                          (
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: <Widget>
                                           [
-                                            Material
-                                              (
-                                                color: Color(0xcc982ef0),
-                                                borderRadius: BorderRadius.circular(24.0),
-                                                child: Center
-                                                  (
-                                                    child: Padding
-                                                      (
-                                                      padding: const EdgeInsets.all(16.0),
-                                                      child: Image(
-                                                        image: AssetImage('assets/images/deals.png'),
-                                                        height: 30.0,
-                                                        width: 30.0,
-                                                      ),
-                                                    )
-                                                )
-                                            ),
-                                            SizedBox(
-                                              width: 8.0,
-                                            ),
-                                            Column
-                                              (
-                                              //mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: <Widget>
-                                              [
-                                                Text('Deal Value', style: TextStyle(color: Color(0xcc982ef0), fontSize: 13.0)),
-                                                Text(members[index].deal_value, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                                                SizedBox(
-                                                  height: 24.0,
-                                                ),
-                                                Text('Deal Details', style: TextStyle(color: Color(0xcc982ef0), fontSize: 13.0)),
-                                                Text(members[index].deal_details, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w400, fontSize: 20.0)),
-                                              ],
-                                            ),
-                                          ]
+                                            AutoSizeText('Business Type', style: TextStyle(color: Color(0xcc26cb3c), fontSize: 13.0), maxLines: 1,),
+                                            AutoSizeText(members[index].business_type, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 20.0), maxLines: 5,)
+                                          ],
+                                        ),
                                       ),
                                     ],
+                                  ),
+                                  SizedBox(
+                                      height: 3*width/50,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Material(
+                                        color: Color(0xccff3266),
+                                        borderRadius: BorderRadius.circular(3*width/50),
+                                        child: Center
+                                          (
+                                          child: Padding
+                                            (
+                                            padding: EdgeInsets.all(width/25),
+                                            child: Icon(
+                                              Icons.assignment,
+                                              size: 7*width/100,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: width/50,
+                                      ),
+                                      Container(
+                                        width: 63*width/100,
+                                        child: Column
+                                          (
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>
+                                          [
+                                            AutoSizeText('Company Brief', style: TextStyle(color: Color(0xccff3266), fontSize: 13.0), maxLines: 1,),
+                                            AutoSizeText(members[index].company_brief, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 20.0), maxLines: 5,)
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 3*width/50,
+                                  ),
+                                  Row
+                                    (
+                                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: <Widget>
+                                      [
+                                        Material
+                                          (
+                                            color: Color(0xcc982ef0),
+                                            borderRadius: BorderRadius.circular(3*width/50),
+                                            child: Center
+                                              (
+                                                child: Padding
+                                                  (
+                                                  padding: EdgeInsets.all(width/25),
+                                                  child: Image(
+                                                    image: AssetImage('assets/images/deals.png'),
+                                                    height: 7*width/100,
+                                                    width: 7*width/100,
+                                                  ),
+                                                )
+                                            )
+                                        ),
+                                        SizedBox(
+                                          width: width/50,
+                                        ),
+                                        Container(
+                                          width: 63*width/100,
+                                          child: Column
+                                            (
+                                            //mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>
+                                            [
+                                              AutoSizeText('Deal Value', style: TextStyle(color: Color(0xcc982ef0), fontSize: 13.0), maxLines: 1,),
+                                              AutoSizeText(members[index].deal_value, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 20.0), maxLines: 1,),
+                                              SizedBox(
+                                                height: 3*width/50,
+                                              ),
+                                              AutoSizeText('Deal Details', style: TextStyle(color: Color(0xcc982ef0), fontSize: 13.0), maxLines: 5,),
+                                              AutoSizeText(members[index].deal_details, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 20.0), maxLines: 1,),
+                                            ],
+                                          ),
+                                        ),
+                                      ]
                                   ),
                                 ],
                               ),

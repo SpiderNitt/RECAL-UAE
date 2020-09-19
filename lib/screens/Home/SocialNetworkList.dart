@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
@@ -93,6 +94,12 @@ class _MemberDatabaseState extends State<MemberDatabase> {
       });
       _members();});
   }
+  
+  bool isEmpty(String linkedin){
+    if(linkedin==null || linkedin.trim()=="")
+      return true;
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +116,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                 Navigator.pop(context);
               }),
           title: Text(
-            'Social Network Lists',
+            'Social Network List',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
@@ -154,12 +161,13 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                             print("female");
                           }
                           return members[index].name !=null ? ExpansionTile(
-                            title: Text(members[index].name,
+                            title: AutoSizeText(members[index].name,
                               style: TextStyle(
                                 fontSize: 18.0,
                                 color: ColorGlobal.textColor,
                                 fontWeight: FontWeight.bold,
                               ),
+                              maxLines: 1,
                             ),
                             leading: CircleAvatar(
                               backgroundColor: Color(color),
@@ -171,24 +179,28 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                             //backgroundColor: Colors.red,
                             children: [
                               members[index].email!=null ? ListTile(
-                                title: Text(members[index].email),
-                                leading: Icon(Icons.email),
+                                title: AutoSizeText(members[index].email, maxLines: 1,),
+                                leading: Icon(Icons.email, color: Colors.grey),
                               ) : Container(),
                               ListTile(
-                                title: Text(members[index].organization),
-                                leading: Icon(Icons.business),
+                                title: AutoSizeText(members[index].organization, maxLines: 1,),
+                                leading: Icon(Icons.business, color: Colors.grey),
                               ),
                               members[index].position!=null ? ListTile(
-                                title: Text(members[index].position),
-                                leading: Icon(Icons.business_center),
+                                title: AutoSizeText(members[index].position, maxLines: 1,),
+                                leading: Icon(Icons.business_center, color: Colors.grey),
                               ) : Container(),
-                              members[index].linkedIn_link !=null ? ListTile(
+                              !isEmpty(members[index].linkedIn_link) ? ListTile(
                                 title: new GestureDetector(
-                                    child: new Text(members[index].linkedIn_link),
+                                    child: new AutoSizeText(members[index].linkedIn_link, maxLines: 1,),
                                     onTap: () =>
                                         launch(members[index].linkedIn_link)
                                 ),
-                                leading: Icon(Icons.share),
+                                leading: Image(
+                                  image: AssetImage('assets/images/linkedin.png'),
+                                  height: 24.0,
+                                  width: 24.0,
+                                ),
                               ) : Container(),
                             ],
                           ) : Container();

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CoreComm extends StatefulWidget {
   @override
@@ -166,14 +167,19 @@ class CoreCommState extends State<CoreComm> {
                             ),
                             textAlign: TextAlign.center,
                           )
-                        : Text(
-                            "Error loading data, Please try again",
-                            style: TextStyle(
-                              color: Color(0xFF544F50),
-                              fontSize: 15.0 * (size.width) / refWidth,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
+                        : Center(
+                  child: SpinKitDoubleBounce(
+                  color: Colors.lightBlueAccent,
+                  ),
+                )
+//                    Text(
+//                            "Error loading data, Please try again",
+//                            style: TextStyle(
+//                              color: Color(0xFF544F50),
+//                              fontSize: 15.0 * (size.width) / refWidth,
+//                            ),
+//                            textAlign: TextAlign.center,
+//                          ),
                   ),
                 ),
               ),

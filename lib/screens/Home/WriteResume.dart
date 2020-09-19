@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -99,6 +100,7 @@ class _WriteResumeState extends State<WriteResume> {
   @override
   Widget build(BuildContext context) {
     String uri;
+    final double width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -148,15 +150,15 @@ class _WriteResumeState extends State<WriteResume> {
                       print("right here");
                       return Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
+                            horizontal: width/25, vertical: width/50),
                         child: Material(
                           color: Colors.white,
                           elevation: 14.0,
                           shadowColor: Color(0x802196F3),
-                          borderRadius: BorderRadius.circular(24.0),
+                          borderRadius: BorderRadius.circular(3*width/50),
                           child: Padding
                             (
-                            padding: const EdgeInsets.all(24.0),
+                            padding: EdgeInsets.all(3*width/50),
                             child: Column(
                               children: [
                                 Row
@@ -170,46 +172,53 @@ class _WriteResumeState extends State<WriteResume> {
                                         (
                                           color: Color(0xfff4c83f),
                                           borderRadius: BorderRadius.circular(
-                                              24.0),
+                                              3*width/50),
                                           child: Center
                                             (
                                               child: Padding
                                                 (
-                                                padding: const EdgeInsets.all(
-                                                    16.0),
+                                                padding: EdgeInsets.all(
+                                                    width/25),
                                                 child: Icon(
                                                   Icons.person,
-                                                  size: 30.0,
+                                                  size: 7*width/100,
                                                   color: Colors.white,
                                                 ),
                                               )
                                           )
                                       ),
                                       SizedBox(
-                                        width: 8.0,
+                                        width: width/50,
                                       ),
-                                      Column
-                                        (
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .center,
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .start,
-                                        children: <Widget>
-                                        [
-                                          Text('Name', style: TextStyle(
-                                              color: Color(0xfff4c83f),
-                                              fontSize: 13.0)),
-                                          Text(writers[index].writer_name,
-                                              style: TextStyle(
-                                                  color: ColorGlobal.textColor,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 20.0))
-                                        ],
+                                      Container(
+                                        width: 63*width/100,
+                                        child: Column
+                                          (
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .center,
+                                          crossAxisAlignment: CrossAxisAlignment
+                                              .start,
+                                          children: <Widget>
+                                          [
+                                            AutoSizeText('Name', style: TextStyle(
+                                                color: Color(0xfff4c83f),
+                                                fontSize: 13.0),
+                                            maxLines: 1,
+                                            ),
+                                            AutoSizeText(writers[index].writer_name,
+                                                style: TextStyle(
+                                                    color: ColorGlobal.textColor,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 20.0),
+                                            maxLines: 1,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ]
                                 ),
                                 SizedBox(
-                                  height: 12.0,
+                                  height: 3*width/100,
                                 ),
                                 Row
                                   (
@@ -221,54 +230,61 @@ class _WriteResumeState extends State<WriteResume> {
                                       (
                                         color: Color(0xcc982ef0),
                                         borderRadius: BorderRadius.circular(
-                                            24.0),
+                                            3*width/50),
                                         child: Center
                                           (
                                             child: Padding
                                               (
-                                              padding: const EdgeInsets.all(
-                                                  16.0),
+                                              padding: EdgeInsets.all(
+                                                  width/25),
                                               child: Icon(
                                                 Icons.phone_android,
-                                                size: 30.0,
+                                                size: 7*width/100,
                                                 color: Colors.white,
                                               ),
                                             )
                                         )
                                     ),
                                     SizedBox(
-                                      width: 8.0,
+                                      width: width/50,
                                     ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        uri = "tel://" +
-                                            writers[index].contact_number;
-                                        launch(uri);
-                                      },
-                                      child: Column(
-                                        //mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text('Contact',
-                                              style: TextStyle(
-                                                  color:
-                                                  Color(0xcc982ef0),
-                                                  fontSize: 13.0)),
-                                          Text(writers[index].contact_number,
-                                              style: TextStyle(
-                                                  color: ColorGlobal
-                                                      .textColor,
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                  fontSize: 20.0)),
-                                        ],
+                                    Container(
+                                      width: 63*width/100,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          uri = "tel://" +
+                                              writers[index].contact_number;
+                                          launch(uri);
+                                        },
+                                        child: Column(
+                                          //mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            AutoSizeText('Contact',
+                                                style: TextStyle(
+                                                    color:
+                                                    Color(0xcc982ef0),
+                                                    fontSize: 13.0),
+                                            maxLines: 1,
+                                            ),
+                                            AutoSizeText(writers[index].contact_number,
+                                                style: TextStyle(
+                                                    color: ColorGlobal
+                                                        .textColor,
+                                                    fontWeight:
+                                                    FontWeight.w500,
+                                                    fontSize: 20.0),
+                                            maxLines: 1,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 12.0,
+                                  height: 3*width/100,
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment
@@ -277,47 +293,54 @@ class _WriteResumeState extends State<WriteResume> {
                                     Material(
                                       color: Color(0xccff3266),
                                       borderRadius: BorderRadius.circular(
-                                          24.0),
+                                          3*width/50),
                                       child: Center
                                         (
                                         child: Padding
                                           (
-                                          padding: const EdgeInsets.all(
-                                              16.0),
+                                          padding: EdgeInsets.all(
+                                              width/25),
                                           child: Icon(
                                             Icons.email,
-                                            size: 30.0,
+                                            size: 7*width/100,
                                             color: Colors.white,
                                           ),
                                         ),
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 8.0,
+                                      width: width/50,
                                     ),
-                                    Column
-                                      (
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      children: <Widget>
-                                      [
-                                        Text('Email', style: TextStyle(
-                                            color: Color(0xccff3266),
-                                            fontSize: 13.0)),
-                                        Text(writers[index].email,
-                                            style: TextStyle(
-                                                color: ColorGlobal
-                                                    .textColor,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 20.0))
-                                      ],
+                                    Container(
+                                      width: 63*width/100,
+                                      child: Column
+                                        (
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .center,
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start,
+                                        children: <Widget>
+                                        [
+                                          AutoSizeText('Email', style: TextStyle(
+                                              color: Color(0xccff3266),
+                                              fontSize: 13.0),
+                                          maxLines: 1,
+                                          ),
+                                          AutoSizeText(writers[index].email,
+                                              style: TextStyle(
+                                                  color: ColorGlobal
+                                                      .textColor,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 20.0),
+                                          maxLines: 1,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 12.0,
+                                  height: 3*width/100,
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment
@@ -326,47 +349,54 @@ class _WriteResumeState extends State<WriteResume> {
                                     Material(
                                       color: Color(0xcc3399fe),
                                       borderRadius: BorderRadius.circular(
-                                          24.0),
+                                          3*width/50),
                                       child: Center
                                         (
                                         child: Padding
                                           (
-                                          padding: const EdgeInsets.all(
-                                              16.0),
+                                          padding: EdgeInsets.all(
+                                              width/25),
                                           child: Image(
                                             image: AssetImage('assets/images/discounts.png'),
-                                            height: 30.0,
-                                            width: 30.0,
+                                            height: 7*width/100,
+                                            width: 7*width/100,
                                           ),
                                         ),
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 8.0,
+                                      width: width/50,
                                     ),
-                                    Column
-                                      (
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      children: <Widget>
-                                      [
-                                        Text('Discounts', style: TextStyle(
-                                            color: Color(0xcc3399fe),
-                                            fontSize: 13.0)),
-                                        Text(writers[index].discounts,
-                                            style: TextStyle(
-                                                color: ColorGlobal
-                                                    .textColor,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 20.0))
-                                      ],
+                                    Container(
+                                      width: 63*width/100,
+                                      child: Column
+                                        (
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .center,
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start,
+                                        children: <Widget>
+                                        [
+                                          AutoSizeText('Discounts', style: TextStyle(
+                                              color: Color(0xcc3399fe),
+                                              fontSize: 13.0),
+                                          maxLines: 1,
+                                          ),
+                                          AutoSizeText(writers[index].discounts,
+                                              style: TextStyle(
+                                                  color: ColorGlobal
+                                                      .textColor,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 20.0),
+                                          maxLines: 1,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 12.0,
+                                  height: 3*width/100,
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment
@@ -375,47 +405,53 @@ class _WriteResumeState extends State<WriteResume> {
                                     Material(
                                       color: Color(0xcc26cb3c),
                                       borderRadius: BorderRadius.circular(
-                                          24.0),
+                                          3*width/50),
                                       child: Center
                                         (
                                         child: Padding
                                           (
-                                          padding: const EdgeInsets.all(
-                                              16.0),
+                                          padding: EdgeInsets.all(
+                                              width/25),
                                           child: Icon(
                                             Icons.link,
-                                            size: 30.0,
+                                            size: 7*width/100,
                                             color: Colors.white,
                                           ),
                                         ),
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 8.0,
+                                      width: width/50,
                                     ),
-                                    Column
-                                      (
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      children: <Widget>
-                                      [
-                                        Text('Link', style: TextStyle(
-                                            color: Color(0xcc26cb3c),
-                                            fontSize: 13.0)),
-                                        GestureDetector(
-                                          onTap: () =>
-                                              launch(writers[index].link.toString()),
-                                          child: Text(writers[index].link,
-                                              style: TextStyle(
-                                                  color: ColorGlobal
-                                                      .textColor,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 20.0),
+                                    Container(
+                                      width: 63*width/100,
+                                      child: Column
+                                        (
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .center,
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start,
+                                        children: <Widget>
+                                        [
+                                          AutoSizeText('Link', style: TextStyle(
+                                              color: Color(0xcc26cb3c),
+                                              fontSize: 13.0),
+                                          maxLines: 1,
                                           ),
-                                        )
-                                      ],
+                                          GestureDetector(
+                                            onTap: () =>
+                                                launch(writers[index].link.toString()),
+                                            child: AutoSizeText(writers[index].link,
+                                                style: TextStyle(
+                                                    color: ColorGlobal
+                                                        .textColor,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 20.0),
+                                            maxLines: 1,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),

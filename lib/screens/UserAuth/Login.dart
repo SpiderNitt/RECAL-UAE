@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/models/LoginData.dart';
-import 'package:iosrecal/screens/Home/Arguments.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:iosrecal/models/User.dart';
 import 'package:iosrecal/Constant/Constant.dart';
@@ -23,7 +22,7 @@ class LoginState extends State<Login> {
   var top = FractionalOffset.topCenter;
   var bottom = FractionalOffset.bottomCenter;
 
-  TimeoutArguments args;
+  bool args;
   TextEditingController email =
   new TextEditingController(text: "someone2@gmail.com");
   TextEditingController password =
@@ -91,14 +90,26 @@ class LoginState extends State<Login> {
             onPressed: () => Navigator.of(context).pop(false),
             color: Colors.green,
             child: Text("NO"),
-
+          ),
           new GestureDetector(
             child: FlatButton(
               onPressed: () => Navigator.of(context, rootNavigator: true).pop(true),
               color: Colors.red,
               child: Text("YES"),
             ),
-          ),
+          )
+
+//          onPressed: () => Navigator.of(context).pop(false),
+//    color: Colors.green,
+//    child: Text("NO"),
+//
+//          new GestureDetector(
+//            child: FlatButton(
+//              onPressed: () => Navigator.of(context, rootNavigator: true).pop(true),
+//              color: Colors.red,
+//              child: Text("YES"),
+//            ),
+//          ),
         ],
       ),
     ) ??
@@ -361,7 +372,7 @@ class LoginState extends State<Login> {
                                                         "Proceed",
                                                         1);
                                                     if (args != null &&
-                                                        args.auth) {
+                                                        args==true) {
 
                                                       Future.delayed(
                                                           Duration(

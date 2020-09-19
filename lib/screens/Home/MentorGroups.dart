@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,6 +72,8 @@ class _MentorGroupsState extends State<MentorGroups> {
     if(groups.length == 0){
       return Center(child: NodataScreen());
     }
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     return CustomScrollView(
       slivers: <Widget>[
         new SliverAppBar(
@@ -104,28 +108,79 @@ class _MentorGroupsState extends State<MentorGroups> {
 
         SliverList(
           delegate: SliverChildBuilderDelegate(
-                  (context, index) =>new Padding(padding: new EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          new Text(
-                              groups[index].group,
-                              style: new TextStyle(fontSize: 18.0)
+                  (context, index) =>GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, WRITE_MENTOR),
+                    child: Container(
+                        height: height / 8,
+                        alignment: Alignment.topRight,
+                        child: GestureDetector(
+                          child: Card(
+                            //color: ColorGlobal.blueColor,
+                            elevation: 5,
+                            shadowColor: const Color(0x802196F3),
+                            margin: const EdgeInsets.all(8),
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Row(
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: width / 18,
+                                  ),
+                                  CircleAvatar(
+                                    radius: width/12,
+                                    child: Icon(
+                                      Icons.group,
+                                      size: width/12,
+                                      color: Colors.white70,
+                                      //alignment: Alignment.bottomCenter,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width / 32,
+                                  ),
+                                  Container(
+                                    height: width/12,
+                                    width: 1.0,
+                                    color: Colors.grey[200],
+                                  ),
+                                  SizedBox(
+                                    width: width / 32,
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      AutoSizeText(
+                                        groups[index].group,
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: ColorGlobal.textColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          AutoSizeText(
+                                            groups[index].leader,
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: ColorGlobal.textColor,
+//                                          fontWeight: FontWeight.bold,
+//                                          fontStyle: FontStyle.italic,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 16.0),
-                      const Divider(
-                        color: const Color(0x22000000),
-                        height: 1,
-                        thickness: 1,
-                      ),
-                    ],
-                  )
-              ),
+                        )),
+                  ),
               childCount: groups.length),
         )
       ],
