@@ -2,16 +2,21 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/models/MemberModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/EventModel.dart';
 import 'package:iosrecal/models/BusinessMemberModel.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:connectivity/connectivity.dart';
 
 
 class DashBoard extends StatefulWidget {
@@ -29,12 +34,19 @@ class _DashBoardState extends State<DashBoard> {
   var final_members = new List<BusinessMemberModel>();
   int state = 0;
   bool _hasError = false;
+  bool _internet = true;
 
   _fetchEvents() async{
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        _internet = false;
+      });
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http
         .get(
-        "https://delta.nitt.edu/recal-uae/api/events/all_events/", headers: {
+        Api.getAllEvents, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
@@ -60,6 +72,8 @@ class _DashBoardState extends State<DashBoard> {
         setState(() {
           state += 1;
         });
+      }else if(responseBody.status_code==401){
+        onTimeOut();
       }else{
         setState(() {
           state+=1;
@@ -74,11 +88,49 @@ class _DashBoardState extends State<DashBoard> {
     }
   }
 
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      state = 0;
+      _hasError = false;
+      _internet = true;
+      _fetchEvents();
+      _fetchAllUsers();
+        });
+  }
+
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
   _fetchSpecificUsers() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http
         .get(
-        "https://delta.nitt.edu/recal-uae/api/business/members/", headers: {
+        Api.businessMembers, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
@@ -93,12 +145,12 @@ class _DashBoardState extends State<DashBoard> {
         int dealValue=0;
         List names = List<String>();
         members.forEach((element) {
+          if(int.tryParse(element.deal_value)!=null)
           dealValue += int.parse(element.deal_value);
-          if(!names.contains(element.name)){
+          if(!names.contains(element.name)) {
             final_members.add(element);
             names.add(element.name);
           }
-
         });
         data['Business Members'] = final_members.length;
         data['Social Members'] = data['All Members'] - final_members.length;
@@ -128,7 +180,7 @@ class _DashBoardState extends State<DashBoard> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http
         .get(
-        "https://delta.nitt.edu/recal-uae/api/users/all_users/", headers: {
+        Api.allUsers, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
@@ -503,6 +555,9 @@ class _DashBoardState extends State<DashBoard> {
   }
 
   Widget getBody(){
+    if(!_internet){
+      return Center(child: NoInternetScreen());
+    }
     if(_hasError){
       return Center(
         child: Error8Screen(),
@@ -549,7 +604,7 @@ class _DashBoardState extends State<DashBoard> {
                 Navigator.pop(context);
               }),
           title: Text(
-            'Business DashBoard',
+            'Business Dashboard',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),

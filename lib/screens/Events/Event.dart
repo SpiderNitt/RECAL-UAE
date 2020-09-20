@@ -103,7 +103,7 @@ class _EventState extends State<Event> {
                              .getProportionalWidth(
                              width: 165),
                        ),
-                    Row(
+                        Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Expanded(

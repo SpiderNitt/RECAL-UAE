@@ -47,13 +47,12 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                   Padding(
                       padding: const EdgeInsets.only(bottom: 2.0),
                       child: ClipPath(
-                          clipper: ClippingClass(),
                           child: Container(
                               width: width,
                               height: height / 2.75,
                               decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.cover,
                                     image: AssetImage('assets/images/socialBusiness.jpg'),
                                   ))))),
                   Column(children: <Widget>[
@@ -86,7 +85,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                       ),
                                     ),
                                   ),
-                                  elevation: 30,
+                                  elevation: 10,
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
                                       new BorderRadius.circular(width / 10)),
@@ -136,7 +135,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                       ),
                                     ),
                                   ),
-                                  elevation: 30,
+                                  elevation: 10,
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
                                       new BorderRadius.circular(width / 10)),
@@ -179,14 +178,10 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                     child: CircleAvatar(
                                       backgroundColor: Colors.white,
                                       radius: width / 10,
-                                      child: Image.asset(
-                                        'assets/images/linkedinIcon.png',
-                                        height: 3*width / 20,
-                                        width: 3*width / 20,
-                                      ),
+                                      child: Text("in",style: TextStyle(color: Color(int.parse("0xff0076b4")), fontWeight: FontWeight.bold, fontSize: width/10),)
                                     ),
                                   ),
-                                  elevation: 30,
+                                  elevation: 10,
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
                                       new BorderRadius.circular(width / 10)),
@@ -245,7 +240,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                     ),
                                   ),
                                 ),
-                                elevation: 30,
+                                elevation: 10,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                     new BorderRadius.circular(width / 10)),
@@ -295,7 +290,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                     ),
                                   ),
                                 ),
-                                elevation: 30,
+                                elevation: 10,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                     new BorderRadius.circular(width / 10)),

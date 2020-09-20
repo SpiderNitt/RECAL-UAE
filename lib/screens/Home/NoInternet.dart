@@ -23,8 +23,7 @@ class NoInternetScreen extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               SizedBox(
                                 height: height / 9,
@@ -36,12 +35,10 @@ class NoInternetScreen extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold,
-                                        color: const Color(
-                                            0xff3AAFFA)),
+                                        color: const Color(0xff3AAFFA)),
                                     textAlign: TextAlign.center,
                                   ),
-                                  duration:
-                                  Duration(milliseconds: 2000),
+                                  duration: Duration(milliseconds: 2000),
                                   curve: Curves.easeIn,
                                 ),
                               ),
@@ -53,12 +50,12 @@ class NoInternetScreen extends StatelessWidget {
                                   image: AssetImage(
                                     'assets/images/no_internet.jpg',
                                   ),
-                                  height: height / 2,
+                                  height: height / 2.5,
                                   fit: BoxFit.fill,
                                   //width: width / 1.5,
                                 ),
                               ),
-                              SizedBox(height: 12.0),
+                              //SizedBox(height: 12.0),
                             ],
                           ),
                         ),
@@ -74,3 +71,4 @@ class NoInternetScreen extends StatelessWidget {
     );
   }
 }
+

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,19 +12,162 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 
 class TechnicalSupport extends StatefulWidget {
   @override
   TechnicalState createState() => TechnicalState();
 }
 
-class TechnicalState extends State<TechnicalSupport> {
+class TechnicalState extends State<TechnicalSupport> with TickerProviderStateMixin{
   final TextEditingController messageController = TextEditingController();
+  final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
+
+  AnimationController _animationController;
+
+  double _containerPaddingLeft = 20.0;
+  double _animationValue;
+  double _translateX = 0;
+  double _translateY = 0;
+  double _rotate = 0;
+  double _scale = 1;
+
+  bool show;
+  bool sent = false;
+  bool error = false;
+  Color _color = Colors.lightBlue;
+
+  initState() {
+    super.initState();
+    _animationController = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1300));
+    show = true;
+    _animationController.addListener(() {
+      setState(() {
+        show = false;
+        _animationValue = _animationController.value;
+        if (_animationValue >= 0.2 && _animationValue < 0.4) {
+          _containerPaddingLeft = 100.0;
+          _color = error ? Colors.red : Colors.green;
+        } else if (_animationValue >= 0.4 && _animationValue <= 0.5) {
+          _translateX = 80.0;
+          _rotate = -20.0;
+          _scale = 0.1;
+        } else if (_animationValue >= 0.5 && _animationValue <= 0.8) {
+          _translateY = -20.0;
+        } else if (_animationValue >= 0.81) {
+          _containerPaddingLeft = 20.0;
+          sent = true;
+        }
+      });
+    });
+    //_positions();
+  }
+
+  Widget animatedButton(){
+    return GestureDetector(
+
+        onTap: () async {
+          _animationController.forward();
+
+          final String message = messageController.text;
+          if (message != "") {
+            bool b = await _sendMessage(message);
+          } else {
+            Fluttertoast.showToast(
+                msg: "Enter a message",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.blue,
+                textColor: Colors.white,
+                fontSize: 16.0);
+          }
+        },
+        child: AnimatedContainer(
+            decoration: BoxDecoration(
+              color: _color,
+              borderRadius: BorderRadius.circular(120.0),
+              boxShadow: [
+                BoxShadow(
+                  color: _color,
+                  blurRadius: 21,
+                  spreadRadius: -15,
+                  offset: Offset(
+                    0.0,
+                    20.0,
+                  ),
+                )
+              ],
+            ),
+            padding: EdgeInsets.only(
+                left: _containerPaddingLeft,
+                right: 20.0,
+                top: 20.0,
+                bottom: 20.0),
+            duration: Duration(milliseconds: 400),
+            curve: Curves.easeOutCubic,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                (!sent)
+                    ? AnimatedContainer(
+                  duration: Duration(milliseconds: 400),
+                  child: Icon(Icons.send, color: Colors.white),
+                  curve: Curves.fastOutSlowIn,
+                  transform: Matrix4.translationValues(
+                      _translateX, _translateY, 0)
+                    ..rotateZ(_rotate)
+                    ..scale(_scale),
+                )
+                    : Container(),
+                AnimatedSize(
+                  vsync: this,
+                  duration: Duration(milliseconds: 600),
+                  child: show ? SizedBox(width: 10.0) : Container(),
+                ),
+                AnimatedSize(
+                  vsync: this,
+                  duration: Duration(milliseconds: 200),
+                  child: show ? Text("Send", style: TextStyle(color: Colors.white),) : Container(),
+                ),
+                AnimatedSize(
+                  vsync: this,
+                  duration: Duration(milliseconds: 200),
+                  child: sent ? (error ? Icon(Icons.warning, color: Colors.white) : Icon(Icons.done, color: Colors.white)) : Container(),
+                ),
+                AnimatedSize(
+                  vsync: this,
+                  alignment: Alignment.topLeft,
+                  duration: Duration(milliseconds: 600),
+                  child: sent ? SizedBox(width: 10.0) : Container(),
+                ),
+                AnimatedSize(
+                  vsync: this,
+                  duration: Duration(milliseconds: 200),
+                  child: sent ? (error ? Text("Error", style: TextStyle(color: Colors.white)) : Text("Done", style: TextStyle(color: Colors.white))) : Container(),
+                ),
+              ],
+            )));
+  }
 
   Future<bool> _sendMessage(String body) async {
+    FocusScope.of(context).unfocus();
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(
+          msg: "Please connect to internet",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.orange,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String url =
-        "https://delta.nitt.edu/recal-uae/api/employment/support";
+    final String url = Api.getSupport;
     final response = await http.post(url, body: {
       "user_id": "${prefs.getString("user_id")}",
       "body": body,
@@ -39,7 +183,10 @@ class TechnicalState extends State<TechnicalSupport> {
       if (responseBody.status_code == 200) {
         print("worked!");
         return true;
-      } else {
+      }
+      else if(responseBody.status_code==401){
+        onTimeOut();
+      }else {
         print(responseBody.data);
         return false;
       }
@@ -47,6 +194,36 @@ class TechnicalState extends State<TechnicalSupport> {
       print('Server error');
       return false;
     }
+  }
+
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      print("step 1");
+      Navigator.pop(context);
+    });
+  }
+
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
   }
 
   _loginDialog1(ProgressDialog pr, String show, String again, int flag) {
@@ -144,7 +321,7 @@ class TechnicalState extends State<TechnicalSupport> {
                     SizedBox(height: 20.0),
                     TextField(
                       autocorrect: true,
-                      maxLines: 5,
+                      maxLines: 8,
                       controller: messageController,
                       decoration: InputDecoration(
                         hintText: 'Enter message',
@@ -166,39 +343,40 @@ class TechnicalState extends State<TechnicalSupport> {
                     SizedBox(
                       height: height / 64,
                     ),
-                    RawMaterialButton(
-                      onPressed: () async {
-                        final String message = messageController.text;
-                        if (message != "") {
-                          bool b = await _sendMessage(message);
-                          ProgressDialog pr;
-                          if (b) {
-                            _loginDialog1(pr, "Message Sent", "Thank you", 1);
-                          } else {
-                            _loginDialog1(
-                                pr, "Message was not sent", "Try again", 0);
-                          }
-                        } else {
-                          Fluttertoast.showToast(
-                              msg: "Enter a message",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.blue,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        }
-                      },
-                      elevation: 2.0,
-                      fillColor: Colors.blue,
-                      child: Icon(
-                        Icons.send,
-                        color: Colors.white,
-                        size: 30.0,
-                      ),
-                      padding: EdgeInsets.all(15.0),
-                      shape: CircleBorder(),
-                    ),
+                    animatedButton(),
+//                    RawMaterialButton(
+//                      onPressed: () async {
+//                        final String message = messageController.text;
+//                        if (message != "") {
+//                          bool b = await _sendMessage(message);
+//                          ProgressDialog pr;
+//                          if (b) {
+//                            _loginDialog1(pr, "Message Sent", "Thank you", 1);
+//                          } else {
+//                            _loginDialog1(
+//                                pr, "Message was not sent", "Try again", 0);
+//                          }
+//                        } else {
+//                          Fluttertoast.showToast(
+//                              msg: "Enter a message",
+//                              toastLength: Toast.LENGTH_SHORT,
+//                              gravity: ToastGravity.BOTTOM,
+//                              timeInSecForIosWeb: 1,
+//                              backgroundColor: Colors.blue,
+//                              textColor: Colors.white,
+//                              fontSize: 16.0);
+//                        }
+//                      },
+//                      elevation: 2.0,
+//                      fillColor: Colors.blue,
+//                      child: Icon(
+//                        Icons.send,
+//                        color: Colors.white,
+//                        size: 30.0,
+//                      ),
+//                      padding: EdgeInsets.all(15.0),
+//                      shape: CircleBorder(),
+//                    ),
                     SizedBox(
                       height: height / 64,
                     ),

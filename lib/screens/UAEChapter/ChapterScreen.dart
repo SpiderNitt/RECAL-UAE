@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iosrecal/screens/Achievements/AchievementsScreen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'ContactUs.dart';
 import 'Pay.dart';
@@ -37,16 +38,12 @@ class _ChapterScreenState extends State<ChapterScreen> {
           ),
         ),
 
-        body: Flex(
-          direction: Axis.vertical,
-          children: [
-            Expanded(
-            child: Column(
-              children: <Widget>[
+        body: Column(
+          children: <Widget>[
                 Center(
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: 15),
-                    width: width*0.7,
+                    width: width*0.6,
                     height: width*0.3,
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     decoration: new BoxDecoration(
@@ -60,96 +57,346 @@ class _ChapterScreenState extends State<ChapterScreen> {
                   ),
       ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.all(10),
                     child: ListBody(
                       children: <Widget>[
                         Text(
                           'RECAL UAE CHAPTER',
                           style: GoogleFonts.josefinSans(
                             color: ColorGlobal.textColor,
-                            fontSize: 20.0,
+                            fontSize: 16.0,
                             fontWeight: FontWeight.w600,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Container(
-                                  padding: const EdgeInsets.only(top: 8, bottom: 8),
-                                  decoration: const BoxDecoration(
-                                    border: Border(
-                                      top: BorderSide(width: 0),
-                                      bottom: BorderSide(width: 0),
-                                    ),
-                                  ),
-                                  child: Text("REC's (NIT Trichy) Alumni Association (RECAL).",
-                                  style: TextStyle(fontSize: 15),),
-                              ),
-                            ),
-                          ),
+//                          Center(
+//                            child: Padding(
+//                              padding: const EdgeInsets.only(top: 10),
+//                              child: Container(
+//                                  padding: const EdgeInsets.only(top: 8, bottom: 8),
+//                                  decoration: const BoxDecoration(
+//                                    border: Border(
+//                                      top: BorderSide(width: 0),
+//                                      bottom: BorderSide(width: 0),
+//                                    ),
+//                                  ),
+//                                  child: Text("REC's (NIT Trichy) Alumni Association (RECAL).",
+//                                  style: TextStyle(fontSize: 12),),
+//                              ),
+//                            ),
+//                          ),
                       ],
                     ),
                   ),
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.list,size: 30),
-                        title: Text('Vision and Mission'),
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.downToUp,
-                                duration: Duration(milliseconds: 300),
-                                child: VisionMission()),);
-                        },
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ListView(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.downToUp,
+                              duration: Duration(milliseconds: 300),
+                              child: VisionMission()),);
+                      },
+                      child: Row
+                        (
+                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment
+                              .center,
+                          children: <Widget>
+                          [
+                            Material
+                              (
+                                color: Color(0xfff4c83f),
+                                borderRadius: BorderRadius.circular(
+                                    24.0),
+                                child: Center
+                                  (
+                                    child: Padding
+                                      (
+                                      padding: const EdgeInsets.all(
+                                          16.0),
+                                      child: Icon(
+                                        Icons.list,
+                                        size: 30.0,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                )
+                            ),
+                            SizedBox(
+                              width: 8.0,
+                            ),
+                            Column
+                              (
+                              mainAxisAlignment: MainAxisAlignment
+                                  .center,
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .start,
+                              children: <Widget>
+                              [
+//                                Text('Name', style: TextStyle(
+//                                    color: Color(0xfff4c83f),
+//                                    fontSize: 13.0)),
+                                Text('Vision and Mission',
+                                    style: TextStyle(
+                                        color: ColorGlobal.textColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20.0))
+                              ],
+                            ),
+                          ]
                       ),
-                      ListTile(
-                        leading: Icon(Icons.person,size: 30),
-                        title: Text('Core Committee'),
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.leftToRight,
-                                duration: Duration(milliseconds: 300),
-                                child: CoreComm()),);
-                        },
+                    ),
+                    SizedBox(
+                      height: 24.0,
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.leftToRight,
+                              duration: Duration(milliseconds: 300),
+                              child: CoreComm()),);
+                      },
+                      child: Row
+                        (
+                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>
+                        [
+                          Material
+                            (
+                              color: Color(0xcc982ef0),
+                              borderRadius: BorderRadius.circular(
+                                  24.0),
+                              child: Center
+                                (
+                                  child: Padding
+                                    (
+                                    padding: const EdgeInsets.all(
+                                        16.0),
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 30.0,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                              )
+                          ),
+                          SizedBox(
+                            width: 8.0,
+                          ),
+                          Column(
+                            //mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: <Widget>[
+//                              Text('Contact',
+//                                  style: TextStyle(
+//                                      color:
+//                                      Color(0xcc982ef0),
+//                                      fontSize: 13.0)),
+                              Text('Core Committee',
+                                  style: TextStyle(
+                                      color: ColorGlobal
+                                          .textColor,
+                                      fontWeight:
+                                      FontWeight.w500,
+                                      fontSize: 20.0)),
+                            ],
+                          ),
+                        ],
                       ),
-                      ListTile(
-                        leading: Icon(Icons.credit_card,size: 30,),
-                        title: Text('Pay'),
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                duration: Duration(milliseconds: 300),
-                                child: PayPage()),);
-                        },
+                    ),
+                    SizedBox(
+                      height: 24.0,
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              duration: Duration(milliseconds: 300),
+                              child: PayPage()),);
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment
+                            .center,
+                        children: [
+                          Material(
+                            color: Color(0xccff3266),
+                            borderRadius: BorderRadius.circular(
+                                24.0),
+                            child: Center
+                              (
+                              child: Padding
+                                (
+                                padding: const EdgeInsets.all(
+                                    16.0),
+                                child: Icon(
+                                  Icons.credit_card,
+                                  size: 30.0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 8.0,
+                          ),
+                          Column
+                            (
+                            mainAxisAlignment: MainAxisAlignment
+                                .center,
+                            crossAxisAlignment: CrossAxisAlignment
+                                .start,
+                            children: <Widget>
+                            [
+//                              Text('Email', style: TextStyle(
+//                                  color: Color(0xccff3266),
+//                                  fontSize: 13.0)),
+                              Text('Pay',
+                                  style: TextStyle(
+                                      color: ColorGlobal
+                                          .textColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20.0))
+                            ],
+                          ),
+                        ],
                       ),
-                      ListTile(
-                        leading: Icon(Icons.phone,size: 30),
-                        title: Text('Contact us'),
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                duration: Duration(milliseconds: 300),
-                                child: ContactUs()),);
-                        },
+                    ),
+                    SizedBox(
+                      height: 24.0,
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.downToUp,
+                              duration: Duration(milliseconds: 300),
+                              child: ContactUs()),);
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment
+                            .center,
+                        children: [
+                          Material(
+                            color: Color(0xcc3399fe),
+                            borderRadius: BorderRadius.circular(
+                                24.0),
+                            child: Center
+                              (
+                              child: Padding
+                                (
+                                padding: const EdgeInsets.all(
+                                    16.0),
+                                child: Icon(
+                                  Icons.phone,
+                                  size: 30.0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 8.0,
+                          ),
+                          Column
+                            (
+                            mainAxisAlignment: MainAxisAlignment
+                                .center,
+                            crossAxisAlignment: CrossAxisAlignment
+                                .start,
+                            children: <Widget>
+                            [
+//                              Text('Discounts', style: TextStyle(
+//                                  color: Color(0xcc3399fe),
+//                                  fontSize: 13.0)),
+                              Text('Contact Us',
+                                  style: TextStyle(
+                                      color: ColorGlobal
+                                          .textColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20.0))
+                            ],
+                          ),
+                        ],
                       ),
+                    ),
+                    SizedBox(
+                      height: 24.0,
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.leftToRight,
+                              duration: Duration(milliseconds: 300),
+                              child: AchievementsScreen()),);
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment
+                            .center,
+                        children: [
+                          Material(
+                            color: Color(0xcc26cb3c),
+                            borderRadius: BorderRadius.circular(
+                                24.0),
+                            child: Center
+                              (
+                              child: Padding
+                                (
+                                padding: const EdgeInsets.all(
+                                    16.0),
+                                child: Icon(
+                                  Icons.brightness_low,
+                                  size: 30.0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 8.0,
+                          ),
+                          Column
+                            (
+                            mainAxisAlignment: MainAxisAlignment
+                                .center,
+                            crossAxisAlignment: CrossAxisAlignment
+                                .start,
+                            children: <Widget>
+                            [
+//                              Text('Email', style: TextStyle(
+//                                  color: Color(0xccff3266),
+//                                  fontSize: 13.0)),
+                              Text('Achievements',
+                                  style: TextStyle(
+                                      color: ColorGlobal
+                                          .textColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20.0))
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
 
-                    ],
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
           ],
         )
       ),

@@ -1,7 +1,133 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/models/ChapterModel.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart' as http;
+import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
+import '../Home/NoData.dart';
+import 'package:connectivity/connectivity.dart';
 
-class PayPage extends StatelessWidget {
+
+class PayPage extends StatefulWidget {
+  @override
+  _PayPageState createState() => _PayPageState();
+}
+
+class _PayPageState extends State<PayPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    _pay();
+  }
+
+  ChapterModel chapterDetails;
+  String payDetails;
+  int state = 0;
+  int internet = 1;
+
+  Future<String> _pay() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        internet=0;
+      });
+    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var response = await http.get(
+        Api.chapterVisionMission,
+        headers: {
+          "Accept": "application/json",
+          "Cookie": "${prefs.getString("cookie")}",
+        });
+    ResponseBody responseBody = new ResponseBody();
+    if (response.statusCode == 200) {
+//        updateCookie(_response);
+      responseBody = ResponseBody.fromJson(json.decode(response.body));
+      if (responseBody.status_code == 200) {
+        chapterDetails =  ChapterModel.fromJson(responseBody.data);
+        payDetails = chapterDetails.bank_account;
+        setState(() {
+          state = 1;
+        });
+
+      }else if(responseBody.status_code==401){
+        onTimeOut();
+      }else{
+        setState(() {
+          state = 2;
+        });
+      }
+    }else{
+      setState(() {
+        state = 2;
+      });
+    }
+  }
+
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+
+      });
+     _pay();
+    });
+  }
+
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
+  Widget getPayDetails(){
+    if(state==0){
+      return SpinKitDoubleBounce(
+        color: Colors.lightBlueAccent,
+      );
+    }else if(state==1){
+      return Text(
+        payDetails,
+        style: TextStyle(
+          fontSize: 20.0,
+          color: Colors.white,
+        ),
+      );
+    }else if(state==2){
+      return Text(
+        'Please try again later',
+        style: TextStyle(
+          fontSize: 20.0,
+          color: Colors.white,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +143,7 @@ class PayPage extends StatelessWidget {
           style: TextStyle(color: ColorGlobal.textColor),
         ),
       ),
-      body: SingleChildScrollView(
+      body: internet == 0 ? Center(child: NoInternetScreen()) : SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Padding(
@@ -38,42 +164,7 @@ class PayPage extends StatelessWidget {
               color: Colors.blue[300],
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Text(
-                        'A/c Holder: RECAL UAE CHAPTER',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 6.0),
-                      Text(
-                        'A/c No./IBAN: AE54672345',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 6.0),
-                      Text(
-                        'Branch Address : NA',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 6.0),
-                      Text(
-                        'Swift: ',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                        ),
-                      )
-                    ]
-                ),
+                child: getPayDetails(),
               ),
             ),
             SizedBox(height: 10.0),
@@ -94,22 +185,11 @@ class PayPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
               child: Text(
-                  '\u2022 Once the payment is received, you will receive a notification on your registered e-mail or on this app once you login again. ',
+                  '\u2022 Once the payment is received, you will receive a notification on this app within 24 hours. ',
                   style: TextStyle(
                     fontSize: 18.0,
                     color: const Color(0xFF544F50),
                   )
-              ),
-            ),
-            SizedBox(height: 6.0),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
-              child: Text(
-                '\u2022 The cost of the annual membership is AED 500 valid for one year from the day of payment. You are entitled to attend all the events organized by the chapter at subsidized rates.',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: const Color(0xFF544F50),
-                ),
               ),
             ),
             Padding(

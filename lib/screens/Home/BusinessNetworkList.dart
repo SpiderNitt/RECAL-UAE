@@ -1,13 +1,19 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/BusinessMemberModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:connectivity/connectivity.dart';
+
 
 class BusinessDatabase extends StatefulWidget {
   @override
@@ -19,17 +25,24 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
   var final_members = new List<BusinessMemberModel>();
   var state = 0;
   bool _hasError = false;
+  bool _internet = true;
 
   initState() {
     super.initState();
-    _positions();
+    _members();
   }
 
-  Future<List> _positions() async {
+  Future<List> _members() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        _internet = false;
+      });
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http
         .get(
-        "https://delta.nitt.edu/recal-uae/api/business/members/", headers: {
+        Api.businessMembers, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
@@ -54,6 +67,8 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
         setState(() {
           state = 1;
         });
+      }else if(responseBody.status_code==401){
+        onTimeOut();
       }else{
         setState(() {
           _hasError = true;
@@ -67,8 +82,44 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
     }
   }
 
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      _members();
+    });
+  }
+
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
 
   Widget getBody() {
+    if(!_internet){
+      return Center(child: NoInternetScreen());
+    }
     if(_hasError){
       return Center(child: Error8Screen());
     }
@@ -83,13 +134,15 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
       itemCount: final_members.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(final_members[index].name,
-            style: TextStyle(
-              color: ColorGlobal.textColor,
-              fontWeight: FontWeight.w700,
-              fontSize: 18.0,
+          title: AutoSizeText(
+            final_members[index].name,
+              style: TextStyle(
+                color: ColorGlobal.textColor,
+                fontWeight: FontWeight.w700,
+                fontSize: 18.0,
+              ),
+            maxLines: 1,
             ),
-          ),
           leading: CircleAvatar(
             backgroundColor: ColorGlobal.blueColor,
             child: Icon(
@@ -121,7 +174,7 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
                 Navigator.pop(context);
               }),
           title: Text(
-            'Member Database',
+            'Business Network List',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),

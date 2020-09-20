@@ -1,5 +1,4 @@
 class Api {
-
   static final String host = "https://delta.nitt.edu/recal-uae/api/";
   static final String checkLogin = host + "auth/check_login";
   static final String login = host + "auth/app_login/";
@@ -20,8 +19,9 @@ class Api {
   static final String marketSurvey = host + "employment/market_survey";
   static final String allUsers = host + "users/all_users/";
   static final String mentorGroups = host + "mentor_group/groups";
-  static final String getNotification = host + "notifications/get_notification";
-  static final String getAllNotifications = host + "notifications/";
+  static final String getNotification =
+      host + "notifications/get_notification?id=";
+  static final String getAllNotifications = host + "notifications/?id=";
   static final String getPosition = host + "employment/positions";
   static final String seekGuidance = host + "employment/seek_guidance";
   static final String writeResume = host + "employment/write_resume";
@@ -37,4 +37,5 @@ class Api {
   static final String getAttendees = host + "event/attendees/";
   static final String getFile=host+"events/get_file/";
   static final String getBaseFileUrl = "https://delta.nitt.edu/recal-uae";
+  static final String getSupport = host + 'employment/support';
 }
