@@ -38,7 +38,7 @@ class _HomeActivityState extends State<HomeActivity> {
   int getPic = 0;
   String cookie = "";
   int unreadMessages=0;
-  bool internetConnection=false;
+  bool internetConnection=true;
 
   refresh() {
     setState(() {
@@ -566,7 +566,7 @@ class _HomeActivityState extends State<HomeActivity> {
                           Navigator.pushNamed(context,PROFILE_SCREEN,arguments: {"picture": picture}).then((value) {
                             profile_pic_flag=0;
                             getPic=0;
-                            internetConnection=false;
+                            internetConnection=true;
                             user = _fetchPrimaryDetails();
                             _getUserPicture();
                             _fetchUnreadMessages();
@@ -654,7 +654,7 @@ class _HomeActivityState extends State<HomeActivity> {
                             setState(() {
                               profile_pic_flag=0;
                               getPic=0;
-                              internetConnection=false;
+                              internetConnection=true;
                               user = _fetchPrimaryDetails();
                               _getUserPicture();
                               _fetchUnreadMessages();
@@ -754,7 +754,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               EventsScreen(1))).then((value) {
                             profile_pic_flag=0;
                             getPic=0;
-                            internetConnection=false;
+                            internetConnection=true;
                             user = _fetchPrimaryDetails();
                             _getUserPicture();
                             _fetchUnreadMessages();
@@ -815,7 +815,7 @@ class _HomeActivityState extends State<HomeActivity> {
                             Navigator.pushNamed(context, SOCIAL_MEDIA).then((value) {
                               profile_pic_flag=0;
                               getPic=0;
-                              internetConnection=false;
+                              internetConnection=true;
                               user = _fetchPrimaryDetails();
                               _getUserPicture();
                               _fetchUnreadMessages();
@@ -865,7 +865,7 @@ class _HomeActivityState extends State<HomeActivity> {
                             Navigator.pushNamed(context,EMPLOYMENT_SUPPORT).then((value) {
                               profile_pic_flag=0;
                               getPic=0;
-                              internetConnection=false;
+                              internetConnection=true;
                               user = _fetchPrimaryDetails();
                               _getUserPicture();
                               _fetchUnreadMessages();
@@ -915,7 +915,7 @@ class _HomeActivityState extends State<HomeActivity> {
                             Navigator.pushNamed(context,MENTOR_GROUPS).then((value) {
                             profile_pic_flag=0;
                                 getPic=0;
-                                internetConnection=false;
+                                internetConnection=true;
                                 user = _fetchPrimaryDetails();
                             _getUserPicture();
                             _fetchUnreadMessages();
@@ -972,7 +972,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                 Navigator.pushNamed(context,SOCIAL).then((value) {
                                   profile_pic_flag=0;
                                   getPic=0;
-                                  internetConnection=false;
+                                  internetConnection=true;
                                   user = _fetchPrimaryDetails();
                                   _getUserPicture();
                                   _fetchUnreadMessages();
@@ -1025,7 +1025,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                 Navigator.pushNamed(context,BUSINESS).then((value) {
                                   profile_pic_flag=0;
                                   getPic=0;
-                                  internetConnection=false;
+                                  internetConnection=true;
                                   user = _fetchPrimaryDetails();
                                   _getUserPicture();
                                   _fetchUnreadMessages();
