@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/screens/Events/EventsScreen.dart';
 import 'package:iosrecal/models/User.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Constant/Constant.dart';
@@ -35,7 +38,19 @@ class _HomeActivityState extends State<HomeActivity> {
   int getPic = 0;
   String cookie = "";
   int unreadMessages=0;
+  bool internetConnection=false;
 
+  refresh() {
+    setState(() {
+      profile_pic_flag=0;
+      getPic=0;
+      internetConnection=false;
+      user = _fetchPrimaryDetails();
+      _getUserPicture();
+      _fetchUnreadMessages();
+      _fetchPrimaryDetails();
+    });
+  }
   Future<dynamic> _fetchPrimaryDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String name =
@@ -51,6 +66,25 @@ class _HomeActivityState extends State<HomeActivity> {
     return {"name": name, "email": email};
   }
   Future<dynamic> _getUserPicture() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          internetConnection = true;
+        });
+      }
+      else {
+        setState(() {
+          internetConnection = false;
+        });
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
+      setState(() {
+        internetConnection = false;
+      });
+    }
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String user_id =
@@ -248,6 +282,25 @@ class _HomeActivityState extends State<HomeActivity> {
   }
 
   _fetchUnreadMessages() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          internetConnection = true;
+        });
+      }
+      else {
+        setState(() {
+          internetConnection = false;
+        });
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      setState(() {
+        internetConnection = false;
+      });
+    }
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String URL = 'https://delta.nitt.edu/recal-uae/api/notifications/?id=' + "${prefs.getString("user_id")}" + '&page=1';
     print(URL);
@@ -434,7 +487,7 @@ class _HomeActivityState extends State<HomeActivity> {
             )
           ],
         ),
-        body: Stack(
+        body: internetConnection==false ? NoInternetScreen(notifyParent: refresh) : Stack(
           children: <Widget>[
             ClipRRect(
               child: Container(
@@ -513,8 +566,11 @@ class _HomeActivityState extends State<HomeActivity> {
                           Navigator.pushNamed(context,PROFILE_SCREEN,arguments: {"picture": picture}).then((value) {
                             profile_pic_flag=0;
                             getPic=0;
+                            internetConnection=false;
                             user = _fetchPrimaryDetails();
                             _getUserPicture();
+                            _fetchUnreadMessages();
+                            _fetchPrimaryDetails();
                           });
                         },
                         child: profile_pic_flag == 0 ?
@@ -596,7 +652,13 @@ class _HomeActivityState extends State<HomeActivity> {
                         onTap: () {
                           Navigator.pushNamed(context, NOTIFICATION_MENU).then((value) {
                             setState(() {
+                              profile_pic_flag=0;
+                              getPic=0;
+                              internetConnection=false;
+                              user = _fetchPrimaryDetails();
+                              _getUserPicture();
                               _fetchUnreadMessages();
+                              _fetchPrimaryDetails();
                             });
                           });
                         },
@@ -689,7 +751,14 @@ class _HomeActivityState extends State<HomeActivity> {
                         ),
                         onTap: () {
                           Navigator.push(context,MaterialPageRoute(builder: (context) =>
-                              EventsScreen(1)));
+                              EventsScreen(1))).then((value) {
+                            profile_pic_flag=0;
+                            getPic=0;
+                            internetConnection=false;
+                            user = _fetchPrimaryDetails();
+                            _getUserPicture();
+                            _fetchUnreadMessages();
+                          });
                         },
                       ),
                     ],
@@ -743,7 +812,15 @@ class _HomeActivityState extends State<HomeActivity> {
                             ],
                           ),
                           onTap: () {
-                            Navigator.pushNamed(context, SOCIAL_MEDIA);
+                            Navigator.pushNamed(context, SOCIAL_MEDIA).then((value) {
+                              profile_pic_flag=0;
+                              getPic=0;
+                              internetConnection=false;
+                              user = _fetchPrimaryDetails();
+                              _getUserPicture();
+                              _fetchUnreadMessages();
+                              _fetchPrimaryDetails();
+                            });
                           },
                         ),
                         GestureDetector(
@@ -785,7 +862,15 @@ class _HomeActivityState extends State<HomeActivity> {
                             ],
                           ),
                           onTap: () {
-                            Navigator.pushNamed(context,EMPLOYMENT_SUPPORT);
+                            Navigator.pushNamed(context,EMPLOYMENT_SUPPORT).then((value) {
+                              profile_pic_flag=0;
+                              getPic=0;
+                              internetConnection=false;
+                              user = _fetchPrimaryDetails();
+                              _getUserPicture();
+                              _fetchUnreadMessages();
+                              _fetchPrimaryDetails();
+                            });
                           },
                         ),
                         GestureDetector(
@@ -827,7 +912,15 @@ class _HomeActivityState extends State<HomeActivity> {
                             ],
                           ),
                           onTap: () {
-                            Navigator.pushNamed(context,MENTOR_GROUPS);
+                            Navigator.pushNamed(context,MENTOR_GROUPS).then((value) {
+                            profile_pic_flag=0;
+                                getPic=0;
+                                internetConnection=false;
+                                user = _fetchPrimaryDetails();
+                            _getUserPicture();
+                            _fetchUnreadMessages();
+                            _fetchPrimaryDetails();
+                            });
                           },
                         ),
                       ],
@@ -876,7 +969,15 @@ class _HomeActivityState extends State<HomeActivity> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                               ),
                               onTap: () {
-                                Navigator.pushNamed(context,SOCIAL);
+                                Navigator.pushNamed(context,SOCIAL).then((value) {
+                                  profile_pic_flag=0;
+                                  getPic=0;
+                                  internetConnection=false;
+                                  user = _fetchPrimaryDetails();
+                                  _getUserPicture();
+                                  _fetchUnreadMessages();
+                                  _fetchPrimaryDetails();
+                                });
                               },
                             ),
                             SizedBox(
@@ -921,7 +1022,15 @@ class _HomeActivityState extends State<HomeActivity> {
                                 ],
                               ),
                               onTap: () {
-                                Navigator.pushNamed(context,BUSINESS);
+                                Navigator.pushNamed(context,BUSINESS).then((value) {
+                                  profile_pic_flag=0;
+                                  getPic=0;
+                                  internetConnection=false;
+                                  user = _fetchPrimaryDetails();
+                                  _getUserPicture();
+                                  _fetchUnreadMessages();
+                                  _fetchPrimaryDetails();
+                                });
                               },
                             ),
                           ],

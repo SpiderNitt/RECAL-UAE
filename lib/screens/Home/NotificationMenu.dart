@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
@@ -45,15 +46,25 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
     return b.created_at.compareTo(a.created_at);
   }
 
+  refresh () {
+    setState(() {
+      _hasInternet=true;
+      _hasError = false;
+      _noData = false;
+      _notifications();
+      _hasMore = true;
+      flag = 0;
+    });
+  }
   Future<String> _notifications() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
       setState(() {
         _hasInternet=false;
         flag = 1;
         print("set flas");
       });
-
     }
     notifications = new List<NotificationsModel>();
     if (block_notification.length == 0) {
@@ -167,7 +178,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
   Widget getBody() {
     print("get body");
     if(!_hasInternet){
-      return Center(child: NoInternetScreen());
+      return Center(child: NoInternetScreen(notifyParent: refresh,));
     }
     if (_hasError) {
       return Center(

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/User.dart';
 
@@ -29,13 +30,15 @@ class SplashScreenState extends State<ImageSplashScreen> {
   int flag;
   String dots="0";
   Timer _timer;
+  UIUtills uiUtills = new UIUtills();
+
   Color getColorFromColorCode(String code){
     return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
   }
 
   startTime() async {
 
-  var _duration = new Duration(milliseconds:4000);
+  var _duration = new Duration(milliseconds:2000);
     return new Timer(_duration, navigationPage);
   }
   Future <Null> _getUserDetails() async {
@@ -95,7 +98,8 @@ class SplashScreenState extends State<ImageSplashScreen> {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WalkThroughApp()));
     }
     else if(email!=null && uid!=null && cookie!=null) {
-     await _checkLogin();
+     //await _checkLogin();
+      Navigator.pushReplacementNamed(context, HOME_PAGE);
     }
     else {
       //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WalkThroughApp()));
@@ -126,6 +130,7 @@ class SplashScreenState extends State<ImageSplashScreen> {
   @override
   void initState() {
     super.initState();
+    uiUtills = new UIUtills();
     _timer = new Timer.periodic(const Duration(milliseconds: 750),changeDots);
     startTime();
   }
@@ -135,11 +140,20 @@ class SplashScreenState extends State<ImageSplashScreen> {
     _timer.cancel();
     super.dispose();
   }
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    final size = MediaQuery.of(context).size;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -167,10 +181,10 @@ class SplashScreenState extends State<ImageSplashScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(30.0),
+                    padding: EdgeInsets.all(getWidth(30, 1)),
                     child: Text(
                       "RECAL UAE CHAPTER",
-                      style: GoogleFonts.josefinSans(fontSize: 23.0, fontWeight: FontWeight.bold, color: ColorGlobal.textColor),
+                      style: GoogleFonts.josefinSans(fontSize: getHeight(23,1), fontWeight: FontWeight.bold, color: ColorGlobal.textColor),
                     ),
                   ),
                 ],
@@ -180,17 +194,17 @@ class SplashScreenState extends State<ImageSplashScreen> {
                 children: [
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      padding: EdgeInsets.symmetric(vertical: getHeight(10, 1)),
                       child: SpinKitWave(
                       color: getColorFromColorCode("#6289ce"),
-                      size: 50.0,
+                      size: getHeight(50, 1),
                       duration :Duration(milliseconds: 1000)
                       ),
                     ),
                   ),
                   Text(
                     "Loading $dots%",
-                    style: GoogleFonts.josefinSans(fontSize: 20.0, fontWeight: FontWeight.w500, color: ColorGlobal.textColor),
+                    style: GoogleFonts.josefinSans(fontSize: getHeight(20, 1), fontWeight: FontWeight.w500, color: ColorGlobal.textColor),
                   ),
                 ],
               ),
