@@ -198,8 +198,8 @@ class _FelicitationsState extends State<Felicitations> {
     Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
         .then((value) {
       print("step 1");
+      int param=widget.event_id;
       Navigator.pop(context);
-     int param=widget.event_id;
       print("step 2");
       Felicitations(param);});
   }

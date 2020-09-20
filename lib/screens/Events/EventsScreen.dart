@@ -200,7 +200,9 @@ class _EventsScreenState extends State<EventsScreen> {
       int param=widget.status;
       Navigator.pop(context);
       print("step 2");
-      EventsScreen(param);});
+      EventsScreen(param);
+      getData();});
+
   }
   void checkSocial(List<EventInfo> eventinfo){
     for(var curr in eventinfo){

@@ -1035,7 +1035,18 @@ picturesListUrl.length>0?  Row(
       EventInfo param2=widget.currEvent;
       Navigator.pop(context,true);
       print("step 2");
-      Event(param1,param2);});
+      Event(param1,param2);
+      getEventFile("flyer");
+      getEventFile("pictures");
+      getEventFile("reminder");
+      getEventDetails();
+      if (widget.currEvent.event_description!=""&&widget.currEvent.event_description.length > 200) {
+        firstHalf = widget.currEvent.event_description.substring(0, 200);
+        secondHalf = widget.currEvent.event_description.substring(200, widget.currEvent.event_description.length);
+      } else {
+        firstHalf = widget.currEvent.event_description;
+        secondHalf = "";
+      }});
   }
   Widget getIcon(String socialMediaName, String feed_url) {
     String iconLocation;
