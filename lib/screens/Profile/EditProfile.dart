@@ -220,22 +220,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       Navigator.pop(context);
     });
   }
-  Future<bool> onTimeOut(){
+  Future<bool> onTimeOut() {
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         title: new Text('Session Timeout'),
         content: new Text('Login to continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              //await _logoutUser();
+          FlatButton(
+            onPressed: () async {
               navigateAndReload();
             },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+            child: Text("OK"),
           ),
         ],
       ),

@@ -532,7 +532,7 @@ class LoginState extends State<Login> {
                                                     () {
                                                   Navigator
                                                       .pushReplacementNamed(
-                                                          context, HOME_PAGE);
+                                                          context, HOME_SCREEN);
                                                 });
                                               }
                                             }

@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onTap: () {
               flag != 1
                   ? Navigator.of(context).pop(false)
-                  : Navigator.pushReplacementNamed(context, HOME_PAGE);
+                  : Navigator.pushReplacementNamed(context, HOME_SCREEN);
             },
             child: FlatButton(
               color: Colors.green,
@@ -85,25 +85,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
     });
   }
-
   Future<bool> onTimeOut() {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) =>
-      new AlertDialog(
+      builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         title: new Text('Session Timeout'),
         content: new Text('Login to continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              //await _logoutUser();
+          FlatButton(
+            onPressed: () async {
               navigateAndReload();
             },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+            child: Text("OK"),
           ),
         ],
       ),

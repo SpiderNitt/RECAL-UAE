@@ -404,7 +404,7 @@ class _HomeActivityState extends State<HomeActivity> {
       });
     });
   }
-  Future<bool> onTimeOut(){
+  Future<bool> onTimeOut() {
     return showDialog(
       barrierDismissible: false,
       context: context,
