@@ -9,13 +9,10 @@ import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/User.dart';
 
 import 'WalkthroughApp.dart';
-
-import '../Home/HomeActivity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../UserAuth/Login.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:http/http.dart' as http;
 

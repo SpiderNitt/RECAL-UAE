@@ -24,6 +24,7 @@ import 'dart:convert';
 import 'package:iosrecal/models/ResponseBody.dart';
 
 class HomeActivity extends StatefulWidget {
+  const HomeActivity({Key key}) : super(key: key);
   @override
   _HomeActivityState createState() => _HomeActivityState();
 }
@@ -44,7 +45,7 @@ class _HomeActivityState extends State<HomeActivity> {
   UIUtills uiUtills = new UIUtills();
 
 
-  refresh() {
+  refreshFull() {
     setState(() {
       profile_pic_flag=0;
       getPic=0;
@@ -53,9 +54,35 @@ class _HomeActivityState extends State<HomeActivity> {
       _fetchUnreadMessages();
       _fetchPrimaryDetails();
       user = _fetchPrimaryDetails();
-
     });
   }
+  refreshInternet() async{
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          internetConnection = true;
+        });
+      }
+      else {
+        Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
+        setState(() {
+          internetConnection = false;
+        });
+
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
+      setState(() {
+        internetConnection = false;
+      });
+    }
+  }
+  refreshMessages () async {
+    await _fetchUnreadMessages();
+  }
+
 
   Future<dynamic> _fetchPrimaryDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -514,7 +541,7 @@ class _HomeActivityState extends State<HomeActivity> {
             ],
           ),
         ),
-        body: internetConnection==false ? NoInternetScreen(notifyParent: refresh) :
+        body: internetConnection==false ? NoInternetScreen(notifyParent: refreshFull) :
             profile_pic_flag==0 ? Center(child: SpinKitSquareCircle(
               color:ColorGlobal.blueColor,
             ),
@@ -543,7 +570,7 @@ class _HomeActivityState extends State<HomeActivity> {
                     child: GestureDetector(
                         onTap: (){
                           Navigator.pushNamed(context,PROFILE_SCREEN,arguments: {"picture": picture}).then((value) {
-                            refresh();
+                            refreshFull();
                           });
                         },
                         child: profile_pic_flag == 0 ?
@@ -624,8 +651,8 @@ class _HomeActivityState extends State<HomeActivity> {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, NOTIFICATION_MENU).then((value) {
-                            refresh();
+                          Navigator.pushNamed(context, NOTIFICATION_MENU).then((value) async {
+                            await refreshMessages();
                           });
                         },
                         child: Column(
@@ -718,7 +745,7 @@ class _HomeActivityState extends State<HomeActivity> {
                         onTap: () {
                           Navigator.push(context,MaterialPageRoute(builder: (context) =>
                               EventsScreen(1))).then((value) {
-                            refresh();
+                            refreshInternet();
                           });
                         },
                       ),
@@ -774,7 +801,7 @@ class _HomeActivityState extends State<HomeActivity> {
                           ),
                           onTap: () {
                             Navigator.pushNamed(context, SOCIAL_MEDIA).then((value) {
-                              refresh();
+                              refreshInternet();
                             });
                           },
                         ),
@@ -818,7 +845,7 @@ class _HomeActivityState extends State<HomeActivity> {
                           ),
                           onTap: () {
                             Navigator.pushNamed(context,EMPLOYMENT_SUPPORT).then((value) {
-                              refresh();
+                              refreshInternet();
                             });
                           },
                         ),
@@ -862,7 +889,7 @@ class _HomeActivityState extends State<HomeActivity> {
                           ),
                           onTap: () {
                             Navigator.pushNamed(context,MENTOR_GROUPS).then((value) {
-                              refresh();
+                              refreshInternet();
                             });
                           },
                         ),
@@ -913,7 +940,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               ),
                               onTap: () {
                                 Navigator.pushNamed(context,SOCIAL).then((value) {
-                                  refresh();
+                                  refreshInternet();
                                 });
                               },
                             ),
@@ -960,7 +987,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               ),
                               onTap: () {
                                 Navigator.pushNamed(context,BUSINESS).then((value) {
-                                 refresh();
+                                  refreshInternet();
                                 });
                               },
                             ),

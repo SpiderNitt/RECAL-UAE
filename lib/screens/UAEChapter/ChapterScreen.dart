@@ -12,11 +12,14 @@ import 'CoreComm.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 
 class ChapterScreen extends StatefulWidget {
+  const ChapterScreen({Key key}) : super(key: key);
+
   @override
   _ChapterScreenState createState() => _ChapterScreenState();
 }
 
 class _ChapterScreenState extends State<ChapterScreen> {
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
