@@ -46,7 +46,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                 Center(
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: 15),
-                    width: width*0.6,
+                    width: width*0.7,
                     height: width*0.3,
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     decoration: new BoxDecoration(

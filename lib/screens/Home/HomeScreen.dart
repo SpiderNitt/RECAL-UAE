@@ -63,23 +63,24 @@ class HomePageState extends State<HomePage> {
     return showDialog(
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit the App'),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Are you sure?'),
+        content : Text('Do you want to exit the app?'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () => Navigator.of(context).pop(false),
-            child: FlatButton(
-              color: Colors.green,
-              child: Text("NO"),
-            ),
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text("NO"),
           ),
           new GestureDetector(
-            onTap: () => SystemNavigator.pop(),
             child: FlatButton(
-              color: Colors.red,
+              onPressed: () =>
+                  Navigator.of(context, rootNavigator: true).pop(true),
               child: Text("YES"),
             ),
-          ),
+          )
         ],
       ),
     ) ??

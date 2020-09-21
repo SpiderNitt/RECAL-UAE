@@ -373,25 +373,21 @@ class _HomeActivityState extends State<HomeActivity> {
     return showDialog(
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to Logout?'),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Logout?'),
+        content : Text('You will return to the login screen.'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () => Navigator.of(context).pop(false),
-            child: FlatButton(
-              color: Colors.green,
-              child: Text("NO"),
-            ),
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text("NO"),
           ),
-          new GestureDetector(
-            onTap: () async {
-              await _logoutUser();
-            },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("YES"),
-            ),
-          ),
+          FlatButton(
+            onPressed: () async => await _logoutUser(),
+            child: Text("YES"),
+          )
         ],
       ),
     ) ??
@@ -413,18 +409,18 @@ class _HomeActivityState extends State<HomeActivity> {
       barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         title: new Text('Session Timeout'),
         content: new Text('Login to continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              //await _logoutUser();
+          FlatButton(
+            onPressed: () async {
               navigateAndReload();
             },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+            child: Text("OK"),
           ),
         ],
       ),
