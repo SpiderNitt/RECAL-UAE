@@ -313,7 +313,7 @@ class FeedbackState extends State<FeedbackScreen> with TickerProviderStateMixin{
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     AutoSizeText(
-                      "FEEDBACK PLEASE!!",
+                      "GENERAL FEEDBACK",
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),

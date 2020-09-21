@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'ResponseBody.dart';
 import 'User.dart';
@@ -13,44 +14,60 @@ class LoginData {
   User user;
 
   Future<void> _loginUser(String email, String password) async {
-    var url = Api.login;
-    var body = {
-      'email': email,
-      'password': password
-    };
-    await http
-        .post(
-      url,
-      body: body,
-    )
-        .then((_response) async {
-      ResponseBody responseBody =
-      new ResponseBody();
-      print('Response body: ${_response.body}');
+    bool internetConnection=false;
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        internetConnection=true;
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+    }
+    if(internetConnection==true) {
+      var url = Api.login;
+      var body = {
+        'email': email,
+        'password': password
+      };
+      await http
+          .post(
+        url,
+        body: body,
+      )
+          .then((_response) async {
+        ResponseBody responseBody =
+        new ResponseBody();
+        print('Response body: ${_response.body}');
 
-      if (_response.statusCode == 200) {
-        responseBody = ResponseBody.fromJson(
-            json.decode(_response.body));
-        print(json.encode(responseBody.data));
-        if (responseBody.status_code == 200) {
-          String rawCookie =
-          _response.headers['set-cookie'];
-          String cookie = rawCookie.substring(
-              0, rawCookie.indexOf(';'));
-          print(cookie);
-          user = User.fromLogin(json.decode(
-              json.encode(responseBody.data)));
-          user.cookie = cookie;
-          return user;
+        if (_response.statusCode == 200) {
+          responseBody = ResponseBody.fromJson(
+              json.decode(_response.body));
+          print(json.encode(responseBody.data));
+          if (responseBody.status_code == 200) {
+            String rawCookie =
+            _response.headers['set-cookie'];
+            String cookie = rawCookie.substring(
+                0, rawCookie.indexOf(';'));
+            print(cookie);
+            user = User.fromLogin(json.decode(
+                json.encode(responseBody.data)));
+            user.cookie = cookie;
+            return user;
+          } else {
+            print(responseBody.data);
+            return user;
+          }
         } else {
-          print(responseBody.data);
+          print("server error");
           return user;
         }
-      } else {
-        print("server error");
-        return user;
-      }
-    });
+      });
+    }
+    else {
+      user = new User();
+      user.user_id=-1;
+      return user;
+    }
   }
 
   Future<Null> loginUser (String email, String password) async {

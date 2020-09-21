@@ -47,7 +47,7 @@ class _EventsScreenState extends State<EventsScreen> {
           ),
         ),
         body: isLoadingData?
-        internet==0?Center(child: NoInternetScreen()):isServerError?Error8Screen():
+        internet==0?Center(child: NoInternetScreen(notifyParent: refresh,)):isServerError?Error8Screen():
         SpinKitDoubleBounce(
           color:ColorGlobal.blueColor,
         )
@@ -118,80 +118,87 @@ class _EventsScreenState extends State<EventsScreen> {
       ),
     );
   }
+  refresh() {
+    getData();
+  }
 
   @override
   void initState() {
     super.initState();
     getData();
   }
-  void getData() async{
+  void getData() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
         internet = 0;
       });
     }
-    SharedPreferences prefs=await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     await http.get(
         Api.getAllEvents,
         headers: {
-          "Accept" : "application/json",
-          "Cookie" : "${prefs.getString("cookie")}",
+          "Accept": "application/json",
+          "Cookie": "${prefs.getString("cookie")}",
         }
-    ) .then((_response) {
-      List<EventInfo> eventinfo =[];
+    ).then((_response) {
+      List<EventInfo> eventinfo = [];
       ResponseBody responseBody = new ResponseBody();
       print('Response body: ${_response.body}');
       if (_response.statusCode == 200) {
         responseBody = ResponseBody.fromJson(json.decode(_response.body));
         if (responseBody.status_code == 200) {
-          if(responseBody.data!=[]) {
+          if (responseBody.data != []) {
             for (var u in responseBody.data) {
               EventInfo currInfo = EventInfo.fromJson(u);
               eventinfo.add(currInfo);
             }
-            if(widget.status==1){checkTime(eventinfo);}else{
+            if (widget.status == 1) {
+              checkTime(eventinfo);
+            } else {
               checkSocial(eventinfo);
             }
             print("Eventlist length=" + eventinfo.length.toString());
           }
           setState(() {
-            isLoadingData=false;
+            isLoadingData = false;
           });
-        }else if(responseBody.status_code==401){
+        } else if (responseBody.status_code == 401) {
           onTimeOut();
         } else {
           print(responseBody.data);
         }
-      }else {
+      } else {
         print('Server error');
         setState(() {
-          isServerError=true;
+          isServerError = true;
         });
       }
     });
   }
-  Future<bool> onTimeOut(){
-    return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Session Timeout'),
-        content: new Text('Login to continue'),
-        actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              navigateAndReload();
-            },
-            child: FlatButton(
-              color: Colors.red,
+    Future<bool> onTimeOut() {
+      return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => new AlertDialog(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: new Text('Session Timeout'),
+          content: new Text('Login to continue'),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () async {
+                navigateAndReload();
+              },
               child: Text("OK"),
             ),
-          ),
-        ],
-      ),
-    ) ??
-        false;
-  }
+          ],
+        ),
+      ) ??
+          false;
+    }
 
   navigateAndReload(){
     Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)

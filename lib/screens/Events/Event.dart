@@ -65,7 +65,6 @@ class _EventState extends State<Event> {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
-            titleSpacing: -5,
             iconTheme: IconThemeData(
                 color: ColorGlobal.textColor
             ),
@@ -77,7 +76,7 @@ class _EventState extends State<Event> {
             ),
             backgroundColor: ColorGlobal.whiteColor,
           ),
-          body:internet==0?NoInternetScreen():(widget.isCompleted!=true&& (!detailsLoading&& !(filesLoading[0]) &&!(filesLoading[1])&&!(filesLoading[2])))?
+          body:internet==0?NoInternetScreen(notifyParent: refresh):(widget.isCompleted!=true&& (!detailsLoading&& !(filesLoading[0]) &&!(filesLoading[1])&&!(filesLoading[2])))?
           SlidingSheet(
             body: getBody(),
             elevation: 4,
@@ -113,27 +112,26 @@ class _EventState extends State<Event> {
                               child: detailsInfo != null ? Container(
                                 child: detailsInfo.registration_link == ""
                                     ? SizedBox() :
-                                OutlineButton(
+                                RaisedButton(
                                   child: Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.center,
                                     children: <Widget>[
+                                      Icon(
+                                        Icons.check_circle,
+                                        color: Colors.white,
+                                      ),
                                       SizedBox(
-                                        width: 4,
+                                        width: 10,
                                       ),
                                       Text(
-                                        "Register here",
-                                        style: TextStyle(color: Colors.blue[900],fontSize: 16),
+                                        "Register",
+                                        style: TextStyle(color: Colors.white,fontSize: 16),
                                       ),
                                     ],
                                   ),
                                   onPressed: ()=>launch(detailsInfo.registration_link),
-                                  color: Colors.white,
-                                  borderSide: BorderSide(
-                                      color: Colors.blue[900],
-                                      style: BorderStyle.solid,
-                                      width: UIUtills()
-                                          .getProportionalWidth(width: 0.8)),
+                                  color: Colors.blue[800],
                                 ),
                               ) : SizedBox(),
                             ),
@@ -148,7 +146,7 @@ class _EventState extends State<Event> {
                                 MainAxisAlignment.center,
                                 children: <Widget>[
                                   Icon(
-                                    Icons.check_circle,
+                                    Icons.people,
                                     color: Colors.white,
                                   ),
                                   SizedBox(
@@ -258,23 +256,6 @@ class _EventState extends State<Event> {
                     ],
                   ),
                 ),
-                widget.currEvent.event_name!=null?
-                Column(
-                  children: <Widget>[
-                    SizedBox(height: 4,),
-                    Container(
-                      margin: EdgeInsets.only(left: 8,right:8,top:4),
-                      child: AutoSizeText(widget.currEvent.event_name.toUpperCase(),
-                        textAlign: TextAlign.center,
-                        //overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: TextStyle(fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                      color: ColorGlobal.textColor,
-                        ),
-                    )),
-                  ],
-                ):SizedBox(),
                 Container(
                   margin: EdgeInsets.only(top: 6),
                   child: Row(
@@ -287,7 +268,7 @@ class _EventState extends State<Event> {
                             margin:EdgeInsets.only(left:5),
                             child: Icon(
                               Icons.place,
-                              size: 36,
+                              size: 30,
                               color: ColorGlobal.blueColor
                             ),
                           ),
@@ -300,7 +281,7 @@ class _EventState extends State<Event> {
                               "Location not available",
                               style: TextStyle(
                                   color: Colors.black54,
-                                  fontSize: 20,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.bold),
                             )
                                 : Column(
@@ -318,7 +299,7 @@ class _EventState extends State<Event> {
                                   widget.currEvent.emirate,
                                   style: TextStyle(
                                         color: Colors.black54,
-                                        fontSize: 22,
+                                        fontSize: 15,
                                         fontWeight:
                                         FontWeight.bold),
                                 ),
@@ -339,10 +320,10 @@ class _EventState extends State<Event> {
                                         null
                                         ? TextStyle(
                                         color: Colors.black45,
-                                        fontSize: 18)
+                                        fontSize: 15)
                                         : TextStyle(
                                         color: Colors.black54,
-                                        fontSize: 22,
+                                        fontSize: 15,
                                         fontWeight:
                                         FontWeight.bold),
                                   )
@@ -356,20 +337,37 @@ class _EventState extends State<Event> {
                     ],
                   ),
                 ),
+                widget.currEvent.event_name!=null?
+                Column(
+                  children: <Widget>[
+                    SizedBox(height: 4,),
+                    Container(
+                        margin: EdgeInsets.only(left: 8,right:8,top:4),
+                        child: AutoSizeText(widget.currEvent.event_name.toUpperCase(),
+                          textAlign: TextAlign.center,
+                          //overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: GoogleFonts.lato(fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: ColorGlobal.textColor,
+                          ),
+                        )),
+                  ],
+                ):SizedBox(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12,0,8,8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      widget.currEvent.event_description!=""?Container(margin:EdgeInsets.only(top: 8,bottom: 4),child: Text("DESCRIPTION",style:TextStyle(fontWeight: FontWeight.bold,color:ColorGlobal.textColor.withOpacity(0.85),fontSize:16))):SizedBox(),
+                      widget.currEvent.event_description!=""?Container(margin:EdgeInsets.only(top: 8,bottom: 4),child: Text("DESCRIPTION",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize:16))):SizedBox(),
                       widget.currEvent.event_description!=""?
                       secondHalf.isEmpty
     ? Container(
-                          child: Text(firstHalf,style:  GoogleFonts.roboto(fontSize: 18,color: ColorGlobal.textColor),))
+                          child: Text(firstHalf,style:  GoogleFonts.roboto(fontSize: 15,color: ColorGlobal.textColor),))
         :  Column(
     children: <Widget>[
      Container(
-         child: Text(flag ? (firstHalf + "...") : (firstHalf + secondHalf),style:  GoogleFonts.roboto(fontSize: 18,color: ColorGlobal.textColor),)),
+         child: Text(flag ? (firstHalf + "...") : (firstHalf + secondHalf),style:  GoogleFonts.roboto(fontSize: 15,color: ColorGlobal.textColor),)),
      InkWell(
     child: Row(
     mainAxisAlignment: MainAxisAlignment.end,
@@ -402,7 +400,7 @@ class _EventState extends State<Event> {
                           child: Text(
                                  detailsInfo.detail_message,
                             style: TextStyle(
-                                color: Colors.black54, fontSize: 17),
+                                color: Colors.black54, fontSize: 15),
                           )) : SizedBox(),
                       SizedBox(
                         height: 4,
@@ -427,14 +425,14 @@ class _EventState extends State<Event> {
                 Text(
                 "AMENDMENT MESSAGE",
                   style: TextStyle(
-                      color: ColorGlobal.textColor.withOpacity(0.85), fontSize: 18,fontWeight: FontWeight.bold),
+                      color: ColorGlobal.textColor.withOpacity(0.8), fontSize: 16,fontWeight: FontWeight.w600),
                 ),
                 Column(
                   children: <Widget>[
                     Text(
                       detailsInfo.detail_amendment_message,
                       style: TextStyle(
-                          color: Colors.black54, fontSize: 16),
+                          color: Colors.black54, fontSize: 15),
                     ),
                   ],
                 ),
@@ -460,10 +458,7 @@ picturesListUrl.length>0?  Row(
                             children: <Widget>[
                               Container(
                                   margin: EdgeInsets.only(left: 5),
-                                  child: Text(
-                                    "Event Gallery",
-                                    style: TextStyle(fontSize: 18,),
-                                  )),
+                                  child: Text("EVENT GALLERY",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize:16))),
                               carouselListUrl.length>5?InkWell(
                                   child: Text("More",
                                       style: TextStyle(
@@ -617,7 +612,8 @@ picturesListUrl.length>0?  Row(
                                                   style: TextStyle(
                                                       color: ColorGlobal
                                                           .textColor,
-                                                      fontSize: 20),
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 16),
                                                 ),
                                               ),
                                             ],
@@ -661,13 +657,6 @@ picturesListUrl.length>0?  Row(
                             if (isEmpty) {
                               return Row(
                                 children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Container(
-                                          margin: EdgeInsets.only(left: 4),
-                                          child: Text("Sponsors : ",style: TextStyle(fontSize: 16),)),
-                                    ],
-                                  ),
                                   Text(
                                     "No Sponsors for this event",
                                     style: TextStyle(color: Colors.black38),
@@ -695,13 +684,7 @@ picturesListUrl.length>0?  Row(
                                   children: <Widget>[
                                     Container(
                                         margin: EdgeInsets.only(left: 4),
-                                        child: Text(
-                                          "Sponsors",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontStyle: FontStyle.italic,
-                                              fontSize: 16),
-                                        )),
+                                      child: Text("EVENT SPONSORS",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize:16)),),
                                   ],
                                 ),
                                 Container(
@@ -784,6 +767,7 @@ picturesListUrl.length>0?  Row(
                                                     TextOverflow
                                                         .ellipsis,
                                                     style: TextStyle(
+                                                      fontSize: 15,
                                                         fontWeight:
                                                         FontWeight
                                                             .bold),
@@ -818,6 +802,7 @@ picturesListUrl.length>0?  Row(
                                                             overflow:
                                                             TextOverflow
                                                                 .ellipsis,
+                                                            style: TextStyle(fontSize: 15),
                                                             maxLines: 1,
                                                           ),
                                                         ),
@@ -853,7 +838,10 @@ picturesListUrl.length>0?  Row(
                                 Container(
                                   child: Row(
                                     children: <Widget>[
-                                      Text("Event Links",style:TextStyle(fontStyle: FontStyle.italic)),
+                                      Container(
+                                          margin: EdgeInsets.only(left: 4),
+                                          child: Text("EVENT LINKS",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize:16)),
+                                      )
                                     ],
                                   ),
                                   margin: EdgeInsets.only(left: 4,top:4),),
@@ -949,7 +937,14 @@ picturesListUrl.length>0?  Row(
   Future<List<SocialMediaFeed>> getSocialMediaLinks() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-        internet = 0;
+      setState(() {
+        internet=0;
+      });
+    }
+    else {
+      setState(() {
+        internet=1;
+      });
     }
     var uri=Uri.parse(Api.getSocialMedia);
     uri = uri.replace(query: "event_id="+widget.currEvent.event_id.toString());
@@ -1005,21 +1000,36 @@ picturesListUrl.length>0?  Row(
       secondHalf = "";
     }
   }
-  Future<bool> onTimeOut(){
+  refresh() {
+    getEventFile("flyer");
+    getEventFile("pictures");
+    getEventFile("reminder");
+    getEventDetails();
+    if (widget.currEvent.event_description!=""&&widget.currEvent.event_description.length > 200) {
+      firstHalf = widget.currEvent.event_description.substring(0, 200);
+      secondHalf = widget.currEvent.event_description.substring(200, widget.currEvent.event_description.length);
+    } else {
+      firstHalf = widget.currEvent.event_description;
+      secondHalf = "";
+    }
+  }
+  Future<bool> onTimeOut() {
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         title: new Text('Session Timeout'),
         content: new Text('Login to continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
+          FlatButton(
+            onPressed: () async {
               navigateAndReload();
             },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+            child: Text("OK"),
           ),
         ],
       ),
@@ -1127,6 +1137,11 @@ picturesListUrl.length>0?  Row(
         internet = 0;
       });
     }
+    else {
+      setState(() {
+        internet=1;
+      });
+    }
     var uri=Uri.parse(Api.getManage);
     uri = uri.replace(query: "event_id="+widget.currEvent.event_id.toString());
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -1171,9 +1186,17 @@ picturesListUrl.length>0?  Row(
     });
   }
   Future<List<SponsorInfo>> getSponsors() async {
+
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-        internet = 0;
+      setState(() {
+        internet=0;
+      });
+    }
+    else {
+      setState(() {
+        internet=1;
+      });
     }
     var uri=Uri.parse(Api.getSponsors);
     uri = uri.replace(query: "event_id="+widget.currEvent.event_id.toString());
@@ -1226,6 +1249,11 @@ picturesListUrl.length>0?  Row(
      setState(() {
        internet = 0;
      });
+    }
+    else {
+      setState(() {
+        internet=1;
+      });
     }
     String url=Api.getFile+"?event_id="+widget.currEvent.event_id.toString()+"&file_type="+file_type;
     var uri=Uri.parse(url);

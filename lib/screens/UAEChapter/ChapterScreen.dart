@@ -12,11 +12,14 @@ import 'CoreComm.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 
 class ChapterScreen extends StatefulWidget {
+  const ChapterScreen({Key key}) : super(key: key);
+
   @override
   _ChapterScreenState createState() => _ChapterScreenState();
 }
 
 class _ChapterScreenState extends State<ChapterScreen> {
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -43,7 +46,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                 Center(
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: 15),
-                    width: width*0.6,
+                    width: width*0.7,
                     height: width*0.3,
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     decoration: new BoxDecoration(

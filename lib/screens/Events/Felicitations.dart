@@ -47,7 +47,7 @@ class _FelicitationsState extends State<Felicitations> {
               if(snapshot.data==null){
                 if(isEmpty){
                   return Center(
-                      child:Text("No felicitations for this event",style:GoogleFonts.josefinSans(fontSize: 22,color: ColorGlobal.textColor,fontStyle: FontStyle.italic))
+                      child:Text("No felicitations for this event",style:GoogleFonts.josefinSans(fontSize: 22,color: ColorGlobal.textColor))
                   );
                 }else if(internet==0){
                   return (Center(child:NoInternetScreen()));

@@ -163,7 +163,7 @@ class LinkedinState extends State<LinkedIn> {
                       child: Card(
                         //color: ColorGlobal.blueColor,
                         elevation: 5,
-                        shadowColor: const Color(0x802196F3),
+//                        shadowColor: const Color(0x802196F3),
                         margin: const EdgeInsets.all(8),
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
@@ -303,8 +303,8 @@ class LinkedinState extends State<LinkedIn> {
                   showSearch(context: context, delegate: Search(positions))
                       .then((value) {
                 setState(() {
-                  state = 0;
-                  _positions();
+//                  state = 0;
+//                  _positions();
                 });
               }),
               icon: Icon(
@@ -378,132 +378,137 @@ class Search extends SearchDelegate {
               element.user.toLowerCase().contains(query.toLowerCase())));
     }
     cardKey = List<GlobalKey<FlipCardState>>.generate(
-        modelSuggestionList.length, (index) => new GlobalObjectKey(index));
+        modelSuggestionList.length, (index) => new GlobalObjectKey(index + modelSuggestionList.length));
 
-    return ListView.builder(
-      itemCount: modelSuggestionList.length,
-      itemBuilder: (context, index) {
-        final double width = MediaQuery.of(context).size.width;
-        final double height = MediaQuery.of(context).size.height;
-        return FlipCard(
-            key: cardKey[index],
-            front: Container(
-                height: height / 8,
-                alignment: Alignment.topRight,
-                child: Card(
-                  //color: ColorGlobal.blueColor,
-                  elevation: 5,
-                  shadowColor: const Color(0x802196F3),
-                  margin: const EdgeInsets.all(8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Row(
-                      children: <Widget>[
-                        SizedBox(
-                          width: width / 18,
-                        ),
-                        Image(
-                          height: width / 8,
-                          width: width / 8,
-                          fit: BoxFit.cover,
-                          image:
-                              AssetImage('assets/images/linkedinIcon.png'),
-                          //alignment: Alignment.bottomCenter,
-                        ),
-                        SizedBox(
-                          width: width / 16,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          itemCount: modelSuggestionList.length,
+          itemBuilder: (context, index) {
+            final double width = MediaQuery.of(context).size.width;
+            final double height = MediaQuery.of(context).size.height;
+            return FlipCard(
+                key: cardKey[index],
+                front: Container(
+                    height: height / 8,
+                    alignment: Alignment.topRight,
+                    child: Card(
+                      //color: ColorGlobal.blueColor,
+                      elevation: 2,
+//                      shadowColor: const Color(0x802196F3),
+                      margin: const EdgeInsets.all(8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Row(
                           children: <Widget>[
-                            // Container(
-                            //   width: width - width / 2.75,
-                            //   child: Align(
-                            //     alignment: Alignment.topRight,
-                            //     child: Icon(
-                            //       Icons.swap_horiz,
-                            //       color: ColorGlobal.blueColor,
-                            //     ),
-                            //   ),
-                            // ),
-                            AutoSizeText(
-                              modelSuggestionList[index].user.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                color: ColorGlobal.textColor,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                              ),
+                            SizedBox(
+                              width: width / 18,
                             ),
-                          ],
-                        ),
-                        // SizedBox(
-                        //     width: width -
-                        //         width / 1.5 -
-                        //         positions[index].user.length),
-
-                        // Align(
-                        //   alignment: Alignment.topRight,
-                        //   child: Icon(
-                        //     Icons.swap_horiz,
-                        //     color: ColorGlobal.blueColor,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  ),
-                )),
-            back: Container(
-                height: height / 8,
-                child: Card(
-                  //color: ColorGlobal.blueColor,
-                  elevation: 5,
-//                              shadowColor: const Color(0x802196F3),
-                  margin: const EdgeInsets.all(8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            //SizedBox(height: height / 32),
-                            Row(
+                            Image(
+                              height: width / 8,
+                              width: width / 8,
+                              fit: BoxFit.cover,
+                              image:
+                                  AssetImage('assets/images/linkedinIcon.png'),
+                              //alignment: Alignment.bottomCenter,
+                            ),
+                            SizedBox(
+                              width: width / 16,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                SizedBox(
-                                  width: width - width / 5,
-                                ),
-                                Icon(
-                                  Icons.swap_horiz,
-                                  color: ColorGlobal.blueColor,
+                                // Container(
+                                //   width: width - width / 2.75,
+                                //   child: Align(
+                                //     alignment: Alignment.topRight,
+                                //     child: Icon(
+                                //       Icons.swap_horiz,
+                                //       color: ColorGlobal.blueColor,
+                                //     ),
+                                //   ),
+                                // ),
+                                AutoSizeText(
+                                  modelSuggestionList[index].user.toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: ColorGlobal.textColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                  ),
                                 ),
                               ],
                             ),
-                            GestureDetector(
-                              onTap: () async {
-                                await _launchLinked(
-                                    modelSuggestionList[index].linkedin);
-                                cardKey[index].currentState.toggleCard();
-                              },
-                              child: AutoSizeText(
-                                modelSuggestionList[index].linkedin,
-                                //"Link",
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: ColorGlobal.textColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
+                            // SizedBox(
+                            //     width: width -
+                            //         width / 1.5 -
+                            //         positions[index].user.length),
+
+                            // Align(
+                            //   alignment: Alignment.topRight,
+                            //   child: Icon(
+                            //     Icons.swap_horiz,
+                            //     color: ColorGlobal.blueColor,
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      ),
+                    )),
+                back: Container(
+                    height: height / 8,
+                    child: Card(
+                      //color: ColorGlobal.blueColor,
+                      elevation: 2,
+//                              shadowColor: const Color(0x802196F3),
+                      margin: const EdgeInsets.all(8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                //SizedBox(height: height / 32),
+                                Row(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: width - width / 5,
+                                    ),
+                                    Icon(
+                                      Icons.swap_horiz,
+                                      color: ColorGlobal.blueColor,
+                                    ),
+                                  ],
                                 ),
-                                maxLines: 2,
-                                textAlign: TextAlign.start,
-                              ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await _launchLinked(
+                                        modelSuggestionList[index].linkedin);
+                                    cardKey[index].currentState.toggleCard();
+                                  },
+                                  child: AutoSizeText(
+                                    modelSuggestionList[index].linkedin,
+                                    //"Link",
+                                    style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: ColorGlobal.textColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                )));
-      },
+                      ),
+                    )));
+          },
+        ),
+      ),
     );
   }
 }

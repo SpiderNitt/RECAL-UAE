@@ -301,7 +301,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin{
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Text(
-                      "HAVE A QUERY!!",
+                      "HAVE A QUERY?",
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),
@@ -309,7 +309,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin{
                     ),
                     SizedBox(height: height / 64),
                     Text(
-                      "Please write your message in the box below",
+                      "Please write your query in the box below",
                       style: TextStyle(
                         fontSize: 15,
                         color: const Color(0xff3AAFFA),
@@ -322,7 +322,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin{
                       maxLines: 8,
                       controller: messageController,
                       decoration: InputDecoration(
-                        hintText: 'Enter details',
+                        hintText: 'Enter query',
                         hintStyle: TextStyle(color: Colors.grey[500]),
                         filled: true,
                         fillColor: Colors.white70,

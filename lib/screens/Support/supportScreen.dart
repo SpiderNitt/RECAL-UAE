@@ -15,6 +15,8 @@ import 'WriteAdmin.dart';
 // }
 
 class SupportScreen extends StatefulWidget {
+  const SupportScreen({Key key}) : super(key: key);
+
   @override
   SupportScreenState createState() => new SupportScreenState();
 }

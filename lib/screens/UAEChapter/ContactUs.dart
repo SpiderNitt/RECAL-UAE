@@ -303,7 +303,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
     if (await canLaunch(uri)) {
       await launch(uri);
     } else {
-      throw 'Could not launch $uri';
+      return;
     }
   }
 

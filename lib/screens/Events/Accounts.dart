@@ -380,21 +380,23 @@ String getDate(String date){
   final DateFormat formatter = DateFormat('dd-MM-yyyy');
 return formatter.format(DateFormat('yyyy-MM-dd').parse(date));
 }
-  Future<bool> onTimeOut(){
+  Future<bool> onTimeOut() {
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         title: new Text('Session Timeout'),
         content: new Text('Login to continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
+          FlatButton(
+            onPressed: () async {
               navigateAndReload();
             },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+            child: Text("OK"),
           ),
         ],
       ),

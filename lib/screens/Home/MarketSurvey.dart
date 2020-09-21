@@ -18,11 +18,11 @@ import 'package:connectivity/connectivity.dart';
 
 int num = 0;
 
-_launchyoutube(url) async {
+_launchMarket(url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    throw 'Could not launch $url';
+    return;
   }
 }
 
@@ -61,6 +61,8 @@ class SurveyState extends State<SurveyScreen> {
   var state = 0;
   int internet = 1;
   int error = 0;
+  List<GlobalKey<FlipCardState>> cardKey;
+
 
   @override
   void initState() {
@@ -93,6 +95,8 @@ class SurveyState extends State<SurveyScreen> {
               num++;
             }
           }
+          cardKey = List<GlobalKey<FlipCardState>>.generate(
+              positions.length, (index) => new GlobalObjectKey(index));
           print("Answer");
           print(positions.length);
           state = 1;
@@ -158,8 +162,7 @@ class SurveyState extends State<SurveyScreen> {
         final double width = MediaQuery.of(context).size.width;
         final double height = MediaQuery.of(context).size.height;
         return FlipCard(
-            //key: cardKey,
-            // flipOnTouch: false,
+            key: cardKey[index],
             front: Container(
                 height: height / 7,
                 child: GestureDetector(
@@ -208,29 +211,32 @@ class SurveyState extends State<SurveyScreen> {
                 )),
             back: Container(
                 height: height / 7,
-                child: GestureDetector(
-                    child: Card(
-                      //color: ColorGlobal.blueColor,
-                      elevation: 20,
-                      shadowColor: const Color(0x802196F3),
-                      margin: const EdgeInsets.all(8),
-                      child: Center(
-                        child: AutoSizeText(
-                          positions[index].link,
-                          style: TextStyle(
-                            fontSize: 10.0,
-                            color: ColorGlobal.textColor,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic,
-                          ),
-                          maxLines: 3,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.fade,
+                child: Card(
+                  //color: ColorGlobal.blueColor,
+                  elevation: 20,
+                  shadowColor: const Color(0x802196F3),
+                  margin: const EdgeInsets.all(8),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () async {
+                        await _launchMarket(positions[index].link);
+                        cardKey[index].currentState.toggleCard();
+                      },
+                      child: AutoSizeText(
+                        positions[index].link,
+                        style: TextStyle(
+                          fontSize: 10.0,
+                          color: ColorGlobal.textColor,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
                         ),
+                        maxLines: 3,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.fade,
                       ),
                     ),
-                    onLongPress: () =>
-                        {_launchyoutube(positions[index].link)})));
+                  ),
+                )));
       },
     );
   }

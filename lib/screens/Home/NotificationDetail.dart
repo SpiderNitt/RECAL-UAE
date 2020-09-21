@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/NotificationDetailModel.dart';
@@ -37,10 +38,15 @@ class _NotificationDetailState extends State<NotificationDetail> {
   Future<String> _notification() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
       setState(() {
         _hasInternet=false;
       });
-
+    }
+    else {
+      setState(() {
+        _hasInternet=true;
+      });
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String URL = Api.getNotification + notificationsModel.notification_id.toString() + '&user_id=' + "${prefs.getString("user_id")}";
@@ -131,6 +137,14 @@ class _NotificationDetailState extends State<NotificationDetail> {
       );
     }
   }
+  refresh() {
+    setState(() {
+      _hasError = false;
+      state=0;
+      _notification();
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +168,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: !_hasError ? !_hasInternet ? Center(child: NoInternetScreen()) :
+          child: !_hasError ? !_hasInternet ? Center(child: NoInternetScreen(notifyParent: refresh,)) :
           SingleChildScrollView(
             child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
