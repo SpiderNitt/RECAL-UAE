@@ -36,7 +36,10 @@ class SupportScreenState extends State<SupportScreen> {
                     children: <Widget>[
                       Text(
                         'SUPPORT',
-                        style: GoogleFonts.josefinSans(color: ColorGlobal.textColor, fontWeight: FontWeight.bold,fontSize: 20),
+                        style: GoogleFonts.josefinSans(
+                            color: ColorGlobal.textColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
                       ),
                     ],
                   ),
@@ -59,8 +62,8 @@ class SupportScreenState extends State<SupportScreen> {
                               decoration: BoxDecoration(
                                   image: DecorationImage(
                                 fit: BoxFit.fill,
-                                image:
-                                    AssetImage('assets/images/supportbg.jpg'),
+                                image: AssetImage(
+                                    'assets/images/newSupportbg.jpg'),
                               ))))),
                   Column(children: <Widget>[
                     SizedBox(

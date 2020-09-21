@@ -88,6 +88,8 @@ class SurveyState extends State<SurveyScreen> {
         setState(() {
           List list = responseBody.data;
           positions = list.map((model) => SurveyModel.fromJson(model)).toList();
+          positions.removeWhere(
+              (element) => element.link == null || element.link.trim() == "");
           for (int i = 0; i < positions.length; i++) {
             if (positions[i].survey_id != null) {
               num++;

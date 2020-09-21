@@ -1,12 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/CoreCommModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:iosrecal/screens/Home/NoData.dart';
+import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CoreComm extends StatefulWidget {
   @override
@@ -20,9 +26,16 @@ class CoreCommState extends State<CoreComm> {
   var bottom = FractionalOffset.bottomCenter;
   double width = 220.0;
   double widthIcon = 200.0;
+  int internet = 1;
+  bool error = false;
+  var state = 0;
   static List<String> _members = [];
   int flag = 0;
   Future<CoreCommModel> _corecomm() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      internet = 0;
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await http.get(Api.chapterCore, headers: {
       "Accept": "application/json",
@@ -73,9 +86,12 @@ class CoreCommState extends State<CoreComm> {
           });
           print(responseBody.data);
         }
+      } else if (responseBody.status_code == 401) {
+        onTimeOut();
       } else {
         setState(() {
           flag = 2;
+          error = true;
         });
         print('Server error');
       }
@@ -92,6 +108,118 @@ class CoreCommState extends State<CoreComm> {
 
   Future<bool> _onBackPressed() {
     Navigator.of(context).pop(true);
+  }
+
+  Future<bool> onTimeOut() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Session Timeout'),
+            content: new Text('Login to continue'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () async {
+                  //await _logoutUser();
+                  navigateAndReload();
+                },
+                child: FlatButton(
+                  color: Colors.red,
+                  child: Text("OK"),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
+  navigateAndReload() {
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true).then((value) {
+      Navigator.pop(context);
+      setState(() {});
+      _corecomm();
+    });
+  }
+
+  Widget getBody() {
+    if (internet == 0) {
+      return NoInternetScreen();
+    } else if (flag == 0) {
+      return SpinKitDoubleBounce(
+        color: Colors.lightBlueAccent,
+      );
+    } else if (flag == 1 && error == false) {
+      final size = MediaQuery.of(context).size;
+      final refHeight = 700.666;
+      final refWidth = 360;
+      return Center(
+        child: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              gradient: new LinearGradient(
+                colors: [
+                  Color(0xFF9CD7FC),
+                  Colors.blue.withOpacity(0.7),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFFEAE3E3),
+                  spreadRadius: 2,
+                  blurRadius: 0,
+                  // changes position of shadow
+                ),
+              ],
+              border: Border.all(
+                width: 2,
+                color: Color(
+                    0xFF544F50), //                   <--- border width here
+              ),
+              color: Color(0xFF544F50),
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  (22.0),
+                ),
+              ),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(15.0),
+              child: flag == 1
+                  ? Text(
+                      "The ongoing members of the core committee of RECAL UAE Chapter are functioning since Oct 2019. The member details are as follows:"
+                      "\n\nPresident:\n ${_members[0]} "
+                      "\n\nVice President:\n ${_members[1]} "
+                      "\n\nSecretary:\n ${_members[2]} "
+                      "\n\nJoint Secretary:\n ${_members[3]} "
+                      "\n\nTreasurer:\n ${_members[4]} "
+                      "\n\nMentor 1:\n ${_members[5]} "
+                      "\n\nMentor 2:\n ${_members[6]} ",
+                      style: TextStyle(
+                        color: Color(0xFF544F50),
+                        fontSize: 15.0 * (size.width) / refWidth,
+                      ),
+                      textAlign: TextAlign.center,
+                    )
+                  : Text(
+                      "Error loading data, Please try again",
+                      style: TextStyle(
+                        color: Color(0xFF544F50),
+                        fontSize: 15.0 * (size.width) / refWidth,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+            ),
+          ),
+        ),
+      );
+    } else if (flag == 2 && error == false) {
+      return NodataScreen();
+    } else {
+      return Error8Screen();
+    }
   }
 
   @override
@@ -115,69 +243,7 @@ class CoreCommState extends State<CoreComm> {
                 style: TextStyle(color: ColorGlobal.textColor),
               ),
             ),
-            body: Center(
-              child: SingleChildScrollView(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    gradient: new LinearGradient(
-                      colors: [
-                        Color(0xFF9CD7FC),
-                        Colors.blue.withOpacity(0.7),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFFEAE3E3),
-                        spreadRadius: 2,
-                        blurRadius: 0,
-                        // changes position of shadow
-                      ),
-                    ],
-                    border: Border.all(
-                      width: 2,
-                      color: Color(
-                          0xFF544F50), //                   <--- border width here
-                    ),
-                    color: Color(0xFF544F50),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(
-                        (22.0),
-                      ),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: flag == 1
-                        ? Text(
-                            "The ongoing members of the core committee of RECAL UAE Chapter are functioning since Oct 2019. The member details are as follows:"
-                            "\n\nPresident:\n ${_members[0]} "
-                            "\n\nVice President:\n ${_members[1]} "
-                            "\n\nSecretary:\n ${_members[2]} "
-                            "\n\nJoint Secretary:\n ${_members[3]} "
-                            "\n\nTreasurer:\n ${_members[4]} "
-                            "\n\nMentor 1:\n ${_members[5]} "
-                            "\n\nMentor 2:\n ${_members[6]} ",
-                            style: TextStyle(
-                              color: Color(0xFF544F50),
-                              fontSize: 15.0 * (size.width) / refWidth,
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                        : Text(
-                            "Error loading data, Please try again",
-                            style: TextStyle(
-                              color: Color(0xFF544F50),
-                              fontSize: 15.0 * (size.width) / refWidth,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                  ),
-                ),
-              ),
-            )),
+            body: getBody()),
       ),
     );
   }

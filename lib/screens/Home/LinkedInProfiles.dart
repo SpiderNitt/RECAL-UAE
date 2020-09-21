@@ -65,6 +65,10 @@ class LinkedinState extends State<LinkedIn> {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       internet = 0;
+      print(internet);
+      print("HI in connectivity");
+
+      //return null;
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(Api.linkedinProfile, headers: {
