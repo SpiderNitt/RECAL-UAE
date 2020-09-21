@@ -16,7 +16,6 @@ import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/User.dart';
 import 'package:keyboard_utils/keyboard_aware/keyboard_aware.dart';
 import 'package:keyboard_utils/keyboard_utils.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'ProfileScreen.dart';

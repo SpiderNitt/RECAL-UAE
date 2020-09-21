@@ -10,8 +10,6 @@ import 'package:iosrecal/bloc/KeyboardBloc.dart';
 import 'package:iosrecal/models/LoginData.dart';
 
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/screens/Home/Arguments.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:iosrecal/models/User.dart';
 import 'package:iosrecal/Constant/Constant.dart';
