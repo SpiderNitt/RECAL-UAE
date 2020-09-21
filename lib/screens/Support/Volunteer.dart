@@ -313,7 +313,7 @@ class VolunteerState extends State<VolunteerScreen> with TickerProviderStateMixi
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         AutoSizeText(
-                          "WANT TO VOLUNTEER!",
+                          "WANT TO VOLUNTEER?",
                           style: TextStyle(
                               fontSize: 25,
                               color: const Color(0xff3AAFFA),
@@ -334,7 +334,7 @@ class VolunteerState extends State<VolunteerScreen> with TickerProviderStateMixi
                           maxLines: 5,
                           controller: messageController,
                           decoration: InputDecoration(
-                            hintText: 'Enter feedback',
+                            hintText: 'Enter message',
                             hintStyle: TextStyle(color: Colors.grey[500]),
                             filled: true,
                             fillColor: Colors.white70,

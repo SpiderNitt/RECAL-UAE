@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/models/EventInfo.dart';
-import 'package:iosrecal/screens/Home/NoData.dart';
 import 'VolunteerCard.dart';
 class UpcomingEvents extends StatefulWidget {
   List<EventInfo> eventlist;
@@ -16,8 +15,6 @@ class _UpcomingEventsState extends State<UpcomingEvents> with TickerProviderStat
   _UpcomingEventsState(this.eventList);
   GlobalKey<AnimatedListState> animatedListKey = GlobalKey<AnimatedListState>();
   AnimationController emptyController;
-  List events = ["1", "2", "3", "4", "5", "6"];
-  List comp = [false, false, false, false, false, false];
   bool isEmpty = false;
 
   @override
@@ -43,7 +40,6 @@ class _UpcomingEventsState extends State<UpcomingEvents> with TickerProviderStat
           key: animatedListKey,
           initialItemCount: eventList.length,
           itemBuilder: (BuildContext context, int index,animation){
-            // return SizeTransition(child: VolunteerCard(comp[index],events[index],false),
             return SizeTransition(child: VolunteerCard(eventList[index],false,0),
               sizeFactor: animation,);
           }

@@ -303,7 +303,7 @@ class MentorState extends State<WriteMentorScreen>  with TickerProviderStateMixi
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     AutoSizeText(
-                      "NEED MENTOR HELP!!",
+                      "NEED MENTOR HELP?",
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),
