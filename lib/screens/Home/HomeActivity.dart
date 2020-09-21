@@ -7,8 +7,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/screens/Events/EventsScreen.dart';
 import 'package:iosrecal/models/User.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
@@ -39,18 +41,22 @@ class _HomeActivityState extends State<HomeActivity> {
   String cookie = "";
   int unreadMessages=0;
   bool internetConnection=true;
+  UIUtills uiUtills = new UIUtills();
+
 
   refresh() {
     setState(() {
       profile_pic_flag=0;
       getPic=0;
-      internetConnection=false;
-      user = _fetchPrimaryDetails();
+      internetConnection=true;
       _getUserPicture();
       _fetchUnreadMessages();
       _fetchPrimaryDetails();
+      user = _fetchPrimaryDetails();
+
     });
   }
+
   Future<dynamic> _fetchPrimaryDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String name =
@@ -66,6 +72,7 @@ class _HomeActivityState extends State<HomeActivity> {
     return {"name": name, "email": email};
   }
   Future<dynamic> _getUserPicture() async {
+
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -74,9 +81,11 @@ class _HomeActivityState extends State<HomeActivity> {
         });
       }
       else {
+        Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
         setState(() {
           internetConnection = false;
         });
+
       }
     } on SocketException catch (_) {
       print('not connected');
@@ -290,12 +299,14 @@ class _HomeActivityState extends State<HomeActivity> {
         });
       }
       else {
+        Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
         setState(() {
           internetConnection = false;
         });
       }
     } on SocketException catch (_) {
       print('not connected');
+      Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
       setState(() {
         internetConnection = false;
       });
@@ -372,6 +383,7 @@ class _HomeActivityState extends State<HomeActivity> {
   }
   Future<bool> onTimeOut(){
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Session Timeout'),
@@ -398,16 +410,28 @@ class _HomeActivityState extends State<HomeActivity> {
   void initState()  {
     // TODO: implement initState
     super.initState();
+    uiUtills = new UIUtills();
+    internetConnection=true;
     _getUserPicture();
     user = _fetchPrimaryDetails();
     _fetchUnreadMessages();
+
   }
-  var dropdownItems=["Volunteer","Write to admin","Write to mentor","Survey"];
-  var _currentItemSelected="Volunteer";
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
+    uiUtills.updateScreenDimesion(width: width, height: height);
+
     final Size coreSize = _textSize(
         "Core Committee",
         TextStyle(
@@ -453,41 +477,49 @@ class _HomeActivityState extends State<HomeActivity> {
 
     return SafeArea(
       child: Scaffold(
-        appBar:AppBar(
-          backgroundColor: ColorGlobal.whiteColor,
-          centerTitle: true,
-          leading: Card(
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 60,
-              child: Image.asset(
-                'assets/images/recal_circle.png',
-                fit: BoxFit.contain,
+        appBar:PreferredSize(
+          preferredSize: Size.fromHeight(getHeight(60, 1)),
+          child: AppBar(
+            backgroundColor: ColorGlobal.whiteColor,
+            centerTitle: true,
+            leading: Card(
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: getHeight(60, 1),
+                child: Image.asset(
+                  'assets/images/recal_circle.png',
+                  fit: BoxFit.contain,
+                ),
               ),
+              shape: RoundedRectangleBorder(
+                  borderRadius:
+                  new BorderRadius.circular(getHeight(60, 1))),
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius:
-                new BorderRadius.circular(60)),
+            title:Text(
+              'RECAL UAE CHAPTER',
+              style: GoogleFonts.josefinSans(color: ColorGlobal.textColor, fontWeight: FontWeight.bold,fontSize: getWidth(20, 1)),
+            ),
+            actions: <Widget>[
+              IconButton(
+                padding: EdgeInsets.only(right: getWidth(20, 1)),
+                icon: Icon(
+                  Icons.exit_to_app,
+                  size: getHeight(30, 1),
+                  color: ColorGlobal.textColor,
+                ),
+                onPressed: () {
+                  _onLogoutPressed();
+                },
+              )
+            ],
           ),
-          title:Text(
-            'RECAL UAE CHAPTER',
-            style: GoogleFonts.josefinSans(color: ColorGlobal.textColor, fontWeight: FontWeight.bold,fontSize: 20),
-          ),
-          actions: <Widget>[
-            IconButton(
-              padding: EdgeInsets.only(right: 20),
-              icon: Icon(
-                Icons.exit_to_app,
-                size: 30,
-                color: ColorGlobal.textColor,
-              ),
-              onPressed: () {
-                _onLogoutPressed();
-              },
-            )
-          ],
         ),
-        body: internetConnection==false ? NoInternetScreen(notifyParent: refresh) : Stack(
+        body: internetConnection==false ? NoInternetScreen(notifyParent: refresh) :
+            profile_pic_flag==0 ? Center(child: SpinKitSquareCircle(
+              color:ColorGlobal.blueColor,
+            ),
+            ) :
+        Stack(
           children: <Widget>[
             ClipRRect(
               child: Container(
@@ -504,59 +536,6 @@ class _HomeActivityState extends State<HomeActivity> {
             ),
             Column(
               children: <Widget>[
-//                Container(
-//                  padding: EdgeInsets.only(top: 10),
-//                  child: Row(
-//                    mainAxisAlignment: MainAxisAlignment.center,
-//                    children: <Widget>[
-//                      AutoSizeText(
-//                        "RECAL UAE CHAPTER",
-//                        style: GoogleFonts.lato(
-//                            fontSize: 20,
-//                            fontWeight: FontWeight.bold,
-//                            color: ColorGlobal.whiteColor
-//                        ),
-//                        maxLines: 1,
-//                      ),
-//                    ],
-//                  ),
-//                ),
-//                Stack(
-//                    fit: StackFit.loose,
-//                    children:[
-//                      Container(
-//                        width: width,
-//                        child: Card(
-//                          child:Row(
-//                            children: <Widget>[
-//                              Container(
-//                                  padding: EdgeInsets.all(10.0),
-//                                  width: width*0.9,
-//                                  child: Text("No new messagessfjf adjfjggj jdejf ajdfh ajf dfjfg sdjfdjfhfgjfkgjfgfjgfjieiddkndsnhuaheuajndawuhna;woeiiej!!",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 15),)),
-//                            ],
-//                          ),
-//                          elevation: 5,
-////                     shape: RoundedRectangleBorder(
-////                       borderRadius: BorderRadius.circular(15),
-////                     ),
-//                        ),
-//                      ),
-//                      Container(
-//                        width: width*0.95,
-//                        height: height*0.07,
-//                        child: Row(
-//                          mainAxisAlignment:MainAxisAlignment.end,
-//                          children: <Widget>[
-//                            Badge(
-//                              badgeContent: Text('3',style: TextStyle(color: Colors.white),),
-//                              badgeColor: Colors.green,
-//                              child: Icon(Icons.notifications,size: 28,color: Colors.grey[700],),
-//                            )
-//                          ],
-//                        ),
-//                      ),
-//                    ]
-//                ),
                 Hero(
                   tag: "profile_picture",
                   child: Padding(
@@ -564,13 +543,7 @@ class _HomeActivityState extends State<HomeActivity> {
                     child: GestureDetector(
                         onTap: (){
                           Navigator.pushNamed(context,PROFILE_SCREEN,arguments: {"picture": picture}).then((value) {
-                            profile_pic_flag=0;
-                            getPic=0;
-                            internetConnection=true;
-                            user = _fetchPrimaryDetails();
-                            _getUserPicture();
-                            _fetchUnreadMessages();
-                            _fetchPrimaryDetails();
+                            refresh();
                           });
                         },
                         child: profile_pic_flag == 0 ?
@@ -599,7 +572,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                     return Text("${snapshot.data["name"]}".toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: width/14),);
                                   }
                                   else if (snapshot.hasError) {
-                                    return Text("X", style: TextStyle(color: Colors.white, fontSize: width/14),);
+                                    onTimeOut();
                                   }
                                   return CircularProgressIndicator();
                                 },
@@ -618,23 +591,24 @@ class _HomeActivityState extends State<HomeActivity> {
                         future: user,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return Container(
-                              width: width*0.8,
-                              child: Center(
-                                child: Text(
-                                  "Welcome "+"${snapshot.data["name"]}",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.josefinSans(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: ColorGlobal.whiteColor
+                            return Expanded(
+                              child: Container(
+                                width: width*0.99,
+                                child: Center(
+                                  child: AutoSizeText(
+                                    "Welcome "+"${snapshot.data["name"]}",
+                                    style: GoogleFonts.josefinSans(
+                                        fontSize: getWidth(25, 1),
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorGlobal.whiteColor
+                                    ),
+                                    maxLines: 1,
                                   ),
-                                  maxLines: 1,
                                 ),
                               ),
                             );
                           } else if (snapshot.hasError) {
-                            return Text("${snapshot.error}");
+                            onTimeOut();
                           }
                           // By default, show a loading spinner.
                           return CircularProgressIndicator();
@@ -651,15 +625,7 @@ class _HomeActivityState extends State<HomeActivity> {
                       GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, NOTIFICATION_MENU).then((value) {
-                            setState(() {
-                              profile_pic_flag=0;
-                              getPic=0;
-                              internetConnection=true;
-                              user = _fetchPrimaryDetails();
-                              _getUserPicture();
-                              _fetchUnreadMessages();
-                              _fetchPrimaryDetails();
-                            });
+                            refresh();
                           });
                         },
                         child: Column(
@@ -669,7 +635,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                 backgroundColor: Colors.white,
                                 radius: width / 10,
                                 child: unreadMessages !=0 ? Badge(
-                                  badgeContent: Text(unreadMessages.toString(),style: TextStyle(color: Colors.white),),
+                                  badgeContent: Text(unreadMessages>9 ? "9+" : unreadMessages.toString(),style: TextStyle(color: Colors.white),),
                                   badgeColor: Colors.green,
                                   position: BadgePosition.topRight(top: -8, right: -8),
                                   child: Image.asset(
@@ -693,7 +659,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               "Message",
                               style: TextStyle(
                                   fontFamily: 'Pacifico',
-                                  fontSize: 15,
+                                  fontSize: getWidth(15, 1),
                                   fontWeight: FontWeight.bold,
                                   color: ColorGlobal.whiteColor),
                             ),
@@ -701,7 +667,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               "View Messages",
                               style: TextStyle(
                                   fontFamily: 'Pacifico',
-                                  fontSize: 13,
+                                  fontSize: getWidth(13, 1),
                                   fontWeight: FontWeight.w600,
                                   color: ColorGlobal.whiteColor.withOpacity(0.7)),
                             ),
@@ -735,7 +701,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               "Events",
                               style: TextStyle(
                                   fontFamily: 'Pacifico',
-                                  fontSize: 15,
+                                  fontSize: getWidth(15, 1),
                                   fontWeight: FontWeight.bold,
                                   color: ColorGlobal.whiteColor),
                             ),
@@ -743,7 +709,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               "Checkout Events",
                               style: TextStyle(
                                   fontFamily: 'Pacifico',
-                                  fontSize: 13,
+                                  fontSize: getWidth(13, 1),
                                   fontWeight: FontWeight.w600,
                                   color: ColorGlobal.whiteColor.withOpacity(0.7)),
                             ),
@@ -752,12 +718,7 @@ class _HomeActivityState extends State<HomeActivity> {
                         onTap: () {
                           Navigator.push(context,MaterialPageRoute(builder: (context) =>
                               EventsScreen(1))).then((value) {
-                            profile_pic_flag=0;
-                            getPic=0;
-                            internetConnection=true;
-                            user = _fetchPrimaryDetails();
-                            _getUserPicture();
-                            _fetchUnreadMessages();
+                            refresh();
                           });
                         },
                       ),
@@ -797,7 +758,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                 "Social Media",
                                 style: TextStyle(
                                     fontFamily: 'Pacifico',
-                                    fontSize: 15,
+                                    fontSize: getWidth(15, 1),
                                     fontWeight: FontWeight.bold,
                                     color: ColorGlobal.textColor),
                               ),
@@ -805,7 +766,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                 "Social Network",
                                 style: TextStyle(
                                     fontFamily: 'Pacifico',
-                                    fontSize: 13,
+                                    fontSize: getWidth(13, 1),
                                     fontWeight: FontWeight.w600,
                                     color: ColorGlobal.textColor.withOpacity(0.7)),
                               ),
@@ -813,13 +774,7 @@ class _HomeActivityState extends State<HomeActivity> {
                           ),
                           onTap: () {
                             Navigator.pushNamed(context, SOCIAL_MEDIA).then((value) {
-                              profile_pic_flag=0;
-                              getPic=0;
-                              internetConnection=true;
-                              user = _fetchPrimaryDetails();
-                              _getUserPicture();
-                              _fetchUnreadMessages();
-                              _fetchPrimaryDetails();
+                              refresh();
                             });
                           },
                         ),
@@ -847,7 +802,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                 "Employment",
                                 style: TextStyle(
                                     fontFamily: 'Pacifico',
-                                    fontSize: 15,
+                                    fontSize: getWidth(15, 1),
                                     fontWeight: FontWeight.bold,
                                     color: ColorGlobal.textColor),
                               ),
@@ -855,7 +810,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                 "Job Positions",
                                 style: TextStyle(
                                     fontFamily: 'Pacifico',
-                                    fontSize: 13,
+                                    fontSize: getWidth(13, 1),
                                     fontWeight: FontWeight.w600,
                                     color: ColorGlobal.textColor.withOpacity(0.7)),
                               ),
@@ -863,13 +818,7 @@ class _HomeActivityState extends State<HomeActivity> {
                           ),
                           onTap: () {
                             Navigator.pushNamed(context,EMPLOYMENT_SUPPORT).then((value) {
-                              profile_pic_flag=0;
-                              getPic=0;
-                              internetConnection=true;
-                              user = _fetchPrimaryDetails();
-                              _getUserPicture();
-                              _fetchUnreadMessages();
-                              _fetchPrimaryDetails();
+                              refresh();
                             });
                           },
                         ),
@@ -897,7 +846,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                 "Mentorship",
                                 style: TextStyle(
                                     fontFamily: 'Pacifico',
-                                    fontSize: 15,
+                                    fontSize: getWidth(15, 1),
                                     fontWeight: FontWeight.bold,
                                     color: ColorGlobal.textColor),
                               ),
@@ -905,7 +854,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                 "Mentor Groups",
                                 style: TextStyle(
                                     fontFamily: 'Pacifico',
-                                    fontSize: 13,
+                                    fontSize: getWidth(13, 1),
                                     fontWeight: FontWeight.w600,
                                     color: ColorGlobal.textColor.withOpacity(0.7)),
                               ),
@@ -913,13 +862,7 @@ class _HomeActivityState extends State<HomeActivity> {
                           ),
                           onTap: () {
                             Navigator.pushNamed(context,MENTOR_GROUPS).then((value) {
-                            profile_pic_flag=0;
-                                getPic=0;
-                                internetConnection=true;
-                                user = _fetchPrimaryDetails();
-                            _getUserPicture();
-                            _fetchUnreadMessages();
-                            _fetchPrimaryDetails();
+                              refresh();
                             });
                           },
                         ),
@@ -953,7 +896,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                     "Social",
                                     style: TextStyle(
                                         fontFamily: 'Pacifico',
-                                        fontSize: 15,
+                                        fontSize: getWidth(15, 1),
                                         fontWeight: FontWeight.bold,
                                         color: ColorGlobal.textColor),
                                   ),
@@ -961,7 +904,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                     "Go Social",
                                     style: TextStyle(
                                         fontFamily: 'Pacifico',
-                                        fontSize: 13,
+                                        fontSize: getWidth(13, 1),
                                         fontWeight: FontWeight.w600,
                                         color: ColorGlobal.textColor.withOpacity(0.7)),
                                   ),
@@ -970,13 +913,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               ),
                               onTap: () {
                                 Navigator.pushNamed(context,SOCIAL).then((value) {
-                                  profile_pic_flag=0;
-                                  getPic=0;
-                                  internetConnection=true;
-                                  user = _fetchPrimaryDetails();
-                                  _getUserPicture();
-                                  _fetchUnreadMessages();
-                                  _fetchPrimaryDetails();
+                                  refresh();
                                 });
                               },
                             ),
@@ -1007,7 +944,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                     "Business",
                                     style: TextStyle(
                                         fontFamily: 'Pacifico',
-                                        fontSize: 15,
+                                        fontSize: getWidth(15, 1),
                                         fontWeight: FontWeight.bold,
                                         color: ColorGlobal.textColor),
                                   ),
@@ -1015,7 +952,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                     "Business Group",
                                     style: TextStyle(
                                         fontFamily: 'Pacifico',
-                                        fontSize: 13,
+                                        fontSize: getWidth(13, 1),
                                         fontWeight: FontWeight.w600,
                                         color: ColorGlobal.textColor.withOpacity(0.7)),
                                   ),
@@ -1023,13 +960,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               ),
                               onTap: () {
                                 Navigator.pushNamed(context,BUSINESS).then((value) {
-                                  profile_pic_flag=0;
-                                  getPic=0;
-                                  internetConnection=true;
-                                  user = _fetchPrimaryDetails();
-                                  _getUserPicture();
-                                  _fetchUnreadMessages();
-                                  _fetchPrimaryDetails();
+                                 refresh();
                                 });
                               },
                             ),

@@ -5,9 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/Constant/utils.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/bloc/KeyboardBloc.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/User.dart';
@@ -41,7 +44,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final picker = ImagePicker();
   List<int> color = new List<int>.generate(9, (i) => 0);
   User user;
-  int flag = 0;
+  int flag = 0, getBranch=0;
   int dialog = 0;
   String previous = "", after = "";
   int change_dp=0;
@@ -49,6 +52,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   var _formkey = GlobalKey<FormState>();
   bool args;
   KeyboardBloc _bloc = KeyboardBloc();
+  bool internetConnection=true;
+  UIUtills uiUtills = new UIUtills();
+  dynamic allBranch;
 
   TextEditingController name;
   TextEditingController email;
@@ -273,10 +279,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             message: show.replaceAll("!", ""), progressWidget: prog);
       });
       Future.delayed(Duration(milliseconds: 2000)).then((value) {
-
         progressDialog.hide();
         if (!mounted) return; setState(() {
           progressDialog = null;
+          clickSave=0;
         });
       });
     }
@@ -313,7 +319,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     print("image: " + _image.path);
     final length = await _image.length();
-    var request = http.MultipartRequest('POST', Uri.parse("https://delta.nitt.edu/recal-uae/api/users/add_file/"))
+    var request = http.MultipartRequest('POST', Uri.parse(Api.addFile))
       ..headers.addAll({"Cookie": cookie})
       ..fields["file_type"] = "profile_picture"
       ..fields["user_id"] = user_id
@@ -330,7 +336,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
         if (responseBody.status_code == 200) {
           FocusManager.instance.primaryFocus.unfocus();
-          print("yess correct");
+          print("profile pic updated");
           _userDialog("Details Updated", "Okay", 1);
           Future.delayed(Duration(milliseconds: 2000), () {
             Navigator.pop(context);
@@ -342,8 +348,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         }
         else if (responseBody.status_code == 500) {
           print(responseBody);
-          var response = json.decode(json.encode(responseBody.data));
-          String exception = response["exception_message"];
           _userDialog("Error saving details", "Okay", 0);
           return false;
         } else {
@@ -374,7 +378,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     print("USERID Profile: $user_id");
     print("cookie profile: $cookie");
 
-    var url = "https://delta.nitt.edu/recal-uae/api/users/profile/";
+    var url = Api.getUser;
     var uri = Uri.parse(url);
     uri = uri.replace(query: "user_id=$user_id");
 
@@ -391,7 +395,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
           print(user.organization);
 
-          if (!mounted) return; setState(() {
+          if (!mounted) return;
+          setState(() {
             flag = 1;
             name = new TextEditingController(text: user.name);
             email = new TextEditingController(text: user.email);
@@ -407,7 +412,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
             if(user.profile_pic!=null)
               setState(() {
-              picture = "https://delta.nitt.edu/recal-uae" + user.profile_pic;
+              picture = Api.imageUrl + user.profile_pic;
               getPic=1;
             });
 
@@ -455,6 +460,69 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       flag = 2;
       print(error);
     });
+  }
+  _getBranches()  async {
+    var url = Api.getBranch;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String cookie = prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+    await http.get(
+      url,
+      headers: {
+        "Cookie": cookie,
+      },
+    ).then((_response) async {
+      print(_response);
+      ResponseBody responseBody = new ResponseBody();
+
+      if (_response.statusCode == 200) {
+        responseBody = ResponseBody.fromJson(json.decode(_response.body));
+        if (responseBody.status_code == 200) {
+          print(responseBody.data);
+          setState(() {
+            getBranch=1;
+          });
+          setState(() {
+            allBranch = responseBody.data;
+          });
+        } else if (responseBody.status_code == 500) {
+          setState(() {
+            getBranch=2;
+          });
+          print(responseBody.data);
+        } else {
+          setState(() {
+            getBranch=2;
+          });
+          print("${responseBody.status_code}");
+        }
+      } else {
+        setState(() {
+          getBranch=2;
+        });
+        print("server error");
+      }
+    }).catchError((error) {
+      setState(() {
+        getBranch=2;
+      });
+      print("server error");
+    });
+//    return [
+//      "CSE",
+//      "ECE",
+//      "EEE",
+//      "MECH",
+//      "PROD",
+//      "ICE",
+//      "CHEM",
+//      "CIVIL",
+//      "META",
+//      "ARCHI",
+//      "PhD/MSc/MS",
+//      "M.DOMS",
+//      "MCA",
+//      "MTECH"
+//    ];
   }
 
   _postUserDetails() async {
@@ -505,7 +573,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           FocusManager.instance.primaryFocus.unfocus();
           yes=1;
 
-          var url = "https://delta.nitt.edu/recal-uae/api/users/profile/";
+          var url = Api.getUser;
+
           var uri = Uri.parse(url);
           uri = uri.replace(query: "user_id=$user_id");
 
@@ -521,7 +590,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 String picture1 = recal_user.profile_pic;
                 if(picture1!=null) {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
-                  prefs.setString("profile_picture","https://delta.nitt.edu/recal-uae" + picture1);
+                  prefs.setString("profile_picture",Api.imageUrl + picture1);
                 }
                 print("display picture get after upload: $picture1");
               }
@@ -533,9 +602,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               }
             } else {
               print("Server error");
+              _userDialog("Server error, could not save details", "Try again", 0);
+
             }
           }).catchError((error) {
             print(error);
+            _userDialog("Server error, could not save details", "Try again", 0);
           });
         } else if (responseBody.status_code == 500) {
           print(responseBody.data);
@@ -543,7 +615,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           setState(() {
             dialog = 1;
           });
-          _userDialog("Please provide unique details", "Try again", 0);
+          _userDialog("Invalid details", "Try again", 0);
         } else {
           print("${responseBody.status_code}");
           if (!mounted) return;
@@ -553,12 +625,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           _userDialog("Error saving details", "Try again", 0);
         }
       } else {
+        print(responseBody.data);
         if (!mounted) return; setState(() {
           dialog = 1;
         });
         _userDialog("Server error, could not save details", "Try again", 0);
+
         print("server error");
       }
+    }).catchError((error) {
+      print("$error");
+      _userDialog("Server error, could not save details", "Try again", 0);
+      print("server error");
     });
     if(yes==1) {
       if (change_dp == 1) {
@@ -579,6 +657,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     // TODO: implement initState
     super.initState();
     _getUserDetails();
+    _getBranches();
     _bloc.start();
   }
 
@@ -596,16 +675,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     super.dispose();
   }
 
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final height = MediaQuery
-        .of(context)
-        .size
-        .height;
+
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width,height: height);
 
     return WillPopScope(
       child: SafeArea(
@@ -622,41 +706,64 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   IconButton(
                     icon: Icon(Icons.check),
                     iconSize: 30,
-                    onPressed: () {
-                      final FormState form = _formkey.currentState;
-                      if (form.validate()) {
-                        if(progressDialog==null && clickSave==0) {
-                          setState(() {
-                            clickSave=1;
-                          });
-                          if (flag == 1) {
-                            after = name.text +
-                                email.text +
-                                DropDown.branch +
-                                DropDown.year.toString() +
-                                phone.text +
-                                organization.text +
-                                position.text +
-                                DropDown.emirate +
-                                DropDown.gender;
-                            print(previous);
-                            print(after);
-                            if (previous == after && change_dp == 0)
-                              Navigator.of(context).pop();
-                            else {
-                              _postUserDetails();
+                    onPressed: () async {
+                      if(flag==1 && getBranch==1) {
+                        final FormState form = _formkey.currentState;
+                        if (form.validate()) {
+                          if (progressDialog == null && clickSave == 0) {
+                            setState(() {
+                              clickSave = 1;
+                            });
+                            if (flag == 1) {
+                              after = name.text +
+                                  email.text +
+                                  DropDown.branch +
+                                  DropDown.year.toString() +
+                                  phone.text +
+                                  organization.text +
+                                  position.text +
+                                  DropDown.emirate +
+                                  DropDown.gender;
+                              print(previous);
+                              print(after);
+                              if (previous == after && change_dp == 0)
+                                Navigator.of(context).pop();
+                              else {
+                                try {
+                                  final result = await InternetAddress.lookup('google.com');
+                                  if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                                    setState(() {
+                                      internetConnection=true;
+                                    });
+                                   await _postUserDetails();
+                                  }
+                                  else {
+                                    Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
+                                    setState(() {
+                                      internetConnection = false;
+                                      clickSave=0;
+                                    });
+                                  }
+                                } on SocketException catch (_) {
+                                  print('not connected');
+                                  Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
+                                  setState(() {
+                                    internetConnection = false;
+                                    clickSave=0;
+                                  });
+                                }
+                              }
+                            } else {
+                              Navigator.pop(context);
                             }
-                          } else {
-                            Navigator.pop(context);
                           }
-                        }
-                      } else {
-                        _userDialog("Invalid details", "", 0);
-                      }
+                        } else {
 
+                        }
+                      }
                     },
                     color: ColorGlobal.blueColor,
-                    padding: EdgeInsets.only(right: 20),
+                    padding: EdgeInsets.only(right: getWidth(20, 1)),
                   )
                 ],
                 title: Text(
@@ -664,13 +771,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   style: TextStyle(color: ColorGlobal.textColor),
                 ),
               ),
-              body: flag == 0
+              body: (flag == 0 || getBranch==0)
                   ? Center(child: CircularProgressIndicator())
-                  : (flag == 2
-                  ? Center(child: Text("Error please try again"))
+                  : (flag == 2 || getBranch==2)
+                  ? Center(child:Text("Error fetching data \nPlease try after sometime",style:GoogleFonts.josefinSans(fontSize: 20,color: ColorGlobal.textColor))
+              )
                   : SingleChildScrollView(
                 child: Container(
-                  margin: EdgeInsets.all(16),
+                  margin: EdgeInsets.all(getWidth(16, 1)),
                   alignment: Alignment.center,
                   child: Form(
                     key: _formkey,
@@ -679,7 +787,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         SizedBox(
-                          height: 10,
+                          height: getHeight(10, 1),
                         ),
                             new GestureDetector(
                               onTap: () {
@@ -687,13 +795,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               },
                               child: getPic == 0 && change_dp==0
                                   ? CircleAvatar(
-                                radius: 60,
+                                radius: getWidth(60, 1),
                                 backgroundColor: Colors.orange,
-                                child: Text(name.text.toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: 60),)
+                                child: Text(name.text.toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: getWidth(60, 1)),)
                                 )
                                   : new Container(
-                                  width: 120.0,
-                                  height: 120.0,
+                                  width: getWidth(120, 1),
+                                  height: getWidth(120, 1),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(
@@ -704,7 +812,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           image: _image==null && change_dp==0 ? NetworkImage(picture) : FileImage(_image)))),
                             ),
                             SizedBox(
-                              height: 5,
+                              height: getHeight(5, 1),
                             ),
                             Center(
                               child: GestureDetector(
@@ -715,7 +823,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   "Change Profile Photo",
                                   style: TextStyle(
                                       color: ColorGlobal.blueColor,
-                                      fontSize: 16.0,
+                                      fontSize: getHeight(16, 1),
                                       fontWeight: FontWeight.w400),
                                 ),
                               ),
@@ -768,6 +876,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 child: DropDown(
                                   select: 0,
                                   hint: branch.text,
+                                  branches: allBranch,
                                 ),
                               ),
                               flex: 2,
@@ -824,7 +933,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                 ),
-              ))),
+              ),
+          ),
       ),
     );
   }
@@ -839,11 +949,13 @@ class Gender {
 class DropDown extends StatefulWidget {
   final int select;
   final String hint;
+  final dynamic branches;
   static String branch;
   static int year;
   static String emirate;
   static String gender;
-  DropDown({Key key, this.select, this.hint}) : super(key: key);
+
+  DropDown({Key key, this.select, this.hint, this.branches}) : super(key: key);
 
   @override
   _DropDownState createState() => _DropDownState();
@@ -883,28 +995,14 @@ class _DropDownState extends State<DropDown> {
 
   List<int> getYears() {
     all = new List<int>();
-    for (var i = 2019; i >= 1964; i--) all.add(i);
+    var year = DateTime
+        .now()
+        .year;
+    for (var i = year; i >= 1964; i--)
+      all.add(i);
     return all;
   }
 
-  List<String> getBranches() {
-    return [
-      "CSE",
-      "ECE",
-      "EEE",
-      "MECH",
-      "PROD",
-      "ICE",
-      "CHEM",
-      "CIVIL",
-      "META",
-      "ARCHI",
-      "PhD/MSc/MS",
-      "M.DOMS",
-      "MCA",
-      "MTECH"
-    ];
-  }
 
   List<String> getEmirates() {
     return [
@@ -917,6 +1015,11 @@ class _DropDownState extends State<DropDown> {
       "Abu Dhabi"
     ];
   }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -924,7 +1027,7 @@ class _DropDownState extends State<DropDown> {
 //    print(_branch);
 //    print(all);
     if (widget.select == 0) {
-      return DropdownButtonHideUnderline(
+      return widget.branches!=null? DropdownButtonHideUnderline(
         child: new InputDecorator(
           decoration: InputDecoration(
             enabledBorder: UnderlineInputBorder(
@@ -956,15 +1059,15 @@ class _DropDownState extends State<DropDown> {
                 DropDown.branch = newValue;
               });
             },
-            items: getBranches().map<DropdownMenuItem<String>>((String value) {
+            items:  widget.branches.map<DropdownMenuItem<String>>((dynamic value) {
               return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
+                value: value.toString(),
+                child: Text(value.toString()),
               );
             }).toList(),
           ),
         ),
-      );
+      ) : Text(DropDown.branch);
     } else if (widget.select == 1) {
       return DropdownButtonHideUnderline(
         child: InputDecorator(

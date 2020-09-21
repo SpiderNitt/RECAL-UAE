@@ -36,7 +36,7 @@ class LoginState extends State<Login> {
   bool args;
   KeyboardBloc _bloc = new KeyboardBloc();
   UIUtills uiUtills = new UIUtills();
-  bool internetConnection=false;
+  bool internetConnection=true;
 
   TextEditingController email =
       new TextEditingController(text: "narensai319@gmail.com");
@@ -65,7 +65,7 @@ class LoginState extends State<Login> {
 
   _initController() {
     email = new TextEditingController(text: "narensai319@gmail.com");
-    password = new TextEditingController(text: "1j7P1T3ync2I");
+    password = new TextEditingController(text: "123456");
     newPassword = new TextEditingController(text: "");
     confirmPassword = new TextEditingController(text: "");
 
@@ -208,10 +208,21 @@ class LoginState extends State<Login> {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        internetConnection = true;
+        setState(() {
+          internetConnection = true;
+        });
+      }
+      else {
+
+        setState(() {
+          internetConnection = false;
+        });
       }
     } on SocketException catch (_) {
       print('not connected');
+      setState(() {
+        internetConnection = false;
+      });
     }
     if (internetConnection == true) {
       var url = Api.passwordReset;
@@ -241,9 +252,20 @@ class LoginState extends State<Login> {
                     milliseconds: 2000),
                     () {
                   Navigator
-                      .pushReplacementNamed(
+                      .pushNamed(
                       context, PASSWORD_RESET);
-                });
+                }).then((value) {
+                  setState(() {
+                    _deleteUserDetails();
+                    _initController();
+                    uiUtills = new UIUtills();
+                    internetConnection=false;
+                    changePassword = false;
+                    primaryButtonText = "SIGN IN";
+                    secondaryButtonText = "Change Password";
+                    pageTitle = "SIGN IN";
+                  });
+            });
           } else {
             _loginDialog("Error Sending Email", "Try Again", 2);
             print(responseBody.data);

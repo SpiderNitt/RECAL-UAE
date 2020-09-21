@@ -157,9 +157,7 @@ class _PasswordResetState extends State<PasswordReset> {
                 Duration(
                     milliseconds: 2000),
                     () {
-                  Navigator
-                      .pushReplacementNamed(
-                      context, LOGIN_SCREEN);
+                  Navigator.pop(context);
                 });
           } else {
             print(responseBody.data);
