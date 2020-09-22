@@ -13,6 +13,7 @@ class ShowDetailTextWidget extends StatelessWidget {
   final FocusNode focusNode;
   final Color color;
   final String type;
+  final bool readOnly;
 
 
   ShowDetailTextWidget({
@@ -21,12 +22,33 @@ class ShowDetailTextWidget extends StatelessWidget {
     this.onChanged,
     this.focusNode,
     this.color, this.controller, this.type,
+    this.readOnly
   });
   bool isValidEmail(input) {
     return RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
         .hasMatch(input);
   }
+  String validateMobile(String value) {
+    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value.length == 0) {
+      return 'Please enter mobile number';
+    }
+    else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid mobile number';
+    }
+    return null;
+  }
+  String emptyValidation(String value) {
+    if (value.trim().length == 0) {
+      print("zero");
+      return 'This field cannot be empty';
+    }
+    print("valid");
+    return null;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +56,11 @@ class ShowDetailTextWidget extends StatelessWidget {
       onChanged: onChanged,
       cursorColor: ColorGlobal.textColor,
       focusNode:  focusNode,
-//      autovalidate: hintText=="Email" && controller.text!=""  ?  true : false,
-//      validator: hintText=="Email" && controller.text!="" ?  (input) => isValidEmail(input) ? null : "Check your email" : null,
         controller: controller,
+        readOnly: readOnly==null? false : true,
         keyboardType: type=='number'? TextInputType.numberWithOptions(signed: false,decimal: false) : type=='phone' ? TextInputType.phone : TextInputType.text,
         inputFormatters: type=='number' ? [WhitelistingTextInputFormatter.digitsOnly] : null ,
+        validator: type=="phone" ? (value) => validateMobile(value) : (value) => emptyValidation(value) ,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 10),   //  <- you can it to 0.0 for no space
           enabledBorder: UnderlineInputBorder(

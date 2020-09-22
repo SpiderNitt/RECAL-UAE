@@ -20,7 +20,7 @@ _launchfacebook() async {
 }
 
 _launchtwitter() async {
-  const url = 'https://twitter.com/NITTAlumniOffic';
+  const url = 'https://twitter.com/recaluae?lang=en';
   if (await canLaunch(url)) {
     await launch(url);
   } else {
@@ -56,301 +56,298 @@ _launchlinkedin() async {
 }
 
 class SocialMediaScreenState extends State<SocialMediaScreen> {
-   Future<bool> _onBackPressed() {
+  Future<bool> _onBackPressed() {
     Navigator.pop(context);
   }
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height ;
+    final double height = MediaQuery.of(context).size.height;
 
     return WillPopScope(
-      onWillPop: _onBackPressed,
-      child: new Scaffold(
-        appBar: AppBar(
-          backgroundColor: ColorGlobal.whiteColor,
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              }
-          ),
-          title: Text(
-            'Social Media',
-            style: GoogleFonts.lato(color: ColorGlobal.textColor),
-          ),
-        ),
-         body: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/SocialMedia.jpg"),
-                  fit: BoxFit.cover,
+        onWillPop: _onBackPressed,
+        child: new Scaffold(
+          appBar: AppBar(
+            backgroundColor: ColorGlobal.whiteColor,
+            leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: ColorGlobal.textColor,
                 ),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+            title: Text(
+              'Social Media',
+              style: GoogleFonts.lato(color: ColorGlobal.textColor),
+            ),
+          ),
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/SocialMedia.jpg"),
+                fit: BoxFit.cover,
               ),
-              child: ClipRRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(height: 20.0),
-                          Container(
-                            height: height / 8,
-                            alignment: Alignment.center,
-                            child: RaisedButton(
-                              onPressed: _launchfacebook,
-                              shape: RoundedRectangleBorder(
+            ),
+            child: ClipRRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: 20.0),
+                        Container(
+                          height: height / 8,
+                          alignment: Alignment.center,
+                          child: RaisedButton(
+                            onPressed: _launchfacebook,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            padding: EdgeInsets.all(0.0),
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xff475993),
+                                      Color(0xff2F5795)
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
                                   borderRadius: BorderRadius.circular(10.0)),
-                              padding: EdgeInsets.all(0.0),
-                              child: Ink(
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xff475993),
-                                        Color(0xff2F5795)
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                      maxWidth: width / 3,
-                                      minHeight: height / 6),
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        12.0, 0.0, 12.0, 0.0),
-                                    child: Card(
-                                      elevation: 20,
-                                      color: Colors.white,
-                                      child: Padding(
-                                          padding: EdgeInsets.all(5),
-                                          child: Container(
-                                            child: Image(
-                                              height: 40.0,
-                                              width: 40.0,
-                                              fit: BoxFit.cover,
-                                              image: AssetImage(
-                                                  'assets/images/facebook.png'),
-                                              alignment: Alignment.center,
-                                            ),
-                                          )),
-                                    ),
+                              child: Container(
+                                constraints: BoxConstraints(
+                                    maxWidth: width / 3, minHeight: height / 6),
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      12.0, 0.0, 12.0, 0.0),
+                                  child: Card(
+                                    elevation: 20,
+                                    color: Colors.white,
+                                    child: Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Container(
+                                          child: Image(
+                                            height: 40.0,
+                                            width: 40.0,
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                'assets/images/facebook.png'),
+                                            alignment: Alignment.center,
+                                          ),
+                                        )),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 20.0),
-                          Container(
-                            height: height / 8,
-                            alignment: Alignment.center,
-                            child: RaisedButton(
-                              onPressed: _launchtwitter,
-                              shape: RoundedRectangleBorder(
+                        ),
+                        SizedBox(height: 20.0),
+                        Container(
+                          height: height / 8,
+                          alignment: Alignment.center,
+                          child: RaisedButton(
+                            onPressed: _launchtwitter,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            padding: EdgeInsets.all(0.0),
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xff76A9EA),
+                                      Color(0xff03A9F4)
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
                                   borderRadius: BorderRadius.circular(10.0)),
-                              padding: EdgeInsets.all(0.0),
-                              child: Ink(
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xff76A9EA),
-                                        Color(0xff03A9F4)
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                      maxWidth: width / 3,
-                                      minHeight: height / 6),
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        12.0, 0.0, 12.0, 0.0),
-                                    child: Card(
-                                      elevation: 20,
-                                      color: Colors.white,
-                                      child: Padding(
-                                          padding: EdgeInsets.all(5),
-                                          child: Container(
-                                            child: Image(
-                                              height: 40.0,
-                                              width: 40.0,
-                                              fit: BoxFit.cover,
-                                              image: AssetImage(
-                                                  'assets/images/twitter.png'),
-                                              alignment: Alignment.center,
-                                            ),
-                                          )),
-                                    ),
+                              child: Container(
+                                constraints: BoxConstraints(
+                                    maxWidth: width / 3, minHeight: height / 6),
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      12.0, 0.0, 12.0, 0.0),
+                                  child: Card(
+                                    elevation: 20,
+                                    color: Colors.white,
+                                    child: Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Container(
+                                          child: Image(
+                                            height: 40.0,
+                                            width: 40.0,
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                'assets/images/twitter.png'),
+                                            alignment: Alignment.center,
+                                          ),
+                                        )),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 20.0),
-                          Container(
-                            height: height / 8,
-                            alignment: Alignment.center,
-                            child: RaisedButton(
-                              onPressed: _launchyoutube,
-                              shape: RoundedRectangleBorder(
+                        ),
+                        SizedBox(height: 20.0),
+                        Container(
+                          height: height / 8,
+                          alignment: Alignment.center,
+                          child: RaisedButton(
+                            onPressed: _launchyoutube,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            padding: EdgeInsets.all(0.0),
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xffE13D38),
+                                      Color(0xffF44336)
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
                                   borderRadius: BorderRadius.circular(10.0)),
-                              padding: EdgeInsets.all(0.0),
-                              child: Ink(
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xffE13D38),
-                                        Color(0xffF44336)
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                      maxWidth: width / 3,
-                                      minHeight: height / 6),
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        12.0, 0.0, 12.0, 0.0),
-                                    child: Card(
-                                      elevation: 20,
-                                      color: Colors.white,
-                                      child: Padding(
-                                          padding: EdgeInsets.all(5),
-                                          child: Container(
-                                            child: Image(
-                                              height: 40.0,
-                                              width: 40.0,
-                                              fit: BoxFit.cover,
-                                              image: AssetImage(
-                                                  'assets/images/youtube.png'),
-                                              alignment: Alignment.center,
-                                            ),
-                                          )),
-                                    ),
+                              child: Container(
+                                constraints: BoxConstraints(
+                                    maxWidth: width / 3, minHeight: height / 6),
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      12.0, 0.0, 12.0, 0.0),
+                                  child: Card(
+                                    elevation: 20,
+                                    color: Colors.white,
+                                    child: Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Container(
+                                          child: Image(
+                                            height: 40.0,
+                                            width: 40.0,
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                'assets/images/youtube.png'),
+                                            alignment: Alignment.center,
+                                          ),
+                                        )),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 20.0),
-                          Container(
-                            height: height / 8,
-                            alignment: Alignment.center,
-                            child: RaisedButton(
-                              onPressed: _launchlinkedin,
-                              shape: RoundedRectangleBorder(
+                        ),
+                        SizedBox(height: 20.0),
+                        Container(
+                          height: height / 8,
+                          alignment: Alignment.center,
+                          child: RaisedButton(
+                            onPressed: _launchlinkedin,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            padding: EdgeInsets.all(0.0),
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xff2D959E),
+                                      Color(0xff0084B1)
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
                                   borderRadius: BorderRadius.circular(10.0)),
-                              padding: EdgeInsets.all(0.0),
-                              child: Ink(
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xff2D959E),
-                                        Color(0xff0084B1)
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                      maxWidth: width / 3,
-                                      minHeight: height / 6),
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        12.0, 0.0, 12.0, 0.0),
-                                    child: Card(
-                                      elevation: 20,
-                                      color: Colors.white,
-                                      child: Padding(
-                                          padding: EdgeInsets.all(5),
-                                          child: Container(
-                                            child: Image(
-                                              height: 40.0,
-                                              width: 40.0,
-                                              fit: BoxFit.cover,
-                                              image: AssetImage(
-                                                  'assets/images/linkedin.png'),
-                                              alignment: Alignment.center,
-                                            ),
-                                          )),
-                                    ),
+                              child: Container(
+                                constraints: BoxConstraints(
+                                    maxWidth: width / 3, minHeight: height / 6),
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      12.0, 0.0, 12.0, 0.0),
+                                  child: Card(
+                                    elevation: 20,
+                                    color: Colors.white,
+                                    child: Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Container(
+                                          child: Image(
+                                            height: 40.0,
+                                            width: 40.0,
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                'assets/images/linkedin.png'),
+                                            alignment: Alignment.center,
+                                          ),
+                                        )),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 20.0),
-                          Container(
-                            height: height / 8,
-                            alignment: Alignment.center,
-                            child: RaisedButton(
-                              onPressed: _launchhome,
-                              shape: RoundedRectangleBorder(
+                        ),
+                        SizedBox(height: 20.0),
+                        Container(
+                          height: height / 8,
+                          alignment: Alignment.center,
+                          child: RaisedButton(
+                            onPressed: _launchhome,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            padding: EdgeInsets.all(0.0),
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xff00B1E8),
+                                      Color(0xff00ECD1)
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
                                   borderRadius: BorderRadius.circular(10.0)),
-                              padding: EdgeInsets.all(0.0),
-                              child: Ink(
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xff00B1E8),
-                                        Color(0xff00ECD1)
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                      maxWidth: width / 3,
-                                      minHeight: height / 6),
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        12.0, 0.0, 12.0, 0.0),
-                                    child: Card(
-                                      elevation: 20,
-                                      color: Colors.white,
-                                      child: Padding(
-                                          padding: EdgeInsets.all(5),
-                                          child: Container(
-                                            child: Image(
-                                              height: 40.0,
-                                              width: 40.0,
-                                              fit: BoxFit.cover,
-                                              image: AssetImage(
-                                                  'assets/images/instagram.png'),
-                                              alignment: Alignment.center,
-                                            ),
-                                          )),
-                                    ),
+                              child: Container(
+                                constraints: BoxConstraints(
+                                    maxWidth: width / 3, minHeight: height / 6),
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      12.0, 0.0, 12.0, 0.0),
+                                  child: Card(
+                                    elevation: 20,
+                                    color: Colors.white,
+                                    child: Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Container(
+                                          child: Image(
+                                            height: 40.0,
+                                            width: 40.0,
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                'assets/images/instagram.png'),
+                                            alignment: Alignment.center,
+                                          ),
+                                        )),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 20.0),
-                        ],
-                      ),
+                        ),
+                        SizedBox(height: 20.0),
+                      ],
                     ),
                   ),
                 ),
               ),
+            ),
           ),
-    ));
+        ));
   }
 }

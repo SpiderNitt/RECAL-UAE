@@ -185,22 +185,11 @@ class _PayPageState extends State<PayPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
               child: Text(
-                  '\u2022 Once the payment is received, you will receive a notification on your registered e-mail or on this app once you login again. ',
+                  '\u2022 Once the payment is received, you will receive a notification on this app within 24 hours. ',
                   style: TextStyle(
                     fontSize: 18.0,
                     color: const Color(0xFF544F50),
                   )
-              ),
-            ),
-            SizedBox(height: 6.0),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
-              child: Text(
-                '\u2022 The cost of the annual membership is AED 500 valid for one year from the day of payment. You are entitled to attend all the events organized by the chapter at subsidized rates.',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: const Color(0xFF544F50),
-                ),
               ),
             ),
             Padding(

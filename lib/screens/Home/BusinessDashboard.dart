@@ -145,12 +145,12 @@ class _DashBoardState extends State<DashBoard> {
         int dealValue=0;
         List names = List<String>();
         members.forEach((element) {
+          if(int.tryParse(element.deal_value)!=null)
           dealValue += int.parse(element.deal_value);
-          if(!names.contains(element.name)){
+          if(!names.contains(element.name)) {
             final_members.add(element);
             names.add(element.name);
           }
-
         });
         data['Business Members'] = final_members.length;
         data['Social Members'] = data['All Members'] - final_members.length;
@@ -604,7 +604,7 @@ class _DashBoardState extends State<DashBoard> {
                 Navigator.pop(context);
               }),
           title: Text(
-            'Business DashBoard',
+            'Business Dashboard',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),

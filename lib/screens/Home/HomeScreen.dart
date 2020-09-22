@@ -21,6 +21,20 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   int _index = 1;
+  final List<Widget> pages = [
+    ChapterScreen(
+      key: PageStorageKey('Chapter'),
+    ),
+    HomeActivity(
+      key: PageStorageKey('Home'),
+    ),
+    SupportScreen(
+      key: PageStorageKey('Support'),
+    ),
+  ];
+
+  final PageStorageBucket bucket = PageStorageBucket();
+
   Widget _showPage= Scaffold(
     body: HomeActivity(),
   );
@@ -45,22 +59,6 @@ class HomePageState extends State<HomePage> {
     "Profile",
   ];
 
-  Widget _getHomeWidgets(index,context) {
-    switch(index) {
-      case 0: return (ChapterScreen());
-      break;
-//      case 1: return (AchievementsScreen());
-//      break;
-      case 1: return (HomeActivity());
-      break;
-      default:return(SupportScreen());
-//      case 3: return(EventsScreen());
-//      break;
-//      case 4: return(ProfileScreen());
-//      break;
-//      default: return(ProfileScreen());
-    }
-  }
   Future<bool> _onBackPressed() {
     return showDialog(
       context: context,
@@ -95,25 +93,7 @@ class HomePageState extends State<HomePage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: ColorGlobal.whiteColor,
-//        appBar: new AppBar(
-//          backgroundColor: Colors.black.withOpacity(0.5),
-//          actions: <Widget>[
-//            IconButton(
-//              icon: Container(
-//                child: SvgPicture.asset(
-//                  "assets/icons/Logout.svg",
-//                  color: Colors.white70,
-//                ),
-//                height: 20,
-//              ),
-//              onPressed: () {
-//                Navigator.of(context).pushReplacementNamed(LOGIN_SCREEN);
-//              },
-//            )
-//          ],
-//          title: Text(_pages[_index]),
-//          elevation: 0.0,
-//        ),
+
           bottomNavigationBar: CurvedNavigationBar(
             backgroundColor: ColorGlobal.whiteColor,
             color: Colors.black,
@@ -152,11 +132,14 @@ class HomePageState extends State<HomePage> {
             animationDuration: Duration(milliseconds: 200),
             onTap: (int tappedIndex) {
               setState(() {
-                _showPage = _getHomeWidgets(tappedIndex, context);
+                _showPage = pages[tappedIndex];
               });
             },
           ),
-          body: _showPage,
+          body: PageStorage(
+            child: _showPage,
+            bucket: bucket,
+          ),
 //            Stack(
 //              children: [
 //                ClipPath(

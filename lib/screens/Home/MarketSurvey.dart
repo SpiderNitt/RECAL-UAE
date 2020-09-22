@@ -15,14 +15,15 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 int num = 0;
 
-_launchyoutube(url) async {
+_launchMarket(url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    throw 'Could not launch $url';
+    return;
   }
 }
 
@@ -61,6 +62,7 @@ class SurveyState extends State<SurveyScreen> {
   var state = 0;
   int internet = 1;
   int error = 0;
+  List<GlobalKey<FlipCardState>> cardKey;
 
   @override
   void initState() {
@@ -95,6 +97,8 @@ class SurveyState extends State<SurveyScreen> {
               num++;
             }
           }
+          cardKey = List<GlobalKey<FlipCardState>>.generate(
+              positions.length, (index) => new GlobalObjectKey(index));
           print("Answer");
           print(positions.length);
           state = 1;
@@ -130,6 +134,7 @@ class SurveyState extends State<SurveyScreen> {
               ),
             ],
           ),
+          barrierDismissible: false,
         ) ??
         false;
   }
@@ -142,9 +147,18 @@ class SurveyState extends State<SurveyScreen> {
     });
   }
 
+  refresh() {
+    setState(() {
+      state = 0;
+      internet = 1;
+      error = 0;
+    });
+    _positions();
+  }
+
   Widget getBody() {
     if (internet == 0) {
-      return NoInternetScreen();
+      return NoInternetScreen(notifyParent: refresh);
     } else if (error == 1) {
       return Error8Screen();
     } else if (state == 0) {
@@ -160,8 +174,7 @@ class SurveyState extends State<SurveyScreen> {
         final double width = MediaQuery.of(context).size.width;
         final double height = MediaQuery.of(context).size.height;
         return FlipCard(
-            //key: cardKey,
-            // flipOnTouch: false,
+            key: cardKey[index],
             front: Container(
                 height: height / 7,
                 child: GestureDetector(
@@ -194,7 +207,8 @@ class SurveyState extends State<SurveyScreen> {
                               AutoSizeText(
                                 positions[index].text.toUpperCase(),
                                 style: TextStyle(
-                                  fontSize: 20.0,
+                                  fontSize: UIUtills().getProportionalHeight(
+                                      height: 20, choice: 3),
                                   color: ColorGlobal.textColor,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -210,29 +224,33 @@ class SurveyState extends State<SurveyScreen> {
                 )),
             back: Container(
                 height: height / 7,
-                child: GestureDetector(
-                    child: Card(
-                      //color: ColorGlobal.blueColor,
-                      elevation: 20,
-                      shadowColor: const Color(0x802196F3),
-                      margin: const EdgeInsets.all(8),
-                      child: Center(
-                        child: AutoSizeText(
-                          positions[index].link,
-                          style: TextStyle(
-                            fontSize: 10.0,
-                            color: ColorGlobal.textColor,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic,
-                          ),
-                          maxLines: 3,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.fade,
+                child: Card(
+                  //color: ColorGlobal.blueColor,
+                  elevation: 20,
+                  shadowColor: const Color(0x802196F3),
+                  margin: const EdgeInsets.all(8),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () async {
+                        await _launchMarket(positions[index].link);
+                        cardKey[index].currentState.toggleCard();
+                      },
+                      child: AutoSizeText(
+                        positions[index].link,
+                        style: TextStyle(
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 10, choice: 3),
+                          color: ColorGlobal.textColor,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
                         ),
+                        maxLines: 3,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.fade,
                       ),
                     ),
-                    onLongPress: () =>
-                        {_launchyoutube(positions[index].link)})));
+                  ),
+                )));
       },
     );
   }

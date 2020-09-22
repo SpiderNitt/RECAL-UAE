@@ -5,7 +5,7 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:folding_cell/folding_cell.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
-import 'package:iosrecal/screens/Home/BusinessDatabase.dart';
+import 'package:iosrecal/screens/Home/BusinessNetworkList.dart';
 import 'package:iosrecal/screens/Home/DealsExecuted.dart';
 import 'BusinessDashboard.dart';
 
@@ -90,7 +90,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
   @override
   Widget build(BuildContext context) {
     options.add("Business Dashboard");
-    options.add("Business Group Database");
+    options.add("Business Network List");
     options.add("Deals Executed");
 
     images.add(AssetImage('assets/images/dashboard.png'));

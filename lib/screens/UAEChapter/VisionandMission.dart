@@ -16,6 +16,8 @@ import '../Home/errorWrong.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
+import 'package:iosrecal/Constant/utils.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class VisionMission extends StatefulWidget {
   @override
@@ -30,7 +32,7 @@ class _VisionMissionState extends State<VisionMission> {
   String mission;
   var state = 0;
   int internet = 1;
-  bool error = true;
+  bool error = false;
 
   initState() {
     super.initState();
@@ -40,7 +42,9 @@ class _VisionMissionState extends State<VisionMission> {
   Future<String> _chapter() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      internet = 0;
+      setState(() {
+        internet = 0;
+      });
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -60,9 +64,10 @@ class _VisionMissionState extends State<VisionMission> {
         print(chapterDetails);
         vision = chapterDetails.vision;
         mission = chapterDetails.mission;
-        if (vision != null && mission != null) {
+        if (vision != "" && mission != "") {
           setState(() {
             state = 1;
+            error = false;
           });
         } else {
           setState(() {
@@ -99,6 +104,7 @@ class _VisionMissionState extends State<VisionMission> {
               ),
             ],
           ),
+          barrierDismissible: false,
         ) ??
         false;
   }
@@ -111,49 +117,21 @@ class _VisionMissionState extends State<VisionMission> {
     });
   }
 
+  refresh() {
+    setState(() {
+      state = 0;
+      internet = 1;
+      error = false;
+    });
+    _chapter();
+  }
+
   Widget getBody() {
     final double width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     if (internet == 0) {
-      return Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: height / 32,
-            ),
-            Center(
-              child: FadeIn(
-                child: Text(
-                  "NOT CONNECTED TO INTERNET",
-                  style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xff3AAFFA)),
-                  textAlign: TextAlign.center,
-                ),
-                duration: Duration(milliseconds: 2000),
-                curve: Curves.easeIn,
-              ),
-            ),
-            SizedBox(
-              height: height / 100,
-            ),
-            Center(
-              child: Image(
-                image: AssetImage(
-                  'assets/images/no_internet.jpg',
-                ),
-                height: height / 3,
-                fit: BoxFit.fill,
-                //width: width / 1.5,
-              ),
-            ),
-            SizedBox(height: 12.0),
-          ],
-        ),
-      );
+      //
+      return NoInternetScreen(notifyParent: refresh);
     } else if (state == 0) {
       return SpinKitDoubleBounce(
         color: Colors.lightBlueAccent,
@@ -172,7 +150,8 @@ class _VisionMissionState extends State<VisionMission> {
                 child: Text(
                   "VISION",
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize:
+                        UIUtills().getProportionalHeight(height: 25, choice: 3),
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -198,7 +177,8 @@ class _VisionMissionState extends State<VisionMission> {
                     child: AutoSizeText(
               vision,
               style: TextStyle(
-                fontSize: 20,
+                fontSize:
+                    UIUtills().getProportionalHeight(height: 20, choice: 3),
                 color: ColorGlobal.textColor,
               ),
               textAlign: TextAlign.center,
@@ -221,7 +201,8 @@ class _VisionMissionState extends State<VisionMission> {
                 child: Text(
                   "VISION",
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize:
+                        UIUtills().getProportionalHeight(height: 25, choice: 3),
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -247,7 +228,8 @@ class _VisionMissionState extends State<VisionMission> {
                     child: AutoSizeText(
               "NO DATA AVAILABLE",
               style: TextStyle(
-                fontSize: 20,
+                fontSize:
+                    UIUtills().getProportionalHeight(height: 20, choice: 3),
                 color: ColorGlobal.textColor,
               ),
               textAlign: TextAlign.center,
@@ -264,45 +246,7 @@ class _VisionMissionState extends State<VisionMission> {
     final double width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     if (internet == 0) {
-      return Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: height / 32,
-            ),
-            Center(
-              child: FadeIn(
-                child: Text(
-                  "NOT CONNECTED TO INTERNET",
-                  style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xff3AAFFA)),
-                  textAlign: TextAlign.center,
-                ),
-                duration: Duration(milliseconds: 2000),
-                curve: Curves.easeIn,
-              ),
-            ),
-            SizedBox(
-              height: height / 100,
-            ),
-            Center(
-              child: Image(
-                image: AssetImage(
-                  'assets/images/no_internet.jpg',
-                ),
-                height: height / 3,
-                fit: BoxFit.fill,
-                //width: width / 1.5,
-              ),
-            ),
-            SizedBox(height: 12.0),
-          ],
-        ),
-      );
+      return NoInternetScreen(notifyParent: refresh);
     } else if (state == 0) {
       return SpinKitDoubleBounce(
         color: Colors.lightBlueAccent,
@@ -321,7 +265,8 @@ class _VisionMissionState extends State<VisionMission> {
                 child: Text(
                   "MISSION",
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize:
+                        UIUtills().getProportionalHeight(height: 25, choice: 3),
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -347,7 +292,8 @@ class _VisionMissionState extends State<VisionMission> {
                     child: AutoSizeText(
               mission,
               style: TextStyle(
-                fontSize: 20,
+                fontSize:
+                    UIUtills().getProportionalHeight(height: 20, choice: 3),
                 color: ColorGlobal.textColor,
               ),
               textAlign: TextAlign.center,
@@ -370,7 +316,8 @@ class _VisionMissionState extends State<VisionMission> {
                 child: Text(
                   "MISSION",
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize:
+                        UIUtills().getProportionalHeight(height: 25, choice: 3),
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -396,7 +343,8 @@ class _VisionMissionState extends State<VisionMission> {
                     child: AutoSizeText(
               "NO DATA AVAILABLE",
               style: TextStyle(
-                fontSize: 20,
+                fontSize:
+                    UIUtills().getProportionalHeight(height: 20, choice: 3),
                 color: ColorGlobal.textColor,
               ),
               textAlign: TextAlign.center,

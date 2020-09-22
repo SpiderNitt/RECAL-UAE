@@ -35,6 +35,8 @@ class _ClosedPositionsState extends State<ClosedPositions> {
   }
 
   Future<List> _positions() async {
+    closedPositions = new List<PositionModel>();
+    positions = new List<PositionModel>();
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       internet = 0;
@@ -59,7 +61,6 @@ class _ClosedPositionsState extends State<ClosedPositions> {
           if(DateTime.now().isAfter(DateTime.parse(element.open_until))){
             closedPositions.add(element);
           }
-
         });
 
       }else if(responseBody.status_code==401){
@@ -72,7 +73,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
     }else{
       error = 1;
     }
-    return positions;
+    return closedPositions;
   }
 
   Future<bool> onTimeOut(){
@@ -112,12 +113,9 @@ class _ClosedPositionsState extends State<ClosedPositions> {
   Widget build(BuildContext context) {
     String uri;
     final double width = MediaQuery.of(context).size.width;
-//    TimeoutArguments args = ModalRoute.of(context).settings.arguments;
-//    print("checking args");
-//    if(args!=null && args.auth){
-//      print("positions again");
-//      _positions();
-//    }
+    final double height = MediaQuery.of(context).size.height;
+    print("width : " + width.toString());
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -136,7 +134,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
           ),
         ),
         body: Center(
-          child: FutureBuilder(
+          child: FutureBuilder (
             future: _positions(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               switch (snapshot.connectionState) {
@@ -167,14 +165,14 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 8.0),
+                              horizontal: width/25, vertical: width/50),
                           child: Material(
                             color: Colors.white,
                             elevation: 14.0,
                             shadowColor: Color(0x802196F3),
-                            borderRadius: BorderRadius.circular(24.0),
+                            borderRadius: BorderRadius.circular(3*width/50),
                             child: Padding(
-                              padding: const EdgeInsets.all(24.0),
+                              padding: EdgeInsets.all(3*width/50),
                               child: Column(
                                 children: [
                                   Row(
@@ -184,34 +182,42 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                       children: <Widget>[
                                         Icon(
                                           Icons.business_center,
-                                          size: 40.0,
+                                          size: width/10,
                                           color: Color(0xfff4c83f),
                                         ),
                                         SizedBox(
-                                          width: 12.0,
+                                          width: 3*width/100,
                                         ),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text('Position',
-                                                style: TextStyle(
-                                                    color: Color(0xfff4c83f),
-                                                    fontSize: 13.0)),
-                                            Text(closedPositions[index].position,
-                                                style: TextStyle(
-                                                    color:
-                                                        ColorGlobal.textColor,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 20.0))
-                                          ],
+                                        Container(
+                                          width: 67*width/100,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              AutoSizeText('Position',
+                                                  style: TextStyle(
+                                                      color: Color(0xfff4c83f),
+                                                      fontSize: 13.0),
+                                                maxLines: 1,
+                                              ),
+                                              AutoSizeText(
+                                                closedPositions[index].position,
+                                                  style: TextStyle(
+                                                      color:
+                                                          ColorGlobal.textColor,
+                                                      fontWeight: FontWeight.w500,
+                                                      fontSize: 20.0),
+                                              maxLines: 1,
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ],
                                   ),
                                   SizedBox(
-                                    height: 24.0,
+                                    height: 3*width/50,
                                   ),
                                   Row(
                                     crossAxisAlignment:
@@ -219,86 +225,81 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                     children: [
                                       Icon(
                                         Icons.business,
-                                        size: 40.0,
+                                        size: width/10,
                                         color: Color(0xffed622b),
                                       ),
                                       SizedBox(
-                                        width: 12.0,
+                                        width: 3*width/100,
                                       ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text('Company',
+                                      Container(
+                                        width: 67*width/100,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            AutoSizeText('Company',
+                                                style: TextStyle(
+                                                    color: Color(0xffed622b),
+                                                    fontSize: 13.0),
+                                            maxLines: 1,
+                                            ),
+                                            AutoSizeText(closedPositions[index].company,
+                                                style: TextStyle(
+                                                    color: ColorGlobal.textColor,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 20.0),
+                                            maxLines: 1,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 3*width/50,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.description,
+                                        size: width/10,
+                                        color: Color(0xcc982ef0),
+                                      ),
+                                      SizedBox(
+                                        width: 3*width/100,
+                                      ),
+                                      Container(
+                                        width: 67*width/100,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            AutoSizeText('Description',
                                               style: TextStyle(
-                                                  color: Color(0xffed622b),
-                                                  fontSize: 13.0)),
-                                          Text(closedPositions[index].company,
+                                                  color: Color(0xcc982ef0),
+                                                  fontSize: 13.0),
+                                              maxLines: 1,
+                                            ),
+                                            AutoSizeText(closedPositions[index].description,
                                               style: TextStyle(
                                                   color: ColorGlobal.textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 20.0))
-                                        ],
+                                                  fontSize: 20.0),
+                                              maxLines: 7,
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ],
-                                  ),
-                                  SizedBox(height: 24.0),
-                                  AutoSizeText(
-                                    closedPositions[index].description,
-                                    style: TextStyle(color: ColorGlobal.textColor,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 20.0),
-                                    maxLines: 10,
                                   ),
                                   SizedBox(
-                                    height: 24.0,
-                                  ),
-                                  Column(
-                                    children: [
-                                      Row(
-                                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.phone_android,
-                                              size: 40.0,
-                                              color: Color(0xcc982ef0),
-                                            ),
-                                            SizedBox(
-                                              width: 12.0,
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                uri = "tel://" +
-                                                    closedPositions[index].contact;
-                                                launch(uri);
-                                              },
-                                              child: Column(
-                                                //mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text('Contact',
-                                                      style: TextStyle(
-                                                          color:
-                                                              Color(0xcc982ef0),
-                                                          fontSize: 13.0)),
-                                                  Text(closedPositions[index].contact,
-                                                      style: TextStyle(
-                                                          color: ColorGlobal
-                                                              .textColor,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontSize: 20.0)),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                      ),
-                                    ],
+                                    height: 3*width/50,
                                   ),
                                 ],
                               ),

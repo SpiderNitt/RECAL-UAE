@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'screens/Home/BusinessDatabase.dart';
+import 'package:iosrecal/screens/UserAuth/PasswordReset.dart';
+import 'screens/Home/BusinessNetworkList.dart';
 import 'screens/Home/BusinessScreen.dart';
 import 'screens/Home/ClosedPositions.dart';
 import 'screens/Home/DealsExecuted.dart';
 //import 'screens/Home/Feedback.dart';
-import 'screens/Home/MemberDatabase.dart';
+import 'screens/Home/SocialNetworkList.dart';
 import 'screens/Home/SocialMedia.dart';
 import 'screens/Home/SocialScreen.dart';
 import 'screens/Home/WriteToMentor.dart';
@@ -52,6 +53,7 @@ void main() {
         home: ImageSplashScreen(),
         routes: <String, WidgetBuilder>{
           LOGIN_SCREEN: (BuildContext context) => new Login(),
+          PASSWORD_RESET: (BuildContext context) => new PasswordReset(),
           HOME_PAGE: (BuildContext context) => new HomePage(),
           IMAGE_SPLASH: (BuildContext context) => new ImageSplashScreen(),
           PROFILE_SCREEN: (BuildContext context) => new ProfileScreen(),

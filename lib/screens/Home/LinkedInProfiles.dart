@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iosrecal/Constant/Constant.dart';
@@ -18,6 +18,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 class LinkedinModel {
   final int id;
@@ -64,12 +65,13 @@ class LinkedinState extends State<LinkedIn> {
   Future<String> _positions() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      internet = 0;
+      setState(() {
+        internet = 0;
+      });
       print(internet);
       print("HI in connectivity");
-
-      //return null;
     }
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(Api.linkedinProfile, headers: {
       "Accept": "application/json",
@@ -126,6 +128,7 @@ class LinkedinState extends State<LinkedIn> {
               ),
             ],
           ),
+          barrierDismissible: false,
         ) ??
         false;
   }
@@ -138,9 +141,18 @@ class LinkedinState extends State<LinkedIn> {
     });
   }
 
+  refresh() {
+    setState(() {
+      state = 0;
+      internet = 1;
+      error = 0;
+    });
+    _positions();
+  }
+
   Widget getBody() {
     if (internet == 0) {
-      return NoInternetScreen();
+      return NoInternetScreen(notifyParent: refresh);
     } else if (error == 1) {
       return Error8Screen();
     } else if (state == 0) {
@@ -158,6 +170,15 @@ class LinkedinState extends State<LinkedIn> {
           itemBuilder: (context, index) {
             final double width = MediaQuery.of(context).size.width;
             final double height = MediaQuery.of(context).size.height;
+            final List<Color> colorArray = [
+              Colors.blue,
+              Colors.purple,
+              Colors.blueGrey,
+              Colors.deepOrange,
+              Colors.redAccent
+            ];
+            print(width);
+            print(height);
             return FlipCard(
                 key: cardKey[index],
                 front: Container(
@@ -176,13 +197,16 @@ class LinkedinState extends State<LinkedIn> {
                               SizedBox(
                                 width: width / 18,
                               ),
-                              Image(
-                                height: width / 8,
-                                width: width / 8,
-                                fit: BoxFit.cover,
-                                image: AssetImage(
-                                    'assets/images/linkedinIcon.png'),
-                                //alignment: Alignment.bottomCenter,
+                              CircleAvatar(
+                                radius: width / 14,
+                                backgroundColor:
+                                    colorArray.elementAt(Random().nextInt(4)),
+                                child: Text(
+                                  positions[index].user.toUpperCase()[0],
+                                  style: TextStyle(
+                                      fontSize: width / 14,
+                                      color: ColorGlobal.whiteColor),
+                                ),
                               ),
                               SizedBox(
                                 width: width / 16,
@@ -200,15 +224,19 @@ class LinkedinState extends State<LinkedIn> {
                                   //     ),
                                   //   ),
                                   // ),
-                                  AutoSizeText(
-                                    positions[index].user.toUpperCase(),
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: ColorGlobal.textColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic,
+                                  Container(
+                                    child: AutoSizeText(
+                                      positions[index].user.toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: UIUtills()
+                                            .getProportionalHeight(
+                                                height: 16, choice: 3),
+                                        color: ColorGlobal.textColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic,
+                                      ),
                                     ),
-                                  ),
+                                  )
                                 ],
                               ),
                               // SizedBox(
@@ -264,7 +292,9 @@ class LinkedinState extends State<LinkedIn> {
                                     positions[index].linkedin,
                                     //"Link",
                                     style: TextStyle(
-                                      fontSize: 12.0,
+                                      fontSize: UIUtills()
+                                          .getProportionalHeight(
+                                              height: 12, choice: 3),
                                       color: ColorGlobal.textColor,
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
@@ -392,6 +422,13 @@ class Search extends SearchDelegate {
           itemBuilder: (context, index) {
             final double width = MediaQuery.of(context).size.width;
             final double height = MediaQuery.of(context).size.height;
+            final List<Color> colorArray = [
+              Colors.blue,
+              Colors.purple,
+              Colors.blueGrey,
+              Colors.deepOrange,
+              Colors.redAccent
+            ];
             return FlipCard(
                 key: cardKey[index],
                 front: Container(
@@ -409,13 +446,18 @@ class Search extends SearchDelegate {
                             SizedBox(
                               width: width / 18,
                             ),
-                            Image(
-                              height: width / 8,
-                              width: width / 8,
-                              fit: BoxFit.cover,
-                              image:
-                                  AssetImage('assets/images/linkedinIcon.png'),
-                              //alignment: Alignment.bottomCenter,
+                            CircleAvatar(
+                              radius: width / 14,
+                              backgroundColor:
+                                  colorArray.elementAt(Random().nextInt(4)),
+                              child: Text(
+                                modelSuggestionList[index]
+                                    .user
+                                    .toUpperCase()[0],
+                                style: TextStyle(
+                                    fontSize: width / 14,
+                                    color: ColorGlobal.whiteColor),
+                              ),
                             ),
                             SizedBox(
                               width: width / 16,
@@ -436,7 +478,8 @@ class Search extends SearchDelegate {
                                 AutoSizeText(
                                   modelSuggestionList[index].user.toUpperCase(),
                                   style: TextStyle(
-                                    fontSize: 16.0,
+                                    fontSize: UIUtills().getProportionalHeight(
+                                        height: 16, choice: 3),
                                     color: ColorGlobal.textColor,
                                     fontWeight: FontWeight.bold,
                                     fontStyle: FontStyle.italic,
@@ -495,7 +538,9 @@ class Search extends SearchDelegate {
                                     modelSuggestionList[index].linkedin,
                                     //"Link",
                                     style: TextStyle(
-                                      fontSize: 12.0,
+                                      fontSize: UIUtills()
+                                          .getProportionalHeight(
+                                              height: 12, choice: 3),
                                       color: ColorGlobal.textColor,
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,

@@ -13,6 +13,7 @@ import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 class CoreComm extends StatefulWidget {
   @override
@@ -34,7 +35,9 @@ class CoreCommState extends State<CoreComm> {
   Future<CoreCommModel> _corecomm() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      internet = 0;
+      setState(() {
+        internet = 0;
+      });
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await http.get(Api.chapterCore, headers: {
@@ -80,14 +83,13 @@ class CoreCommState extends State<CoreComm> {
             print("members: ");
             print(_members);
           }
+        } else if (responseBody.status_code == 401) {
+          onTimeOut();
         } else {
           setState(() {
-            flag = 2;
+            error = true;
           });
-          print(responseBody.data);
         }
-      } else if (responseBody.status_code == 401) {
-        onTimeOut();
       } else {
         setState(() {
           flag = 2;
@@ -113,6 +115,7 @@ class CoreCommState extends State<CoreComm> {
   Future<bool> onTimeOut() {
     return showDialog(
           context: context,
+          barrierDismissible: false,
           builder: (context) => new AlertDialog(
             title: new Text('Session Timeout'),
             content: new Text('Login to continue'),
@@ -141,9 +144,18 @@ class CoreCommState extends State<CoreComm> {
     });
   }
 
+  refresh() {
+    setState(() {
+      state = 0;
+      internet = 1;
+      error = false;
+    });
+    _corecomm();
+  }
+
   Widget getBody() {
     if (internet == 0) {
-      return NoInternetScreen();
+      return NoInternetScreen(notifyParent: refresh);
     } else if (flag == 0) {
       return SpinKitDoubleBounce(
         color: Colors.lightBlueAccent,
@@ -188,21 +200,158 @@ class CoreCommState extends State<CoreComm> {
             child: Padding(
               padding: EdgeInsets.all(15.0),
               child: flag == 1
-                  ? Text(
-                      "The ongoing members of the core committee of RECAL UAE Chapter are functioning since Oct 2019. The member details are as follows:"
-                      "\n\nPresident:\n ${_members[0]} "
-                      "\n\nVice President:\n ${_members[1]} "
-                      "\n\nSecretary:\n ${_members[2]} "
-                      "\n\nJoint Secretary:\n ${_members[3]} "
-                      "\n\nTreasurer:\n ${_members[4]} "
-                      "\n\nMentor 1:\n ${_members[5]} "
-                      "\n\nMentor 2:\n ${_members[6]} ",
-                      style: TextStyle(
-                        color: Color(0xFF544F50),
-                        fontSize: 15.0 * (size.width) / refWidth,
+                  ? Column(children: <Widget>[
+                      Text(
+                        "The ongoing members of the core committee of RECAL UAE Chapter are functioning since Oct 2019. The member details are as follows:",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 15, choice: 3),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    )
+                      Text(
+                        "\nPresident:",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 18, choice: 3),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "${_members[0]}",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 15, choice: 3),
+                          // fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "\nVice President:",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 18, choice: 3),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "${_members[1]}",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 15, choice: 3),
+                          //fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "\nSecretary:",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 18, choice: 3),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "${_members[2]}",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 15, choice: 3),
+                          //fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "\nJoint Secretary:",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 18, choice: 3),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "${_members[3]}",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 15, choice: 3),
+                          //fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "\nTreasurer:",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 18, choice: 3),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "${_members[4]}",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 15, choice: 3),
+                          //fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "\nVMentor 1:",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 18, choice: 3),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "${_members[5]}",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 15, choice: 3),
+                          //fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "\nMentor 2:",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 18, choice: 3),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "${_members[5]}",
+                        style: TextStyle(
+                          color: Color(0xFF544F50),
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 15, choice: 3),
+                          //fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ])
                   : Text(
                       "Error loading data, Please try again",
                       style: TextStyle(

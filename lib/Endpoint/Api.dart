@@ -1,20 +1,22 @@
 class Api {
-  static final String host = "https://delta.nitt.edu/recal-uae/api/";
+  static final String host = "https://delta.nitt.edu/recal-uae/api/"; //"https://www.recaluaechapter.com/api/api/";
+  static final String imageUrl = "https://delta.nitt.edu/recal-uae"; //"https://www.recaluaechapter.com/api/";
   static final String checkLogin = host + "auth/check_login";
   static final String login = host + "auth/app_login/";
-  static final String passwordReset = host + "auth/pass_reset";
-  static final String passwordUpdate = host + "auth/pass_update";
+  static final String passwordReset = host + "auth/pass_reset/";
+  static final String passwordUpdate = host + "auth/pass_update/";
   static final String feedbackMessage = host + "feedback/send";
   static final String chapterCore = host + "chapter/core/";
   static final String chapterVisionMission = host + "chapter/";
   static final String writeAdmin = host + "employment/write_admin";
   static final String getUser = host + "users/profile/";
-  static final String updateuser = host + "users/update/";
+  static final String updateUser = host + "users/update/";
   static final String addFile = host + "users/add_file/";
   static final String logout = host + "auth/logout/";
   static final String alumniPlaced = host + "employment/alumni_placed";
   static final String businessMembers = host + "business/members/";
   static final String addBranch = host + "branch/add/";
+  static final String getBranch = host + "branch/";
   static final String linkedinProfile = host + "employment/linked_profiles";
   static final String marketSurvey = host + "employment/market_survey";
   static final String allUsers = host + "users/all_users/";
