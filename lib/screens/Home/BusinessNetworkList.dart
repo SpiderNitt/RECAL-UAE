@@ -13,6 +13,7 @@ import 'package:iosrecal/screens/Home/NoData.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 
 class BusinessDatabase extends StatefulWidget {
@@ -26,10 +27,21 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
   var state = 0;
   bool _hasError = false;
   bool _internet = true;
+  UIUtills uiUtills = new UIUtills();
 
   initState() {
     super.initState();
+    uiUtills = new UIUtills();
     _members();
+
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   Future<List> _members() async {
@@ -89,12 +101,28 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
       setState(() {
 
       });
+      state = 0;
+      _hasError = false;
+      _internet = true;
       _members();
     });
   }
 
+  refresh(){
+    print('hello');
+    setState(() {
+
+    });
+    state = 0;
+    _hasError = false;
+    _internet = true;
+    _members();
+  }
+
+
   Future<bool> onTimeOut(){
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Session Timeout'),
@@ -118,7 +146,7 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
 
   Widget getBody() {
     if(!_internet){
-      return Center(child: NoInternetScreen());
+      return Center(child: NoInternetScreen(notifyParent: refresh));
     }
     if(_hasError){
       return Center(child: Error8Screen());
@@ -139,7 +167,7 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
               style: TextStyle(
                 color: ColorGlobal.textColor,
                 fontWeight: FontWeight.w700,
-                fontSize: 18.0,
+                fontSize: getHeight(18, 2),
               ),
             maxLines: 1,
             ),

@@ -31,6 +31,8 @@ class UIUtills {
       return _screenHeight * height / _refrenceScreenHeight;
     else if(choice==1)
       return _screenHeight * height / 672.0;
+    else if(choice==2)
+      return _screenHeight * height / 813.0;
     else
       return 0;
 
@@ -43,6 +45,8 @@ class UIUtills {
       w = _screenWidth * width / _refrenceScreenWidth;
     else if(choice==1)
       w = _screenWidth * width / 360.0;
+    else if(choice==2)
+      w = _screenWidth * width / 411.4;
     else
       w=0;
     return w.ceilToDouble();

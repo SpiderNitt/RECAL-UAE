@@ -13,6 +13,7 @@ import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:iosrecal/Constant/utils.dart';
 import 'package:connectivity/connectivity.dart';
 
 class NotificationDetail extends StatefulWidget {
@@ -27,18 +28,28 @@ class _NotificationDetailState extends State<NotificationDetail> {
   _NotificationDetailState(this.notificationsModel);
   bool _hasError = false;
   bool _hasInternet = true;
+  UIUtills uiUtills = new UIUtills();
 
   var notification = new NotificationDetailModel();
   int state = 0;
   initState() {
     super.initState();
+    UIUtills uiUtills = new UIUtills();
     _notification();
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   Future<String> _notification() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
+      //Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
       setState(() {
         _hasInternet=false;
       });
@@ -98,6 +109,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
 
   Future<bool> onTimeOut(){
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Session Timeout'),
@@ -123,7 +135,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
     if(state==1){
       return Text(notification.body,
         style: TextStyle(
-          fontSize: 20.0,
+          fontSize: getHeight(20, 2),
           fontStyle: FontStyle.italic,
         ),
       );
@@ -167,7 +179,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(getHeight(8, 2)),
           child: !_hasError ? !_hasInternet ? Center(child: NoInternetScreen(notifyParent: refresh,)) :
           SingleChildScrollView(
             child: Column(
@@ -178,9 +190,9 @@ class _NotificationDetailState extends State<NotificationDetail> {
                 color: Colors.white,
                 elevation: 5.0,
                 shadowColor: Color(0x802196F3),
-                borderRadius: BorderRadius.circular(24.0),
+                borderRadius: BorderRadius.circular(getHeight(24, 2)),
                 child: Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: EdgeInsets.all(getHeight(24, 2)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -192,14 +204,14 @@ class _NotificationDetailState extends State<NotificationDetail> {
                            notificationsModel.title,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: 24.0,
+                              fontSize: getHeight(24, 2),
                             ),
                           ),
                         ),
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        height: 24.0,
+                        height: getHeight(24, 2),
                       ),
                       _notificationText(),
                     ],

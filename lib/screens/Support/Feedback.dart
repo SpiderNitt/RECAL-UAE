@@ -95,14 +95,14 @@ class FeedbackState extends State<FeedbackScreen> with TickerProviderStateMixin{
           ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         print("worked!");
-        Fluttertoast.showToast(
-            msg: "Message sent",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0);
+//        Fluttertoast.showToast(
+//            msg: "Message sent",
+//            toastLength: Toast.LENGTH_SHORT,
+//            gravity: ToastGravity.BOTTOM,
+//            timeInSecForIosWeb: 1,
+//            backgroundColor: Colors.green,
+//            textColor: Colors.white,
+//            fontSize: 16.0);
         return true;
       } else if(responseBody.status_code==401){
         onTimeOut();
@@ -198,10 +198,10 @@ class FeedbackState extends State<FeedbackScreen> with TickerProviderStateMixin{
     return GestureDetector(
 
         onTap: () async {
-          _animationController.forward();
 
           final String message = messageController.text;
                         if (message != "") {
+                          _animationController.forward();
                           bool b = await _sendMessage(message);
                         } else {
                           Fluttertoast.showToast(

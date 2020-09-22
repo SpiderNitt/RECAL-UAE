@@ -17,7 +17,7 @@ import 'package:iosrecal/models/BusinessMemberModel.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:connectivity/connectivity.dart';
-
+import 'package:iosrecal/Constant/utils.dart';
 
 class DashBoard extends StatefulWidget {
   @override
@@ -35,6 +35,15 @@ class _DashBoardState extends State<DashBoard> {
   int state = 0;
   bool _hasError = false;
   bool _internet = true;
+  UIUtills uiUtills = new UIUtills();
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
 
   _fetchEvents() async{
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -100,11 +109,25 @@ class _DashBoardState extends State<DashBoard> {
       _internet = true;
       _fetchEvents();
       _fetchAllUsers();
+      uiUtills = new UIUtills();
         });
   }
 
+  refresh(){
+    setState(() {
+
+    });
+    state = 0;
+    _hasError = false;
+    _internet = true;
+    _fetchEvents();
+    _fetchAllUsers();
+  }
+
+
   Future<bool> onTimeOut(){
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Session Timeout'),
@@ -280,10 +303,10 @@ class _DashBoardState extends State<DashBoard> {
       color: Colors.white,
       elevation: 14.0,
       shadowColor: Color(0x802196F3),
-      borderRadius: BorderRadius.circular(24.0),
+      borderRadius: BorderRadius.circular(getHeight(24, 2)),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(getHeight(8, 2)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -292,25 +315,25 @@ class _DashBoardState extends State<DashBoard> {
                 children: <Widget>[
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(getHeight(8, 2)),
                       child: Text(
                         heading,
                         style: TextStyle(
                           color: new Color(color),
-                          fontSize: 20.0,
+                          fontSize: getHeight(20, 2),
                         ),
                       ),
                     ),
                   ),
                   Material(
                     color: new Color(color),
-                    borderRadius: BorderRadius.circular(24.0),
+                    borderRadius: BorderRadius.circular(getHeight(24, 2)),
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(getHeight(16, 2)),
                       child: Icon(
                         icon,
                         color: Colors.white,
-                        size: 30.0,
+                        size: getHeight(30, 2),
                       ),
                     ),
                   ),
@@ -328,9 +351,9 @@ class _DashBoardState extends State<DashBoard> {
       color: Colors.white,
       elevation: 14.0,
       shadowColor: Color(0x802196F3),
-      borderRadius: BorderRadius.circular(24.0),
+      borderRadius: BorderRadius.circular(getHeight(24, 2)),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(getHeight(24, 2)),
         child: Column(
           children: [
             Row(
@@ -343,24 +366,24 @@ class _DashBoardState extends State<DashBoard> {
                     children: <Widget>
                     [
                       Text('Total deals', style: TextStyle(color: Color(color))),
-                      Text(data['All Deals'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 34.0)),
+                      Text(data['All Deals'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: getWidth(34, 2))),
                       SizedBox(
                         height: 24.0,
                       ),
                       Text('Total value', style: TextStyle(color: Color(color))),
-                      Text(data['Deals Value'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 34.0)),
+                      Text(data['Deals Value'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: getWidth(34, 2))),
                     ],
                   ),
                   Material(
                       color: Color(color),
-                      borderRadius: BorderRadius.circular(24.0),
+                      borderRadius: BorderRadius.circular(getHeight(24, 2)),
                       child: Center(
                           child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(getWidth(16, 2)),
                         child: Image(
                           image: AssetImage('assets/images/deals.png'),
-                          height: 30.0,
-                          width: 30.0,
+                          height: getWidth(30, 2),
+                          width: getWidth(30, 2),
                         ),
                       )))
                 ]),
@@ -375,9 +398,9 @@ class _DashBoardState extends State<DashBoard> {
       color: Colors.white,
       elevation: 14.0,
       shadowColor: Color(0x802196F3),
-      borderRadius: BorderRadius.circular(24.0),
+      borderRadius: BorderRadius.circular(getHeight(24, 2)),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(getHeight(24, 2)),
         child: Column(
           children: [
             Row(
@@ -390,24 +413,24 @@ class _DashBoardState extends State<DashBoard> {
                     children: <Widget>
                     [
                       Text('Total events', style: TextStyle(color: Color(color))),
-                      Text(data['All Events'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: 34.0)),
+                      Text(data['All Events'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: getWidth(34, 2))),
                     ],
                   ),
                   Material(
                       color: Color(color),
-                      borderRadius: BorderRadius.circular(24.0),
+                      borderRadius: BorderRadius.circular(getHeight(24, 2)),
                       child: Center(
                           child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(getWidth(16, 2)),
                         child: Image(
                           image: AssetImage('assets/images/events.png'),
-                          height: 30.0,
-                          width: 30.0,
+                          height: getWidth(30, 2),
+                          width: getWidth(30, 0),
                         ),
                       )))
                 ]),
             SizedBox(
-              height: 24.0,
+              height: getHeight(24, 2),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -416,15 +439,15 @@ class _DashBoardState extends State<DashBoard> {
                   children: [
                     Image(
                       image: AssetImage('assets/images/social_db.png'),
-                      height: 30.0,
-                      width: 30.0,
+                      height: getWidth(30, 2),
+                      width: getWidth(30, 2),
                     ),
                     SizedBox(
-                      height: 8.0,
+                      height: getHeight(8, 2),
                     ),
                     Text(
                         data['Social Events'].toString(),
-                        style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w400, fontSize: 22.0)
+                        style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w400, fontSize: getWidth(22, 2))
                     ),
                   ],
                 ),
@@ -432,15 +455,15 @@ class _DashBoardState extends State<DashBoard> {
                   children: [
                     Image.asset(
                       'assets/images/business_db.png',
-                      height: 30.0,
-                      width: 30.0,
+                      height: getWidth(30, 2),
+                      width: getWidth(30, 2),
                     ),
                     SizedBox(
-                      height: 8.0,
+                      height: getHeight(8, 2),
                     ),
                     Text(
                         data['Business Events'].toString(),
-                        style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w400, fontSize: 22.0)
+                        style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w400, fontSize: getWidth(22, 2))
                     ),
                   ],
                 ),
@@ -458,9 +481,9 @@ class _DashBoardState extends State<DashBoard> {
       color: Colors.white,
       elevation: 14.0,
       shadowColor: Color(0x802196F3),
-      borderRadius: BorderRadius.circular(24.0),
+      borderRadius: BorderRadius.circular(getHeight(24, 2)),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(getHeight(24, 2)),
         child: Column(
           children: [
             Row(
@@ -473,21 +496,21 @@ class _DashBoardState extends State<DashBoard> {
                     children: <Widget>
                     [
                       Text('Total members', style: TextStyle(color: Color(color))),
-                      Text(data['All Members'].toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 34.0)),
+                      Text(data['All Members'].toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: getWidth(34, 2))),
                     ],
                   ),
                   Material(
                       color: Color(color),
-                      borderRadius: BorderRadius.circular(24.0),
+                      borderRadius: BorderRadius.circular(getHeight(24, 2)),
                       child: Center(
                           child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(getWidth(16, 2)),
                         child:
-                            Icon(Icons.group, color: Colors.white, size: 30.0),
+                            Icon(Icons.group, color: Colors.white, size: getWidth(30, 2)),
                       )))
                 ]),
             SizedBox(
-              height: 24.0,
+              height: getHeight(24, 2),
             ),
             Expanded(
               child: charts.PieChart(
@@ -518,7 +541,7 @@ class _DashBoardState extends State<DashBoard> {
               ),
             ),
             SizedBox(
-              height: 24.0,
+              height: getHeight(24, 2),
             ),
             Expanded(
               child: charts.PieChart(
@@ -556,7 +579,7 @@ class _DashBoardState extends State<DashBoard> {
 
   Widget getBody(){
     if(!_internet){
-      return Center(child: NoInternetScreen());
+      return Center(child: NoInternetScreen(notifyParent: refresh));
     }
     if(_hasError){
       return Center(
@@ -572,8 +595,8 @@ class _DashBoardState extends State<DashBoard> {
     }
     return new StaggeredGridView.count(
       crossAxisCount: 2,
-      crossAxisSpacing: 12.0,
-      mainAxisSpacing: 12.0,
+      crossAxisSpacing: getWidth(12, 2),
+      mainAxisSpacing: getHeight(12, 2),
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       children: <Widget>[
         membersItem(0xfff4c83f),
@@ -581,9 +604,9 @@ class _DashBoardState extends State<DashBoard> {
         dealsItem(0xff7297ff),
       ],
       staggeredTiles: [
-        StaggeredTile.extent(2, 550.0),
-        StaggeredTile.extent(2, 206.0),
-        StaggeredTile.extent(2, 204.0),
+        StaggeredTile.extent(2, getHeight(550, 2)),
+        StaggeredTile.extent(2, getHeight(206, 2)),
+        StaggeredTile.extent(2, getHeight(206, 2)),
 
       ],
     );

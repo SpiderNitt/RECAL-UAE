@@ -17,6 +17,7 @@ import 'package:iosrecal/screens/Home/NoData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 class NotificationsMenu extends StatefulWidget {
   @override
@@ -33,13 +34,23 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
   bool _hasInternet = true;
   int page = 1;
   int error = 0;
+  UIUtills uiUtills = new UIUtills();
 
   initState() {
     super.initState();
     _notifications();
     _hasMore = true;
     flag = 0;
+    uiUtills = new UIUtills();
     print(block_notification.keys.toList().length);
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   int Comparison(NotificationsModel a, NotificationsModel b) {
@@ -59,7 +70,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
   Future<String> _notifications() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
+      //Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
       setState(() {
         _hasInternet=false;
         flag = 1;
@@ -141,8 +152,10 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
     }
   }
 
+
   Future<bool> onTimeOut(){
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Session Timeout'),
@@ -207,7 +220,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
           }
           return Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: getHeight(10, 2)),
               child: SpinKitDoubleBounce(
                 color: Colors.lightBlueAccent,
               ),
@@ -216,11 +229,11 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
         }
         List date = block_notification.keys.toList()[index1].split("-");
         return Padding(
-          padding: const EdgeInsets.only(top: 5),
+          padding: EdgeInsets.only(top: getHeight(5, 2)),
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: getWidth(10, 2)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -228,7 +241,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                       "${date[2]}-${date[1]}-${date[0]}",
                       style: GoogleFonts.lato(
                         fontWeight: FontWeight.w300,
-                        fontSize: 15.0,
+                        fontSize: getHeight(15, 2),
                       ),
                     ),
                   ],
@@ -273,7 +286,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                         child: Icon(
                           icon,
                           color: color,
-                          size: 25,
+                          size: getWidth(25, 2),
                         ),
                       ),
                       title: Hero(
@@ -285,7 +298,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                             notification.title,
                             style: GoogleFonts.lato(
                               fontWeight: FontWeight.w500,
-                              fontSize: 18.0,
+                              fontSize: getWidth(18, 2),
                               color: notification.is_read == true
                                   ? Colors.black
                                   : Color(0xcc26cb3c),
@@ -298,7 +311,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                 },
                 separatorBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
+                    padding: EdgeInsets.only(left: getWidth(10, 2)),
                     child: Divider(),
                   );
                 },
@@ -309,7 +322,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
       },
       separatorBuilder: (context, index1) {
         return Padding(
-          padding: const EdgeInsets.only(left: 10.0),
+          padding: EdgeInsets.only(left: getWidth(10, 2)),
           child: Divider(color: ColorGlobal.textColor),
         );
       },
