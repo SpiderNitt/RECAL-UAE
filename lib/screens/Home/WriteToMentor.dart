@@ -14,13 +14,15 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 class WriteMentorScreen extends StatefulWidget {
   @override
   MentorState createState() => MentorState();
 }
 
-class MentorState extends State<WriteMentorScreen>  with TickerProviderStateMixin{
+class MentorState extends State<WriteMentorScreen>
+    with TickerProviderStateMixin {
   final TextEditingController messageController = TextEditingController();
   final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
@@ -65,9 +67,8 @@ class MentorState extends State<WriteMentorScreen>  with TickerProviderStateMixi
     //_positions();
   }
 
-  Widget animatedButton(){
+  Widget animatedButton() {
     return GestureDetector(
-
         onTap: () async {
           final String message = messageController.text;
           if (message != "") {
@@ -112,14 +113,14 @@ class MentorState extends State<WriteMentorScreen>  with TickerProviderStateMixi
               children: <Widget>[
                 (!sent)
                     ? AnimatedContainer(
-                  duration: Duration(milliseconds: 400),
-                  child: Icon(Icons.send, color: Colors.white),
-                  curve: Curves.fastOutSlowIn,
-                  transform: Matrix4.translationValues(
-                      _translateX, _translateY, 0)
-                    ..rotateZ(_rotate)
-                    ..scale(_scale),
-                )
+                        duration: Duration(milliseconds: 400),
+                        child: Icon(Icons.send, color: Colors.white),
+                        curve: Curves.fastOutSlowIn,
+                        transform: Matrix4.translationValues(
+                            _translateX, _translateY, 0)
+                          ..rotateZ(_rotate)
+                          ..scale(_scale),
+                      )
                     : Container(),
                 AnimatedSize(
                   vsync: this,
@@ -129,12 +130,21 @@ class MentorState extends State<WriteMentorScreen>  with TickerProviderStateMixi
                 AnimatedSize(
                   vsync: this,
                   duration: Duration(milliseconds: 200),
-                  child: show ? Text("Send", style: TextStyle(color: Colors.white),) : Container(),
+                  child: show
+                      ? Text(
+                          "Send",
+                          style: TextStyle(color: Colors.white),
+                        )
+                      : Container(),
                 ),
                 AnimatedSize(
                   vsync: this,
                   duration: Duration(milliseconds: 200),
-                  child: sent ? (error ? Icon(Icons.warning, color: Colors.white) : Icon(Icons.done, color: Colors.white)) : Container(),
+                  child: sent
+                      ? (error
+                          ? Icon(Icons.warning, color: Colors.white)
+                          : Icon(Icons.done, color: Colors.white))
+                      : Container(),
                 ),
                 AnimatedSize(
                   vsync: this,
@@ -145,7 +155,11 @@ class MentorState extends State<WriteMentorScreen>  with TickerProviderStateMixi
                 AnimatedSize(
                   vsync: this,
                   duration: Duration(milliseconds: 200),
-                  child: sent ? (error ? Text("Error", style: TextStyle(color: Colors.white)) : Text("Done", style: TextStyle(color: Colors.white))) : Container(),
+                  child: sent
+                      ? (error
+                          ? Text("Error", style: TextStyle(color: Colors.white))
+                          : Text("Done", style: TextStyle(color: Colors.white)))
+                      : Container(),
                 ),
               ],
             )));
@@ -162,8 +176,7 @@ class MentorState extends State<WriteMentorScreen>  with TickerProviderStateMixi
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.orange,
           textColor: Colors.white,
-          fontSize: 16.0
-      );
+          fontSize: 16.0);
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String url = Api.getSupport;
@@ -182,10 +195,9 @@ class MentorState extends State<WriteMentorScreen>  with TickerProviderStateMixi
       if (responseBody.status_code == 200) {
         print("worked!");
         return true;
-      }
-      else if(responseBody.status_code==401){
+      } else if (responseBody.status_code == 401) {
         onTimeOut();
-      }else {
+      } else {
         print(responseBody.data);
         return false;
       }
@@ -195,33 +207,33 @@ class MentorState extends State<WriteMentorScreen>  with TickerProviderStateMixi
     }
   }
 
-  navigateAndReload(){
-    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
-        .then((value) {
+  navigateAndReload() {
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true).then((value) {
       print("step 1");
       Navigator.pop(context);
     });
   }
 
-  Future<bool> onTimeOut(){
+  Future<bool> onTimeOut() {
     return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Session Timeout'),
-        content: new Text('Login to continue'),
-        actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              navigateAndReload();
-            },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Session Timeout'),
+            content: new Text('Login to continue'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () async {
+                  navigateAndReload();
+                },
+                child: FlatButton(
+                  color: Colors.red,
+                  child: Text("OK"),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ) ??
+          barrierDismissible: false,
+        ) ??
         false;
   }
 
@@ -276,126 +288,99 @@ class MentorState extends State<WriteMentorScreen>  with TickerProviderStateMixi
     final double height = MediaQuery.of(context).size.height;
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Color(0xDDFFFFFF),
-      appBar: AppBar(
-        backgroundColor: ColorGlobal.whiteColor,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          'Mentor Support',
-          style: TextStyle(color: ColorGlobal.textColor),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(
-                    width / 12, height / 16, width / 12, 0.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    AutoSizeText(
-                      "NEED MENTOR HELP?",
-                      style: TextStyle(
-                          fontSize: 25,
-                          color: const Color(0xff3AAFFA),
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: height / 64),
-                    AutoSizeText(
-                      "Please write your message in the box below",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: const Color(0xff3AAFFA),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextField(
-                      autocorrect: true,
-                      maxLines: 8,
-                      controller: messageController,
-                      decoration: InputDecoration(
-                        hintText: 'Enter message to mentor',
-                        hintStyle: TextStyle(color: Colors.grey[500]),
-                        filled: true,
-                        fillColor: Colors.white70,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                          borderSide:
-                              BorderSide(color: Color(0xFF3AAFFA), width: 2),
+            backgroundColor: Color(0xDDFFFFFF),
+            appBar: AppBar(
+              backgroundColor: ColorGlobal.whiteColor,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              title: Text(
+                'Mentor Support',
+                style: TextStyle(color: ColorGlobal.textColor),
+              ),
+            ),
+            body: SingleChildScrollView(
+              child: Center(
+                child: Container(
+                  color: Colors.white,
+                  height: height,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.fromLTRB(
+                            width / 12, height / 8, width / 12, 0.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            AutoSizeText(
+                              "NEED MENTOR HELP!!",
+                              style: TextStyle(
+                                  fontSize: UIUtills().getProportionalHeight(
+                                      height: 25, choice: 3),
+                                  color: const Color(0xff3AAFFA),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: height / 64),
+                            AutoSizeText(
+                              "Please write your message in the box below",
+                              style: TextStyle(
+                                fontSize: UIUtills().getProportionalHeight(
+                                    height: 15, choice: 3),
+                                color: const Color(0xff3AAFFA),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 20.0),
+                            TextField(
+                              autocorrect: true,
+                              maxLines: 8,
+                              controller: messageController,
+                              decoration: InputDecoration(
+                                hintText: 'Enter message to mentor',
+                                hintStyle: TextStyle(color: Colors.grey[500]),
+                                filled: true,
+                                fillColor: Colors.white70,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12.0)),
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF3AAFFA), width: 2),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12.0)),
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF3AAFFA), width: 2),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: height / 64,
+                            ),
+                            animatedButton(),
+                            SizedBox(
+                              height: height / 64,
+                            ),
+                          ],
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                          borderSide:
-                              BorderSide(color: Color(0xFF3AAFFA), width: 2),
-                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: height / 64,
-                    ),
-                    animatedButton(),
-//                    RawMaterialButton(
-//                      onPressed: () async {
-//                        final String message = messageController.text;
-//                        if (message != "") {
-//                          bool b = await _sendMessage(message);
-//                          ProgressDialog pr;
-//                          if (b) {
-//                            _loginDialog1(pr, "Message Sent", "Thank you", 1);
-//                          } else {
-//                            _loginDialog1(
-//                                pr, "Message was not sent", "Try again", 0);
-//                          }
-//                        } else {
-//                          Fluttertoast.showToast(
-//                              msg: "Enter a message",
-//                              toastLength: Toast.LENGTH_SHORT,
-//                              gravity: ToastGravity.BOTTOM,
-//                              timeInSecForIosWeb: 1,
-//                              backgroundColor: Colors.blue,
-//                              textColor: Colors.white,
-//                              fontSize: 16.0);
-//                        }
-//                      },
-//                      elevation: 2.0,
-//                      fillColor: Colors.blue,
-//                      child: Icon(
-//                        Icons.send,
-//                        color: Colors.white,
-//                        size: 30.0,
-//                      ),
-//                      padding: EdgeInsets.all(15.0),
-//                      shape: CircleBorder(),
-//                    ),
-                    SizedBox(
-                      height: height / 64,
-                    ),
-                  ],
+                      // Align(
+                      //   alignment: Alignment.bottomCenter,
+                      //   child: Image(
+                      //     height: height / 2.75,
+                      //     width: width,
+                      //     fit: BoxFit.fitWidth,
+                      //     image: AssetImage('assets/images/writementor.jpg'),
+                      //     alignment: Alignment.bottomCenter,
+                      //   ),
+                      // )
+                    ],
+                  ),
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Image(
-                  height: height / 2.75,
-                  width: width,
-                  fit: BoxFit.fitWidth,
-                  image: AssetImage('assets/images/writementor.jpg'),
-                  alignment: Alignment.bottomCenter,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    ));
+            )));
   }
 }

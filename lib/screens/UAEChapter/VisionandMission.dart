@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/models/ChapterModel.dart';
@@ -13,6 +14,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import '../Home/errorWrong.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
+import 'package:iosrecal/Constant/utils.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class VisionMission extends StatefulWidget {
   @override
@@ -26,6 +31,7 @@ class _VisionMissionState extends State<VisionMission> {
   String vision;
   String mission;
   var state = 0;
+  int internet = 1;
   bool error = false;
 
   initState() {
@@ -34,6 +40,12 @@ class _VisionMissionState extends State<VisionMission> {
   }
 
   Future<String> _chapter() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        internet = 0;
+      });
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     print("hey1");
@@ -52,9 +64,10 @@ class _VisionMissionState extends State<VisionMission> {
         print(chapterDetails);
         vision = chapterDetails.vision;
         mission = chapterDetails.mission;
-        if (vision != null && mission != null) {
+        if (vision != "" && mission != "") {
           setState(() {
             state = 1;
+            error = false;
           });
         } else {
           setState(() {
@@ -62,6 +75,8 @@ class _VisionMissionState extends State<VisionMission> {
             error = true;
           });
         }
+      } else if (responseBody.status_code == 401) {
+        onTimeOut();
       } else {
         setState(() {
           state = 2;
@@ -70,65 +85,273 @@ class _VisionMissionState extends State<VisionMission> {
     }
   }
 
+  Future<bool> onTimeOut() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Session Timeout'),
+            content: new Text('Login to continue'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () async {
+                  //await _logoutUser();
+                  navigateAndReload();
+                },
+                child: FlatButton(
+                  color: Colors.red,
+                  child: Text("OK"),
+                ),
+              ),
+            ],
+          ),
+          barrierDismissible: false,
+        ) ??
+        false;
+  }
+
+  navigateAndReload() {
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true).then((value) {
+      Navigator.pop(context);
+      setState(() {});
+      _chapter();
+    });
+  }
+
+  refresh() {
+    setState(() {
+      state = 0;
+      internet = 1;
+      error = false;
+    });
+    _chapter();
+  }
+
   Widget getBody() {
-    if (state == 0) {
+    final double width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    if (internet == 0) {
+      //
+      return NoInternetScreen(notifyParent: refresh);
+    } else if (state == 0) {
       return SpinKitDoubleBounce(
         color: Colors.lightBlueAccent,
       );
     } else if (state == 1 && error == false) {
-      return Center(
-          child: FadeIn(
-              child: AutoSizeText(
-        vision,
-        style: TextStyle(
-          fontSize: 15,
-          color: ColorGlobal.textColor,
+      return Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              height: height / 32,
+            ),
+            Center(
+              child: FadeIn(
+                child: Text(
+                  "VISION",
+                  style: TextStyle(
+                    fontSize:
+                        UIUtills().getProportionalHeight(height: 25, choice: 3),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                // Optional paramaters
+                duration: Duration(milliseconds: 2000),
+                curve: Curves.easeIn,
+              ),
+            ),
+            Center(
+              child: Image(
+                image: AssetImage(
+                  'assets/images/visionbg.jpg',
+                ),
+                height: height / 3,
+                fit: BoxFit.fill,
+                //width: width / 1.5,
+              ),
+            ),
+            SizedBox(height: 12.0),
+            Center(
+                child: FadeIn(
+                    child: AutoSizeText(
+              vision,
+              style: TextStyle(
+                fontSize:
+                    UIUtills().getProportionalHeight(height: 20, choice: 3),
+                color: ColorGlobal.textColor,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 5,
+            )))
+          ],
         ),
-        textAlign: TextAlign.center,
-        maxLines: 5,
-      )));
+      );
     } else if (state == 1 && error == true) {
-      return FadeIn(
-        child: Center(
-            child: Text(
-          "NO DATA AVAILABLE",
-          style: TextStyle(
-              fontSize: 18,
-              color: const Color(0xff3AAFFA),
-              fontWeight: FontWeight.bold),
-        )),
+      return Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              height: height / 32,
+            ),
+            Center(
+              child: FadeIn(
+                child: Text(
+                  "VISION",
+                  style: TextStyle(
+                    fontSize:
+                        UIUtills().getProportionalHeight(height: 25, choice: 3),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                // Optional paramaters
+                duration: Duration(milliseconds: 2000),
+                curve: Curves.easeIn,
+              ),
+            ),
+            Center(
+              child: Image(
+                image: AssetImage(
+                  'assets/images/visionbg.jpg',
+                ),
+                height: height / 3,
+                fit: BoxFit.fill,
+                //width: width / 1.5,
+              ),
+            ),
+            SizedBox(height: 12.0),
+            Center(
+                child: FadeIn(
+                    child: AutoSizeText(
+              "NO DATA AVAILABLE",
+              style: TextStyle(
+                fontSize:
+                    UIUtills().getProportionalHeight(height: 20, choice: 3),
+                color: ColorGlobal.textColor,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 5,
+            )))
+          ],
+        ),
       );
     }
     return Error8Screen();
   }
 
   Widget getBody1() {
-    if (state == 0) {
+    final double width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    if (internet == 0) {
+      return NoInternetScreen(notifyParent: refresh);
+    } else if (state == 0) {
       return SpinKitDoubleBounce(
         color: Colors.lightBlueAccent,
       );
     } else if (state == 1 && error == false) {
-      return Center(
-          child: FadeIn(
-              child: AutoSizeText(
-        mission,
-        style: TextStyle(
-          fontSize: 20,
-          color: ColorGlobal.textColor,
+      return Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              height: height / 32,
+            ),
+            Center(
+              child: FadeIn(
+                child: Text(
+                  "MISSION",
+                  style: TextStyle(
+                    fontSize:
+                        UIUtills().getProportionalHeight(height: 25, choice: 3),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                // Optional paramaters
+                duration: Duration(milliseconds: 2000),
+                curve: Curves.easeIn,
+              ),
+            ),
+            Center(
+              child: Image(
+                image: AssetImage(
+                  'assets/images/missionbg.jpg',
+                ),
+                height: height / 3,
+                fit: BoxFit.fill,
+                //width: width / 1.5,
+              ),
+            ),
+            SizedBox(height: 12.0),
+            Center(
+                child: FadeIn(
+                    child: AutoSizeText(
+              mission,
+              style: TextStyle(
+                fontSize:
+                    UIUtills().getProportionalHeight(height: 20, choice: 3),
+                color: ColorGlobal.textColor,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 5,
+            )))
+          ],
         ),
-        textAlign: TextAlign.center,
-        maxLines: 5,
-      )));
+      );
     } else if (state == 1 && error == true) {
-      return FadeIn(
-        child: Center(
-            child: Text(
-          "NO DATA AVAILABLE",
-          style: TextStyle(
-              fontSize: 18,
-              color: const Color(0xff3AAFFA),
-              fontWeight: FontWeight.bold),
-        )),
+      return Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              height: height / 32,
+            ),
+            Center(
+              child: FadeIn(
+                child: Text(
+                  "MISSION",
+                  style: TextStyle(
+                    fontSize:
+                        UIUtills().getProportionalHeight(height: 25, choice: 3),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                // Optional paramaters
+                duration: Duration(milliseconds: 2000),
+                curve: Curves.easeIn,
+              ),
+            ),
+            Center(
+              child: Image(
+                image: AssetImage(
+                  'assets/images/missionbg.jpg',
+                ),
+                height: height / 3,
+                fit: BoxFit.fill,
+                //width: width / 1.5,
+              ),
+            ),
+            SizedBox(height: 12.0),
+            Center(
+                child: FadeIn(
+                    child: AutoSizeText(
+              "NO DATA AVAILABLE",
+              style: TextStyle(
+                fontSize:
+                    UIUtills().getProportionalHeight(height: 20, choice: 3),
+                color: ColorGlobal.textColor,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 5,
+            )))
+          ],
+        ),
       );
     }
     return Error8Screen();
@@ -192,89 +415,7 @@ class _VisionMissionState extends State<VisionMission> {
                         _currentPage = page;
                       });
                     },
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              height: height / 32,
-                            ),
-                            Center(
-                              child: FadeIn(
-                                child: Text(
-                                  "VISION",
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                // Optional paramaters
-                                duration: Duration(milliseconds: 2000),
-                                curve: Curves.easeIn,
-                              ),
-                            ),
-                            Center(
-                              child: Image(
-                                image: AssetImage(
-                                  'assets/images/visionbg.jpg',
-                                ),
-                                height: height / 3,
-                                fit: BoxFit.fill,
-                                //width: width / 1.5,
-                              ),
-                            ),
-                            SizedBox(height: 12.0),
-                            getBody(),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(
-                                  height: height / 32,
-                                ),
-                                Center(
-                                  child: FadeIn(
-                                    child: Text(
-                                      "MISSION",
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    // Optional paramaters
-                                    duration: Duration(milliseconds: 2000),
-                                    curve: Curves.easeIn,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: height / 40,
-                                ),
-                                Center(
-                                  child: Image(
-                                    image: AssetImage(
-                                      'assets/images/missionbg.jpg',
-                                    ),
-                                    height: height / 3.5,
-                                    //width: width / 1.5,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: height / 40,
-                                ),
-                                getBody1()
-                              ],
-                            ),
-                          )),
-                    ],
+                    children: <Widget>[getBody(), getBody1()],
                   ),
                 ),
                 Row(

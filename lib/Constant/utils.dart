@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class UIUtills {
   factory UIUtills() {
     return _singleton;
@@ -25,30 +26,33 @@ class UIUtills {
     _screenHeight = (height != null) ? height : _screenHeight;
   }
 
-  double getProportionalHeight({double height, int choice=0}) {
+  double getProportionalHeight({double height, int choice = 0}) {
     if (_screenHeight == null) return height;
-    if(choice==0)
+    if (choice == 0)
       return _screenHeight * height / _refrenceScreenHeight;
-    else if(choice==1)
+    else if (choice == 1)
       return _screenHeight * height / 672.0;
-    else if(choice==2)
+    else if (choice == 3) {
+      return _screenHeight * height / 690.0;
+    } else if (choice == 2)
       return _screenHeight * height / 813.0;
     else
       return 0;
-
   }
 
-  double getProportionalWidth({double width, int choice=0}) {
+  double getProportionalWidth({double width, int choice = 0}) {
     if (_screenWidth == null) return width;
     var w;
-    if(choice==0)
+    if (choice == 0)
       w = _screenWidth * width / _refrenceScreenWidth;
-    else if(choice==1)
+    else if (choice == 1)
       w = _screenWidth * width / 360.0;
-    else if(choice==2)
+    else if (choice == 3)
+      w = _screenWidth * width / 360.0;
+    else if (choice == 2)
       w = _screenWidth * width / 411.4;
     else
-      w=0;
+      w = 0;
     return w.ceilToDouble();
   }
 }
