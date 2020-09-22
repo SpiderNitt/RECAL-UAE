@@ -16,6 +16,7 @@ import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 
 class OpenPositions extends StatefulWidget {
@@ -28,10 +29,20 @@ class _OpenPositionsState extends State<OpenPositions> {
   var openPositions = new List<PositionModel>();
   int internet = 1;
   int error = 0;
+  UIUtills uiUtills = new UIUtills();
 
   initState() {
     super.initState();
+    uiUtills = new UIUtills();
     //_positions();
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   Future<List> _positions() async {
@@ -89,6 +100,13 @@ class _OpenPositionsState extends State<OpenPositions> {
       _positions();});
   }
 
+  refresh(){
+    setState(() {
+
+    });
+    _positions;
+  }
+
   Future<bool> onTimeOut(){
     return showDialog(
       context: context,
@@ -140,7 +158,7 @@ class _OpenPositionsState extends State<OpenPositions> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
-                  return Center(child: NoInternetScreen());
+                  return Center(child: NoInternetScreen(notifyParent: refresh));
                 case ConnectionState.waiting:
                 case ConnectionState.active:
                   return Center(
@@ -150,7 +168,7 @@ class _OpenPositionsState extends State<OpenPositions> {
                   );
                 case ConnectionState.done:
                   if (snapshot.hasError) {
-                    return internet == 1 ? Center(child: Error8Screen()) : Center(child: NoInternetScreen());
+                    return internet == 1 ? Center(child: Error8Screen()) : Center(child: NoInternetScreen(notifyParent: refresh));
                   } else {
                     if(error==1){
                       return Center(child: Error8Screen());
@@ -197,7 +215,7 @@ class _OpenPositionsState extends State<OpenPositions> {
                                             AutoSizeText('Position',
                                               style: TextStyle(
                                                   color: Color(0xfff4c83f),
-                                                  fontSize: 13.0),
+                                                  fontSize: getHeight(13, 2)),
                                               maxLines: 1,
                                             ),
                                             AutoSizeText(openPositions[index].position,
@@ -205,7 +223,7 @@ class _OpenPositionsState extends State<OpenPositions> {
                                                   color:
                                                   ColorGlobal.textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 20.0),
+                                                  fontSize: getHeight(20, 2)),
                                               maxLines: 1,
                                             )
                                           ],
@@ -239,14 +257,14 @@ class _OpenPositionsState extends State<OpenPositions> {
                                             AutoSizeText('Company',
                                               style: TextStyle(
                                                   color: Color(0xffed622b),
-                                                  fontSize: 13.0),
+                                                  fontSize: getHeight(13, 2)),
                                               maxLines: 1,
                                             ),
                                             AutoSizeText(openPositions[index].company,
                                               style: TextStyle(
                                                   color: ColorGlobal.textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 20.0),
+                                                  fontSize: getHeight(20, 2)),
                                               maxLines: 1,
                                             )
                                           ],
@@ -280,14 +298,14 @@ class _OpenPositionsState extends State<OpenPositions> {
                                             AutoSizeText('Description',
                                               style: TextStyle(
                                                   color: Color(0xcc982ef0),
-                                                  fontSize: 13.0),
+                                                  fontSize: getHeight(13, 2)),
                                               maxLines: 1,
                                             ),
                                             AutoSizeText(openPositions[index].description,
                                               style: TextStyle(
                                                   color: ColorGlobal.textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 20.0),
+                                                  fontSize: getHeight(20, 2)),
                                               maxLines: 7,
                                             )
                                           ],
@@ -321,14 +339,14 @@ class _OpenPositionsState extends State<OpenPositions> {
                                             AutoSizeText('Contact',
                                               style: TextStyle(
                                                   color: Color(0xcc26cb3c),
-                                                  fontSize: 13.0),
+                                                  fontSize: getHeight(13, 2)),
                                               maxLines: 1,
                                             ),
                                             AutoSizeText(openPositions[index].contact,
                                               style: TextStyle(
                                                   color: ColorGlobal.textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 20.0),
+                                                  fontSize: getHeight(20, 2)),
                                               maxLines: 2,
                                             )
                                           ],

@@ -70,10 +70,10 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin{
     return GestureDetector(
 
         onTap: () async {
-          _animationController.forward();
 
           final String message = messageController.text;
           if (message != "") {
+            _animationController.forward();
             bool b = await _sendMessage(message);
           } else {
             Fluttertoast.showToast(

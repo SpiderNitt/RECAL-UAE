@@ -14,6 +14,7 @@ import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 class MemberDatabase extends StatefulWidget {
   @override
@@ -24,10 +25,20 @@ class _MemberDatabaseState extends State<MemberDatabase> {
   var members = new List<MemberModel>();
   int internet = 1;
   int error = 0;
+  UIUtills uiUtills = new UIUtills();
 
   initState() {
     super.initState();
+    uiUtills = new UIUtills();
     //_positions();
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   Future<List> _members() async {
@@ -63,8 +74,17 @@ class _MemberDatabaseState extends State<MemberDatabase> {
     return members;
   }
 
+  refresh(){
+    setState(() {
+
+    });
+    _members();
+  }
+
+
   Future<bool> onTimeOut(){
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Session Timeout'),
@@ -128,7 +148,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
-                    return Center(child: NoInternetScreen());
+                    return Center(child: NoInternetScreen(notifyParent: refresh));
                   case ConnectionState.waiting:
                   case ConnectionState.active:
                     return Center(
@@ -138,7 +158,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                     );
                   case ConnectionState.done:
                     if (snapshot.hasError) {
-                      return internet == 1 ? Center(child: Error8Screen()) : Center(child: NoInternetScreen());
+                      return internet == 1 ? Center(child: Error8Screen()) : Center(child: NoInternetScreen(notifyParent: refresh));
                     } else {
                       print("members length" + members.length.toString());
                       if(error == 1){
@@ -154,7 +174,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                         },
                         itemBuilder: (context, index) {
                           int color;
-                          if(members[index].gender=="male")
+                          if(members[index].gender.toLowerCase().contains("m"))
                             color = 0xbb3399fe;
                           else{
                             color = 0xbbff3266;
@@ -163,7 +183,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                           return members[index].name !=null ? ExpansionTile(
                             title: AutoSizeText(members[index].name,
                               style: TextStyle(
-                                fontSize: 18.0,
+                                fontSize: getHeight(18, 2),
                                 color: ColorGlobal.textColor,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -179,27 +199,27 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                             //backgroundColor: Colors.red,
                             children: [
                               members[index].email!=null ? ListTile(
-                                title: AutoSizeText(members[index].email, maxLines: 1,),
-                                leading: Icon(Icons.email, color: Colors.indigoAccent),
+                                title: AutoSizeText(members[index].email, style : TextStyle(fontSize: getHeight(16,2)), maxLines: 1,),
+                                leading: Icon(Icons.email,  size: getHeight(26,2), color: Colors.indigoAccent),
                               ) : Container(),
                               ListTile(
-                                title: AutoSizeText(members[index].organization, maxLines: 1,),
-                                leading: Icon(Icons.business, color: Colors.orange),
+                                title: AutoSizeText(members[index].organization, style : TextStyle(fontSize: getHeight(16,2)), maxLines: 1,),
+                                leading: Icon(Icons.business, size: getHeight(26,2), color: Colors.orange),
                               ),
                               members[index].position!=null ? ListTile(
-                                title: AutoSizeText(members[index].position, maxLines: 1,),
-                                leading: Icon(Icons.business_center, color: Colors.green),
+                                title: AutoSizeText(members[index].position, style : TextStyle(fontSize: getHeight(16,2)), maxLines: 1,),
+                                leading: Icon(Icons.business_center, size: getHeight(26,2), color: Colors.green),
                               ) : Container(),
                               !isEmpty(members[index].linkedIn_link) ? ListTile(
                                 title: new GestureDetector(
-                                    child: new AutoSizeText(members[index].linkedIn_link, maxLines: 1,),
+                                    child: new AutoSizeText(members[index].linkedIn_link, style : TextStyle(fontSize: getHeight(16,2)), maxLines: 1,),
                                     onTap: () =>
                                         launch(members[index].linkedIn_link)
                                 ),
                                 leading: Image(
                                   image: AssetImage('assets/images/linkedin.png'),
-                                  height: 24.0,
-                                  width: 24.0,
+                                  height: getHeight(24, 2),
+                                  width: getHeight(24, 2),
                                 ),
                               ) : Container(),
                             ],

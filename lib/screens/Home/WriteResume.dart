@@ -16,6 +16,7 @@ import 'package:iosrecal/screens/Home/NoData.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 class WriteResume extends StatefulWidget {
   @override
@@ -26,9 +27,19 @@ class _WriteResumeState extends State<WriteResume> {
   var writers = new List<ResumeWriteModel>();
   int internet = 1;
   int error = 0;
+  UIUtills uiUtills = new UIUtills();
 
   initState() {
     super.initState();
+    uiUtills = new UIUtills();
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   navigateAndReload(){
@@ -41,8 +52,16 @@ class _WriteResumeState extends State<WriteResume> {
       getResumeWriters();});
   }
 
+  refresh(){
+    setState(() {
+
+    });
+    getResumeWriters();
+  }
+
   Future<bool> onTimeOut(){
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Session Timeout'),
@@ -122,7 +141,7 @@ class _WriteResumeState extends State<WriteResume> {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
-                return Center(child: NoInternetScreen());
+                return Center(child: NoInternetScreen(notifyParent: refresh));
               case ConnectionState.waiting:
               case ConnectionState.active:
                 return Center(
@@ -132,9 +151,8 @@ class _WriteResumeState extends State<WriteResume> {
                   ),
                 );
               case ConnectionState.done:
-                print("done");
                 if (snapshot.hasError) {
-                  return internet==0 ? Center(child: NoInternetScreen()) : Center(child: Error8Screen());
+                  return internet==0 ? Center(child: NoInternetScreen(notifyParent: refresh)) : Center(child: Error8Screen());
                 } else {
                   print(writers.length);
                   if(error == 1){
@@ -147,7 +165,6 @@ class _WriteResumeState extends State<WriteResume> {
                     crossAxisCount: 2,
                     itemCount: writers.length,
                     itemBuilder: (BuildContext context, int index) {
-                      print("right here");
                       return Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: width/25, vertical: width/50),
@@ -202,14 +219,14 @@ class _WriteResumeState extends State<WriteResume> {
                                           [
                                             AutoSizeText('Name', style: TextStyle(
                                                 color: Color(0xfff4c83f),
-                                                fontSize: 13.0),
+                                                fontSize: getHeight(13, 2)),
                                             maxLines: 1,
                                             ),
                                             AutoSizeText(writers[index].writer_name,
                                                 style: TextStyle(
                                                     color: ColorGlobal.textColor,
                                                     fontWeight: FontWeight.w500,
-                                                    fontSize: 20.0),
+                                                    fontSize: getHeight(20, 2)),
                                             maxLines: 1,
                                             ),
                                           ],
@@ -265,7 +282,7 @@ class _WriteResumeState extends State<WriteResume> {
                                                 style: TextStyle(
                                                     color:
                                                     Color(0xcc982ef0),
-                                                    fontSize: 13.0),
+                                                    fontSize: getHeight(13, 2)),
                                             maxLines: 1,
                                             ),
                                             AutoSizeText(writers[index].contact_number,
@@ -274,7 +291,7 @@ class _WriteResumeState extends State<WriteResume> {
                                                         .textColor,
                                                     fontWeight:
                                                     FontWeight.w500,
-                                                    fontSize: 20.0),
+                                                    fontSize: getHeight(20, 2)),
                                             maxLines: 1,
                                             ),
                                           ],
@@ -323,7 +340,7 @@ class _WriteResumeState extends State<WriteResume> {
                                         [
                                           AutoSizeText('Email', style: TextStyle(
                                               color: Color(0xccff3266),
-                                              fontSize: 13.0),
+                                              fontSize: getHeight(13, 2)),
                                           maxLines: 1,
                                           ),
                                           AutoSizeText(writers[index].email,
@@ -331,7 +348,7 @@ class _WriteResumeState extends State<WriteResume> {
                                                   color: ColorGlobal
                                                       .textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 20.0),
+                                                  fontSize: getHeight(20, 2)),
                                           maxLines: 1,
                                           ),
                                         ],
@@ -379,7 +396,7 @@ class _WriteResumeState extends State<WriteResume> {
                                         [
                                           AutoSizeText('Discounts', style: TextStyle(
                                               color: Color(0xcc3399fe),
-                                              fontSize: 13.0),
+                                              fontSize: getHeight(13, 2)),
                                           maxLines: 1,
                                           ),
                                           AutoSizeText(writers[index].discounts,
@@ -387,7 +404,7 @@ class _WriteResumeState extends State<WriteResume> {
                                                   color: ColorGlobal
                                                       .textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 20.0),
+                                                  fontSize: getHeight(20, 2)),
                                           maxLines: 1,
                                           ),
                                         ],
@@ -435,7 +452,7 @@ class _WriteResumeState extends State<WriteResume> {
                                         [
                                           AutoSizeText('Link', style: TextStyle(
                                               color: Color(0xcc26cb3c),
-                                              fontSize: 13.0),
+                                              fontSize: getHeight(13, 2)),
                                           maxLines: 1,
                                           ),
                                           GestureDetector(
@@ -446,7 +463,7 @@ class _WriteResumeState extends State<WriteResume> {
                                                     color: ColorGlobal
                                                         .textColor,
                                                     fontWeight: FontWeight.w500,
-                                                    fontSize: 20.0),
+                                                    fontSize: getHeight(20, 2)),
                                             maxLines: 1,
                                             ),
                                           )
@@ -462,8 +479,8 @@ class _WriteResumeState extends State<WriteResume> {
                       );
                     },
                     staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-                    crossAxisSpacing: 12.0,
-                    mainAxisSpacing: 12.0,
+                    crossAxisSpacing: getWidth(12, 2),
+                    mainAxisSpacing: getHeight(12, 2),
                   );
                 }
             };

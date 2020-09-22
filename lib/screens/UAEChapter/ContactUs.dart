@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-
+import 'package:iosrecal/Constant/utils.dart';
 
 class ContactUs extends StatefulWidget {
   @override
@@ -23,6 +23,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
   String uri;
   final TextEditingController messageController = TextEditingController();
   final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
+  UIUtills uiUtills = new UIUtills();
 
   AnimationController _animationController;
 
@@ -40,6 +41,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
 
   initState() {
     super.initState();
+    uiUtills = new UIUtills();
     _animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1300));
     show = true;
@@ -65,14 +67,23 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
     //_positions();
   }
 
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+
+
   Widget animatedButton(){
     return GestureDetector(
 
         onTap: () async {
-          _animationController.forward();
 
           final String message = messageController.text;
           if (message != "") {
+            _animationController.forward();
             bool b = await _sendMessage(message);
           } else {
             Fluttertoast.showToast(
@@ -82,13 +93,13 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
-                fontSize: 16.0);
+                fontSize: getHeight(16, 2));
           }
         },
         child: AnimatedContainer(
             decoration: BoxDecoration(
               color: _color,
-              borderRadius: BorderRadius.circular(120.0),
+              borderRadius: BorderRadius.circular(120),
               boxShadow: [
                 BoxShadow(
                   color: _color,
@@ -164,7 +175,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.orange,
           textColor: Colors.white,
-          fontSize: 16.0
+          fontSize: getHeight(16, 2),
       );
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -183,41 +194,41 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
           json.decode(response.body));
       if (responseBody.status_code == 200){
         print("worked!");
-        Fluttertoast.showToast(
-            msg: "Message sent",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0
-        );
+//        Fluttertoast.showToast(
+//            msg: "Message sent",
+//            toastLength: Toast.LENGTH_SHORT,
+//            gravity: ToastGravity.BOTTOM,
+//            timeInSecForIosWeb: 1,
+//            backgroundColor: Colors.green,
+//            textColor: Colors.white,
+//            fontSize: getHeight(16, 2)
+        //);
         return true;
       }else if(responseBody.status_code==401){
         onTimeOut();
       }else {
         print(responseBody.data);
-        Fluttertoast.showToast(
-            msg: "An error occured. Please try again",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0
-        );
+//        Fluttertoast.showToast(
+//            msg: "An error occured. Please try again",
+//            toastLength: Toast.LENGTH_SHORT,
+//            gravity: ToastGravity.BOTTOM,
+//            timeInSecForIosWeb: 1,
+//            backgroundColor: Colors.red,
+//            textColor: Colors.white,
+//            fontSize: getHeight(16, 2)
+        //);
       }
     } else {
       print('Server error');
-      Fluttertoast.showToast(
-          msg: "An error occured. Please try again",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
+//      Fluttertoast.showToast(
+//          msg: "An error occured. Please try again",
+//          toastLength: Toast.LENGTH_SHORT,
+//          gravity: ToastGravity.BOTTOM,
+//          timeInSecForIosWeb: 1,
+//          backgroundColor: Colors.red,
+//          textColor: Colors.white,
+//          fontSize: getHeight(16, 2)
+//      );
     }
   }
 
@@ -231,6 +242,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
 
   Future<bool> onTimeOut(){
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Session Timeout'),
@@ -341,7 +353,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
 //            height : height/2,
 //            color: const Color(0xFF2146A8),
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 10.0, 8.0, 0.0),
+                        padding: EdgeInsets.fromLTRB(0.0, getHeight(10, 2), getWidth(8, 2), 0.0),
                         child: Column(
                           children: <Widget>[
                             Center(
@@ -414,14 +426,14 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0)),
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(8.0, 10, 8.0, 10),
+                        padding: EdgeInsets.fromLTRB(getWidth(16, 2), getHeight(10, 2), getWidth(16, 2), getHeight(10, 2)),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
                               'Please write about your issue. Someone from the admin team will respond within 24 hrs.',
                               style: TextStyle(
-                                fontSize: 18.0,
+                                fontSize: getHeight(18, 2),
                                 letterSpacing: 1.2,
                                 color: Colors.black,
                               ),
