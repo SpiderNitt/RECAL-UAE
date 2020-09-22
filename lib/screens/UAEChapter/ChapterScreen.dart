@@ -13,6 +13,8 @@ import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 
 class ChapterScreen extends StatefulWidget {
+  const ChapterScreen({Key key}) : super(key: key);
+
   @override
   _ChapterScreenState createState() => _ChapterScreenState();
 }
@@ -54,7 +56,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                 Center(
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: getHeight(15, 2)),
-                    width: width*0.6,
+                    width: width*0.7,
                     height: width*0.3,
                     padding: EdgeInsets.symmetric(horizontal: getWidth(20,2)),
                     decoration: new BoxDecoration(
@@ -80,22 +82,6 @@ class _ChapterScreenState extends State<ChapterScreen> {
                           ),
                           textAlign: TextAlign.center,
                         ),
-//                          Center(
-//                            child: Padding(
-//                              padding: const EdgeInsets.only(top: 10),
-//                              child: Container(
-//                                  padding: const EdgeInsets.only(top: 8, bottom: 8),
-//                                  decoration: const BoxDecoration(
-//                                    border: Border(
-//                                      top: BorderSide(width: 0),
-//                                      bottom: BorderSide(width: 0),
-//                                    ),
-//                                  ),
-//                                  child: Text("REC's (NIT Trichy) Alumni Association (RECAL).",
-//                                  style: TextStyle(fontSize: 12),),
-//                              ),
-//                            ),
-//                          ),
                       ],
                     ),
                   ),

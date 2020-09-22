@@ -30,7 +30,7 @@ import 'screens/Home/EmploymentSupport.dart';
 import 'screens/Profile/ProfileScreen.dart';
 import 'screens/Profile/EditProfile.dart';
 import './Constant/Constant.dart';
-import 'screens/Screen/HomePage.dart';
+import 'screens/Screen/HomeScreen.dart';
 import 'screens//Screen/ImageSplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'screens/UserAuth/Login.dart';
@@ -39,6 +39,7 @@ import 'screens/Support/TechnicalSupport.dart';
 import 'screens/Support/Volunteer.dart';
 import 'screens/Support/Other.dart';
 import 'screens/Support/Feedback.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,7 +55,7 @@ void main() {
         routes: <String, WidgetBuilder>{
           LOGIN_SCREEN: (BuildContext context) => new Login(),
           PASSWORD_RESET: (BuildContext context) => new PasswordReset(),
-          HOME_PAGE: (BuildContext context) => new HomePage(),
+          HOME_SCREEN: (BuildContext context) => new HomeScreen(),
           IMAGE_SPLASH: (BuildContext context) => new ImageSplashScreen(),
           PROFILE_SCREEN: (BuildContext context) => new ProfileScreen(),
           EDIT_PROFILE_SCREEN: (BuildContext context) => new EditProfileScreen(),

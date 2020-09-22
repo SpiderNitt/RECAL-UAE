@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -123,6 +124,8 @@ class _MemberDatabaseState extends State<MemberDatabase> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Color> colorArray = [Colors.blue, Colors.purple, Colors.blueGrey, Colors.deepOrange, Colors.redAccent];
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -173,13 +176,8 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                           return Divider();
                         },
                         itemBuilder: (context, index) {
-                          int color;
-                          if(members[index].gender.toLowerCase().contains("m"))
-                            color = 0xbb3399fe;
-                          else{
-                            color = 0xbbff3266;
-                            print("female");
-                          }
+                          Color color = colorArray.elementAt(Random().nextInt(4));
+
                           return members[index].name !=null ? ExpansionTile(
                             title: AutoSizeText(members[index].name,
                               style: TextStyle(
@@ -190,7 +188,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                               maxLines: 1,
                             ),
                             leading: CircleAvatar(
-                              backgroundColor: Color(color),
+                              backgroundColor: color,
                               child: Icon(
                                 Icons.person,
                                 color: ColorGlobal.whiteColor,

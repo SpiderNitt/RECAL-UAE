@@ -314,7 +314,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin{
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     AutoSizeText(
-                      "NEED ADMIN HELP!!",
+                      "NEED ADMIN HELP?",
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),
