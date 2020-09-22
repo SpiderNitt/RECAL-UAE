@@ -18,8 +18,6 @@ class _CompletedEventsState extends State<CompletedEvents> with TickerProviderSt
   _CompletedEventsState(this.eventList);
   GlobalKey<AnimatedListState> animatedListKey=GlobalKey<AnimatedListState>();
   AnimationController emptyController;
-  List events=["1","2","3","4","5","6"];
-  List comp=[true,true,true,true,true,true];
   bool isEmpty=false;
 
   @override
@@ -33,8 +31,7 @@ class _CompletedEventsState extends State<CompletedEvents> with TickerProviderSt
   }
   Widget EmptyList(){
     return Center(
-      child: FadeTransition(child: Text("No events to show!!",style: GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor),),
-        opacity: emptyController,),
+      child: Text("No events to show!!",style: GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor),),
     );
   }
   @override
@@ -44,7 +41,6 @@ class _CompletedEventsState extends State<CompletedEvents> with TickerProviderSt
           key: animatedListKey,
           initialItemCount: eventList.length,
           itemBuilder: (BuildContext context, int index,animation){
-            //return SizeTransition(child: VolunteerCard(comp[index],events[index],Random().nextInt(2)==1 ? true : false),
             return SizeTransition(child: VolunteerCard(eventList[index],true,widget.status),
               sizeFactor: animation,);
           }

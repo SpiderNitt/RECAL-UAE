@@ -98,19 +98,21 @@ class LoginState extends State<Login> {
     return showDialog(
           context: context,
           builder: (context) => new AlertDialog(
-            title: new Text('Are you sure?'),
-            content: new Text('Do you want to exit the App'),
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text('Are you sure?'),
+            content : Text('Do you want to exit the app?'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                color: Colors.green,
                 child: Text("NO"),
               ),
               new GestureDetector(
                 child: FlatButton(
                   onPressed: () =>
                       Navigator.of(context, rootNavigator: true).pop(true),
-                  color: Colors.red,
                   child: Text("YES"),
                 ),
               )
@@ -284,66 +286,45 @@ class LoginState extends State<Login> {
   _emailDialog() {
     return  showDialog(
         context: context,
-        builder: (_) => Dialog(
-          backgroundColor: Colors.transparent,
-          child: Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(getHeight(20, 1)),
-              ),
-              color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.all(getHeight(8, 1)),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Center(
-                      child: Text(
-                        "Write an email to",
-                        style: GoogleFonts.lato(
-                          color: ColorGlobal.textColor,
-                          fontSize: getHeight(20, 1),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: GestureDetector(
-                        onTap: () => _sendMail(),
-                        child: Text(
-                          "recaluaechapter@gmail.com",
-                          style: GoogleFonts.lato(
-                            color: ColorGlobal.blueColor,
-                            decoration: TextDecoration.underline,
-                            fontSize: getHeight(20, 1),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: FlatButton(
-                        color: ColorGlobal.textColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(getHeight(9,1)),
-                        ),
-
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pop(); // To close the dialog
-                        },
-                        child: Text("OK",
-                            style: GoogleFonts.lato(
-                              color: ColorGlobal.whiteColor,
-                              fontSize: getHeight(16, 1),
-                              fontWeight: FontWeight.w700,
-                            )),
-                      ),
-                    ),
-                  ],
+        builder: (_) => new AlertDialog(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          content : Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Write an email to",
+                style: GoogleFonts.lato(
+                  color: ColorGlobal.textColor,
+                  fontSize: getHeight(18, 1),
+                  fontWeight: FontWeight.w700,
                 ),
-              )),
+              ),
+              GestureDetector(
+                onTap: () => _sendMail(),
+                child: Text(
+                  "recaluaechapter@gmail.com",
+                  style: GoogleFonts.lato(
+                    color: ColorGlobal.blueColor,
+                    decoration: TextDecoration.underline,
+                    fontSize: getHeight(18, 1),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(); // To close the dialog
+              },
+              child: Text("OK"),
+            ),
+          ],
         ));
   }
   _sendMail() async {
@@ -551,7 +532,7 @@ class LoginState extends State<Login> {
                                                     () {
                                                   Navigator
                                                       .pushReplacementNamed(
-                                                          context, HOME_PAGE);
+                                                          context, HOME_SCREEN);
                                                 });
                                               }
                                             }

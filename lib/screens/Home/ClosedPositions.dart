@@ -16,6 +16,7 @@ import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/Constant/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ClosedPositions extends StatefulWidget {
@@ -28,9 +29,11 @@ class _ClosedPositionsState extends State<ClosedPositions> {
   var closedPositions = new List<PositionModel>();
   int internet = 1;
   int error = 0;
+  UIUtills uiUtills = new UIUtills();
 
   initState() {
     super.initState();
+    uiUtills = new UIUtills();
     //_positions();
   }
 
@@ -76,8 +79,17 @@ class _ClosedPositionsState extends State<ClosedPositions> {
     return closedPositions;
   }
 
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+
   Future<bool> onTimeOut(){
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Session Timeout'),
@@ -109,12 +121,20 @@ class _ClosedPositionsState extends State<ClosedPositions> {
           _positions();});
   }
 
+  refresh(){
+    setState(() {
+
+    });
+    _positions;
+  }
+
   @override
   Widget build(BuildContext context) {
     String uri;
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     print("width : " + width.toString());
+    print("height : " + height.toString());
 
     return SafeArea(
       child: Scaffold(
@@ -139,7 +159,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
-                  return Center(child: NoInternetScreen());
+                  return Center(child: NoInternetScreen(notifyParent: refresh));
                 case ConnectionState.waiting:
                 case ConnectionState.active:
                   return Center(
@@ -149,7 +169,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                   );
                 case ConnectionState.done:
                   if (snapshot.hasError) {
-                    return internet == 1 ? Center(child: Error8Screen()) : Center(child: NoInternetScreen());
+                    return internet == 1 ? Center(child: Error8Screen()) : Center(child: NoInternetScreen(notifyParent: refresh));
                   }
                   else {
                     print("error is : " + error.toString());
@@ -199,7 +219,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                               AutoSizeText('Position',
                                                   style: TextStyle(
                                                       color: Color(0xfff4c83f),
-                                                      fontSize: 13.0),
+                                                      fontSize: getHeight(13,2)),
                                                 maxLines: 1,
                                               ),
                                               AutoSizeText(
@@ -208,7 +228,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                                       color:
                                                           ColorGlobal.textColor,
                                                       fontWeight: FontWeight.w500,
-                                                      fontSize: 20.0),
+                                                      fontSize: getHeight(20,2)),
                                               maxLines: 1,
                                               )
                                             ],
@@ -242,14 +262,14 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                             AutoSizeText('Company',
                                                 style: TextStyle(
                                                     color: Color(0xffed622b),
-                                                    fontSize: 13.0),
+                                                    fontSize: getHeight(13,2)),
                                             maxLines: 1,
                                             ),
                                             AutoSizeText(closedPositions[index].company,
                                                 style: TextStyle(
                                                     color: ColorGlobal.textColor,
                                                     fontWeight: FontWeight.w500,
-                                                    fontSize: 20.0),
+                                                    fontSize: getHeight(20,2)),
                                             maxLines: 1,
                                             )
                                           ],
@@ -283,14 +303,14 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                             AutoSizeText('Description',
                                               style: TextStyle(
                                                   color: Color(0xcc982ef0),
-                                                  fontSize: 13.0),
+                                                  fontSize: getHeight(13,2)),
                                               maxLines: 1,
                                             ),
                                             AutoSizeText(closedPositions[index].description,
                                               style: TextStyle(
                                                   color: ColorGlobal.textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 20.0),
+                                                  fontSize: getHeight(20,2)),
                                               maxLines: 7,
                                             )
                                           ],

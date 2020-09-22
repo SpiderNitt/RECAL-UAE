@@ -11,6 +11,7 @@ import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import '../Home/NoData.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 
 class PayPage extends StatefulWidget {
@@ -19,17 +20,26 @@ class PayPage extends StatefulWidget {
 }
 
 class _PayPageState extends State<PayPage> {
+  UIUtills uiUtills = new UIUtills();
 
   @override
   void initState() {
     super.initState();
     _pay();
+    uiUtills = new UIUtills();
   }
 
   ChapterModel chapterDetails;
   String payDetails;
   int state = 0;
   int internet = 1;
+
+  refresh(){
+    setState(() {
+
+    });
+    _pay();
+  }
 
   Future<String> _pay() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -70,6 +80,14 @@ class _PayPageState extends State<PayPage> {
     }
   }
 
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+
   navigateAndReload(){
     Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
         .then((value) {
@@ -83,6 +101,7 @@ class _PayPageState extends State<PayPage> {
 
   Future<bool> onTimeOut(){
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Session Timeout'),
@@ -143,37 +162,37 @@ class _PayPageState extends State<PayPage> {
           style: TextStyle(color: ColorGlobal.textColor),
         ),
       ),
-      body: internet == 0 ? Center(child: NoInternetScreen()) : SingleChildScrollView(
+      body: internet == 0 ? Center(child: NoInternetScreen(notifyParent: refresh)) : SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(12.0, 16.0, 12.0, 0.0),
+              padding: EdgeInsets.fromLTRB(getWidth(12, 2), getHeight(16, 2), getWidth(12, 2), 0.0),
               child: Text(
                 'If you are paying for your annual membership or contribution towards an upcoming event, please tranfer/deposit in the following bank account',
                 style: TextStyle(
                   color: const Color(0xFF544F50),
-                  fontSize: 18.0,
+                  fontSize: getHeight(18, 2),
                   letterSpacing: 1.2,
                   wordSpacing: 1.2,
                 ),
               ),
             ),
-            SizedBox(height: 10.0),
+            SizedBox(height: getHeight(10, 2)),
             Card(
-              margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+              margin: EdgeInsets.fromLTRB(getWidth(16, 2), getHeight(16, 2), getWidth(16, 2), getHeight(16, 2)),
               color: Colors.blue[300],
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: EdgeInsets.all(getHeight(12, 2)),
                 child: getPayDetails(),
               ),
             ),
-            SizedBox(height: 10.0),
+            SizedBox(height: getHeight(10, 2)),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+              padding: EdgeInsets.fromLTRB(getWidth(16, 2), 0.0, getWidth(16, 2), 0.0),
               child: Text(
                   'Note:',
                   style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: getHeight(18, 2),
                     color: const Color(0xFF544F50),
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,
@@ -181,19 +200,19 @@ class _PayPageState extends State<PayPage> {
                   )
               ),
             ),
-            SizedBox(height: 6.0),
+            SizedBox(height: getHeight(6, 2)),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+              padding: EdgeInsets.fromLTRB(getWidth(16, 2), 0.0, getWidth(16, 2), 0.0),
               child: Text(
                   '\u2022 Once the payment is received, you will receive a notification on this app within 24 hours. ',
                   style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: getHeight(18, 2),
                     color: const Color(0xFF544F50),
                   )
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 4.0),
+              padding: EdgeInsets.fromLTRB(0.0, getHeight(8, 2), 0.0, getHeight(4, 2)),
               child: Image(
                 image: AssetImage('assets/images/pay_bg.jpg'),
                 alignment: Alignment.bottomCenter,

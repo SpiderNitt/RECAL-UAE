@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +14,8 @@ import 'package:iosrecal/models/MentorGroupModel.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:iosrecal/Constant/utils.dart';
+import 'package:connectivity/connectivity.dart';
 
 class MentorGroups extends StatefulWidget {
   @override
@@ -23,12 +26,33 @@ class _MentorGroupsState extends State<MentorGroups> {
   var groups = new List<MentorGroupModel>();
   int state = 0;
   bool _hasError = false;
+  bool _hasInternet = true;
+  UIUtills uiUtills = new UIUtills();
 
   initState() {
     super.initState();
+    uiUtills = new UIUtills();
     _groups();
   }
+
+  refresh(){
+    setState(() {
+
+    });
+    _hasError = false;
+    _hasInternet = true;
+    _groups();
+  }
+
   Future<List> _groups() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        _hasInternet = false;
+      });
+
+      return null;
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.get(
         Api.mentorGroups,
@@ -50,6 +74,8 @@ class _MentorGroupsState extends State<MentorGroups> {
         setState(() {
           state = 1;
         });
+      }else if(responseBody.status_code==401){
+        onTimeOut();
       } else {
         setState(() {
           _hasError = true;
@@ -60,7 +86,54 @@ class _MentorGroupsState extends State<MentorGroups> {
     }
   }
 
+  Future<bool> onTimeOut(){
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      _hasError = false;
+      _hasInternet = true;
+      _groups();});
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+
   Widget getBody(){
+    if(_hasInternet== false){
+      return Center(child: NoInternetScreen(notifyParent: refresh));
+    }
     if(_hasError){
       return Center(child: Error8Screen());
     }if(state==0){
@@ -88,7 +161,7 @@ class _MentorGroupsState extends State<MentorGroups> {
           ),
           brightness: Brightness.dark,
           centerTitle: true,
-          expandedHeight: 250,
+          expandedHeight: getHeight(250, 2),
           floating: true,
           pinned: true,
           snap: true,
@@ -97,7 +170,7 @@ class _MentorGroupsState extends State<MentorGroups> {
           flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
               title: Text('Mentor Groups',
-                style: TextStyle(color: ColorGlobal.textColor, fontSize: 20.0),
+                style: TextStyle(color: ColorGlobal.textColor, fontSize: getHeight(20, 2)),
               ),
               background: Hero(
                 tag: 'imageHero',
@@ -148,28 +221,30 @@ class _MentorGroupsState extends State<MentorGroups> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      AutoSizeText(
-                                        groups[index].group,
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: ColorGlobal.textColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontStyle: FontStyle.italic,
+                                      Container(
+                                        width: width - ( 13 + width/18 + width/7 + width/16),
+                                        color: Colors.transparent,
+                                        child: AutoSizeText(
+                                          groups[index].group,
+                                          style: TextStyle(
+                                            fontSize: getHeight(16, 2),
+                                            color: ColorGlobal.textColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.italic,
+                                          ),
                                         ),
                                       ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          AutoSizeText(
-                                            groups[index].leader,
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                              color: ColorGlobal.textColor,
+                                      Container(
+                                        width: width - ( 13 + width/18 + width/7 + width/16),
+                                        child: AutoSizeText(
+                                          groups[index].leader,
+                                          style: TextStyle(
+                                            fontSize: getHeight(16, 2),
+                                            color: ColorGlobal.textColor,
 //                                          fontWeight: FontWeight.bold,
 //                                          fontStyle: FontStyle.italic,
-                                            ),
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ],
                                   ),

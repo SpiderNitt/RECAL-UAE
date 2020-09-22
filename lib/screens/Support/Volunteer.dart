@@ -70,10 +70,9 @@ class VolunteerState extends State<VolunteerScreen>
   Widget animatedButton() {
     return GestureDetector(
         onTap: () async {
-          _animationController.forward();
-
           final String message = messageController.text;
           if (message != "") {
+            _animationController.forward();
             bool b = await _sendMessage(message);
           } else {
             Fluttertoast.showToast(
@@ -196,14 +195,14 @@ class VolunteerState extends State<VolunteerScreen>
           ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         print("worked!");
-        Fluttertoast.showToast(
-            msg: "Message sent",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0);
+//        Fluttertoast.showToast(
+//            msg: "Message sent",
+//            toastLength: Toast.LENGTH_SHORT,
+//            gravity: ToastGravity.BOTTOM,
+//            timeInSecForIosWeb: 1,
+//            backgroundColor: Colors.green,
+//            textColor: Colors.white,
+//            fontSize: 16.0);
         return true;
       } else if (responseBody.status_code == 401) {
         onTimeOut();
@@ -371,39 +370,6 @@ class VolunteerState extends State<VolunteerScreen>
                               height: height / 64,
                             ),
                             animatedButton(),
-//                        RawMaterialButton(
-//                          onPressed: () async {
-//                            final String message = messageController.text;
-//                            if (message != "") {
-//                              bool b = await _sendMessage(message);
-//                              ProgressDialog pr;
-//                              if (b) {
-//                                _loginDialog1(pr, "Message Sent", "Thank you", 1);
-//                              } else {
-//                                _loginDialog1(
-//                                    pr, "Message was not sent", "Try again", 0);
-//                              }
-//                            } else {
-//                              Fluttertoast.showToast(
-//                                  msg: "Enter a message",
-//                                  toastLength: Toast.LENGTH_SHORT,
-//                                  gravity: ToastGravity.BOTTOM,
-//                                  timeInSecForIosWeb: 1,
-//                                  backgroundColor: Colors.blue,
-//                                  textColor: Colors.white,
-//                                  fontSize: 16.0);
-//                            }
-//                          },
-//                          elevation: 2.0,
-//                          fillColor: Colors.blue,
-//                          child: Icon(
-//                            Icons.send,
-//                            color: Colors.white,
-//                            size: 30.0,
-//                          ),
-//                          padding: EdgeInsets.all(15.0),
-//                          shape: CircleBorder(),
-//                        ),
                             SizedBox(
                               height: height / 64,
                             ),

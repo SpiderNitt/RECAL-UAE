@@ -9,6 +9,7 @@ import 'Pay.dart';
 import 'VisionandMission.dart';
 import 'Sponsors.dart';
 import 'CoreComm.dart';
+import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 
 class ChapterScreen extends StatefulWidget {
@@ -19,6 +20,15 @@ class ChapterScreen extends StatefulWidget {
 }
 
 class _ChapterScreenState extends State<ChapterScreen> {
+  UIUtills uiUtills = new UIUtills();
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +55,10 @@ class _ChapterScreenState extends State<ChapterScreen> {
           children: <Widget>[
                 Center(
                   child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 15),
-                    width: width*0.6,
+                    margin: EdgeInsets.symmetric(vertical: getHeight(15, 2)),
+                    width: width*0.7,
                     height: width*0.3,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: getWidth(20,2)),
                     decoration: new BoxDecoration(
                       color: ColorGlobal.colorPrimaryDark,
                       image: new DecorationImage(
@@ -60,42 +70,26 @@ class _ChapterScreenState extends State<ChapterScreen> {
                   ),
       ),
                   Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: EdgeInsets.all(getHeight(10, 2)),
                     child: ListBody(
                       children: <Widget>[
                         Text(
                           'RECAL UAE CHAPTER',
                           style: GoogleFonts.josefinSans(
                             color: ColorGlobal.textColor,
-                            fontSize: 16.0,
+                            fontSize: getHeight(16, 2),
                             fontWeight: FontWeight.w600,
                           ),
                           textAlign: TextAlign.center,
                         ),
-//                          Center(
-//                            child: Padding(
-//                              padding: const EdgeInsets.only(top: 10),
-//                              child: Container(
-//                                  padding: const EdgeInsets.only(top: 8, bottom: 8),
-//                                  decoration: const BoxDecoration(
-//                                    border: Border(
-//                                      top: BorderSide(width: 0),
-//                                      bottom: BorderSide(width: 0),
-//                                    ),
-//                                  ),
-//                                  child: Text("REC's (NIT Trichy) Alumni Association (RECAL).",
-//                                  style: TextStyle(fontSize: 12),),
-//                              ),
-//                            ),
-//                          ),
                       ],
                     ),
                   ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(getHeight(10,2)),
                 child: ListView(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal: getWidth(10, 2)),
                   children: <Widget>[
                     GestureDetector(
                       onTap: (){
@@ -106,58 +100,49 @@ class _ChapterScreenState extends State<ChapterScreen> {
                               duration: Duration(milliseconds: 300),
                               child: VisionMission()),);
                       },
-                      child: Row
-                        (
-                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment
-                              .center,
-                          children: <Widget>
-                          [
-                            Material
-                              (
-                                color: Color(0xfff4c83f),
-                                borderRadius: BorderRadius.circular(
-                                    24.0),
-                                child: Center
-                                  (
-                                    child: Padding
-                                      (
-                                      padding: const EdgeInsets.all(
-                                          16.0),
-                                      child: Icon(
-                                        Icons.list,
-                                        size: 30.0,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                )
-                            ),
-                            SizedBox(
-                              width: 8.0,
-                            ),
-                            Column
-                              (
-                              mainAxisAlignment: MainAxisAlignment
-                                  .center,
-                              crossAxisAlignment: CrossAxisAlignment
-                                  .start,
-                              children: <Widget>
-                              [
-//                                Text('Name', style: TextStyle(
-//                                    color: Color(0xfff4c83f),
-//                                    fontSize: 13.0)),
-                                Text('Vision and Mission',
-                                    style: TextStyle(
-                                        color: ColorGlobal.textColor,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 20.0))
-                              ],
-                            ),
-                          ]
+                      child: Container(
+                        width: width,
+                        color: Colors.transparent,
+                        child: Row
+                          (
+                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment
+                                .center,
+                            children: <Widget>
+                            [
+                              Material
+                                (
+                                  color: Color(0xfff4c83f),
+                                  borderRadius: BorderRadius.circular(
+                                      getWidth(24, 2)),
+                                  child: Center
+                                    (
+                                      child: Padding
+                                        (
+                                        padding: EdgeInsets.all(
+                                            getWidth(16, 2)),
+                                        child: Icon(
+                                          Icons.list,
+                                          size: getWidth(30, 2),
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                  )
+                              ),
+                              SizedBox(
+                                width: getWidth(8, 2),
+                              ),
+                              Text('Vision and Mission',
+                                  style: TextStyle(
+                                      color: ColorGlobal.textColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: getHeight(20, 2))),
+                            ]
+                        ),
                       ),
                     ),
                     SizedBox(
-                      height: 24.0,
+                      height: getHeight(24, 2),
                     ),
                     GestureDetector(
                       onTap: (){
@@ -168,58 +153,51 @@ class _ChapterScreenState extends State<ChapterScreen> {
                               duration: Duration(milliseconds: 300),
                               child: CoreComm()),);
                       },
-                      child: Row
-                        (
-                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>
-                        [
-                          Material
-                            (
-                              color: Color(0xcc982ef0),
-                              borderRadius: BorderRadius.circular(
-                                  24.0),
-                              child: Center
-                                (
-                                  child: Padding
-                                    (
-                                    padding: const EdgeInsets.all(
-                                        16.0),
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 30.0,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                              )
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Column(
-                            //mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: <Widget>[
-//                              Text('Contact',
-//                                  style: TextStyle(
-//                                      color:
-//                                      Color(0xcc982ef0),
-//                                      fontSize: 13.0)),
-                              Text('Core Committee',
-                                  style: TextStyle(
-                                      color: ColorGlobal
-                                          .textColor,
-                                      fontWeight:
-                                      FontWeight.w500,
-                                      fontSize: 20.0)),
-                            ],
-                          ),
-                        ],
+                      child: Container(
+                        width: width,
+                        color: Colors.transparent,
+                        //color: Colors.red,
+                        child: Row
+                          (
+                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>
+                          [
+                            Material
+                              (
+                                color: Color(0xcc982ef0),
+                                borderRadius: BorderRadius.circular(
+                                    getHeight(24, 2)),
+                                child: Center
+                                  (
+                                    child: Padding
+                                      (
+                                      padding: EdgeInsets.all(
+                                          getWidth(16, 2)),
+                                      child: Icon(
+                                        Icons.person,
+                                        size: getWidth(30, 2),
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                )
+                            ),
+                            SizedBox(
+                              width: getWidth(8, 2),
+                            ),
+                            Text('Core Committee',
+                                style: TextStyle(
+                                    color: ColorGlobal
+                                        .textColor,
+                                    fontWeight:
+                                    FontWeight.w500,
+                                    fontSize: getWidth(20, 2))),
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
-                      height: 24.0,
+                      height: getHeight(24, 2),
                     ),
                     GestureDetector(
                       onTap: (){
@@ -230,55 +208,59 @@ class _ChapterScreenState extends State<ChapterScreen> {
                               duration: Duration(milliseconds: 300),
                               child: PayPage()),);
                       },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment
-                            .center,
-                        children: [
-                          Material(
-                            color: Color(0xccff3266),
-                            borderRadius: BorderRadius.circular(
-                                24.0),
-                            child: Center
-                              (
-                              child: Padding
+                      child: Container(
+                        width: width,
+                        color: Colors.transparent,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment
+                              .center,
+                          children: [
+                            Material(
+                              color: Color(0xccff3266),
+                              borderRadius: BorderRadius.circular(
+                                  getHeight(24, 2)),
+                              child: Center
                                 (
-                                padding: const EdgeInsets.all(
-                                    16.0),
-                                child: Icon(
-                                  Icons.credit_card,
-                                  size: 30.0,
-                                  color: Colors.white,
+                                child: Padding
+                                  (
+                                  padding: EdgeInsets.all(
+                                      getWidth(16, 2)),
+                                  child: Icon(
+                                    Icons.credit_card,
+                                    size: getWidth(30, 2),
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Column
-                            (
-                            mainAxisAlignment: MainAxisAlignment
-                                .center,
-                            crossAxisAlignment: CrossAxisAlignment
-                                .start,
-                            children: <Widget>
-                            [
+                            SizedBox(
+                              width: getWidth(8, 2),
+                            ),
+                            Column
+                              (
+                              mainAxisAlignment: MainAxisAlignment
+                                  .center,
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .start,
+                              children: <Widget>
+                              [
 //                              Text('Email', style: TextStyle(
 //                                  color: Color(0xccff3266),
 //                                  fontSize: 13.0)),
-                              Text('Pay',
-                                  style: TextStyle(
-                                      color: ColorGlobal
-                                          .textColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20.0))
-                            ],
-                          ),
-                        ],
+                                Text('Pay',
+                                    style: TextStyle(
+                                        color: ColorGlobal
+                                            .textColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: getWidth(20, 2)))
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
-                      height: 24.0,
+                      height: getHeight(24, 2),
                     ),
                     GestureDetector(
                       onTap: (){
@@ -289,55 +271,59 @@ class _ChapterScreenState extends State<ChapterScreen> {
                               duration: Duration(milliseconds: 300),
                               child: ContactUs()),);
                       },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment
-                            .center,
-                        children: [
-                          Material(
-                            color: Color(0xcc3399fe),
-                            borderRadius: BorderRadius.circular(
-                                24.0),
-                            child: Center
-                              (
-                              child: Padding
+                      child: Container(
+                        width: width,
+                        color: Colors.transparent,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment
+                              .center,
+                          children: [
+                            Material(
+                              color: Color(0xcc3399fe),
+                              borderRadius: BorderRadius.circular(
+                                  getHeight(24, 2)),
+                              child: Center
                                 (
-                                padding: const EdgeInsets.all(
-                                    16.0),
-                                child: Icon(
-                                  Icons.phone,
-                                  size: 30.0,
-                                  color: Colors.white,
+                                child: Padding
+                                  (
+                                  padding: EdgeInsets.all(
+                                      getWidth(16, 2)),
+                                  child: Icon(
+                                    Icons.phone,
+                                    size: getWidth(30, 2),
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Column
-                            (
-                            mainAxisAlignment: MainAxisAlignment
-                                .center,
-                            crossAxisAlignment: CrossAxisAlignment
-                                .start,
-                            children: <Widget>
-                            [
+                            SizedBox(
+                              width: getWidth(8, 2),
+                            ),
+                            Column
+                              (
+                              mainAxisAlignment: MainAxisAlignment
+                                  .center,
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .start,
+                              children: <Widget>
+                              [
 //                              Text('Discounts', style: TextStyle(
 //                                  color: Color(0xcc3399fe),
 //                                  fontSize: 13.0)),
-                              Text('Contact Us',
-                                  style: TextStyle(
-                                      color: ColorGlobal
-                                          .textColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20.0))
-                            ],
-                          ),
-                        ],
+                                Text('Contact Us',
+                                    style: TextStyle(
+                                        color: ColorGlobal
+                                            .textColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: getWidth(20, 2)))
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
-                      height: 24.0,
+                      height: getHeight(24, 2),
                     ),
                     GestureDetector(
                       onTap: (){
@@ -348,51 +334,43 @@ class _ChapterScreenState extends State<ChapterScreen> {
                               duration: Duration(milliseconds: 300),
                               child: AchievementsScreen()),);
                       },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment
-                            .center,
-                        children: [
-                          Material(
-                            color: Color(0xcc26cb3c),
-                            borderRadius: BorderRadius.circular(
-                                24.0),
-                            child: Center
-                              (
-                              child: Padding
+                      child: Container(
+                        width: width,
+                        color: Colors.transparent,
+                        //color: Colors.red,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment
+                              .center,
+                          children: [
+                            Material(
+                              color: Color(0xcc26cb3c),
+                              borderRadius: BorderRadius.circular(
+                                  getHeight(24, 2)),
+                              child: Center
                                 (
-                                padding: const EdgeInsets.all(
-                                    16.0),
-                                child: Icon(
-                                  Icons.brightness_low,
-                                  size: 30.0,
-                                  color: Colors.white,
+                                child: Padding
+                                  (
+                                  padding: EdgeInsets.all(
+                                      getWidth(16, 2)),
+                                  child: Icon(
+                                    Icons.brightness_low,
+                                    size: getWidth(30, 2),
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Column
-                            (
-                            mainAxisAlignment: MainAxisAlignment
-                                .center,
-                            crossAxisAlignment: CrossAxisAlignment
-                                .start,
-                            children: <Widget>
-                            [
-//                              Text('Email', style: TextStyle(
-//                                  color: Color(0xccff3266),
-//                                  fontSize: 13.0)),
-                              Text('Achievements',
-                                  style: TextStyle(
-                                      color: ColorGlobal
-                                          .textColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20.0))
-                            ],
-                          ),
-                        ],
+                            SizedBox(
+                              width: getWidth(8, 2),
+                            ),
+                            Text('Achievements',
+                                style: TextStyle(
+                                    color: ColorGlobal
+                                        .textColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: getWidth(20, 2))),
+                          ],
+                        ),
                       ),
                     ),
 

@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 
 class DealsExecuted extends StatefulWidget {
@@ -26,9 +27,19 @@ class _DealsExecutedState extends State<DealsExecuted> {
   var members = new List<BusinessMemberModel>();
   bool _hasError = false;
   int internet = 1;
+  UIUtills uiUtills = new UIUtills();
 
   initState() {
     super.initState();
+    uiUtills = new UIUtills();
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   Future<List> _deals() async {
@@ -76,8 +87,17 @@ class _DealsExecutedState extends State<DealsExecuted> {
     });
   }
 
+  refresh(){
+    setState(() {
+
+    });
+    _deals();
+  }
+
+
   Future<bool> onTimeOut(){
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Session Timeout'),
@@ -125,7 +145,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
             builder: (BuildContext context, AsyncSnapshot snapshot){
               switch(snapshot.connectionState){
                 case ConnectionState.none:
-                  return Center(child: NoInternetScreen());
+                  return Center(child: NoInternetScreen(notifyParent: refresh));
                 case ConnectionState.waiting:
                 case ConnectionState.active:
                   return Center(
@@ -138,7 +158,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
                   print("done");
                   if(snapshot.hasError){
                     print("error");
-                    return internet == 1 ? Center(child: Error8Screen()) : Center(child: NoInternetScreen());
+                    return internet == 1 ? Center(child: Error8Screen()) : Center(child: NoInternetScreen(notifyParent: refresh));
                   }else{
                     print(members.length);
                     if(_hasError){
@@ -178,7 +198,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                               (
                                                 child: Padding
                                                   (
-                                                  padding: EdgeInsets.all(10),
+                                                  padding: EdgeInsets.all(getHeight(10, 2)),
                                                   child: Icon(
                                                     Icons.person,
                                                     size: 5*width/100,
@@ -198,8 +218,8 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: <Widget>
                                             [
-                                              AutoSizeText('Name', style: TextStyle(color: Color(0xfff4c83f), fontSize: 13.0), maxLines: 1,),
-                                              AutoSizeText(members[index].name, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 18.0), maxLines: 1,)
+                                              AutoSizeText('Name', style: TextStyle(color: Color(0xfff4c83f), fontSize: getHeight(13, 2)), maxLines: 1,),
+                                              AutoSizeText(members[index].name, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getHeight(18, 2)), maxLines: 1,)
                                             ],
                                           ),
                                         ),
@@ -218,7 +238,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                           (
                                           child: Padding
                                             (
-                                            padding: EdgeInsets.all(10),
+                                            padding: EdgeInsets.all(getHeight(10, 2)),
                                             child: Icon(
                                               Icons.business,
                                               size: 5*width/100,
@@ -238,8 +258,8 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: <Widget>
                                           [
-                                            AutoSizeText('Industry', style: TextStyle(color: Color(0xffed622b), fontSize: 13.0), maxLines: 1,),
-                                            AutoSizeText(members[index].industry, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 18.0), maxLines: 5,)
+                                            AutoSizeText('Industry', style: TextStyle(color: Color(0xffed622b), fontSize: getHeight(13, 2)), maxLines: 1,),
+                                            AutoSizeText(members[index].industry, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getHeight(18, 2)), maxLines: 5,)
                                           ],
                                         ),
                                       ),
@@ -258,7 +278,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                           (
                                           child: Padding
                                             (
-                                            padding: EdgeInsets.all(10),
+                                            padding: EdgeInsets.all(getHeight(10, 2)),
                                             child: Icon(
                                               Icons.business_center,
                                               size: 5*width/100,
@@ -278,8 +298,8 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: <Widget>
                                           [
-                                            AutoSizeText('Business Type', style: TextStyle(color: Color(0xcc26cb3c), fontSize: 13.0), maxLines: 1,),
-                                            AutoSizeText(members[index].business_type, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 18.0), maxLines: 5,)
+                                            AutoSizeText('Business Type', style: TextStyle(color: Color(0xcc26cb3c), fontSize: getHeight(13, 2)), maxLines: 1,),
+                                            AutoSizeText(members[index].business_type, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getHeight(18, 2)), maxLines: 5,)
                                           ],
                                         ),
                                       ),
@@ -298,7 +318,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                           (
                                           child: Padding
                                             (
-                                            padding: EdgeInsets.all(10),
+                                            padding: EdgeInsets.all(getHeight(10, 2)),
                                             child: Icon(
                                               Icons.assignment,
                                               size: 5*width/100,
@@ -318,8 +338,8 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: <Widget>
                                           [
-                                            AutoSizeText('Company Brief', style: TextStyle(color: Color(0xccff3266), fontSize: 13.0), maxLines: 1,),
-                                            AutoSizeText(members[index].company_brief, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 18.0), maxLines: 5,)
+                                            AutoSizeText('Company Brief', style: TextStyle(color: Color(0xccff3266), fontSize: getHeight(13, 2)), maxLines: 1,),
+                                            AutoSizeText(members[index].company_brief, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getHeight(18, 2)), maxLines: 5,)
                                           ],
                                         ),
                                       ),
@@ -342,7 +362,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                               (
                                                 child: Padding
                                                   (
-                                                  padding: EdgeInsets.all(10),
+                                                  padding: EdgeInsets.all(getHeight(10, 2)),
                                                   child: Image(
                                                     image: AssetImage('assets/images/deals.png'),
                                                     height: 5*width/100,
@@ -362,13 +382,13 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: <Widget>
                                             [
-                                              AutoSizeText('Deal Value', style: TextStyle(color: Color(0xcc982ef0), fontSize: 13.0), maxLines: 1,),
-                                              AutoSizeText(members[index].deal_value, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 18.0), maxLines: 1,),
+                                              AutoSizeText('Deal Value', style: TextStyle(color: Color(0xcc982ef0), fontSize: getHeight(13, 2)), maxLines: 1,),
+                                              AutoSizeText(members[index].deal_value, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getHeight(18, 2)), maxLines: 1,),
                                               SizedBox(
                                                 height: width/50,
                                               ),
-                                              AutoSizeText('Deal Details', style: TextStyle(color: Color(0xcc982ef0), fontSize: 13.0), maxLines: 5,),
-                                              AutoSizeText(members[index].deal_details, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: 18.0), maxLines: 1,),
+                                              AutoSizeText('Deal Details', style: TextStyle(color: Color(0xcc982ef0), fontSize: getHeight(13, 2)), maxLines: 5,),
+                                              AutoSizeText(members[index].deal_details, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getHeight(18, 2)), maxLines: 1,),
                                             ],
                                           ),
                                         ),
@@ -381,8 +401,8 @@ class _DealsExecutedState extends State<DealsExecuted> {
                         );
                       },
                       staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-                      crossAxisSpacing: 12.0,
-                      mainAxisSpacing: 12.0,
+                      crossAxisSpacing: getWidth(12, 2),
+                      mainAxisSpacing: getHeight(12, 2),
                     );
                   }
 

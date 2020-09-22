@@ -1,12 +1,6 @@
 import 'package:flutter/services.dart';
-
-import 'HomeActivity.dart';
-import '../Achievements/AchievementsScreen.dart';
-import 'HomeScreen.dart';
-import '../Events/EventsScreen.dart';
+import '../Home/HomeActivity.dart';
 import '../UAEChapter/ChapterScreen.dart';
-import '../Profile/ProfileScreen.dart';
-import 'SocialMedia.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +8,12 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import '../Support/supportScreen.dart';
 
 
-class HomePage extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  HomePageState createState() => new HomePageState();
+  HomeScreenState createState() => new HomeScreenState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomeScreenState extends State<HomeScreen> {
   int _index = 1;
   final List<Widget> pages = [
     ChapterScreen(
@@ -43,43 +37,39 @@ class HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-//    Navigator.pushReplacement(
-//        context,
-//        PageTransition(
-//            type: PageTransitionType.rightToLeftWithFade,
-//            child: Login()));
   }
 
-
-  static List<String> _pages = [
-    "UAE Chapter",
-    "Achievements",
-    "Home",
-    "Events",
-    "Profile",
-  ];
-
+  Widget _getHomeWidgets(index,context) {
+    switch(index) {
+      case 0: return (ChapterScreen());
+      break;
+      case 1: return (HomeActivity());
+      break;
+      default: return(SupportScreen());
+    }
+  }
   Future<bool> _onBackPressed() {
     return showDialog(
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit the App'),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Are you sure?'),
+        content : Text('Do you want to exit the app?'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () => Navigator.of(context).pop(false),
-            child: FlatButton(
-              color: Colors.green,
-              child: Text("NO"),
-            ),
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text("NO"),
           ),
           new GestureDetector(
-            onTap: () => SystemNavigator.pop(),
             child: FlatButton(
-              color: Colors.red,
+              onPressed: () =>
+                  Navigator.of(context, rootNavigator: true).pop(true),
               child: Text("YES"),
             ),
-          ),
+          )
         ],
       ),
     ) ??
@@ -105,12 +95,6 @@ class HomePageState extends State<HomePage> {
                 size: 30,
                 color: ColorGlobal.color3,
               ),
-              //     SvgPicture.asset("assets/icons/ac.svg",color:color_shades.color4,height: 30,),
-//              Icon(
-//                Icons.assistant_photo,
-//                size: 30,
-//                color: ColorGlobal.color3,
-//              ),
               Icon(
                 Icons.home,
                 size: 30,
@@ -121,11 +105,6 @@ class HomePageState extends State<HomePage> {
                 size: 30,
                 color: ColorGlobal.color3,
               ),
-//              Icon(
-//                Icons.person,
-//                size: 30,
-//                color: ColorGlobal.color3,
-//              ),
             ],
             animationCurve: Curves.bounceInOut,
             index: _index,
@@ -140,24 +119,6 @@ class HomePageState extends State<HomePage> {
             child: _showPage,
             bucket: bucket,
           ),
-//            Stack(
-//              children: [
-//                ClipPath(
-//                  child: Container(
-//                    height: MediaQuery.of(context).size.height / 2,
-//                    decoration: BoxDecoration(
-//                      image: DecorationImage(
-//                          image: AssetImage("assets/images/admin.jpeg"),
-//                          fit: BoxFit.cover),
-//                    ),
-//                  ),
-//                  clipper: Header(),
-//                ),
-//                Container(
-//                  child: _showPage,
-//                )
-//              ],
-//            ),
         ),
       ),
     );
