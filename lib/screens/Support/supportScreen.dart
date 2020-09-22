@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'WriteAdmin.dart';
+import 'package:iosrecal/Constant/utils.dart';
 // class MyApp extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
@@ -38,7 +39,10 @@ class SupportScreenState extends State<SupportScreen> {
                     children: <Widget>[
                       Text(
                         'SUPPORT',
-                        style: GoogleFonts.josefinSans(color: ColorGlobal.textColor, fontWeight: FontWeight.bold,fontSize: 20),
+                        style: GoogleFonts.josefinSans(
+                            color: ColorGlobal.textColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
                       ),
                     ],
                   ),
@@ -61,8 +65,8 @@ class SupportScreenState extends State<SupportScreen> {
                               decoration: BoxDecoration(
                                   image: DecorationImage(
                                 fit: BoxFit.fill,
-                                image:
-                                    AssetImage('assets/images/supportbg.jpg'),
+                                image: AssetImage(
+                                    'assets/images/newSupportbg.jpg'),
                               ))))),
                   Column(children: <Widget>[
                     SizedBox(
@@ -103,7 +107,9 @@ class SupportScreenState extends State<SupportScreen> {
                                 AutoSizeText(
                                   "Write to",
                                   style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: UIUtills()
+                                          .getProportionalHeight(
+                                              height: 16, choice: 3),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -111,7 +117,9 @@ class SupportScreenState extends State<SupportScreen> {
                                 AutoSizeText(
                                   "admin",
                                   style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: UIUtills()
+                                          .getProportionalHeight(
+                                              height: 16, choice: 3),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -154,7 +162,9 @@ class SupportScreenState extends State<SupportScreen> {
                                 AutoSizeText(
                                   "Write to",
                                   style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: UIUtills()
+                                          .getProportionalHeight(
+                                              height: 16, choice: 3),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -162,7 +172,9 @@ class SupportScreenState extends State<SupportScreen> {
                                 AutoSizeText(
                                   "mentor",
                                   style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: UIUtills()
+                                          .getProportionalHeight(
+                                              height: 16, choice: 3),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -205,7 +217,9 @@ class SupportScreenState extends State<SupportScreen> {
                                 AutoSizeText(
                                   "Technical",
                                   style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: UIUtills()
+                                          .getProportionalHeight(
+                                              height: 16, choice: 3),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -213,7 +227,9 @@ class SupportScreenState extends State<SupportScreen> {
                                 AutoSizeText(
                                   "Support",
                                   style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: UIUtills()
+                                          .getProportionalHeight(
+                                              height: 16, choice: 3),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -266,7 +282,9 @@ class SupportScreenState extends State<SupportScreen> {
                                 AutoSizeText(
                                   "Vounteer",
                                   style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: UIUtills()
+                                          .getProportionalHeight(
+                                              height: 16, choice: 3),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -309,7 +327,9 @@ class SupportScreenState extends State<SupportScreen> {
                                 AutoSizeText(
                                   "Feedback",
                                   style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: UIUtills()
+                                          .getProportionalHeight(
+                                              height: 16, choice: 3),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -352,7 +372,9 @@ class SupportScreenState extends State<SupportScreen> {
                                 AutoSizeText(
                                   "Other",
                                   style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: UIUtills()
+                                          .getProportionalHeight(
+                                              height: 16, choice: 3),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,

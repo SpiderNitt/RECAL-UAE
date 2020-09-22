@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:iosrecal/screens/Home/NoData.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/models/MemberModel.dart';
@@ -45,10 +46,11 @@ class _DashBoardState extends State<DashBoard> {
     return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
-  _fetchEvents() async{
+  Future<bool> _fetchEvents() async{
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
+        print("set internet to false");
         _internet = false;
       });
     }
@@ -60,10 +62,8 @@ class _DashBoardState extends State<DashBoard> {
       "Cookie": "${prefs.getString("cookie")}",
     });
     ResponseBody responseBody = new ResponseBody();
-    print(response.statusCode);
     if (response.statusCode == 200) {
       responseBody = ResponseBody.fromJson(json.decode(response.body));
-      print(responseBody.status_code);
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
         events = list.map((model) => EventModel.fromJson(model)).toList();
@@ -78,23 +78,24 @@ class _DashBoardState extends State<DashBoard> {
 
         });
 
-        setState(() {
+        //setState(() {
           state += 1;
-        });
+        //});
       }else if(responseBody.status_code==401){
         onTimeOut();
       }else{
-        setState(() {
+        //setState(() {
           state+=1;
           _hasError = true;
-        });
+        //});
       }
     }else{
-      setState(() {
+      //setState(() {
         state+=1;
         _hasError = true;
-      });
+      //});
     }
+    return true;
   }
 
   navigateAndReload(){
@@ -158,10 +159,8 @@ class _DashBoardState extends State<DashBoard> {
       "Cookie": "${prefs.getString("cookie")}",
     });
     ResponseBody responseBody = new ResponseBody();
-    print(response.statusCode);
     if (response.statusCode == 200) {
       responseBody = ResponseBody.fromJson(json.decode(response.body));
-      print(responseBody.status_code);
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
         members = list.map((model) => BusinessMemberModel.fromJson(model)).toList();
@@ -179,27 +178,27 @@ class _DashBoardState extends State<DashBoard> {
         data['Social Members'] = data['All Members'] - final_members.length;
         data['All Deals'] = members.length;
         data['Deals Value'] = dealValue;
-        _generatePieData();
+        await _generatePieData();
 
-        setState(() {
-          state += 1;
-        });
+        //setState(() {
+          //state += 1;
+        //});
 
       }else{
-        setState(() {
+        //setState(() {
           state+=1;
           _hasError = true;
-        });
+        //});
       }
     }else{
-      setState(() {
+      //setState(() {
         state+=1;
         _hasError = true;
-      });
+      //});
     }
   }
 
-  _fetchAllUsers() async{
+  Future<bool> _fetchAllUsers() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http
         .get(
@@ -208,10 +207,8 @@ class _DashBoardState extends State<DashBoard> {
       "Cookie": "${prefs.getString("cookie")}",
     });
     ResponseBody responseBody = new ResponseBody();
-    print(response.statusCode);
     if (response.statusCode == 200) {
       responseBody = ResponseBody.fromJson(json.decode(response.body));
-      print(responseBody.status_code);
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
         users = list.map((model) => MemberModel.fromJson(model)).toList();
@@ -219,34 +216,35 @@ class _DashBoardState extends State<DashBoard> {
         int male = 0;
         users.forEach((element) {
           if(element.gender=="male"){
-            print(element.name);
+            //print(element.name);
             male++;
           }
 
         });
         data['Male'] = male;
         data['Female'] = users.length - male;
-        print("values are ");
-        print(data['Male']);
-        print(data['Female']);
-        _fetchSpecificUsers();
+        //print("values are ");
+        //print(data['Male']);
+        //print(data['Female']);
+        await _fetchSpecificUsers();
 
-        setState(() {
+        //setState(() {
           state += 1;
-        });
+        //});
 
         }else{
-        setState(() {
+        //setState(() {
           state+=1;
           _hasError = true;
-        });
+        //});
       }
       }else{
-      setState(() {
+      //setState(() {
         state+=1;
         _hasError = true;
-      });
+     // });
     }
+    return true;
     }
 
   _generatePieData(){
@@ -259,7 +257,8 @@ class _DashBoardState extends State<DashBoard> {
       new SandB('Social', data['Social Members'], Color(0xcc982ef0)),
       new SandB('Business', data['Business Members'], Color(0xcc26cb3c)),
     ];
-
+    _seriesGenderPieData = List<charts.Series<Gender, String>>();
+    _seriesSAndBPieData = List<charts.Series<SandB, String>>();
     _seriesGenderPieData.add(
       charts.Series(
         data: genderPieData,
@@ -283,9 +282,33 @@ class _DashBoardState extends State<DashBoard> {
         labelAccessorFn: (SandB row, _) => '${row.types}',
       ),
     );
-    setState(() {
+    //setState(() {
+      print("reached pie chart");
+      print("state is : " + state.toString());
       state+=1;
-    });
+    //});
+  }
+
+  Future<Map<String, int>> makeRequests() async {
+    //var value = <Map<String, dynamic>>[];
+    var r1 = _fetchEvents();
+    var r2 = _fetchAllUsers();
+    await Future.wait([r1, r2]); // list of Responses
+//    for (var response in results) {
+//      print(response.statusCode);
+//      // todo - parse the response - perhaps JSON
+//      value.add(json.decode(response.body));
+//    }
+    print("returning data");
+    return data;
+  }
+
+  _makeRequests(){
+    _fetchEvents();
+    _fetchAllUsers();
+    print("I am here");
+    print("state is : " + state.toString());
+    return;
   }
 
   @override
@@ -293,16 +316,13 @@ class _DashBoardState extends State<DashBoard> {
     super.initState();
     _seriesGenderPieData = List<charts.Series<Gender, String>>();
     _seriesSAndBPieData = List<charts.Series<SandB, String>>();
-    _fetchEvents();
-    _fetchAllUsers();
     //_generatePieData();
   }
 
   Material myItems(IconData icon, String heading, int color) {
     return Material(
       color: Colors.white,
-      elevation: 14.0,
-      shadowColor: Color(0x802196F3),
+      elevation: 5.0,
       borderRadius: BorderRadius.circular(getHeight(24, 2)),
       child: Center(
         child: Padding(
@@ -425,7 +445,7 @@ class _DashBoardState extends State<DashBoard> {
                         child: Image(
                           image: AssetImage('assets/images/events.png'),
                           height: getWidth(30, 2),
-                          width: getWidth(30, 0),
+                          width: getWidth(30, 2),
                         ),
                       )))
                 ]),
@@ -485,6 +505,7 @@ class _DashBoardState extends State<DashBoard> {
       child: Padding(
         padding: EdgeInsets.all(getHeight(24, 2)),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -493,6 +514,7 @@ class _DashBoardState extends State<DashBoard> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>
                     [
                       Text('Total members', style: TextStyle(color: Color(color))),
@@ -512,7 +534,8 @@ class _DashBoardState extends State<DashBoard> {
             SizedBox(
               height: getHeight(24, 2),
             ),
-            Expanded(
+            Container(
+              height: getHeight(200, 2),
               child: charts.PieChart(
                 _seriesGenderPieData,
                 animate: true,
@@ -532,7 +555,7 @@ class _DashBoardState extends State<DashBoard> {
                   ),
                 ],
                 defaultRenderer: new charts.ArcRendererConfig(
-                  arcWidth: 50,
+                  arcWidth: getHeight(50, 2).toInt(),
                   arcRendererDecorators: [
                     new charts.ArcLabelDecorator(
                         labelPosition: charts.ArcLabelPosition.inside),
@@ -543,7 +566,8 @@ class _DashBoardState extends State<DashBoard> {
             SizedBox(
               height: getHeight(24, 2),
             ),
-            Expanded(
+            Container(
+              height: getHeight(200, 2),
               child: charts.PieChart(
                 _seriesSAndBPieData,
                 animate: true,
@@ -563,7 +587,7 @@ class _DashBoardState extends State<DashBoard> {
                   ),
                 ],
                 defaultRenderer: new charts.ArcRendererConfig(
-                  arcWidth: 50,
+                  arcWidth: getHeight(50, 2).toInt(),
                   arcRendererDecorators: [
                     new charts.ArcLabelDecorator(
                         labelPosition: charts.ArcLabelPosition.inside),
@@ -577,39 +601,14 @@ class _DashBoardState extends State<DashBoard> {
     );
   }
 
-  Widget getBody(){
-    if(!_internet){
-      return Center(child: NoInternetScreen(notifyParent: refresh));
+  Widget getBody(int index){
+    if(index==0){
+      return membersItem(0xfff4c83f);
+    }else if(index == 1){
+      return eventsItem(0xffed622b);
+    }else if(index==2){
+      return dealsItem(0xff7297ff);
     }
-    if(_hasError){
-      return Center(
-        child: Error8Screen(),
-      );
-    }
-    if(state<3){
-      return Center(
-        child: SpinKitDoubleBounce(
-          color: Colors.lightBlueAccent,
-        ),
-      );
-    }
-    return new StaggeredGridView.count(
-      crossAxisCount: 2,
-      crossAxisSpacing: getWidth(12, 2),
-      mainAxisSpacing: getHeight(12, 2),
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      children: <Widget>[
-        membersItem(0xfff4c83f),
-        eventsItem(0xffed622b),
-        dealsItem(0xff7297ff),
-      ],
-      staggeredTiles: [
-        StaggeredTile.extent(2, getHeight(550, 2)),
-        StaggeredTile.extent(2, getHeight(206, 2)),
-        StaggeredTile.extent(2, getHeight(206, 2)),
-
-      ],
-    );
   }
 
   @override
@@ -631,7 +630,63 @@ class _DashBoardState extends State<DashBoard> {
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: getBody(),
+        body: FutureBuilder(
+          future: makeRequests(),
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            print("entering switch");
+            switch(snapshot.connectionState){
+              //case ConnectionState.none:
+                //print("no connection");
+                //return Center(child: NoInternetScreen(notifyParent: refresh));
+              case ConnectionState.waiting:
+              case ConnectionState.active:
+                print("connection active");
+                return Center(
+                  child: SpinKitDoubleBounce(
+                    color: Colors
+                        .lightBlueAccent,
+                  ),
+                );
+              case ConnectionState.done:
+                print("connection done");
+                if(snapshot.hasError){
+                  print("Got error");
+                  return _internet == true ? Center(child: Error8Screen()) : Center(child: NoInternetScreen(notifyParent: refresh));
+                }else{
+                  print("in else");
+                  if(_hasError){
+                    print("has error");
+                    return Center(child: Error8Screen());
+                  }
+                  if(data.length == 0){
+                    print("data length is 0");
+                    return Center(child: NodataScreen());
+                  }
+                  if(state<3){
+                    print("state is less than 3");
+                    return Center(child: SpinKitDoubleBounce(
+                      color: Colors
+                          .lightBlueAccent,
+                    ),
+                    );
+                  }
+                  print("reached staggered view");
+                  return StaggeredGridView.countBuilder(
+                    crossAxisCount: 2,
+                    itemCount: 3,
+                    itemBuilder: (BuildContext context, int index){
+                      return getBody(index);
+                    },
+                    staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
+                    crossAxisSpacing: getWidth(12, 2),
+                    mainAxisSpacing: getHeight(12, 2),
+                  );
+                }
+
+            };
+            return Center(child: Text("Try Again!"));
+          },
+        ),
       ),
     );
   }

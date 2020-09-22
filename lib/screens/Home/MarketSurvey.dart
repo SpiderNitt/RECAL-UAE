@@ -15,6 +15,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 int num = 0;
 
@@ -63,7 +64,6 @@ class SurveyState extends State<SurveyScreen> {
   int error = 0;
   List<GlobalKey<FlipCardState>> cardKey;
 
-
   @override
   void initState() {
     super.initState();
@@ -90,6 +90,8 @@ class SurveyState extends State<SurveyScreen> {
         setState(() {
           List list = responseBody.data;
           positions = list.map((model) => SurveyModel.fromJson(model)).toList();
+          positions.removeWhere(
+              (element) => element.link == null || element.link.trim() == "");
           for (int i = 0; i < positions.length; i++) {
             if (positions[i].survey_id != null) {
               num++;
@@ -132,6 +134,7 @@ class SurveyState extends State<SurveyScreen> {
               ),
             ],
           ),
+          barrierDismissible: false,
         ) ??
         false;
   }
@@ -144,9 +147,18 @@ class SurveyState extends State<SurveyScreen> {
     });
   }
 
+  refresh() {
+    setState(() {
+      state = 0;
+      internet = 1;
+      error = 0;
+    });
+    _positions();
+  }
+
   Widget getBody() {
     if (internet == 0) {
-      return NoInternetScreen();
+      return NoInternetScreen(notifyParent: refresh);
     } else if (error == 1) {
       return Error8Screen();
     } else if (state == 0) {
@@ -195,7 +207,8 @@ class SurveyState extends State<SurveyScreen> {
                               AutoSizeText(
                                 positions[index].text.toUpperCase(),
                                 style: TextStyle(
-                                  fontSize: 20.0,
+                                  fontSize: UIUtills().getProportionalHeight(
+                                      height: 20, choice: 3),
                                   color: ColorGlobal.textColor,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -225,7 +238,8 @@ class SurveyState extends State<SurveyScreen> {
                       child: AutoSizeText(
                         positions[index].link,
                         style: TextStyle(
-                          fontSize: 10.0,
+                          fontSize: UIUtills()
+                              .getProportionalHeight(height: 10, choice: 3),
                           color: ColorGlobal.textColor,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic,

@@ -36,7 +36,6 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
 
   bool show;
   bool sent = false;
-  bool error = false;
   Color _color = Colors.lightBlue;
 
   initState() {
@@ -51,7 +50,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
         _animationValue = _animationController.value;
         if (_animationValue >= 0.2 && _animationValue < 0.4) {
           _containerPaddingLeft = 100.0;
-          _color = error ? Colors.red : Colors.green;
+          _color = Colors.green;
         } else if (_animationValue >= 0.4 && _animationValue <= 0.5) {
           _translateX = 80.0;
           _rotate = -20.0;
@@ -83,7 +82,6 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
 
           final String message = messageController.text;
           if (message != "") {
-            _animationController.forward();
             bool b = await _sendMessage(message);
           } else {
             Fluttertoast.showToast(
@@ -146,7 +144,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                 AnimatedSize(
                   vsync: this,
                   duration: Duration(milliseconds: 200),
-                  child: sent ? (error ? Icon(Icons.warning, color: Colors.white) : Icon(Icons.done, color: Colors.white)) : Container(),
+                  child: sent ? Icon(Icons.done, color: Colors.white) : Container(),
                 ),
                 AnimatedSize(
                   vsync: this,
@@ -157,7 +155,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                 AnimatedSize(
                   vsync: this,
                   duration: Duration(milliseconds: 200),
-                  child: sent ? (error ? Text("Error", style: TextStyle(color: Colors.white)) : Text("Done", style: TextStyle(color: Colors.white))) : Container(),
+                  child: sent ? Text("Done", style: TextStyle(color: Colors.white)) : Container(),
                 ),
               ],
             )));
@@ -194,41 +192,33 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
           json.decode(response.body));
       if (responseBody.status_code == 200){
         print("worked!");
-//        Fluttertoast.showToast(
-//            msg: "Message sent",
-//            toastLength: Toast.LENGTH_SHORT,
-//            gravity: ToastGravity.BOTTOM,
-//            timeInSecForIosWeb: 1,
-//            backgroundColor: Colors.green,
-//            textColor: Colors.white,
-//            fontSize: getHeight(16, 2)
-        //);
+        _animationController.forward();
         return true;
       }else if(responseBody.status_code==401){
         onTimeOut();
       }else {
+        Fluttertoast.showToast(
+          msg: "Error occurred. Please try again later.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: getHeight(16, 2),
+        );
         print(responseBody.data);
-//        Fluttertoast.showToast(
-//            msg: "An error occured. Please try again",
-//            toastLength: Toast.LENGTH_SHORT,
-//            gravity: ToastGravity.BOTTOM,
-//            timeInSecForIosWeb: 1,
-//            backgroundColor: Colors.red,
-//            textColor: Colors.white,
-//            fontSize: getHeight(16, 2)
-        //);
       }
     } else {
+      Fluttertoast.showToast(
+        msg: "Error occurred. Please try again later.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: getHeight(16, 2),
+      );
       print('Server error');
-//      Fluttertoast.showToast(
-//          msg: "An error occured. Please try again",
-//          toastLength: Toast.LENGTH_SHORT,
-//          gravity: ToastGravity.BOTTOM,
-//          timeInSecForIosWeb: 1,
-//          backgroundColor: Colors.red,
-//          textColor: Colors.white,
-//          fontSize: getHeight(16, 2)
-//      );
     }
   }
 
