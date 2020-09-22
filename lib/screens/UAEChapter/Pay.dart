@@ -38,6 +38,8 @@ class _PayPageState extends State<PayPage> {
     setState(() {
 
     });
+    state = 0;
+    internet = 1;
     _pay();
   }
 
@@ -95,6 +97,8 @@ class _PayPageState extends State<PayPage> {
       setState(() {
 
       });
+      state = 0;
+      internet = 1;
      _pay();
     });
   }

@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/AchievementModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:connectivity/connectivity.dart';
 
 class AchievementsScreen extends StatefulWidget {
   @override
@@ -16,10 +19,16 @@ class AchievementsScreen extends StatefulWidget {
 
 class _AchievementsScreenState extends State<AchievementsScreen> {
   int _index = 0;
-
+  bool _hasInternet = true;
   var achievements = new List<AchievementModel>();
 
   Future<List<AchievementModel>> _getAchievements() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        _hasInternet = false;
+      });
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http
         .get("https://delta.nitt.edu/recal-uae/api/achievements/", headers: {
@@ -43,13 +52,58 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
 
         print(achievements.length);
         return achievements;
-      } else {
+      } else if(responseBody.status_code==401){
+        onTimeOut();
+      }else {
         print(responseBody.data);
       }
     } else {
       print(response.statusCode);
       print('Server error');
     }
+  }
+
+  Future<bool> onTimeOut(){
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              //await _logoutUser();
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
+  refresh(){
+    setState(() {
+
+    });
+    _hasInternet = true;
+    _getAchievements();
+  }
+
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      _hasInternet = true;
+      _getAchievements();});
   }
 
   @override
@@ -73,6 +127,9 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
         child: FutureBuilder(
           future: _getAchievements(),
           builder: (BuildContext context, AsyncSnapshot projectSnap) {
+            if(_hasInternet==false){
+              return Center(child: NoInternetScreen(notifyParent: refresh));
+            }
             if (projectSnap.data == null) {
               return Center(
                 child: SpinKitDoubleBounce(

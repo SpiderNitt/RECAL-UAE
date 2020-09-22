@@ -38,6 +38,7 @@ class _MentorGroupsState extends State<MentorGroups> {
     setState(() {
 
     });
+    state = 0;
     _hasError = false;
     _hasInternet = true;
     _groups();
@@ -116,6 +117,7 @@ class _MentorGroupsState extends State<MentorGroups> {
       setState(() {
 
       });
+      state = 0;
       _hasError = false;
       _hasInternet = true;
       _groups();});

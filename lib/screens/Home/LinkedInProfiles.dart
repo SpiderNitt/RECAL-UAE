@@ -146,136 +146,140 @@ class LinkedinState extends State<LinkedIn> {
     } else if (state == 1 && positions.length == 0) {
       return NodataScreen();
     }
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: positions.length,
-          itemBuilder: (context, index) {
-            final double width = MediaQuery.of(context).size.width;
-            final double height = MediaQuery.of(context).size.height;
-            return FlipCard(
-                key: cardKey[index],
-                front: Container(
-                    height: height / 8,
-                    alignment: Alignment.topRight,
-                    child: GestureDetector(
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    return Container(
+      height: height,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+            itemCount: positions.length,
+            itemBuilder: (context, index) {
+
+              return FlipCard(
+                  key: cardKey[index],
+                  front: Container(
+                      height: height / 8,
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
+                        child: Card(
+                          //color: ColorGlobal.blueColor,
+                          elevation: 5,
+//                        shadowColor: const Color(0x802196F3),
+                          margin: const EdgeInsets.all(8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  width: width / 18,
+                                ),
+                                Image(
+                                  height: width / 8,
+                                  width: width / 8,
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(
+                                      'assets/images/linkedinIcon.png'),
+                                  //alignment: Alignment.bottomCenter,
+                                ),
+                                SizedBox(
+                                  width: width / 16,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    // Container(
+                                    //   width: width - width / 2.75,
+                                    //   child: Align(
+                                    //     alignment: Alignment.topRight,
+                                    //     child: Icon(
+                                    //       Icons.swap_horiz,
+                                    //       color: ColorGlobal.blueColor,
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    AutoSizeText(
+                                      positions[index].user.toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: ColorGlobal.textColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                // SizedBox(
+                                //     width: width -
+                                //         width / 1.5 -
+                                //         positions[index].user.length),
+
+                                // Align(
+                                //   alignment: Alignment.topRight,
+                                //   child: Icon(
+                                //     Icons.swap_horiz,
+                                //     color: ColorGlobal.blueColor,
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )),
+                  back: Container(
+                      height: height / 8,
                       child: Card(
                         //color: ColorGlobal.blueColor,
                         elevation: 5,
-//                        shadowColor: const Color(0x802196F3),
+//                              shadowColor: const Color(0x802196F3),
+
                         margin: const EdgeInsets.all(8),
                         child: Padding(
-                          padding: const EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Row(
                             children: <Widget>[
-                              SizedBox(
-                                width: width / 18,
-                              ),
-                              Image(
-                                height: width / 8,
-                                width: width / 8,
-                                fit: BoxFit.cover,
-                                image: AssetImage(
-                                    'assets/images/linkedinIcon.png'),
-                                //alignment: Alignment.bottomCenter,
-                              ),
-                              SizedBox(
-                                width: width / 16,
-                              ),
                               Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  // Container(
-                                  //   width: width - width / 2.75,
-                                  //   child: Align(
-                                  //     alignment: Alignment.topRight,
-                                  //     child: Icon(
-                                  //       Icons.swap_horiz,
-                                  //       color: ColorGlobal.blueColor,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  AutoSizeText(
-                                    positions[index].user.toUpperCase(),
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: ColorGlobal.textColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic,
+                                  //SizedBox(height: height / 32),
+                                  Row(
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: width - width / 5,
+                                      ),
+                                      Icon(
+                                        Icons.swap_horiz,
+                                        color: ColorGlobal.blueColor,
+                                      ),
+                                    ],
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await _launchLinked(
+                                          positions[index].linkedin);
+                                      cardKey[index].currentState.toggleCard();
+                                    },
+                                    child: AutoSizeText(
+                                     positions[index].linkedin,
+                                      //"Link",
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                        color: ColorGlobal.textColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                      maxLines: 2,
+                                      textAlign: TextAlign.start,
                                     ),
                                   ),
                                 ],
                               ),
-                              // SizedBox(
-                              //     width: width -
-                              //         width / 1.5 -
-                              //         positions[index].user.length),
-
-                              // Align(
-                              //   alignment: Alignment.topRight,
-                              //   child: Icon(
-                              //     Icons.swap_horiz,
-                              //     color: ColorGlobal.blueColor,
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
-                      ),
-                    )),
-                back: Container(
-                    height: height / 8,
-                    child: Card(
-                      //color: ColorGlobal.blueColor,
-                      elevation: 5,
-//                              shadowColor: const Color(0x802196F3),
-
-                      margin: const EdgeInsets.all(8),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                //SizedBox(height: height / 32),
-                                Row(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: width - width / 5,
-                                    ),
-                                    Icon(
-                                      Icons.swap_horiz,
-                                      color: ColorGlobal.blueColor,
-                                    ),
-                                  ],
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    await _launchLinked(
-                                        positions[index].linkedin);
-                                    cardKey[index].currentState.toggleCard();
-                                  },
-                                  child: AutoSizeText(
-                                   positions[index].linkedin,
-                                    //"Link",
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: ColorGlobal.textColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    )));
-          },
+                      )));
+            },
+          ),
         ),
       ),
     );
