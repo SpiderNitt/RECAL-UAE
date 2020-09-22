@@ -31,6 +31,7 @@ class CoreCommState extends State<CoreComm> {
   bool error = false;
   var state = 0;
   static List<String> _members = [];
+  String tenure, date;
   int flag = 0;
   Future<CoreCommModel> _corecomm() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -71,6 +72,15 @@ class CoreCommState extends State<CoreComm> {
             responseBody.data['mentor2'] != null
                 ? _members.add(responseBody.data['mentor2'])
                 : print("empty");
+            responseBody.data['tenure'] != null
+                ? tenure=responseBody.data['tenure']
+                : print("empty tenure");
+            responseBody.data['date'] != null
+                ? date=responseBody.data['date']
+                : print("empty date");
+
+            if(tenure!=null) print(tenure);
+            if(date!=null) print(date);
             if (_members.length > 0)
               setState(() {
                 flag = 1;

@@ -607,7 +607,6 @@ class _DashBoardState extends State<DashBoard> {
         StaggeredTile.extent(2, getHeight(550, 2)),
         StaggeredTile.extent(2, getHeight(206, 2)),
         StaggeredTile.extent(2, getHeight(206, 2)),
-
       ],
     );
   }

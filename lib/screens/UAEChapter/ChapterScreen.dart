@@ -77,7 +77,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                           'RECAL UAE CHAPTER',
                           style: GoogleFonts.josefinSans(
                             color: ColorGlobal.textColor,
-                            fontSize: getHeight(16, 2),
+                            fontSize: getHeight(18, 2),
                             fontWeight: FontWeight.w600,
                           ),
                           textAlign: TextAlign.center,

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -377,13 +378,13 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                                           color: Colors.white,
                                         ),
                                       ),
-                                      Text(
-                                        'Email\nrecaluaechapter@gmail.com',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
+                                      GestureDetector(
+                                        child: CustomToolTip(text: 'Email\nrecaluaechapter@gmail.com'),
+                                        onTap: () async {
+                                          if(Platform.isAndroid)
+                                            await _sendMail();
+                                        },
                                         ),
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -400,12 +401,11 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                                           color: Colors.white,
                                         ),
                                       ),
-                                      Text(
-                                        'WhatsApp\n+971-55-1086104',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                      new GestureDetector(
+                                        child: CustomToolTip(text: 'WhatsApp\n+971-55-1086104'),
+                                        onTap: () {
+
+                                        },
                                       ),
                                     ],
                                   ),
@@ -504,6 +504,31 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
               ),
             ),
           )),
+    );
+  }
+}
+class CustomToolTip extends StatelessWidget {
+
+  String text;
+
+  CustomToolTip({this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return new GestureDetector(
+      child: new Tooltip(preferBelow: false,
+          message: "Copy", child: new Text(text, style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ))),
+      onTap: () {
+        Fluttertoast.showToast(msg: text.contains("@") ?  "Copied Email Address" : "Copied WhatsApp number",textColor: Colors.white,backgroundColor: Colors.green);
+        Clipboard.setData(new ClipboardData(text: text.split('\n')[1]));
+      },
+      onLongPress: () {
+        Fluttertoast.showToast(msg: text.contains("@") ?  "Copied Email Address" : "Copied WhatsApp number",textColor: Colors.white,backgroundColor: Colors.green);
+        Clipboard.setData(new ClipboardData(text: text.split('\n')[1]));
+      },
     );
   }
 }

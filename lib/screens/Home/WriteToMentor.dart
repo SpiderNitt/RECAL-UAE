@@ -191,7 +191,7 @@ class MentorState extends State<WriteMentorScreen>
 
     if (response.statusCode == 200) {
       ResponseBody responseBody =
-          ResponseBody.fromJson(json.decode(response.body));
+      ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         print("worked!");
         return true;
@@ -265,15 +265,15 @@ class MentorState extends State<WriteMentorScreen>
     Future.delayed(Duration(milliseconds: 1000)).then((value) {
       Widget prog = flag == 1
           ? Icon(
-              Icons.check_circle,
-              size: 50,
-              color: Colors.green,
-            )
+        Icons.check_circle,
+        size: 50,
+        color: Colors.green,
+      )
           : Icon(
-              Icons.close,
-              size: 50,
-              color: Colors.red,
-            );
+        Icons.close,
+        size: 50,
+        color: Colors.red,
+      );
       pr.update(message: show.replaceAll("!", ""), progressWidget: prog);
     });
     Future.delayed(Duration(milliseconds: 2000)).then((value) {
