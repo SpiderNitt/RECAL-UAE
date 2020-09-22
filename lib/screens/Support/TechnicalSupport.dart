@@ -302,7 +302,7 @@ class TechnicalState extends State<TechnicalSupport> with TickerProviderStateMix
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     AutoSizeText(
-                      "NEED TECHNICAL HELP!!",
+                      "NEED TECHNICAL HELP?",
                       style: TextStyle(
                           fontSize: 25,
                           color: const Color(0xff3AAFFA),

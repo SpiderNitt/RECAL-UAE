@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -149,6 +150,7 @@ class _MentorGroupsState extends State<MentorGroups> {
     }
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    final List<Color> colorArray = [Colors.blue, Colors.purple, Colors.blueGrey, Colors.deepOrange, Colors.redAccent];
     return CustomScrollView(
       slivers: <Widget>[
         new SliverAppBar(
@@ -166,6 +168,7 @@ class _MentorGroupsState extends State<MentorGroups> {
           pinned: true,
           snap: true,
           elevation: 50,
+          backgroundColor: Colors.white,
           flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
               title: Text('Mentor Groups',
@@ -202,7 +205,7 @@ class _MentorGroupsState extends State<MentorGroups> {
                                   ),
                                   CircleAvatar(
                                     radius: width/14,
-                                    backgroundColor: Colors.blue,
+                                    backgroundColor: colorArray.elementAt(Random().nextInt(4)),
                                     child: Text(groups[index].group.toUpperCase()[0],style: TextStyle(fontSize: width/14, color: ColorGlobal.whiteColor),),
                                   ),
                                   SizedBox(

@@ -1,11 +1,16 @@
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:http/http.dart' as http;
+import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
+import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/models/FelicitationInfo.dart';
 class Felicitations extends StatefulWidget {
@@ -18,6 +23,7 @@ class Felicitations extends StatefulWidget {
 class _FelicitationsState extends State<Felicitations> {
   bool isEmpty=false;
   bool checkData=false;
+  int internet = 1;
   bool serverError=false;
   @override
   Widget build(BuildContext context) {
@@ -41,12 +47,14 @@ class _FelicitationsState extends State<Felicitations> {
               if(snapshot.data==null){
                 if(isEmpty){
                   return Center(
-                      child:Text("No felicitations for this event",style:GoogleFonts.josefinSans(fontSize: 20,color: ColorGlobal.textColor))
+                      child:Text("No felicitations for this event",style:GoogleFonts.josefinSans(fontSize: 22,color: ColorGlobal.textColor))
                   );
+                }else if(internet==0){
+                  return (Center(child:NoInternetScreen()));
                 }
                 else if(serverError){
                   return Center(
-                      child:Text("Server Error.. Try again after some time",style: GoogleFonts.josefinSans(fontSize: 20,color: ColorGlobal.textColor))
+                      child:Error8Screen()
                   );
                 }
                 else {
@@ -114,9 +122,16 @@ class _FelicitationsState extends State<Felicitations> {
     );
   }
   Future<List<FelicitationModel>> getFelicitations() async{
-    var params={'event_id':widget.event_id.toString()};
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        internet = 0;
+      });
+    }
+
     List<FelicitationModel> felicitationList=[];
-    var uri=Uri.https('delta.nitt.edu','/recal-uae/api/events/felicitations/',params);
+    var uri=Uri.parse(Api.getFelicitations);
+    uri = uri.replace(query: "event_id="+widget.event_id.toString());
     SharedPreferences prefs=await SharedPreferences.getInstance();
     var response=await http.get(
         uri,
@@ -143,7 +158,9 @@ class _FelicitationsState extends State<Felicitations> {
             isEmpty=true;
             return 1;
           }
-        } else {
+        } else if(responseBody.status_code==401){
+          onTimeOut();
+        }else {
           print(responseBody.data);
           return 2;
         }
@@ -154,5 +171,36 @@ class _FelicitationsState extends State<Felicitations> {
       }
     });
     if(felicitationList.length!=0){return felicitationList;}
+  }
+  Future<bool> onTimeOut(){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () async {
+              navigateAndReload();
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      print("step 1");
+      int param=widget.event_id;
+      Navigator.pop(context);
+      print("step 2");
+      Felicitations(param);});
   }
 }

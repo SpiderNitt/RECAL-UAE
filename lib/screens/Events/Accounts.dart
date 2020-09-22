@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,9 +8,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/Constant/utils.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/models/AccountInfo.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:iosrecal/screens/Home/NoInternet.dart';
+import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transparent_image/transparent_image.dart';
 class Accounts extends StatefulWidget {
@@ -22,7 +27,9 @@ class Accounts extends StatefulWidget {
 class _AccountsState extends State<Accounts> {
   bool isAccountEmpty = false;
   bool accountServerError = false;
+  int internet=1;
   int accountID=-1;
+  bool isTimeOut=false;
   int countDetailsCall=0;
   bool isCompleted=false;
   List<int> accountIDList=new List<int>();
@@ -54,22 +61,24 @@ class _AccountsState extends State<Accounts> {
 
   Widget displayAccount(){
     if(!isCompleted){
-      if(accountID==-2||isAccountEmpty){
+      if(internet==0){
+        return Center(child: NoInternetScreen());
+      }
+      else if(accountID==-2||isAccountEmpty){
         return Center(
-            child: Text("No account information for this event", style: GoogleFonts.josefinSans(fontSize: 20,color: ColorGlobal.textColor))
+            child: Text("No account information for this event", style:GoogleFonts.josefinSans(fontSize: 22,color: ColorGlobal.textColor,fontStyle: FontStyle.italic))
         );
       }
       else if(accountID==-3||accountServerError){
         return Center(
-            child: Text(
-                "Server Error", style: GoogleFonts.josefinSans(fontSize: 20,color: ColorGlobal.textColor))
+            child: Error8Screen()
         );
       }
-      else   if(accountID==-1||accountID==null){
+      else if(accountID==-1||accountID==null){
         return
           Center(
             child: SpinKitDoubleBounce(
-              color: Colors.lightBlueAccent,
+              color: ColorGlobal.blueColor,
             ),
 
           );
@@ -287,12 +296,16 @@ class _AccountsState extends State<Accounts> {
 
   }
   Future<AccountInfo> getAccountDetails() async {
-    print("second api");
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+     setState(() {
+       internet = 0;
+     });
+    }
     AccountInfo accountInfos=new AccountInfo();
     if(accountID!=-1&& accountID!=null){
-      print("second api called");
-      var params={'account_id':accountID.toString()};
-      var uri=Uri.https('delta.nitt.edu', '/recal-uae/api/events/accounts/',params);
+      var uri=Uri.parse(Api.getAccount);
+      uri = uri.replace(query: "account_id="+accountID.toString());
       SharedPreferences prefs=await SharedPreferences.getInstance();
       var response=await http.get(
           uri,
@@ -326,8 +339,14 @@ class _AccountsState extends State<Accounts> {
                   isCompleted=true;
                 });
               }
-
             }
+          }else if(responseBody.status_code==401){
+            if(isTimeOut==false)
+            {
+              onTimeOut();
+              isTimeOut=true;
+            }
+
           } else {
             print(responseBody.data);
             return 2;
@@ -360,8 +379,42 @@ class _AccountsState extends State<Accounts> {
 String getDate(String date){
   final DateFormat formatter = DateFormat('dd-MM-yyyy');
 return formatter.format(DateFormat('yyyy-MM-dd').parse(date));
-
 }
+  Future<bool> onTimeOut() {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () async {
+              navigateAndReload();
+            },
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
+  navigateAndReload(){
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
+        .then((value) {
+      print("step 1");
+      Navigator.pop(context);
+      setState(() {
+
+      });
+      print("step 2");
+      Accounts(widget.event_id);});
+  }
   @override
   void initState() {
     super.initState();
@@ -372,6 +425,12 @@ return formatter.format(DateFormat('yyyy-MM-dd').parse(date));
     print(accountID.toString());
   }
   Future<dynamic> getAccountId() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+     setState(() {
+       internet = 0;
+     });
+    }
     List<String> nameList=new List<String>();
     var uri = Uri.https(
         'delta.nitt.edu', '/recal-uae/api/events/all_accounts/');
@@ -432,6 +491,13 @@ return formatter.format(DateFormat('yyyy-MM-dd').parse(date));
                 isAccountEmpty=true;
               });
             }
+          }
+
+        }else if(responseBody.status_code==401){
+          if(isTimeOut==false)
+          {
+            onTimeOut();
+            isTimeOut=true;
           }
 
         } else {

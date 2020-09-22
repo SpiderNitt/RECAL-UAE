@@ -9,13 +9,10 @@ import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/User.dart';
 
 import 'WalkthroughApp.dart';
-
-import '../Home/HomeActivity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../UserAuth/Login.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:http/http.dart' as http;
 
@@ -72,7 +69,7 @@ class SplashScreenState extends State<ImageSplashScreen> {
         if (responseBody.status_code == 200) {
           User user = User.fromCheckLogin(responseBody.data);
           if(user.loggedIn==true)
-            Navigator.pushReplacementNamed(context, HOME_PAGE);
+            Navigator.pushReplacementNamed(context, HOME_SCREEN);
           else
             Navigator.pushReplacementNamed(context, LOGIN_SCREEN);
 
@@ -99,7 +96,7 @@ class SplashScreenState extends State<ImageSplashScreen> {
     }
     else if(email!=null && uid!=null && cookie!=null) {
      //await _checkLogin();
-      Navigator.pushReplacementNamed(context, HOME_PAGE);
+      Navigator.pushReplacementNamed(context, HOME_SCREEN);
     }
     else {
       //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WalkThroughApp()));

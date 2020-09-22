@@ -8,13 +8,27 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import '../Support/supportScreen.dart';
 
 
-class HomePage extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  HomePageState createState() => new HomePageState();
+  HomeScreenState createState() => new HomeScreenState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomeScreenState extends State<HomeScreen> {
   int _index = 1;
+  final List<Widget> pages = [
+    ChapterScreen(
+      key: PageStorageKey('Chapter'),
+    ),
+    HomeActivity(
+      key: PageStorageKey('Home'),
+    ),
+    SupportScreen(
+      key: PageStorageKey('Support'),
+    ),
+  ];
+
+  final PageStorageBucket bucket = PageStorageBucket();
+
   Widget _showPage= Scaffold(
     body: HomeActivity(),
   );
@@ -36,24 +50,29 @@ class HomePageState extends State<HomePage> {
   }
   Future<bool> _onBackPressed() {
     return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Are you sure?'),
-            content: new Text('Do you want to exit the App'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                color: Colors.green,
-                child: Text("NO"),
-              ),
-              FlatButton(
-                onPressed: () => SystemNavigator.pop(),
-                color: Colors.red,
-                child: Text("YES"),
-              ),
-            ],
+      context: context,
+      builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Are you sure?'),
+        content : Text('Do you want to exit the app?'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text("NO"),
           ),
-        ) ??
+          new GestureDetector(
+            child: FlatButton(
+              onPressed: () =>
+                  Navigator.of(context, rootNavigator: true).pop(true),
+              child: Text("YES"),
+            ),
+          )
+        ],
+      ),
+    ) ??
         false;
   }
 
@@ -63,7 +82,8 @@ class HomePageState extends State<HomePage> {
       onWillPop: _onBackPressed,
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: ColorGlobal.whiteColor,
+
           bottomNavigationBar: CurvedNavigationBar(
             backgroundColor: ColorGlobal.whiteColor,
             color: Colors.black,
@@ -86,15 +106,19 @@ class HomePageState extends State<HomePage> {
                 color: ColorGlobal.color3,
               ),
             ],
-            animationCurve: Curves.easeInOutCubic,
+            animationCurve: Curves.bounceInOut,
             index: _index,
             animationDuration: Duration(milliseconds: 200),
-            onTap: (int tappedIndex) =>
+            onTap: (int tappedIndex) {
               setState(() {
-                _showPage = _getHomeWidgets(tappedIndex, context);
-              }),
+                _showPage = pages[tappedIndex];
+              });
+            },
           ),
-          body: _showPage,
+          body: PageStorage(
+            child: _showPage,
+            bucket: bucket,
+          ),
         ),
       ),
     );
