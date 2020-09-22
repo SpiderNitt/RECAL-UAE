@@ -59,7 +59,6 @@ class _PayPageState extends State<PayPage> {
         });
     ResponseBody responseBody = new ResponseBody();
     if (response.statusCode == 200) {
-//        updateCookie(_response);
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         chapterDetails =  ChapterModel.fromJson(responseBody.data);

@@ -73,7 +73,6 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
         actions: <Widget>[
           new GestureDetector(
             onTap: () async {
-              //await _logoutUser();
               navigateAndReload();
             },
             child: FlatButton(
