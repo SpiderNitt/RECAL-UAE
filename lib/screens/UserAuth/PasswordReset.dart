@@ -31,22 +31,6 @@ class _PasswordResetState extends State<PasswordReset> {
   KeyboardBloc _bloc = new KeyboardBloc();
   ProgressDialog progressDialog;
 
-
-  Future<bool> _onBackPressed() {
-    return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        content: new Text('You cannot go back at this stage'),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text("OK"),
-          ),
-        ],
-      ),
-    ) ??
-        false;
-  }
   double getHeight(double height, int choice) {
     return uiUtills.getProportionalHeight(height: height, choice: choice);
   }
@@ -185,6 +169,31 @@ class _PasswordResetState extends State<PasswordReset> {
       _passwordDialog("No Internet Connection", "Try Again", 2);
     }
   }
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Are you sure?'),
+        content : Text('You will return to the login screen.'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text("NO"),
+          ),
+          FlatButton(
+            onPressed: () =>
+                Navigator.of(context).pop(true),
+            child: Text("YES"),
+          )
+        ],
+      ),
+    ) ??
+        false;
+  }
  Future<bool> _onBackDialog() {
     return  showDialog(
         context: context,
@@ -235,13 +244,13 @@ class _PasswordResetState extends State<PasswordReset> {
               )),
         )) ?? false;
   }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     uiUtills = new UIUtills();
     _bloc.start();
+
   }
   @override
   void dispose() {
@@ -261,7 +270,7 @@ class _PasswordResetState extends State<PasswordReset> {
     return Scaffold(
       backgroundColor: ColorGlobal.whiteColor,
       body: WillPopScope(
-        onWillPop: _onBackDialog,
+        onWillPop: _onBackPressed,
         child: Center(
           child: SingleChildScrollView(
             child: Column(

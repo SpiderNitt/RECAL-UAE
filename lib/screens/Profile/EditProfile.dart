@@ -541,7 +541,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     print(
         "branch emirate year gender ${DropDown.branch} ${DropDown
             .emirate} ${DropDown.year.toString()} ${DropDown.gender}");
-    var url = "https://delta.nitt.edu/recal-uae/api/users/update/";
+    var url = Api.updateUser;
     var body = {
       "id": user_id.toString(),
       "email": email.text,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iosrecal/Constant/utils.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/models/User.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
@@ -145,7 +146,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       print("USERID Profile: $user_id");
       print("cookie profile: $cookie");
 
-      var url = "https://delta.nitt.edu/recal-uae/api/users/profile/";
+      var url = Api.getUser;
       var uri = Uri.parse(url);
       uri = uri.replace(query: "user_id=$user_id");
 
@@ -164,14 +165,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             if (picture != null) {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               prefs.setString("profile_picture",
-                  "https://delta.nitt.edu/recal-uae" + picture);
+                  Api.imageUrl + picture);
             }
             print("display picture get: $picture");
             setState(() {
               if (picture != null) {
                 setState(() {
                   picture =
-                      "https://delta.nitt.edu/recal-uae" + picture;
+                      Api.imageUrl + picture;
                   getPic = 1;
                 });
               }

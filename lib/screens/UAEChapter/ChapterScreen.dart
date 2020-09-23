@@ -69,22 +69,6 @@ class _ChapterScreenState extends State<ChapterScreen> {
                       ),
                   ),
       ),
-                  Padding(
-                    padding: EdgeInsets.all(getHeight(10, 2)),
-                    child: ListBody(
-                      children: <Widget>[
-                        Text(
-                          'RECAL UAE CHAPTER',
-                          style: GoogleFonts.josefinSans(
-                            color: ColorGlobal.textColor,
-                            fontSize: getHeight(18, 2),
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.all(getHeight(10,2)),
@@ -134,9 +118,11 @@ class _ChapterScreenState extends State<ChapterScreen> {
                               ),
                               Text('Vision and Mission',
                                   style: TextStyle(
-                                      color: ColorGlobal.textColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: getHeight(20, 2))),
+                                      color: ColorGlobal
+                                          .textColor,
+                                      fontWeight:
+                                      FontWeight.w500,
+                                      fontSize: getWidth(20, 2))),
                             ]
                         ),
                       ),
