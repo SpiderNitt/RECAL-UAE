@@ -96,14 +96,6 @@ class FeedbackState extends State<FeedbackScreen>
           ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         print("worked!");
-//        Fluttertoast.showToast(
-//            msg: "Message sent",
-//            toastLength: Toast.LENGTH_SHORT,
-//            gravity: ToastGravity.BOTTOM,
-//            timeInSecForIosWeb: 1,
-//            backgroundColor: Colors.green,
-//            textColor: Colors.white,
-//            fontSize: 16.0);
         return true;
       } else if (responseBody.status_code == 401) {
         onTimeOut();
@@ -173,23 +165,24 @@ class FeedbackState extends State<FeedbackScreen>
 
   Future<bool> onTimeOut() {
     return showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             title: new Text('Session Timeout'),
             content: new Text('Login to continue'),
             actions: <Widget>[
-              new GestureDetector(
-                onTap: () async {
+              FlatButton(
+                onPressed: () async {
                   navigateAndReload();
                 },
-                child: FlatButton(
-                  color: Colors.red,
-                  child: Text("OK"),
-                ),
+                child: Text("OK"),
               ),
             ],
           ),
-          barrierDismissible: false,
         ) ??
         false;
   }
@@ -303,10 +296,23 @@ class FeedbackState extends State<FeedbackScreen>
             backgroundColor: Color(0xDDFFFFFF),
             appBar: AppBar(
               backgroundColor: ColorGlobal.whiteColor,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
+              leading: (Platform.isAndroid)
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: ColorGlobal.textColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                  : IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: ColorGlobal.textColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
               title: Text(
                 'Feedback',
                 style: TextStyle(color: ColorGlobal.textColor),

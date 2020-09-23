@@ -9,6 +9,7 @@ import 'package:iosrecal/models/ChapterModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'dart:convert';
+import 'dart:io';
 import '../Home/NoData.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
@@ -87,24 +88,24 @@ class _VisionMissionState extends State<VisionMission> {
 
   Future<bool> onTimeOut() {
     return showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             title: new Text('Session Timeout'),
             content: new Text('Login to continue'),
             actions: <Widget>[
-              new GestureDetector(
-                onTap: () async {
-                  //await _logoutUser();
+              FlatButton(
+                onPressed: () async {
                   navigateAndReload();
                 },
-                child: FlatButton(
-                  color: Colors.red,
-                  child: Text("OK"),
-                ),
+                child: Text("OK"),
               ),
             ],
           ),
-          barrierDismissible: false,
         ) ??
         false;
   }
@@ -130,11 +131,10 @@ class _VisionMissionState extends State<VisionMission> {
     final double width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     if (internet == 0) {
-      //
       return NoInternetScreen(notifyParent: refresh);
     } else if (state == 0) {
       return SpinKitDoubleBounce(
-        color: Colors.lightBlueAccent,
+        color: ColorGlobal.blueColor,
       );
     } else if (state == 1 && error == false) {
       return Padding(
@@ -172,16 +172,17 @@ class _VisionMissionState extends State<VisionMission> {
               ),
             ),
             SizedBox(height: 12.0),
-            FadeIn(
-                child: AutoSizeText(
+            Center(
+                child: FadeIn(
+                    child: AutoSizeText(
               vision,
               style: TextStyle(
-            fontSize:
-                UIUtills().getProportionalHeight(height: 20, choice: 3),
-            color: ColorGlobal.textColor,
+                fontSize:
+                    UIUtills().getProportionalHeight(height: 15, choice: 3),
+                color: ColorGlobal.textColor,
               ),
-              maxLines: 5,
-            ))
+              maxLines: 15,
+            )))
           ],
         ),
       );
@@ -236,8 +237,9 @@ class _VisionMissionState extends State<VisionMission> {
           ],
         ),
       );
+    } else {
+      return Error8Screen();
     }
-    return Error8Screen();
   }
 
   Widget getBody1() {
@@ -247,18 +249,17 @@ class _VisionMissionState extends State<VisionMission> {
       return NoInternetScreen(notifyParent: refresh);
     } else if (state == 0) {
       return SpinKitDoubleBounce(
-        color: Colors.lightBlueAccent,
+        color: ColorGlobal.blueColor,
       );
     } else if (state == 1 && error == false) {
       return Padding(
         padding: EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-
           children: <Widget>[
-            SizedBox(
-              height: height / 32,
-            ),
+            // SizedBox(
+            //   height: height / 32,
+            // ),
             Center(
               child: FadeIn(
                 child: Text(
@@ -286,16 +287,17 @@ class _VisionMissionState extends State<VisionMission> {
               ),
             ),
             SizedBox(height: 12.0),
-            FadeIn(
-                child: AutoSizeText(
-              mission,
+            Center(
+                child: FadeIn(
+                    child: AutoSizeText(
+              vision,
               style: TextStyle(
-            fontSize:
-                UIUtills().getProportionalHeight(height: 20, choice: 3),
-            color: ColorGlobal.textColor,
+                fontSize:
+                    UIUtills().getProportionalHeight(height: 15, choice: 3),
+                color: ColorGlobal.textColor,
               ),
-              maxLines: 5,
-            ))
+              maxLines: 15,
+            )))
           ],
         ),
       );
@@ -350,8 +352,9 @@ class _VisionMissionState extends State<VisionMission> {
           ],
         ),
       );
+    } else {
+      return Error8Screen();
     }
-    return Error8Screen();
   }
 
   List<Widget> _buildPageIndicator() {
@@ -380,13 +383,26 @@ class _VisionMissionState extends State<VisionMission> {
     final double width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return SafeArea(
-            child: Scaffold(
+        child: Scaffold(
       appBar: AppBar(
         backgroundColor: ColorGlobal.whiteColor,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        leading: (Platform.isAndroid)
+            ? IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: ColorGlobal.textColor,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
+            : IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: ColorGlobal.textColor,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
         title: Text(
           'Vision and Mission',
           style: TextStyle(color: ColorGlobal.textColor),

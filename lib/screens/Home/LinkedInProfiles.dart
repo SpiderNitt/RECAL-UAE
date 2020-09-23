@@ -111,24 +111,24 @@ class LinkedinState extends State<LinkedIn> {
 
   Future<bool> onTimeOut() {
     return showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             title: new Text('Session Timeout'),
             content: new Text('Login to continue'),
             actions: <Widget>[
-              new GestureDetector(
-                onTap: () async {
-                  //await _logoutUser();
+              FlatButton(
+                onPressed: () async {
                   navigateAndReload();
                 },
-                child: FlatButton(
-                  color: Colors.red,
-                  child: Text("OK"),
-                ),
+                child: Text("OK"),
               ),
             ],
           ),
-          barrierDismissible: false,
         ) ??
         false;
   }
@@ -157,7 +157,7 @@ class LinkedinState extends State<LinkedIn> {
       return Error8Screen();
     } else if (state == 0) {
       return SpinKitDoubleBounce(
-        color: Colors.lightBlueAccent,
+        color: ColorGlobal.blueColor,
       );
     } else if (state == 1 && positions.length == 0) {
       return NodataScreen();
@@ -323,14 +323,23 @@ class LinkedinState extends State<LinkedIn> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorGlobal.whiteColor,
-          leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: ColorGlobal.textColor,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
+          leading: (Platform.isAndroid)
+              ? IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: ColorGlobal.textColor,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  })
+              : IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: ColorGlobal.textColor,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
           actions: [
             IconButton(
               onPressed: () =>
