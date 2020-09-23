@@ -229,7 +229,8 @@ class _DashBoardState extends State<DashBoard> {
       new SandB('Social', data['Social Members'], Color(0xcc982ef0)),
       new SandB('Business', data['Business Members'], Color(0xcc26cb3c)),
     ];
-
+    _seriesGenderPieData = List<charts.Series<Gender, String>>();
+    _seriesSAndBPieData = List<charts.Series<SandB, String>>();
     _seriesGenderPieData.add(
       charts.Series(
         data: genderPieData,
@@ -273,6 +274,54 @@ class _DashBoardState extends State<DashBoard> {
     super.initState();
     _seriesGenderPieData = List<charts.Series<Gender, String>>();
     _seriesSAndBPieData = List<charts.Series<SandB, String>>();
+    //_generatePieData();
+  }
+
+  Material myItems(IconData icon, String heading, int color) {
+    return Material(
+      color: Colors.white,
+      elevation: 5.0,
+      borderRadius: BorderRadius.circular(getHeight(24, 2)),
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.all(getHeight(8, 2)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(getHeight(8, 2)),
+                      child: Text(
+                        heading,
+                        style: TextStyle(
+                          color: new Color(color),
+                          fontSize: getHeight(20, 2),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Material(
+                    color: new Color(color),
+                    borderRadius: BorderRadius.circular(getHeight(24, 2)),
+                    child: Padding(
+                      padding: EdgeInsets.all(getHeight(16, 2)),
+                      child: Icon(
+                        icon,
+                        color: Colors.white,
+                        size: getHeight(30, 2),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Material dealsItem(int color) {

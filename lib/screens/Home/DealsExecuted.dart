@@ -173,8 +173,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
                           padding: EdgeInsets.symmetric(horizontal: width/25, vertical: width/50),
                           child: Material(
                             color: Colors.white,
-                            elevation: 14.0,
-                            shadowColor: Color(0x802196F3),
+                            elevation: 5.0,
                             borderRadius: BorderRadius.circular(3*width/50),
                             child: Padding
                               (
