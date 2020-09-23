@@ -216,23 +216,24 @@ class TechnicalState extends State<TechnicalSupport>
 
   Future<bool> onTimeOut() {
     return showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             title: new Text('Session Timeout'),
             content: new Text('Login to continue'),
             actions: <Widget>[
-              new GestureDetector(
-                onTap: () async {
+              FlatButton(
+                onPressed: () async {
                   navigateAndReload();
                 },
-                child: FlatButton(
-                  color: Colors.red,
-                  child: Text("OK"),
-                ),
+                child: Text("OK"),
               ),
             ],
           ),
-          barrierDismissible: false,
         ) ??
         false;
   }
@@ -291,10 +292,23 @@ class TechnicalState extends State<TechnicalSupport>
             backgroundColor: Color(0xDDFFFFFF),
             appBar: AppBar(
               backgroundColor: ColorGlobal.whiteColor,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
+              leading: (Platform.isAndroid)
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: ColorGlobal.textColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                  : IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: ColorGlobal.textColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
               title: Text(
                 'Technical Support',
                 style: TextStyle(color: ColorGlobal.textColor),

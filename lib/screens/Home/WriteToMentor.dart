@@ -191,7 +191,7 @@ class MentorState extends State<WriteMentorScreen>
 
     if (response.statusCode == 200) {
       ResponseBody responseBody =
-      ResponseBody.fromJson(json.decode(response.body));
+          ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         print("worked!");
         return true;
@@ -216,23 +216,24 @@ class MentorState extends State<WriteMentorScreen>
 
   Future<bool> onTimeOut() {
     return showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             title: new Text('Session Timeout'),
             content: new Text('Login to continue'),
             actions: <Widget>[
-              new GestureDetector(
-                onTap: () async {
+              FlatButton(
+                onPressed: () async {
                   navigateAndReload();
                 },
-                child: FlatButton(
-                  color: Colors.red,
-                  child: Text("OK"),
-                ),
+                child: Text("OK"),
               ),
             ],
           ),
-          barrierDismissible: false,
         ) ??
         false;
   }
@@ -265,15 +266,15 @@ class MentorState extends State<WriteMentorScreen>
     Future.delayed(Duration(milliseconds: 1000)).then((value) {
       Widget prog = flag == 1
           ? Icon(
-        Icons.check_circle,
-        size: 50,
-        color: Colors.green,
-      )
+              Icons.check_circle,
+              size: 50,
+              color: Colors.green,
+            )
           : Icon(
-        Icons.close,
-        size: 50,
-        color: Colors.red,
-      );
+              Icons.close,
+              size: 50,
+              color: Colors.red,
+            );
       pr.update(message: show.replaceAll("!", ""), progressWidget: prog);
     });
     Future.delayed(Duration(milliseconds: 2000)).then((value) {
@@ -291,10 +292,23 @@ class MentorState extends State<WriteMentorScreen>
             backgroundColor: Color(0xDDFFFFFF),
             appBar: AppBar(
               backgroundColor: ColorGlobal.whiteColor,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
+              leading: (Platform.isAndroid)
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: ColorGlobal.textColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                  : IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: ColorGlobal.textColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
               title: Text(
                 'Mentor Support',
                 style: TextStyle(color: ColorGlobal.textColor),
