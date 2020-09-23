@@ -591,7 +591,7 @@ class LoginState extends State<Login> {
                                           ? "Return to Sign in"
                                           : "Change Password";
                                   pageTitle = pageTitle == "SIGN IN"
-                                      ? "RESET PASSWORD"
+                                      ? "CHANGE PASSWORD"
                                       : "SIGN IN";
                                   emailFocus.unfocus();
                                   passwordFocus.unfocus();

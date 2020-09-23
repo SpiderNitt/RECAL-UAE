@@ -177,6 +177,7 @@ class CoreCommState extends State<CoreComm> {
       return Center(
         child: SingleChildScrollView(
           child: Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
             margin: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               gradient: new LinearGradient(
@@ -212,7 +213,7 @@ class CoreCommState extends State<CoreComm> {
               child: flag == 1
                   ? Column(children: <Widget>[
                       Text(
-                        "The ongoing members of the core committee of RECAL UAE Chapter are functioning since Oct 2019. The member details are as follows:",
+                        "The ongoing members of the core committee of RECAL UAE Chapter are as follows:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
                           fontSize: UIUtills()

@@ -494,6 +494,7 @@ class _HomeActivityState extends State<HomeActivity> {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar:PreferredSize(
           preferredSize: Size.fromHeight(getHeight(60, 1)),
           child: AppBar(

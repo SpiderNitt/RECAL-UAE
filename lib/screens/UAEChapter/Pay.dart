@@ -36,9 +36,10 @@ class _PayPageState extends State<PayPage> {
 
   refresh(){
     setState(() {
-
+      state=0;
+      internet=1;
+      _pay();
     });
-    _pay();
   }
 
   Future<String> _pay() async {
@@ -168,7 +169,7 @@ class _PayPageState extends State<PayPage> {
             Padding(
               padding: EdgeInsets.fromLTRB(getWidth(12, 2), getHeight(16, 2), getWidth(12, 2), 0.0),
               child: Text(
-                'If you are paying for your annual membership or contribution towards an upcoming event, please tranfer/deposit in the following bank account',
+                'If you are paying for your annual membership or contributing towards an upcoming event, please transfer/deposit in the following bank account',
                 style: TextStyle(
                   color: const Color(0xFF544F50),
                   fontSize: getHeight(18, 2),
@@ -178,7 +179,10 @@ class _PayPageState extends State<PayPage> {
               ),
             ),
             SizedBox(height: getHeight(10, 2)),
-            Card(
+
+            state==0 ? SpinKitDoubleBounce(
+              color: Colors.lightBlueAccent,
+            ) :  Card(
               margin: EdgeInsets.fromLTRB(getWidth(16, 2), getHeight(16, 2), getWidth(16, 2), getHeight(16, 2)),
               color: Colors.blue[300],
               child: Padding(

@@ -758,7 +758,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             }
                           }
                         } else {
-
+                          print("form not valid");
                         }
                       }
                     },

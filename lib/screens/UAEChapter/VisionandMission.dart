@@ -167,23 +167,21 @@ class _VisionMissionState extends State<VisionMission> {
                   'assets/images/visionbg.jpg',
                 ),
                 height: height / 3,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 //width: width / 1.5,
               ),
             ),
             SizedBox(height: 12.0),
-            Center(
-                child: FadeIn(
-                    child: AutoSizeText(
+            FadeIn(
+                child: AutoSizeText(
               vision,
               style: TextStyle(
-                fontSize:
-                    UIUtills().getProportionalHeight(height: 20, choice: 3),
-                color: ColorGlobal.textColor,
+            fontSize:
+                UIUtills().getProportionalHeight(height: 20, choice: 3),
+            color: ColorGlobal.textColor,
               ),
-              textAlign: TextAlign.center,
               maxLines: 5,
-            )))
+            ))
           ],
         ),
       );
@@ -218,7 +216,7 @@ class _VisionMissionState extends State<VisionMission> {
                   'assets/images/visionbg.jpg',
                 ),
                 height: height / 3,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 //width: width / 1.5,
               ),
             ),
@@ -256,6 +254,7 @@ class _VisionMissionState extends State<VisionMission> {
         padding: EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+
           children: <Widget>[
             SizedBox(
               height: height / 32,
@@ -282,23 +281,21 @@ class _VisionMissionState extends State<VisionMission> {
                   'assets/images/missionbg.jpg',
                 ),
                 height: height / 3,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 //width: width / 1.5,
               ),
             ),
             SizedBox(height: 12.0),
-            Center(
-                child: FadeIn(
-                    child: AutoSizeText(
+            FadeIn(
+                child: AutoSizeText(
               mission,
               style: TextStyle(
-                fontSize:
-                    UIUtills().getProportionalHeight(height: 20, choice: 3),
-                color: ColorGlobal.textColor,
+            fontSize:
+                UIUtills().getProportionalHeight(height: 20, choice: 3),
+            color: ColorGlobal.textColor,
               ),
-              textAlign: TextAlign.center,
               maxLines: 5,
-            )))
+            ))
           ],
         ),
       );
@@ -333,7 +330,7 @@ class _VisionMissionState extends State<VisionMission> {
                   'assets/images/missionbg.jpg',
                 ),
                 height: height / 3,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 //width: width / 1.5,
               ),
             ),
@@ -382,8 +379,7 @@ class _VisionMissionState extends State<VisionMission> {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return MaterialApp(
-        home: SafeArea(
+    return SafeArea(
             child: Scaffold(
       appBar: AppBar(
         backgroundColor: ColorGlobal.whiteColor,
@@ -427,6 +423,6 @@ class _VisionMissionState extends State<VisionMission> {
           ),
         ),
       ),
-    )));
+    ));
   }
 }
