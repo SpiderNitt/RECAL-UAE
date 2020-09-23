@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
@@ -70,7 +69,6 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
   Future<String> _notifications() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      //Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
       setState(() {
         _hasInternet=false;
         flag = 1;
@@ -97,7 +95,6 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
 
     if (response.statusCode == 200) {
       print("got response");
-//        updateCookie(_response);
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       print(responseBody.data);
       if (responseBody.status_code == 200) {
@@ -158,18 +155,16 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
       barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Session Timeout'),
-        content: new Text('Login to continue'),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Session Timeout'),
+        content : Text('Login in continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              //await _logoutUser();
-              navigateAndReload();
-            },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+          FlatButton(
+            onPressed: () => navigateAndReload(),
+            child: Text("OK"),
           ),
         ],
       ),
@@ -222,7 +217,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
             child: Padding(
               padding: EdgeInsets.only(top: getHeight(10, 2)),
               child: SpinKitDoubleBounce(
-                color: Colors.lightBlueAccent,
+                color: ColorGlobal.blueColor,
               ),
             ),
           );
@@ -338,7 +333,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
           backgroundColor: ColorGlobal.whiteColor,
           leading: IconButton(
               icon: Icon(
-                Icons.arrow_back,
+                Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
                 color: ColorGlobal.textColor,
               ),
               onPressed: () {

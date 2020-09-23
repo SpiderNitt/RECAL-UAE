@@ -16,7 +16,7 @@ import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:iosrecal/Constant/utils.dart';
-
+import 'dart:io' show Platform;
 
 class DealsExecuted extends StatefulWidget {
   @override
@@ -100,18 +100,16 @@ class _DealsExecutedState extends State<DealsExecuted> {
       barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Session Timeout'),
-        content: new Text('Login to continue'),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Session Timeout'),
+        content : Text('Login in continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              //await _logoutUser();
-              navigateAndReload();
-            },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+          FlatButton(
+            onPressed: () => navigateAndReload(),
+            child: Text("OK"),
           ),
         ],
       ),
@@ -128,7 +126,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
           backgroundColor: ColorGlobal.whiteColor,
           leading: IconButton(
               icon: Icon(
-                Icons.arrow_back,
+                Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
                 color: ColorGlobal.textColor,
               ),
               onPressed: () {
@@ -150,8 +148,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
                 case ConnectionState.active:
                   return Center(
                     child: SpinKitDoubleBounce(
-                      color: Colors
-                          .lightBlueAccent,
+                      color: ColorGlobal.blueColor,
                     ),
                   );
                 case ConnectionState.done:

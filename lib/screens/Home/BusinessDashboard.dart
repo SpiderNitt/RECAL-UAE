@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
@@ -9,7 +9,6 @@ import 'package:iosrecal/models/MemberModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:iosrecal/Constant/Constant.dart';
-import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -78,22 +77,16 @@ class _DashBoardState extends State<DashBoard> {
 
         });
 
-        //setState(() {
           state += 1;
-        //});
       }else if(responseBody.status_code==401){
         onTimeOut();
       }else{
-        //setState(() {
           state+=1;
           _hasError = true;
-        //});
       }
     }else{
-      //setState(() {
         state+=1;
         _hasError = true;
-      //});
     }
     return true;
   }
@@ -131,18 +124,16 @@ class _DashBoardState extends State<DashBoard> {
       barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Session Timeout'),
-        content: new Text('Login to continue'),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Session Timeout'),
+        content : Text('Login in continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              //await _logoutUser();
-              navigateAndReload();
-            },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+          FlatButton(
+            onPressed: () => navigateAndReload(),
+            child: Text("OK"),
           ),
         ],
       ),
@@ -180,21 +171,13 @@ class _DashBoardState extends State<DashBoard> {
         data['Deals Value'] = dealValue;
         await _generatePieData();
 
-        //setState(() {
-          //state += 1;
-        //});
-
       }else{
-        //setState(() {
           state+=1;
           _hasError = true;
-        //});
       }
     }else{
-      //setState(() {
         state+=1;
         _hasError = true;
-      //});
     }
   }
 
@@ -223,26 +206,15 @@ class _DashBoardState extends State<DashBoard> {
         });
         data['Male'] = male;
         data['Female'] = users.length - male;
-        //print("values are ");
-        //print(data['Male']);
-        //print(data['Female']);
         await _fetchSpecificUsers();
-
-        //setState(() {
           state += 1;
-        //});
-
         }else{
-        //setState(() {
           state+=1;
           _hasError = true;
-        //});
       }
       }else{
-      //setState(() {
         state+=1;
         _hasError = true;
-     // });
     }
     return true;
     }
@@ -281,11 +253,9 @@ class _DashBoardState extends State<DashBoard> {
         labelAccessorFn: (SandB row, _) => '${row.types}',
       ),
     );
-    //setState(() {
       print("reached pie chart");
       print("state is : " + state.toString());
       state+=1;
-    //});
   }
 
   Future<Map<String, int>> makeRequests() async {
@@ -293,77 +263,16 @@ class _DashBoardState extends State<DashBoard> {
     var r1 = _fetchEvents();
     var r2 = _fetchAllUsers();
     await Future.wait([r1, r2]); // list of Responses
-//    for (var response in results) {
-//      print(response.statusCode);
-//      // todo - parse the response - perhaps JSON
-//      value.add(json.decode(response.body));
-//    }
     print("returning data");
     return data;
   }
 
-  _makeRequests(){
-    _fetchEvents();
-    _fetchAllUsers();
-    print("I am here");
-    print("state is : " + state.toString());
-    return;
-  }
 
   @override
   void initState() {
     super.initState();
     _seriesGenderPieData = List<charts.Series<Gender, String>>();
     _seriesSAndBPieData = List<charts.Series<SandB, String>>();
-    //_generatePieData();
-  }
-
-  Material myItems(IconData icon, String heading, int color) {
-    return Material(
-      color: Colors.white,
-      elevation: 14.0,
-      shadowColor: Color(0x802196F3),
-      borderRadius: BorderRadius.circular(getHeight(24, 2)),
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.all(getHeight(8, 2)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(getHeight(8, 2)),
-                      child: Text(
-                        heading,
-                        style: TextStyle(
-                          color: new Color(color),
-                          fontSize: getHeight(20, 2),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Material(
-                    color: new Color(color),
-                    borderRadius: BorderRadius.circular(getHeight(24, 2)),
-                    child: Padding(
-                      padding: EdgeInsets.all(getHeight(16, 2)),
-                      child: Icon(
-                        icon,
-                        color: Colors.white,
-                        size: getHeight(30, 2),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Material dealsItem(int color) {
@@ -619,7 +528,7 @@ class _DashBoardState extends State<DashBoard> {
           backgroundColor: ColorGlobal.whiteColor,
           leading: IconButton(
               icon: Icon(
-                Icons.arrow_back,
+                Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
                 color: ColorGlobal.textColor,
               ),
               onPressed: () {
@@ -635,16 +544,15 @@ class _DashBoardState extends State<DashBoard> {
           builder: (BuildContext context, AsyncSnapshot snapshot){
             print("entering switch");
             switch(snapshot.connectionState){
-              //case ConnectionState.none:
-                //print("no connection");
-                //return Center(child: NoInternetScreen(notifyParent: refresh));
+              case ConnectionState.none:
+                print("no connection");
+                return Center(child: NoInternetScreen(notifyParent: refresh));
               case ConnectionState.waiting:
               case ConnectionState.active:
                 print("connection active");
                 return Center(
                   child: SpinKitDoubleBounce(
-                    color: Colors
-                        .lightBlueAccent,
+                    color: ColorGlobal.blueColor,
                   ),
                 );
               case ConnectionState.done:
@@ -665,8 +573,7 @@ class _DashBoardState extends State<DashBoard> {
                   if(state<3){
                     print("state is less than 3");
                     return Center(child: SpinKitDoubleBounce(
-                      color: Colors
-                          .lightBlueAccent,
+                      color: ColorGlobal.blueColor,
                     ),
                     );
                   }

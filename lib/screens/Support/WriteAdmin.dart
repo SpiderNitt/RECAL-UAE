@@ -188,6 +188,8 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
       if (responseBody.status_code == 200) {
         print("worked!");
         _animationController.forward();
+        messageController.text = "";
+        Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
         return true;
       } else if (responseBody.status_code == 401) {
         onTimeOut();

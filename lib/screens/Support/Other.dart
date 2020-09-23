@@ -188,6 +188,8 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
           ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         _animationController.forward();
+        messageController.text = "";
+        Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
         print("worked!");
         return true;
       } else if (responseBody.status_code == 401) {

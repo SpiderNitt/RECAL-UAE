@@ -72,6 +72,8 @@ class TechnicalState extends State<TechnicalSupport>
           final String message = messageController.text;
           if (message != "") {
             _animationController.forward();
+            messageController.text = "";
+            Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
             bool b = await _sendMessage(message);
           } else {
             Fluttertoast.showToast(

@@ -554,7 +554,9 @@ class Search extends SearchDelegate {
                           ],
                         ),
                       ),
-                    )));
+                    ),
+                ),
+            );
           },
         ),
       ),

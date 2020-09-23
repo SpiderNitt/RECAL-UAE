@@ -50,16 +50,16 @@ class NoInternetScreen extends StatelessWidget {
                           Center(
                             child: Image(
                               image: AssetImage(
-                                'assets/images/no_internet.jpg',
+                                'assets/images/no_internet.png',
                               ),
-                              height: height / 2.5,
+                              height: height / 3,
                               fit: BoxFit.fill,
                               //width: width / 1.5,
                             ),
                           ),
                           Center(
                             child: FlatButton.icon(
-                              color: ColorGlobal.textColor,
+                              color: const Color(0xff3AAFFA),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(9),
                               ),

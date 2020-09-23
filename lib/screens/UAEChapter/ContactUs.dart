@@ -1,9 +1,7 @@
-import 'dart:io';
+import 'dart:io' show Platform;
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:iosrecal/Constant/Constant.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
@@ -63,7 +61,6 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
         }
       });
     });
-    //_positions();
   }
 
   double getHeight(double height, int choice) {
@@ -193,6 +190,8 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
       if (responseBody.status_code == 200){
         print("worked!");
         _animationController.forward();
+        messageController.text = "";
+        Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
         return true;
       }else if(responseBody.status_code==401){
         onTimeOut();
@@ -235,67 +234,21 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
       barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Session Timeout'),
-        content: new Text('Login to continue'),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Session Timeout'),
+        content : Text('Login in continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              navigateAndReload();
-            },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+          FlatButton(
+            onPressed: () => navigateAndReload(),
+            child: Text("OK"),
           ),
         ],
       ),
     ) ??
         false;
-  }
-
-  _loginDialog1(ProgressDialog pr, String show, String again, int flag) {
-    pr = new ProgressDialog(
-      context,
-      type: ProgressDialogType.Normal,
-      textDirection: TextDirection.rtl,
-      showLogs: true,
-      isDismissible: false,
-    );
-
-    pr.style(
-      message: "Sending message",
-      borderRadius: 10.0,
-      backgroundColor: Colors.white,
-      elevation: 10.0,
-      progressWidget: Image.asset(
-        "assets/images/ring.gif",
-        height: 50,
-        width: 50,
-      ),
-      insetAnimCurve: Curves.easeInOut,
-      progressWidgetAlignment: Alignment.center,
-      messageTextStyle: TextStyle(
-          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
-    );
-    pr.show();
-    Future.delayed(Duration(milliseconds: 1000)).then((value) {
-      Widget prog = flag == 1
-          ? Icon(
-        Icons.check_circle,
-        size: 50,
-        color: Colors.green,
-      )
-          : Icon(
-        Icons.close,
-        size: 50,
-        color: Colors.red,
-      );
-      pr.update(message: show.replaceAll("!", ""), progressWidget: prog);
-    });
-    Future.delayed(Duration(milliseconds: 2000)).then((value) {
-      pr.update(progressWidget: null);
-      pr.hide();
-    });
   }
 
   _sendMail() async {
@@ -318,7 +271,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
           appBar: AppBar(
             backgroundColor: ColorGlobal.whiteColor,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
+              icon: Icon(Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios, color: ColorGlobal.textColor),
               onPressed: () => Navigator.of(context).pop(),
             ),
             title: Text(
@@ -340,8 +293,6 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                           end: Alignment.bottomRight,
                         ),
                       ),
-//            height : height/2,
-//            color: const Color(0xFF2146A8),
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(0.0, getHeight(10, 2), getWidth(8, 2), 0.0),
                         child: Column(
@@ -451,39 +402,6 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                                 ),
                               ),
                             ),
-//                            RawMaterialButton(
-//                              onPressed: () async {
-//                                final String message = messageController.text;
-//                                if (message != "") {
-//                                  bool b = await _sendMessage(message);
-//                                  ProgressDialog pr;
-//                                  if (b) {
-//                                    _loginDialog1(pr, "Message Sent", "Thank you", 1);
-//                                  } else {
-//                                    _loginDialog1(
-//                                        pr, "Message was not sent", "Try again", 0);
-//                                  }
-//                                } else {
-//                                  Fluttertoast.showToast(
-//                                      msg: "Enter a message",
-//                                      toastLength: Toast.LENGTH_SHORT,
-//                                      gravity: ToastGravity.BOTTOM,
-//                                      timeInSecForIosWeb: 1,
-//                                      backgroundColor: Colors.blue,
-//                                      textColor: Colors.white,
-//                                      fontSize: 16.0);
-//                                }
-//                              },
-//                              elevation: 2.0,
-//                              fillColor: Colors.blue,
-//                              child: Icon(
-//                                Icons.send,
-//                                color: Colors.white,
-//                                size: 30.0,
-//                              ),
-//                              padding: EdgeInsets.all(15.0),
-//                              shape: CircleBorder(),
-//                            )
                           animatedButton(),
                           ],
                         ),

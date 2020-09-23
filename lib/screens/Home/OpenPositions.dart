@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -11,7 +11,6 @@ import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:iosrecal/screens/Home/NoData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
@@ -34,7 +33,6 @@ class _OpenPositionsState extends State<OpenPositions> {
   initState() {
     super.initState();
     uiUtills = new UIUtills();
-    //_positions();
   }
 
   double getHeight(double height, int choice) {
@@ -61,7 +59,6 @@ class _OpenPositionsState extends State<OpenPositions> {
 
     if (response.statusCode == 200) {
       print("success");
-//        updateCookie(_response);
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
@@ -111,17 +108,16 @@ class _OpenPositionsState extends State<OpenPositions> {
     return showDialog(
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Session Timeout'),
-        content: new Text('Login to continue'),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Session Timeout'),
+        content : Text('Login in continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              navigateAndReload();
-            },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+          FlatButton(
+            onPressed: () => navigateAndReload(),
+            child: Text("OK"),
           ),
         ],
       ),
@@ -141,7 +137,7 @@ class _OpenPositionsState extends State<OpenPositions> {
           backgroundColor: ColorGlobal.whiteColor,
           leading: IconButton(
               icon: Icon(
-                Icons.arrow_back,
+                Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
                 color: ColorGlobal.textColor,
               ),
               onPressed: () {
@@ -163,7 +159,7 @@ class _OpenPositionsState extends State<OpenPositions> {
                 case ConnectionState.active:
                   return Center(
                     child: SpinKitDoubleBounce(
-                      color: Colors.lightBlueAccent,
+                      color: ColorGlobal.blueColor,
                     ),
                   );
                 case ConnectionState.done:

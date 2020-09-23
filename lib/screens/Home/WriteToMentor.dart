@@ -1,6 +1,5 @@
-import 'dart:io';
+import 'dart:io' show Platform;
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
@@ -189,6 +188,8 @@ class MentorState extends State<WriteMentorScreen>
       if (responseBody.status_code == 200) {
         print("worked!");
         _animationController.forward();
+        messageController.text = "";
+        Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
         return true;
       } else if (responseBody.status_code == 401) {
         onTimeOut();
@@ -248,51 +249,6 @@ class MentorState extends State<WriteMentorScreen>
         false;
   }
 
-  _loginDialog1(ProgressDialog pr, String show, String again, int flag) {
-    pr = new ProgressDialog(
-      context,
-      type: ProgressDialogType.Normal,
-      textDirection: TextDirection.rtl,
-      showLogs: true,
-      isDismissible: false,
-    );
-
-    pr.style(
-      message: "Sending message",
-      borderRadius: 10.0,
-      backgroundColor: Colors.white,
-      elevation: 10.0,
-      progressWidget: Image.asset(
-        "assets/images/ring.gif",
-        height: 50,
-        width: 50,
-      ),
-      insetAnimCurve: Curves.easeInOut,
-      progressWidgetAlignment: Alignment.center,
-      messageTextStyle: TextStyle(
-          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
-    );
-    pr.show();
-    Future.delayed(Duration(milliseconds: 1000)).then((value) {
-      Widget prog = flag == 1
-          ? Icon(
-              Icons.check_circle,
-              size: 50,
-              color: Colors.green,
-            )
-          : Icon(
-              Icons.close,
-              size: 50,
-              color: Colors.red,
-            );
-      pr.update(message: show.replaceAll("!", ""), progressWidget: prog);
-    });
-    Future.delayed(Duration(milliseconds: 2000)).then((value) {
-      pr.update(progressWidget: null);
-      pr.hide();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
@@ -303,7 +259,7 @@ class MentorState extends State<WriteMentorScreen>
             appBar: AppBar(
               backgroundColor: ColorGlobal.whiteColor,
               leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
+                icon: Icon(Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios, color: ColorGlobal.textColor),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               title: Text(
