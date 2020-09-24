@@ -30,14 +30,21 @@ class _CompletedEventsState extends State<CompletedEvents> with TickerProviderSt
     );
     emptyController.forward();
   }
-  Widget EmptyList(){
+  Widget EmptyList(BuildContext context){
     return Center(
-      child: Text("No events to show!!",style: GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor),),
+      child: Text("No events to show!!",style: GoogleFonts.josefinSans(fontSize: UIUtills().getProportionalHeight(height: 22),color: ColorGlobal.textColor),),
     );
   }
   @override
   Widget build(BuildContext context) {
-    return eventList.isEmpty?EmptyList():Container(
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
+    UIUtills().updateScreenDimesion(
+        width: screenSize.width, height: screenSize.height);
+    final double width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    return eventList.isEmpty?EmptyList(context):Container(
       child: AnimatedList(
           key: animatedListKey,
           initialItemCount: eventList.length,
