@@ -346,7 +346,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
 //                              Text('Discounts', style: TextStyle(
 //                                  color: Color(0xcc3399fe),
 //                                  fontSize: 13.0)),
-                                Text('Contact Us',
+                                Text('Contact',
                                     style: TextStyle(
                                         color: ColorGlobal
                                             .textColor,

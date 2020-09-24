@@ -56,7 +56,7 @@ class LoginState extends State<Login> {
   }
 
   _initController() {
-    email = new TextEditingController(text: "");;
+    email = new TextEditingController(text: "");
     password = new TextEditingController(text: "");
     emailFocus = new FocusNode();
     passwordFocus = new FocusNode();

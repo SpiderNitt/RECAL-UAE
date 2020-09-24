@@ -442,13 +442,10 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                           'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
                               'Height: ${_bloc.keyboardUtils.keyboardHeight}');
                       return _bloc.keyboardUtils.isKeyboardOpen == true
-                          ? Container(
+                          ? SizedBox(
                         height: _bloc.keyboardUtils.keyboardHeight,
                       )
-                          : Container(
-                        height: 0,
-                        width: 0,
-                      );
+                          : SizedBox();
                     }),
               ],
             ),
