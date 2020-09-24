@@ -148,6 +148,7 @@ class _HomeActivityState extends State<HomeActivity> {
           recal_user =
               User.fromProfile(json.decode(json.encode(responseBody.data)));
           picture = recal_user.profile_pic;
+          print("picture : " + picture.toString());
           if(picture!=null) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setString("profile_picture",Api.imageUrl + picture);

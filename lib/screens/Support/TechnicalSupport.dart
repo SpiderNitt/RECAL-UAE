@@ -37,7 +37,6 @@ class TechnicalState extends State<TechnicalSupport>
 
   bool show;
   bool sent = false;
-  bool error = false;
   Color _color = Colors.lightBlue;
 
   initState() {
@@ -51,7 +50,7 @@ class TechnicalState extends State<TechnicalSupport>
         _animationValue = _animationController.value;
         if (_animationValue >= 0.2 && _animationValue < 0.4) {
           _containerPaddingLeft = 100.0;
-          _color = error ? Colors.red : Colors.green;
+          _color = Colors.green;
         } else if (_animationValue >= 0.4 && _animationValue <= 0.5) {
           _translateX = 80.0;
           _rotate = -20.0;
@@ -73,6 +72,8 @@ class TechnicalState extends State<TechnicalSupport>
           final String message = messageController.text;
           if (message != "") {
             _animationController.forward();
+            messageController.text = "";
+            Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
             bool b = await _sendMessage(message);
           } else {
             Fluttertoast.showToast(
@@ -141,9 +142,7 @@ class TechnicalState extends State<TechnicalSupport>
                   vsync: this,
                   duration: Duration(milliseconds: 200),
                   child: sent
-                      ? (error
-                          ? Icon(Icons.warning, color: Colors.white)
-                          : Icon(Icons.done, color: Colors.white))
+                      ? Icon(Icons.done, color: Colors.white)
                       : Container(),
                 ),
                 AnimatedSize(
@@ -156,9 +155,7 @@ class TechnicalState extends State<TechnicalSupport>
                   vsync: this,
                   duration: Duration(milliseconds: 200),
                   child: sent
-                      ? (error
-                          ? Text("Error", style: TextStyle(color: Colors.white))
-                          : Text("Done", style: TextStyle(color: Colors.white)))
+                      ? Text("Done", style: TextStyle(color: Colors.white))
                       : Container(),
                 ),
               ],
@@ -198,10 +195,26 @@ class TechnicalState extends State<TechnicalSupport>
       } else if (responseBody.status_code == 401) {
         onTimeOut();
       } else {
+        Fluttertoast.showToast(
+            msg: "An error occured. Please try again later.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.orange,
+            textColor: Colors.white,
+            fontSize: 16.0);
         print(responseBody.data);
         return false;
       }
     } else {
+      Fluttertoast.showToast(
+          msg: "An error occured. Please try again later.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.orange,
+          textColor: Colors.white,
+          fontSize: 16.0);
       print('Server error');
       return false;
     }

@@ -1,14 +1,11 @@
-import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:folding_cell/folding_cell.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/screens/Home/BusinessNetworkList.dart';
 import 'package:iosrecal/screens/Home/DealsExecuted.dart';
 import 'BusinessDashboard.dart';
-
+import 'dart:io' show Platform;
 
 class BusinessScreen extends StatefulWidget {
   @override
@@ -18,7 +15,6 @@ class BusinessScreen extends StatefulWidget {
 class _WaveHeaderState extends State<BusinessScreen> {
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
@@ -26,7 +22,7 @@ class _WaveHeaderState extends State<BusinessScreen> {
           backgroundColor: ColorGlobal.whiteColor,
           leading: IconButton(
               icon: Icon(
-                Icons.arrow_back,
+                Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
                 color: ColorGlobal.textColor,
               ),
               onPressed: () {
@@ -66,15 +62,12 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
   void initState(){
     Timer(Duration(milliseconds: 250), () {
       _foldingCellKey1?.currentState?.toggleFold();
-      print("Yeah, this line is printed after 1 seconds");
     });
     Timer(Duration(milliseconds: 500), () {
       _foldingCellKey2?.currentState?.toggleFold();
-      print("Yeah, this line is printed after 2 seconds");
     });
     Timer(Duration(milliseconds: 750), () {
       _foldingCellKey3?.currentState?.toggleFold();
-      print("Yeah, this line is printed after 3 seconds");
     });
   }
 
@@ -101,12 +94,8 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
     final height = MediaQuery.of(context).size.height;
 
     return Container(
-//      color: Color(0xFF2e282a),
       child: Column(
         children: <Widget>[
-//          SizedBox(
-//            height: height/8 + 10.0,
-//          ),
           SimpleFoldingCell.create(
             key: _foldingCellKey1,
             frontWidget: _buildFrontWidget(_foldingCellKey1, 0),

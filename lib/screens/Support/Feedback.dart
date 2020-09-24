@@ -36,7 +36,6 @@ class FeedbackState extends State<FeedbackScreen>
 
   bool show;
   bool sent = false;
-  bool error = false;
   Color _color = Colors.lightBlue;
 
   initState() {
@@ -50,7 +49,7 @@ class FeedbackState extends State<FeedbackScreen>
         _animationValue = _animationController.value;
         if (_animationValue >= 0.2 && _animationValue < 0.4) {
           _containerPaddingLeft = 100.0;
-          _color = error ? Colors.red : Colors.green;
+          _color = Colors.green;
         } else if (_animationValue >= 0.4 && _animationValue <= 0.5) {
           _translateX = 80.0;
           _rotate = -20.0;
@@ -70,7 +69,6 @@ class FeedbackState extends State<FeedbackScreen>
     FocusScope.of(context).unfocus();
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      error = true;
       Fluttertoast.showToast(
           msg: "Please connect to internet",
           toastLength: Toast.LENGTH_SHORT,
@@ -96,16 +94,33 @@ class FeedbackState extends State<FeedbackScreen>
           ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         print("worked!");
+        _animationController.forward();
+        messageController.text = "";
+        Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
         return true;
       } else if (responseBody.status_code == 401) {
         onTimeOut();
       } else {
-        error = true;
+        Fluttertoast.showToast(
+            msg: "An error occured.. Please try again later",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.orange,
+            textColor: Colors.white,
+            fontSize: 16.0);
         print(responseBody.data);
         return false;
       }
     } else {
-      error = true;
+      Fluttertoast.showToast(
+          msg: "An error occured. Please try again later",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.orange,
+          textColor: Colors.white,
+          fontSize: 16.0);
       print('Server error');
       return false;
     }
@@ -194,7 +209,6 @@ class FeedbackState extends State<FeedbackScreen>
 
           if (message != "") {
             bool b = await _sendMessage(message);
-            _animationController.forward();
           } else {
             Fluttertoast.showToast(
                 msg: "Enter a message",
@@ -262,10 +276,7 @@ class FeedbackState extends State<FeedbackScreen>
                 AnimatedSize(
                   vsync: this,
                   duration: Duration(milliseconds: 200),
-                  child: sent
-                      ? (error
-                          ? Icon(Icons.warning, color: Colors.white)
-                          : Icon(Icons.done, color: Colors.white))
+                  child: sent? Icon(Icons.done, color: Colors.white)
                       : Container(),
                 ),
                 AnimatedSize(
@@ -278,9 +289,7 @@ class FeedbackState extends State<FeedbackScreen>
                   vsync: this,
                   duration: Duration(milliseconds: 200),
                   child: sent
-                      ? (error
-                          ? Text("Error", style: TextStyle(color: Colors.white))
-                          : Text("Done", style: TextStyle(color: Colors.white)))
+                      ? Text("Done", style: TextStyle(color: Colors.white))
                       : Container(),
                 ),
               ],

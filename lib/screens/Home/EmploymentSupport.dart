@@ -3,8 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Constant/Constant.dart';
-
-import 'package:iosrecal/Constant/Constant.dart';
+import 'dart:io' show Platform;
 
 class EmploymentSupport extends StatefulWidget {
   @override
@@ -25,7 +24,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                   backgroundColor: ColorGlobal.whiteColor,
                   leading: IconButton(
                       icon: Icon(
-                        Icons.arrow_back,
+                        Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
                         color: ColorGlobal.textColor,
                       ),
                       onPressed: () {
@@ -92,7 +91,6 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                 ),
                                 SizedBox(height: 6.0),
                                 Container(
-//                                    alignment: Alignment.center,
                                     child: Column(children: <Widget>[
                                       AutoSizeText(
                                         "Open",
@@ -142,7 +140,6 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                 ),
                                 SizedBox(height: 6.0),
                                 Container(
-//                                    alignment: Alignment.center,
                                     child: Column(children: <Widget>[
                                       AutoSizeText(
                                         "Closed",
@@ -188,7 +185,6 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                 ),
                                 SizedBox(height: 6.0),
                                 Container(
-//                                    alignment: Alignment.center,
                                     child: Column(children: <Widget>[
                                       AutoSizeText(
                                         "LinkedIn",
@@ -247,7 +243,6 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                               ),
                               SizedBox(height: 6.0),
                               Container(
-//                                    alignment: Alignment.center,
                                   child: Column(children: <Widget>[
                                     AutoSizeText(
                                       "Market",
@@ -297,7 +292,6 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                               ),
                               SizedBox(height: 6.0),
                               Container(
-//                                    alignment: Alignment.center,
                                   child: Column(children: <Widget>[
                                     AutoSizeText(
                                       "Write",

@@ -1,6 +1,5 @@
-import 'dart:io';
+import 'dart:io' show Platform;
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
@@ -37,7 +36,6 @@ class MentorState extends State<WriteMentorScreen>
 
   bool show;
   bool sent = false;
-  bool error = false;
   Color _color = Colors.lightBlue;
 
   initState() {
@@ -51,7 +49,7 @@ class MentorState extends State<WriteMentorScreen>
         _animationValue = _animationController.value;
         if (_animationValue >= 0.2 && _animationValue < 0.4) {
           _containerPaddingLeft = 100.0;
-          _color = error ? Colors.red : Colors.green;
+          _color = Colors.green;
         } else if (_animationValue >= 0.4 && _animationValue <= 0.5) {
           _translateX = 80.0;
           _rotate = -20.0;
@@ -72,7 +70,6 @@ class MentorState extends State<WriteMentorScreen>
         onTap: () async {
           final String message = messageController.text;
           if (message != "") {
-            _animationController.forward();
             bool b = await _sendMessage(message);
           } else {
             Fluttertoast.showToast(
@@ -141,9 +138,7 @@ class MentorState extends State<WriteMentorScreen>
                   vsync: this,
                   duration: Duration(milliseconds: 200),
                   child: sent
-                      ? (error
-                          ? Icon(Icons.warning, color: Colors.white)
-                          : Icon(Icons.done, color: Colors.white))
+                      ? Icon(Icons.done, color: Colors.white)
                       : Container(),
                 ),
                 AnimatedSize(
@@ -156,9 +151,7 @@ class MentorState extends State<WriteMentorScreen>
                   vsync: this,
                   duration: Duration(milliseconds: 200),
                   child: sent
-                      ? (error
-                          ? Text("Error", style: TextStyle(color: Colors.white))
-                          : Text("Done", style: TextStyle(color: Colors.white)))
+                      ? Text("Done", style: TextStyle(color: Colors.white))
                       : Container(),
                 ),
               ],
@@ -194,14 +187,33 @@ class MentorState extends State<WriteMentorScreen>
           ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         print("worked!");
+        _animationController.forward();
+        messageController.text = "";
+        Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
         return true;
       } else if (responseBody.status_code == 401) {
         onTimeOut();
       } else {
+        Fluttertoast.showToast(
+            msg: "An error occured. Please try again later.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
         print(responseBody.data);
         return false;
       }
     } else {
+      Fluttertoast.showToast(
+          msg: "An error occured. Please try again later.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
       print('Server error');
       return false;
     }
@@ -236,51 +248,6 @@ class MentorState extends State<WriteMentorScreen>
           ),
         ) ??
         false;
-  }
-
-  _loginDialog1(ProgressDialog pr, String show, String again, int flag) {
-    pr = new ProgressDialog(
-      context,
-      type: ProgressDialogType.Normal,
-      textDirection: TextDirection.rtl,
-      showLogs: true,
-      isDismissible: false,
-    );
-
-    pr.style(
-      message: "Sending message",
-      borderRadius: 10.0,
-      backgroundColor: Colors.white,
-      elevation: 10.0,
-      progressWidget: Image.asset(
-        "assets/images/ring.gif",
-        height: 50,
-        width: 50,
-      ),
-      insetAnimCurve: Curves.easeInOut,
-      progressWidgetAlignment: Alignment.center,
-      messageTextStyle: TextStyle(
-          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
-    );
-    pr.show();
-    Future.delayed(Duration(milliseconds: 1000)).then((value) {
-      Widget prog = flag == 1
-          ? Icon(
-              Icons.check_circle,
-              size: 50,
-              color: Colors.green,
-            )
-          : Icon(
-              Icons.close,
-              size: 50,
-              color: Colors.red,
-            );
-      pr.update(message: show.replaceAll("!", ""), progressWidget: prog);
-    });
-    Future.delayed(Duration(milliseconds: 2000)).then((value) {
-      pr.update(progressWidget: null);
-      pr.hide();
-    });
   }
 
   @override

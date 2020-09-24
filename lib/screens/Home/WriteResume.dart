@@ -64,18 +64,16 @@ class _WriteResumeState extends State<WriteResume> {
       barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Session Timeout'),
-        content: new Text('Login to continue'),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Session Timeout'),
+        content : Text('Login in continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              //await _logoutUser();
-              navigateAndReload();
-            },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+          FlatButton(
+            onPressed: () => navigateAndReload(),
+            child: Text("OK"),
           ),
         ],
       ),
@@ -99,7 +97,6 @@ class _WriteResumeState extends State<WriteResume> {
     ResponseBody responseBody = new ResponseBody();
 
     if (response.statusCode == 200) {
-//        updateCookie(_response);
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
           List list = responseBody.data;
@@ -146,8 +143,7 @@ class _WriteResumeState extends State<WriteResume> {
               case ConnectionState.active:
                 return Center(
                   child: SpinKitDoubleBounce(
-                    color: Colors
-                        .lightBlueAccent,
+                    color: ColorGlobal.blueColor,
                   ),
                 );
               case ConnectionState.done:
@@ -180,7 +176,6 @@ class _WriteResumeState extends State<WriteResume> {
                               children: [
                                 Row
                                   (
-                                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment
                                         .center,
                                     children: <Widget>
@@ -239,7 +234,6 @@ class _WriteResumeState extends State<WriteResume> {
                                 ),
                                 Row
                                   (
-                                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>
                                   [
@@ -274,7 +268,6 @@ class _WriteResumeState extends State<WriteResume> {
                                           launch(uri);
                                         },
                                         child: Column(
-                                          //mainAxisAlignment: MainAxisAlignment.center,
                                           crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                           children: <Widget>[

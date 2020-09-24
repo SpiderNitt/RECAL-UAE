@@ -89,7 +89,7 @@ class LinkedinState extends State<LinkedIn> {
           positions =
               list.map((model) => LinkedinModel.fromJson(model)).toList();
           positions.removeWhere((element) =>
-              element.linkedin == null || element.linkedin.trim() == "");
+          element.linkedin == null || element.linkedin.trim() == "");
           fullList = positions.map((e) => e.user).toList();
           cardKey = List<GlobalKey<FlipCardState>>.generate(
               positions.length, (index) => new GlobalObjectKey(index));
@@ -200,7 +200,7 @@ class LinkedinState extends State<LinkedIn> {
                               CircleAvatar(
                                 radius: width / 14,
                                 backgroundColor:
-                                    colorArray.elementAt(Random().nextInt(4)),
+                                colorArray.elementAt(Random().nextInt(4)),
                                 child: Text(
                                   positions[index].user.toUpperCase()[0],
                                   style: TextStyle(
@@ -230,7 +230,7 @@ class LinkedinState extends State<LinkedIn> {
                                       style: TextStyle(
                                         fontSize: UIUtills()
                                             .getProportionalHeight(
-                                                height: 16, choice: 3),
+                                            height: 16, choice: 3),
                                         color: ColorGlobal.textColor,
                                         fontWeight: FontWeight.bold,
                                         fontStyle: FontStyle.italic,
@@ -294,7 +294,7 @@ class LinkedinState extends State<LinkedIn> {
                                     style: TextStyle(
                                       fontSize: UIUtills()
                                           .getProportionalHeight(
-                                              height: 12, choice: 3),
+                                          height: 12, choice: 3),
                                       color: ColorGlobal.textColor,
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
@@ -345,11 +345,11 @@ class LinkedinState extends State<LinkedIn> {
               onPressed: () =>
                   showSearch(context: context, delegate: Search(positions))
                       .then((value) {
-                setState(() {
-                  state = 0;
-                  _positions();
-                });
-              }),
+                    setState(() {
+                      state = 0;
+                      _positions();
+                    });
+                  }),
               icon: Icon(
                 Icons.search,
                 color: ColorGlobal.textColor,
@@ -415,9 +415,9 @@ class Search extends SearchDelegate {
       modelSuggestionList = listExample.map((e) => e).toList();
     } else {
       suggestionList.addAll(listExample.map((e) => e.user).toList().where(
-          (element) => element.toLowerCase().contains(query.toLowerCase())));
+              (element) => element.toLowerCase().contains(query.toLowerCase())));
       modelSuggestionList.addAll(listExample.map((e) => e).toList().where(
-          (element) =>
+              (element) =>
               element.user.toLowerCase().contains(query.toLowerCase())));
     }
     cardKey = List<GlobalKey<FlipCardState>>.generate(
@@ -458,7 +458,7 @@ class Search extends SearchDelegate {
                             CircleAvatar(
                               radius: width / 14,
                               backgroundColor:
-                                  colorArray.elementAt(Random().nextInt(4)),
+                              colorArray.elementAt(Random().nextInt(4)),
                               child: Text(
                                 modelSuggestionList[index]
                                     .user
@@ -549,7 +549,7 @@ class Search extends SearchDelegate {
                                     style: TextStyle(
                                       fontSize: UIUtills()
                                           .getProportionalHeight(
-                                              height: 12, choice: 3),
+                                          height: 12, choice: 3),
                                       color: ColorGlobal.textColor,
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
@@ -563,7 +563,9 @@ class Search extends SearchDelegate {
                           ],
                         ),
                       ),
-                    )));
+                    ),
+                ),
+            );
           },
         ),
       ),

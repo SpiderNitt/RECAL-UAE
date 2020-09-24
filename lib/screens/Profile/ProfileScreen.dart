@@ -245,7 +245,7 @@ refresh () {
             ),
             leading: IconButton(
               icon: Icon(
-                Icons.arrow_back,
+                Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
                 size: 30,
                 color: ColorGlobal.textColor,
               ),

@@ -9,10 +9,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import '../Home/NoData.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:iosrecal/Constant/utils.dart';
-
+import 'dart:io' show Platform;
 
 class PayPage extends StatefulWidget {
   @override
@@ -46,6 +45,7 @@ class _PayPageState extends State<PayPage> {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
+        state = 1;
         internet=0;
       });
     }
@@ -58,7 +58,6 @@ class _PayPageState extends State<PayPage> {
         });
     ResponseBody responseBody = new ResponseBody();
     if (response.statusCode == 200) {
-//        updateCookie(_response);
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         chapterDetails =  ChapterModel.fromJson(responseBody.data);
@@ -96,6 +95,8 @@ class _PayPageState extends State<PayPage> {
       setState(() {
 
       });
+      state = 0;
+      internet = 1;
      _pay();
     });
   }
@@ -105,18 +106,16 @@ class _PayPageState extends State<PayPage> {
       barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Session Timeout'),
-        content: new Text('Login to continue'),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Session Timeout'),
+        content : Text('Login in continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              //await _logoutUser();
-              navigateAndReload();
-            },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+          FlatButton(
+            onPressed: () => navigateAndReload(),
+            child: Text("OK"),
           ),
         ],
       ),
@@ -125,11 +124,7 @@ class _PayPageState extends State<PayPage> {
   }
 
   Widget getPayDetails(){
-    if(state==0){
-      return SpinKitDoubleBounce(
-        color: Colors.lightBlueAccent,
-      );
-    }else if(state==1){
+    if(state==1){
       return Text(
         payDetails,
         style: TextStyle(
@@ -155,7 +150,7 @@ class _PayPageState extends State<PayPage> {
       appBar: AppBar(
         backgroundColor: ColorGlobal.whiteColor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
+          icon: Icon(Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios, color: ColorGlobal.textColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -163,7 +158,7 @@ class _PayPageState extends State<PayPage> {
           style: TextStyle(color: ColorGlobal.textColor),
         ),
       ),
-      body: internet == 0 ? Center(child: NoInternetScreen(notifyParent: refresh)) : SingleChildScrollView(
+      body: state ==0 ? (SpinKitDoubleBounce(color: ColorGlobal.blueColor,)) : internet == 0 ? Center(child: NoInternetScreen(notifyParent: refresh)) : SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Padding(
@@ -222,16 +217,6 @@ class _PayPageState extends State<PayPage> {
                 alignment: Alignment.bottomCenter,
               ),
             ),
-//          Padding(
-//            padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-//            child: Text(
-//              'https://www.freepik.com/free-photos-vectors/business. Business vector created by freepik - www.freepik.com',
-//                style: TextStyle(
-//                  fontSize: 10.0,
-//                  color: Colors.grey[500],
-//                ),
-//            ),
-//          )
           ],
         ),
       ),

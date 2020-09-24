@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
-
+import 'dart:io' show Platform;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:iosrecal/Constant/Constant.dart';
@@ -39,6 +39,7 @@ class _MentorGroupsState extends State<MentorGroups> {
     setState(() {
 
     });
+    state = 0;
     _hasError = false;
     _hasInternet = true;
     _groups();
@@ -65,7 +66,6 @@ class _MentorGroupsState extends State<MentorGroups> {
 
     if (response.statusCode == 200) {
       print("success");
-//        updateCookie(_response);
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
@@ -91,18 +91,16 @@ class _MentorGroupsState extends State<MentorGroups> {
       barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Session Timeout'),
-        content: new Text('Login to continue'),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Session Timeout'),
+        content : Text('Login in continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              //await _logoutUser();
-              navigateAndReload();
-            },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+          FlatButton(
+            onPressed: () => navigateAndReload(),
+            child: Text("OK"),
           ),
         ],
       ),
@@ -117,6 +115,7 @@ class _MentorGroupsState extends State<MentorGroups> {
       setState(() {
 
       });
+      state = 0;
       _hasError = false;
       _hasInternet = true;
       _groups();});
@@ -139,7 +138,7 @@ class _MentorGroupsState extends State<MentorGroups> {
     }if(state==0){
       return Center(
         child: SpinKitDoubleBounce(
-          color: Colors.lightBlueAccent,
+          color: ColorGlobal.blueColor,
         ),
       );
     }
@@ -153,7 +152,7 @@ class _MentorGroupsState extends State<MentorGroups> {
       slivers: <Widget>[
         new SliverAppBar(
           leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              icon: Icon(Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios, color: ColorGlobal.textColor,
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -241,8 +240,6 @@ class _MentorGroupsState extends State<MentorGroups> {
                                           style: TextStyle(
                                             fontSize: getHeight(16, 2),
                                             color: ColorGlobal.textColor,
-//                                          fontWeight: FontWeight.bold,
-//                                          fontStyle: FontStyle.italic,
                                           ),
                                         ),
                                       ),

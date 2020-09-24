@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/NotificationDetailModel.dart';
@@ -15,6 +14,7 @@ import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/Constant/utils.dart';
 import 'package:connectivity/connectivity.dart';
+import 'dart:io' show Platform;
 
 class NotificationDetail extends StatefulWidget {
   final NotificationsModel notificationsModel;
@@ -49,7 +49,6 @@ class _NotificationDetailState extends State<NotificationDetail> {
   Future<String> _notification() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      //Fluttertoast.showToast(msg: "No Internet Connection",textColor: Colors.white,backgroundColor: Colors.green);
       setState(() {
         _hasInternet=false;
       });
@@ -73,7 +72,6 @@ class _NotificationDetailState extends State<NotificationDetail> {
 
     if (response.statusCode == 200) {
       print("success");
-//        updateCookie(_response);
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         print("in here");
@@ -112,18 +110,16 @@ class _NotificationDetailState extends State<NotificationDetail> {
       barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Session Timeout'),
-        content: new Text('Login to continue'),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Session Timeout'),
+        content : Text('Login in continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
-              //await _logoutUser();
-              navigateAndReload();
-            },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+          FlatButton(
+            onPressed: () => navigateAndReload(),
+            child: Text("OK"),
           ),
         ],
       ),
@@ -143,8 +139,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
       return Center(
         child:
         SpinKitDoubleBounce(
-          color: Colors
-              .lightBlueAccent,
+          color: ColorGlobal.blueColor,
         ),
       );
     }
@@ -167,7 +162,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
         appBar: AppBar(
           backgroundColor: ColorGlobal.whiteColor,
           leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              icon: Icon(Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios, color: ColorGlobal.textColor,
               ),
               onPressed: () {
                 Navigator.pop(context);
