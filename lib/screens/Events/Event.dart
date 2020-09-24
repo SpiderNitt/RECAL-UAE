@@ -9,11 +9,11 @@ import 'package:intl/intl.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
-import 'package:iosrecal/screens/Events/Accounts.dart';
 import 'package:iosrecal/screens/Events/EventPictureDisplay.dart';
 import 'package:iosrecal/screens/Events/Felicitations.dart';
 import 'package:iosrecal/models/EventDetailsInfo.dart';
 import 'package:iosrecal/models/EventInfo.dart';
+import 'dart:io' show Platform;
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/SponsorInfo.dart';
 import 'package:iosrecal/models/Socialmedia_feed.dart';
@@ -71,9 +71,13 @@ class _EventState extends State<Event> {
             title: Text("Event Details",
                 style: TextStyle(color: ColorGlobal.textColor)),
             leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
+                icon: Icon(
+                  Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
+                  color: ColorGlobal.textColor,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
             backgroundColor: ColorGlobal.whiteColor,
           ),
           body:internet==0?NoInternetScreen(notifyParent: refresh):(widget.isCompleted!=true&& (!detailsLoading&& !(filesLoading[0]) &&!(filesLoading[1])&&!(filesLoading[2])))?
@@ -91,7 +95,9 @@ class _EventState extends State<Event> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                         SizedBox(height: 4,),
+                         SizedBox(height: UIUtills()
+                             .getProportionalHeight(
+                             height: 4),),
                        Divider(
                          thickness: 3,
                          color: Colors.grey.withOpacity(0.8),
@@ -120,13 +126,20 @@ class _EventState extends State<Event> {
                                       Icon(
                                         Icons.check_circle,
                                         color: Colors.white,
+                                        size: UIUtills()
+                                            .getProportionalWidth(
+                                            width: 24),
                                       ),
                                       SizedBox(
-                                        width: 10,
+                                        width: UIUtills()
+                                            .getProportionalWidth(
+                                            width: 10),
                                       ),
                                       Text(
                                         "Register",
-                                        style: TextStyle(color: Colors.white,fontSize: 16),
+                                        style: TextStyle(color: Colors.white,fontSize: UIUtills()
+                                            .getProportionalWidth(
+                                            width: 16),),
                                       ),
                                     ],
                                   ),
@@ -148,13 +161,20 @@ class _EventState extends State<Event> {
                                   Icon(
                                     Icons.people,
                                     color: Colors.white,
+                                    size: UIUtills()
+                                        .getProportionalWidth(
+                                        width: 24),
                                   ),
                                   SizedBox(
-                                    width: 10,
+                                    width: UIUtills()
+                                        .getProportionalWidth(
+                                        width: 10),
                                   ),
                                   Text(
                                     "Volunteer",
-                                    style: TextStyle(color: Colors.white,fontSize: 16),
+                                    style: TextStyle(color: Colors.white,fontSize: UIUtills()
+                                        .getProportionalWidth(
+                                        width: 16),),
                                   ),
                                 ],
                               ),
@@ -192,7 +212,9 @@ class _EventState extends State<Event> {
                            ],
                          ),
                        ) : SizedBox()) : SizedBox(),
-                       SizedBox(height: 10,),
+                       SizedBox(height: UIUtills()
+                           .getProportionalHeight(
+                           height: 10),),
                   ],
                 ),
               );
@@ -268,7 +290,9 @@ class _EventState extends State<Event> {
                             margin:EdgeInsets.only(left:5),
                             child: Icon(
                               Icons.place,
-                              size: 30,
+                              size: UIUtills()
+                                  .getProportionalWidth(
+                                  width: 30),
                               color: ColorGlobal.blueColor
                             ),
                           ),
@@ -290,7 +314,9 @@ class _EventState extends State<Event> {
                               children: <Widget>[
                                 widget.currEvent.emirate == null
                                     ? SizedBox(
-                                  height: 6,
+                                  height: UIUtills()
+                                      .getProportionalHeight(
+                                      height: 6),
                                 )
                                     : Container(
                                   width: UIUtills()
@@ -340,7 +366,9 @@ class _EventState extends State<Event> {
                 widget.currEvent.event_name!=null?
                 Column(
                   children: <Widget>[
-                    SizedBox(height: 4,),
+                    SizedBox(height: UIUtills()
+                        .getProportionalHeight(
+                        height: 4),),
                     Container(
                         margin: EdgeInsets.only(left: 8,right:8,top:4),
                         child: AutoSizeText(widget.currEvent.event_name.toUpperCase(),
@@ -403,12 +431,16 @@ class _EventState extends State<Event> {
                                 color: Colors.black54, fontSize: 15),
                           )) : SizedBox(),
                       SizedBox(
-                        height: 4,
+                        height: UIUtills()
+                            .getProportionalHeight(
+                            height: 4),
                       ),
 
                       detailsInfo != null ? detailsInfo
                           .detail_amendment_message ==""
-                          ? SizedBox(height: 4)
+                          ? SizedBox(height: UIUtills()
+                          .getProportionalHeight(
+                          height: 4))
                           : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -440,7 +472,9 @@ class _EventState extends State<Event> {
             ),
           )  )
       ),
-      Container(margin: EdgeInsets.only(left: 0),child:Icon(Icons.add_to_photos,color: Colors.green,),)
+      Container(margin: EdgeInsets.only(left: 0),child:Icon(Icons.add_to_photos,color: Colors.green,size:UIUtills()
+          .getProportionalWidth(
+          width: 24),),)
     ],
     ))
                         ],
@@ -450,8 +484,12 @@ class _EventState extends State<Event> {
                         children: <Widget>[
                           detailsInfo.detail_amendment_message != "" ?
                           SizedBox(
-                            height: 10,
-                          ) : SizedBox(height: 4,),
+                            height: UIUtills()
+                                .getProportionalHeight(
+                                height: 10),
+                          ) : SizedBox(height: UIUtills()
+                              .getProportionalHeight(
+                              height: 4),),
 picturesListUrl.length>0?  Row(
                             mainAxisAlignment:
                             MainAxisAlignment.spaceBetween,
@@ -532,7 +570,9 @@ picturesListUrl.length>0?  Row(
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 10,),
+                              SizedBox(height: UIUtills()
+                                  .getProportionalHeight(
+                                  height: 10),),
                             ],
                           ):SizedBox(height: 0,),
                         ],
@@ -559,7 +599,9 @@ picturesListUrl.length>0?  Row(
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            SizedBox(height: 10,),
+                            SizedBox(height: UIUtills()
+                                .getProportionalHeight(
+                                height: 10),),
                           ],
                         ) : SizedBox(),
                         width: MediaQuery
@@ -646,7 +688,9 @@ picturesListUrl.length>0?  Row(
                           : SizedBox(),
 
                       SizedBox(
-                        height: 10,
+                        height: UIUtills()
+                            .getProportionalHeight(
+                            height: 10),
                       ),
 
                       FutureBuilder(
@@ -720,7 +764,7 @@ picturesListUrl.length>0?  Row(
                                                           .brochure != null
                                                           ? InkWell(
                                                             child: Image.network(
-                                                        (Api.getBaseFileUrl+
+                                                        (Api.imageUrl+
                                                               snapshot.data[index]
                                                                   .brochure
                                                                   .toString()),
@@ -747,7 +791,7 @@ picturesListUrl.length>0?  Row(
                                                           Navigator.push(
                                                               context,
                                                               MaterialPageRoute(
-                                                                  builder: (context) => EventPictureDisplay(Api.getBaseFileUrl+
+                                                                  builder: (context) => EventPictureDisplay(Api.imageUrl+
                                                                       snapshot.data[index]
                                                                           .brochure
                                                                           .toString())))
@@ -930,21 +974,16 @@ picturesListUrl.length>0?  Row(
         emirate = "Abu Dhabi";
         break;
     }
-    print(emirate);
     return emirate;
   }
 
   Future<List<SocialMediaFeed>> getSocialMediaLinks() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      setState(() {
         internet=0;
-      });
     }
     else {
-      setState(() {
         internet=1;
-      });
     }
     var uri=Uri.parse(Api.getSocialMedia);
     uri = uri.replace(query: "event_id="+widget.currEvent.event_id.toString());
@@ -1040,11 +1079,9 @@ picturesListUrl.length>0?  Row(
   navigateAndReload(){
     Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
         .then((value) {
-      print("step 1");
       bool param1 = widget.isCompleted;
       EventInfo param2=widget.currEvent;
       Navigator.pop(context,true);
-      print("step 2");
       Event(param1,param2);
       getEventFile("flyer");
       getEventFile("pictures");
@@ -1164,7 +1201,6 @@ picturesListUrl.length>0?  Row(
                   volunteer_message: responseBody.data['volunteer_message']);
               detailsLoading = false;
             });
-            print("yayy" + responseBody.data.toString());
             return detailsInfo;
           } else {
             setState(() {
@@ -1172,6 +1208,8 @@ picturesListUrl.length>0?  Row(
             });
             return 1;
           }
+        } else if(responseBody.status_code==401){
+          onTimeOut();
         } else {
           print(responseBody.data);
           return 2;
@@ -1189,14 +1227,10 @@ picturesListUrl.length>0?  Row(
 
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      setState(() {
         internet=0;
-      });
     }
     else {
-      setState(() {
         internet=1;
-      });
     }
     var uri=Uri.parse(Api.getSponsors);
     uri = uri.replace(query: "event_id="+widget.currEvent.event_id.toString());
@@ -1219,7 +1253,6 @@ picturesListUrl.length>0?  Row(
               SponsorInfo model = SponsorInfo.fromJson(u);
               sponsorsList.add(model);
             }
-            print(sponsorsList.length.toString());
             return sponsorsList;
           }
           else {
@@ -1275,11 +1308,11 @@ picturesListUrl.length>0?  Row(
               if (file_type == "flyer") {
                 if(responseBody.data['file']!=null)
                 { filesLoading[0] = false;
-                  flyerUrl = Api.getBaseFileUrl + responseBody.data['file'].toString();}
+                  flyerUrl = Api.imageUrl + responseBody.data['file'].toString();}
               }else if(file_type=="reminder"){
                 filesLoading[1]=false;
                 if(responseBody.data['file']!=null)
-                {reminderUrl = Api.getBaseFileUrl + responseBody.data['file'].toString();}
+                {reminderUrl = Api.imageUrl + responseBody.data['file'].toString();}
               }else{
                 if(responseBody.data['file']!=null)
                   {filesLoading[2]=false;
@@ -1287,11 +1320,10 @@ picturesListUrl.length>0?  Row(
                   for(var u in responseBody.data['file']) {
                     cnt++;
                     if(cnt<=10){
-                      carouselListUrl.add(Api.getBaseFileUrl+u.toString());
+                      carouselListUrl.add(Api.imageUrl+u.toString());
                     }
-                    print(u.toString());
-                   picturesListUrl.add(Api.getBaseFileUrl+u.toString());
-              print("picturesList"+picturesListUrl.length.toString());}
+                   picturesListUrl.add(Api.imageUrl+u.toString());
+           }
               }}
             });
             return picturesListUrl;
@@ -1307,8 +1339,6 @@ picturesListUrl.length>0?  Row(
             });
             return 1;
           }
-        } else if(responseBody.status_code==401){
-            onTimeOut();
         }else {
           print(responseBody.data);
           return 2;

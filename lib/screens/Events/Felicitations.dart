@@ -7,12 +7,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
 import 'package:iosrecal/screens/Home/errorWrong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/models/FelicitationInfo.dart';
+import 'dart:io' show Platform;
 class Felicitations extends StatefulWidget {
   int event_id;
   Felicitations(this.event_id);
@@ -25,8 +27,14 @@ class _FelicitationsState extends State<Felicitations> {
   bool checkData=false;
   int internet = 1;
   bool serverError=false;
+  bool isCreated=false;
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
+    UIUtills().updateScreenDimesion(
+        width: screenSize.width, height: screenSize.height);
     final double width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return SafeArea(
@@ -37,8 +45,16 @@ class _FelicitationsState extends State<Felicitations> {
           iconTheme: IconThemeData(
               color: ColorGlobal.textColor
           ),
+          leading: IconButton(
+              icon: Icon(
+                Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
+                color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
         ),
-        body: Padding(
+        body: isCreated?Padding(
           padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 0.0),
           child:
           FutureBuilder(
@@ -84,15 +100,21 @@ class _FelicitationsState extends State<Felicitations> {
                             )
                           ],
                           color:ColorGlobal.color2,
-                          borderRadius: BorderRadius.circular(20.0)),
+                          borderRadius: BorderRadius.circular(UIUtills()
+                              .getProportionalWidth(
+                              width: 20),)),
                       margin: EdgeInsets.only(top: 6,bottom: 6),
                       child: Padding(
                         padding: const EdgeInsets.only(top:8.0,bottom: 8,left: 8,right: 8),
                         child: ExpansionTile(
                           backgroundColor: Colors.white,
                           leading: CircleAvatar(
-                            radius: 24,
-                            child: Icon(Icons.person,size: 36,),
+                            radius: UIUtills()
+                                .getProportionalWidth(
+                                width: 26),
+                            child: Icon(Icons.person,size: UIUtills()
+                                .getProportionalWidth(
+                                width: 36),),
                           ),
                           title: snapshot.data[index].felicitated_person!=null?Text(
                             snapshot.data[index].felicitated_person,
@@ -104,7 +126,9 @@ class _FelicitationsState extends State<Felicitations> {
                           trailing: Icon(
                             Icons.keyboard_arrow_down,
                             color: ColorGlobal.textColor,
-                          ),
+                          size: UIUtills()
+                              .getProportionalWidth(
+                              width: 22),),
                           children: <Widget>[
                             Container(
                                 margin: EdgeInsets.all(6),child: snapshot.data[index].achievement!=null?Text(snapshot.data[index].achievement,style: TextStyle(fontSize: 18),):Text("Not available"))
@@ -117,7 +141,7 @@ class _FelicitationsState extends State<Felicitations> {
               }
             },
           ),
-        ),
+        ):SizedBox(),
       ),
     );
   }
@@ -172,21 +196,23 @@ class _FelicitationsState extends State<Felicitations> {
     });
     if(felicitationList.length!=0){return felicitationList;}
   }
-  Future<bool> onTimeOut(){
+  Future<bool> onTimeOut() {
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         title: new Text('Session Timeout'),
         content: new Text('Login to continue'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () async {
+          FlatButton(
+            onPressed: () async {
               navigateAndReload();
             },
-            child: FlatButton(
-              color: Colors.red,
-              child: Text("OK"),
-            ),
+            child: Text("OK"),
           ),
         ],
       ),
@@ -194,13 +220,22 @@ class _FelicitationsState extends State<Felicitations> {
         false;
   }
 
+  @override
+  void initState() {
+    setState(() {
+      isCreated=true;
+    });
+  }
+
   navigateAndReload(){
     Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
         .then((value) {
-      print("step 1");
       int param=widget.event_id;
-      Navigator.pop(context);
-      print("step 2");
-      Felicitations(param);});
+      Navigator.pop(context,true);
+      Felicitations(param);
+      setState(() {
+        isCreated=true;
+      });
+        });
   }
 }

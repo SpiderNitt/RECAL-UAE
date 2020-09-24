@@ -4,6 +4,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/screens/Events/Event.dart';
 import 'package:iosrecal/models/EventInfo.dart';
@@ -14,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'CompletedEvents.dart';
 import 'UpcomingEvents.dart';
+import 'dart:io' show Platform;
 import 'UpcomingEvents.dart';
 import 'package:http/http.dart' as http;
 
@@ -34,6 +36,11 @@ class _EventsScreenState extends State<EventsScreen> {
   bool isServerError=false;
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
+    UIUtills().updateScreenDimesion(
+        width: screenSize.width, height: screenSize.height);
     return SafeArea (
       child: Scaffold(
         appBar: AppBar(
@@ -45,6 +52,14 @@ class _EventsScreenState extends State<EventsScreen> {
             'Events',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
+          leading: IconButton(
+              icon: Icon(
+                Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
+                color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
         ),
         body: isLoadingData?
         internet==0?Center(child: NoInternetScreen(notifyParent: refresh,)):isServerError?Error8Screen():
@@ -73,12 +88,16 @@ class _EventsScreenState extends State<EventsScreen> {
                         SizedBox(
                           height: 2,
                         ),
-                        Icon(Icons.timer,),
+                        Icon(Icons.timer,size: UIUtills()
+                            .getProportionalWidth(
+                            width: 24),),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "Upcoming",
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(fontSize: UIUtills()
+                                .getProportionalWidth(
+                                width: 14),),
                           ),
                         ),
                       ],
@@ -90,12 +109,16 @@ class _EventsScreenState extends State<EventsScreen> {
                         SizedBox(
                           height: 2,
                         ),
-                        Icon(Icons.check_circle),
+                        Icon(Icons.check_circle,size: UIUtills()
+                            .getProportionalWidth(
+                            width: 24),),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "Completed",
-                            style: TextStyle(fontSize: 14,),
+                            style: TextStyle(fontSize: UIUtills()
+                                .getProportionalWidth(
+                                width: 14),),
                           ),
                         ),
                       ],
@@ -203,10 +226,8 @@ class _EventsScreenState extends State<EventsScreen> {
   navigateAndReload(){
     Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
         .then((value) {
-      print("step 1");
       int param=widget.status;
       Navigator.pop(context);
-      print("step 2");
       EventsScreen(param);
       getData();});
 

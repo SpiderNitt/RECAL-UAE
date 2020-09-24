@@ -98,7 +98,9 @@ class _VolunteerCardState extends State<VolunteerCard> {
                             margin:EdgeInsets.only(left: 10),
                             child: Icon(
                               Icons.event_note,
-                              size: 32,
+                              size: UIUtills()
+                                  .getProportionalWidth(
+                                  width: 32),
                               color: Colors.green,
                             ),
                           ),
@@ -132,7 +134,9 @@ class _VolunteerCardState extends State<VolunteerCard> {
                           ),
                         ],
                       ),
-                      Container(child: IconButton(icon:Icon(Icons.chevron_right),onPressed: (){
+                      Container(child: IconButton(icon:Icon(Icons.chevron_right,size: UIUtills()
+                          .getProportionalWidth(
+                          width: 22),),onPressed: (){
                         Navigator.push(context, MaterialPageRoute(builder:(context)=>
                         widget.status==2?Felicitations(widget.currEvent.event_id):Event(widget.isCompleted,widget.currEvent))).then((value) => checkAttended());
                       },),margin: EdgeInsets.only(right: 8),),
@@ -149,10 +153,14 @@ class _VolunteerCardState extends State<VolunteerCard> {
   Widget getAttendWidget() {
     if(widget.isCheckAttended){
       if(widget.isAttended){
-        return Icon(Icons.check_circle,color: Colors.green,);
+        return Icon(Icons.check_circle,color: Colors.green,size: UIUtills()
+            .getProportionalWidth(
+            width: 24),);
       }
       else {
-        return Icon(Icons.cancel,color: Colors.red,);
+        return Icon(Icons.cancel,color: Colors.red,size:UIUtills()
+            .getProportionalWidth(
+            width: 24),);
       }
     }
     else{
