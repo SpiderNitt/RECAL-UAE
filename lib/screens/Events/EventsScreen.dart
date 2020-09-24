@@ -86,13 +86,17 @@ class _EventsScreenState extends State<EventsScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                          height: 2,
+                          height: UIUtills()
+                              .getProportionalHeight(
+                              height: 2),
                         ),
                         Icon(Icons.timer,size: UIUtills()
                             .getProportionalWidth(
                             width: 24),),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(UIUtills()
+                              .getProportionalHeight(
+                              height: 8)),
                           child: Text(
                             "Upcoming",
                             style: TextStyle(fontSize: UIUtills()
@@ -107,14 +111,17 @@ class _EventsScreenState extends State<EventsScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                          height: 2,
+                          height: UIUtills()
+                              .getProportionalHeight(
+                              height: 2),
                         ),
                         Icon(Icons.check_circle,size: UIUtills()
                             .getProportionalWidth(
                             width: 24),),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
+                          padding: EdgeInsets.all(UIUtills()
+                              .getProportionalHeight(
+                              height: 8)),                          child: Text(
                             "Completed",
                             style: TextStyle(fontSize: UIUtills()
                                 .getProportionalWidth(

@@ -571,7 +571,7 @@ class _HomeActivityState extends State<HomeActivity> {
                 padding: EdgeInsets.only(right: getWidth(20, 1)),
                 icon: Icon(
                   Icons.exit_to_app,
-                  size: getHeight(30, 1),
+                  size: getHeight(35, 1),
                   color: ColorGlobal.textColor,
                 ),
                 onPressed: () {

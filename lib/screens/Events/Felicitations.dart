@@ -123,9 +123,9 @@ class _FelicitationsState extends State<Felicitations> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: UIUtills()
+                                fontSize:UIUtills()
                                     .getProportionalHeight(
-                                    height: 20), color: Colors.black87),
+                                    height: 20) , color: Colors.black87),
                           ):SizedBox(),
                           trailing: Icon(
                             Icons.keyboard_arrow_down,
@@ -135,7 +135,9 @@ class _FelicitationsState extends State<Felicitations> {
                               width: 22),),
                           children: <Widget>[
                             Container(
-                                margin: EdgeInsets.all(6),child: snapshot.data[index].achievement!=null?Text(snapshot.data[index].achievement,style: TextStyle(fontSize: 18),):Text("Not available"))
+                                margin: EdgeInsets.all(6),child: snapshot.data[index].achievement!=null?Text(snapshot.data[index].achievement,style: TextStyle(fontSize: UIUtills()
+                                .getProportionalHeight(
+                                height: 18)),):Text("Not available"))
                           ],
                         ),
                       ),

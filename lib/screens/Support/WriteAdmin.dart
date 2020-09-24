@@ -36,6 +36,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
   bool show;
   bool sent = false;
   Color _color = Colors.lightBlue;
+  bool finished=false;
 
   initState() {
     super.initState();
@@ -171,38 +172,55 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
           textColor: Colors.white,
           fontSize: 16.0);
     }
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String url = Api.getSupport;
-    final response = await http.post(url, body: {
-      "user_id": "${prefs.getString("user_id")}",
-      "body": body,
-      "type": "write to admin",
-    }, headers: {
-      "Accept": "application/json",
-      "Cookie": "${prefs.getString("cookie")}",
-    }).catchError((error) {
-      Fluttertoast.showToast(
-          msg: "An error occured. Please try again later.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      return false;
-    });
-    if (response.statusCode == 200) {
-      ResponseBody responseBody =
-          ResponseBody.fromJson(json.decode(response.body));
-      print(responseBody.data);
-      if (responseBody.status_code == 200) {
-        print("worked!");
-        _animationController.forward();
-        messageController.text = "";
-        Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
-        return true;
-      } else if (responseBody.status_code == 401) {
-        onTimeOut();
+    if(finished==false) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String url = Api.getSupport;
+      final response = await http.post(url, body: {
+        "user_id": "${prefs.getString("user_id")}",
+        "body": body,
+        "type": "write to admin",
+      }, headers: {
+        "Accept": "application/json",
+        "Cookie": "${prefs.getString("cookie")}",
+      }).catchError((error) {
+        Fluttertoast.showToast(
+            msg: "An error occured. Please try again later.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return false;
+      });
+      if (response.statusCode == 200) {
+        ResponseBody responseBody =
+        ResponseBody.fromJson(json.decode(response.body));
+        print(responseBody.data);
+        if (responseBody.status_code == 200) {
+          print("worked!");
+          setState(() {
+            finished = true;
+          });
+          _animationController.forward();
+          messageController.text = "";
+          Future.delayed(
+              const Duration(seconds: 2), () => Navigator.pop(context));
+          return true;
+        } else if (responseBody.status_code == 401) {
+          onTimeOut();
+        } else {
+          Fluttertoast.showToast(
+              msg: "An error occured. Please try again later.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.orange,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          print(responseBody.data);
+          return false;
+        }
       } else {
         Fluttertoast.showToast(
             msg: "An error occured. Please try again later.",
@@ -212,20 +230,9 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
             backgroundColor: Colors.orange,
             textColor: Colors.white,
             fontSize: 16.0);
-        print(responseBody.data);
+        print('Server error');
         return false;
       }
-    } else {
-      Fluttertoast.showToast(
-          msg: "An error occured. Please try again later.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.orange,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      print('Server error');
-      return false;
     }
   }
 
@@ -358,10 +365,10 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             AutoSizeText(
-                              "NEED ADMIN HELP!!",
+                              "NEED ADMIN HELP?",
                               style: TextStyle(
                                   fontSize: UIUtills().getProportionalHeight(
-                                      height: 25, choice: 3),
+                                      height: 24, choice: 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
                             ),

@@ -21,7 +21,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'ProfileScreen.dart';
 import 'package:iosrecal/Constant/ShowDetailText.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
-import 'package:iosrecal/Constant/TextField.dart';
 import 'package:badges/badges.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -7,7 +7,6 @@ import 'package:page_transition/page_transition.dart';
 import 'ContactUs.dart';
 import 'Pay.dart';
 import 'VisionandMission.dart';
-import 'Sponsors.dart';
 import 'CoreComm.dart';
 import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';

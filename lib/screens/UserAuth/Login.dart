@@ -37,16 +37,12 @@ class LoginState extends State<Login> {
   bool internetConnection=true;
 
   TextEditingController email =
-      new TextEditingController(text: "narensai319@gmail.com");
+      new TextEditingController(text: "");
   TextEditingController password =
-      new TextEditingController(text: "1j7P1T3ync2I");
-  TextEditingController newPassword = new TextEditingController(text: "");
-  TextEditingController confirmPassword = new TextEditingController(text: "");
+      new TextEditingController(text: "");
 
   FocusNode emailFocus = new FocusNode();
   FocusNode passwordFocus = new FocusNode();
-  FocusNode newPasswordFocus = new FocusNode();
-  FocusNode confirmPasswordFocus = new FocusNode();
 
   bool changePassword = false;
   String primaryButtonText = "SIGN IN";
@@ -55,34 +51,23 @@ class LoginState extends State<Login> {
 
   ProgressDialog progressDialog;
 
-  List<String> result = new List<String>();
-
   Color getColorFromColorCode(String code) {
     return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
   }
 
   _initController() {
-    email = new TextEditingController(text: "narensai319@gmail.com");
-    password = new TextEditingController(text: "123456");
-    newPassword = new TextEditingController(text: "");
-    confirmPassword = new TextEditingController(text: "");
-
+    email = new TextEditingController(text: "");;
+    password = new TextEditingController(text: "");
     emailFocus = new FocusNode();
     passwordFocus = new FocusNode();
-    newPasswordFocus = new FocusNode();
-    confirmPasswordFocus = new FocusNode();
     _bloc.start();
   }
 
   _disposeController() {
     email.clear();
     password.clear();
-    newPassword.clear();
-    confirmPassword.clear();
     emailFocus.unfocus();
     passwordFocus.unfocus();
-    newPasswordFocus.unfocus();
-    confirmPasswordFocus.unfocus();
     _bloc.dispose();
   }
 
@@ -597,10 +582,7 @@ class LoginState extends State<Login> {
                                   passwordFocus.unfocus();
                                 });
                               },
-                              child: AnimatedSwitcher(
-                                duration: Duration(seconds: 1),
-                                child: secondaryWidget(),
-                              ),
+                              child: secondaryWidget(),
                             ),
                           ),
                           Padding(
