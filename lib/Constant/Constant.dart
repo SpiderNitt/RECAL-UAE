@@ -1,7 +1,6 @@
 String
     IMAGE_SPLASH = '/ImageSplashScreen',
-    VIDEO_SPALSH = '/VideoSplashScreen',
-    ANIMATED_SPALSH = '/AnimatedSplashScreen',
+    INTRO_PAGE = '/IntroPage',
     LOGIN_SCREEN = '/Login',
     PASSWORD_RESET = '/Login/Reset',
     PROFILE_SCREEN = '/HomeScreen/Profile',

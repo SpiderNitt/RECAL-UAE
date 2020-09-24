@@ -428,7 +428,7 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
           ),
         ),
       ),
-          bottomNavigationBar:
+          bottomNavigationBar: internet==0 ? SizedBox() :
           Container(
             color: Colors.white,
             child: Padding(

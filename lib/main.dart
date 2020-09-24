@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:iosrecal/screens/Screen/IntroPage.dart';
 import 'package:iosrecal/screens/UserAuth/PasswordReset.dart';
 import 'screens/Home/BusinessNetworkList.dart';
 import 'screens/Home/BusinessScreen.dart';
@@ -53,6 +54,7 @@ void main() {
         ),
         home: ImageSplashScreen(),
         routes: <String, WidgetBuilder>{
+          INTRO_PAGE: (BuildContext context) => new IntroPage(),
           LOGIN_SCREEN: (BuildContext context) => new Login(),
           PASSWORD_RESET: (BuildContext context) => new PasswordReset(),
           HOME_SCREEN: (BuildContext context) => new HomeScreen(),
