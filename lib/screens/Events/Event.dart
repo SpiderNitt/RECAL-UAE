@@ -194,7 +194,9 @@ class _EventState extends State<Event> {
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: <Widget>[
                              CircleAvatar(
-                               radius: 30,
+                               radius: UIUtills()
+                                   .getProportionalHeight(
+                                   height: 30),
                                child: Container(
                                    child: Image.asset( "assets/images/volunteer.png",fit: BoxFit.cover,)
                                ),
@@ -206,7 +208,9 @@ class _EventState extends State<Event> {
                                      detailsInfo.volunteer_message,
                                      style: TextStyle(
                                          color: Colors.black87,
-                                         fontSize: 16),
+                                         fontSize: UIUtills()
+                                             .getProportionalHeight(
+                                             height: 16)),
                                    )),
                              ),
                            ],
@@ -269,11 +273,15 @@ class _EventState extends State<Event> {
                     children: <Widget>[
                       Text(
                         getDate(),
-                        style: TextStyle(color: Colors.blueGrey,fontSize: 15),
+                        style: TextStyle(color: Colors.blueGrey,fontSize: UIUtills()
+                            .getProportionalWidth(
+                            width: 16)),
                       ),
                       Text(
                         getTime(),
-                        style: TextStyle(color: Colors.blueGrey),
+                        style: TextStyle(color: Colors.blueGrey,fontSize: UIUtills()
+                            .getProportionalWidth(
+                            width: 16)),
                       )
                     ],
                   ),
@@ -305,7 +313,7 @@ class _EventState extends State<Event> {
                               "Location not available",
                               style: TextStyle(
                                   color: Colors.black54,
-                                  fontSize: 15,
+                                  fontSize: UIUtills().getProportionalWidth(width: 16),
                                   fontWeight: FontWeight.bold),
                             )
                                 : Column(
@@ -325,7 +333,9 @@ class _EventState extends State<Event> {
                                   widget.currEvent.emirate,
                                   style: TextStyle(
                                         color: Colors.black54,
-                                        fontSize: 15,
+                                        fontSize:  UIUtills()
+                                            .getProportionalHeight(
+                                            height: 15),
                                         fontWeight:
                                         FontWeight.bold),
                                 ),
@@ -346,10 +356,14 @@ class _EventState extends State<Event> {
                                         null
                                         ? TextStyle(
                                         color: Colors.black45,
-                                        fontSize: 15)
+                                        fontSize:  UIUtills()
+                                            .getProportionalHeight(
+                                            height: 15))
                                         : TextStyle(
                                         color: Colors.black54,
-                                        fontSize: 15,
+                                        fontSize:  UIUtills()
+                                            .getProportionalHeight(
+                                            height: 15),
                                         fontWeight:
                                         FontWeight.bold),
                                   )
@@ -375,7 +389,9 @@ class _EventState extends State<Event> {
                           textAlign: TextAlign.center,
                           //overflow: TextOverflow.ellipsis,
                           maxLines: 2,
-                          style: GoogleFonts.lato(fontSize: 20,
+                          style: GoogleFonts.lato(fontSize:  UIUtills()
+                              .getProportionalHeight(
+                              height: 20),
                             fontWeight: FontWeight.w700,
                             color: ColorGlobal.textColor,
                           ),
@@ -387,22 +403,30 @@ class _EventState extends State<Event> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      widget.currEvent.event_description!=""?Container(margin:EdgeInsets.only(top: 8,bottom: 4),child: Text("DESCRIPTION",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize:16))):SizedBox(),
+                      widget.currEvent.event_description!=""?Container(margin:EdgeInsets.only(top: 8,bottom: 4),child: Text("DESCRIPTION",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize: UIUtills()
+                          .getProportionalHeight(
+                          height: 16)))):SizedBox(),
                       widget.currEvent.event_description!=""?
                       secondHalf.isEmpty
     ? Container(
-                          child: Text(firstHalf,style:  GoogleFonts.roboto(fontSize: 15,color: ColorGlobal.textColor),))
+                          child: Text(firstHalf,style:  GoogleFonts.roboto(fontSize:  UIUtills()
+                              .getProportionalHeight(
+                              height: 15),color: ColorGlobal.textColor),))
         :  Column(
     children: <Widget>[
      Container(
-         child: Text(flag ? (firstHalf + "...") : (firstHalf + secondHalf),style:  GoogleFonts.roboto(fontSize: 15,color: ColorGlobal.textColor),)),
+         child: Text(flag ? (firstHalf + "...") : (firstHalf + secondHalf),style:  GoogleFonts.roboto(fontSize:  UIUtills()
+             .getProportionalHeight(
+             height: 15),color: ColorGlobal.textColor),)),
      InkWell(
     child: Row(
     mainAxisAlignment: MainAxisAlignment.end,
     children: <Widget>[
       Text(
     flag ? "show more" : "show less",
-    style: new TextStyle(color: Colors.blue),
+    style: new TextStyle(color: Colors.blue,fontSize:  UIUtills()
+        .getProportionalHeight(
+        height: 14)),
     ),
     ],
     ),
@@ -428,7 +452,9 @@ class _EventState extends State<Event> {
                           child: Text(
                                  detailsInfo.detail_message,
                             style: TextStyle(
-                                color: Colors.black54, fontSize: 15),
+                                color: Colors.black54, fontSize:  UIUtills()
+                                .getProportionalHeight(
+                                height: 15)),
                           )) : SizedBox(),
                       SizedBox(
                         height: UIUtills()
@@ -457,14 +483,18 @@ class _EventState extends State<Event> {
                 Text(
                 "AMENDMENT MESSAGE",
                   style: TextStyle(
-                      color: ColorGlobal.textColor.withOpacity(0.8), fontSize: 16,fontWeight: FontWeight.w600),
+                      color: ColorGlobal.textColor.withOpacity(0.8), fontSize:  UIUtills()
+                      .getProportionalHeight(
+                      height: 16),fontWeight: FontWeight.w600),
                 ),
                 Column(
                   children: <Widget>[
                     Text(
                       detailsInfo.detail_amendment_message,
                       style: TextStyle(
-                          color: Colors.black54, fontSize: 15),
+                          color: Colors.black54, fontSize:  UIUtills()
+                          .getProportionalHeight(
+                          height: 15)),
                     ),
                   ],
                 ),
@@ -496,11 +526,15 @@ picturesListUrl.length>0?  Row(
                             children: <Widget>[
                               Container(
                                   margin: EdgeInsets.only(left: 5),
-                                  child: Text("EVENT GALLERY",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize:16))),
+                                  child: Text("EVENT GALLERY",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize: UIUtills()
+                                      .getProportionalHeight(
+                                      height: 16)))),
                               carouselListUrl.length>5?InkWell(
                                   child: Text("More",
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,color:Colors.indigo)),
+                                          fontWeight: FontWeight.bold,color:Colors.indigo,fontSize:  UIUtills()
+                                          .getProportionalHeight(
+                                          height: 14))),
                                   onTap: () =>
                                   {
                                     Navigator.push(
@@ -655,7 +689,9 @@ picturesListUrl.length>0?  Row(
                                                       color: ColorGlobal
                                                           .textColor,
                                                       fontWeight: FontWeight.w600,
-                                                      fontSize: 16),
+                                                      fontSize:  UIUtills()
+                                                          .getProportionalHeight(
+                                                          height: 16)),
                                                 ),
                                               ),
                                             ],
@@ -703,7 +739,9 @@ picturesListUrl.length>0?  Row(
                                 children: <Widget>[
                                   Text(
                                     "No Sponsors for this event",
-                                    style: TextStyle(color: Colors.black38),
+                                    style: TextStyle(color: Colors.black38,fontSize:  UIUtills()
+                                        .getProportionalHeight(
+                                        height: 14)),
                                   ),
                                 ],
                               );
@@ -711,7 +749,9 @@ picturesListUrl.length>0?  Row(
                               return Center(
                                   child: Text(
                                     "Server Error..Try again after sometime",
-                                    style: TextStyle(color: Colors.blueGrey),
+                                    style: TextStyle(color: Colors.blueGrey,fontSize: UIUtills()
+                                        .getProportionalHeight(
+                                        height: 14)),
                                   ));
                             } else {
                               return Center(
@@ -728,7 +768,9 @@ picturesListUrl.length>0?  Row(
                                   children: <Widget>[
                                     Container(
                                         margin: EdgeInsets.only(left: 4),
-                                      child: Text("EVENT SPONSORS",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize:16)),),
+                                      child: Text("EVENT SPONSORS",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize: UIUtills()
+                                          .getProportionalHeight(
+                                          height: 16))),),
                                   ],
                                 ),
                                 Container(
@@ -811,7 +853,9 @@ picturesListUrl.length>0?  Row(
                                                     TextOverflow
                                                         .ellipsis,
                                                     style: TextStyle(
-                                                      fontSize: 15,
+                                                      fontSize:  UIUtills()
+                                                          .getProportionalHeight(
+                                                          height: 15),
                                                         fontWeight:
                                                         FontWeight
                                                             .bold),
@@ -831,7 +875,9 @@ picturesListUrl.length>0?  Row(
                                                   mainAxisAlignment: MainAxisAlignment
                                                       .center,
                                                   children: <Widget>[
-                                                    Icon(Icons.phone,size: 20,),
+                                                    Icon(Icons.phone,size:  UIUtills()
+                                                        .getProportionalHeight(
+                                                        height: 20),),
                                                     Container(
                                                       margin: EdgeInsets.only(
                                                           left: 4),
@@ -846,7 +892,9 @@ picturesListUrl.length>0?  Row(
                                                             overflow:
                                                             TextOverflow
                                                                 .ellipsis,
-                                                            style: TextStyle(fontSize: 15),
+                                                            style: TextStyle(fontSize:  UIUtills()
+                                                                .getProportionalHeight(
+                                                                height: 15)),
                                                             maxLines: 1,
                                                           ),
                                                         ),
@@ -884,7 +932,9 @@ picturesListUrl.length>0?  Row(
                                     children: <Widget>[
                                       Container(
                                           margin: EdgeInsets.only(left: 4),
-                                          child: Text("EVENT LINKS",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize:16)),
+                                          child: Text("EVENT LINKS",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize: UIUtills()
+                                              .getProportionalHeight(
+                                              height: 16))),
                                       )
                                     ],
                                   ),

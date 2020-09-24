@@ -63,7 +63,9 @@ class _FelicitationsState extends State<Felicitations> {
               if(snapshot.data==null){
                 if(isEmpty){
                   return Center(
-                      child:Text("No felicitations for this event",style:GoogleFonts.josefinSans(fontSize: 22,color: ColorGlobal.textColor))
+                      child:Text("No felicitations for this event",style:GoogleFonts.josefinSans(fontSize: UIUtills()
+                          .getProportionalHeight(
+                          height: 22),color: ColorGlobal.textColor))
                   );
                 }else if(internet==0){
                   return (Center(child:NoInternetScreen()));
@@ -111,7 +113,7 @@ class _FelicitationsState extends State<Felicitations> {
                           leading: CircleAvatar(
                             radius: UIUtills()
                                 .getProportionalWidth(
-                                width: 26),
+                                width: 24),
                             child: Icon(Icons.person,size: UIUtills()
                                 .getProportionalWidth(
                                 width: 36),),
@@ -121,7 +123,9 @@ class _FelicitationsState extends State<Felicitations> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 20.0, color: Colors.black87),
+                                fontSize: UIUtills()
+                                    .getProportionalHeight(
+                                    height: 20), color: Colors.black87),
                           ):SizedBox(),
                           trailing: Icon(
                             Icons.keyboard_arrow_down,
