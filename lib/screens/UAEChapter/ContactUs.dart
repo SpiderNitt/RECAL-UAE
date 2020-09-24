@@ -177,7 +177,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.orange,
+          backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: getHeight(16, 2),
       );

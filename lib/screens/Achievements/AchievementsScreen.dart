@@ -7,6 +7,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/Constant/utils.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/models/AchievementModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
@@ -21,6 +23,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
   int _index = 0;
   bool _hasInternet = true;
   var achievements = new List<AchievementModel>();
+  UIUtills uiUtills = new UIUtills();
+
 
   Future<List<AchievementModel>> _getAchievements() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -31,7 +35,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http
-        .get("https://delta.nitt.edu/recal-uae/api/achievements/", headers: {
+        .get(Api.getAchievements, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
@@ -96,8 +100,21 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
       _getAchievements();});
   }
 
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: ColorGlobal.whiteColor,
@@ -110,156 +127,124 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        body: Container(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          margin: EdgeInsets.symmetric(vertical: 20),
-          child: FutureBuilder(
-            future: _getAchievements(),
-            builder: (BuildContext context, AsyncSnapshot projectSnap) {
-              if (_hasInternet == false) {
-                return Center(child: NoInternetScreen(notifyParent: refresh));
-              }
-              if (projectSnap.data == null) {
-                return Center(
-                  child: SpinKitDoubleBounce(
-                    color: ColorGlobal.blueColor,
-                  ),
-                );
-              } else {
-                return Container(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
-                  //color: Colors.blue,
-                  margin: EdgeInsets.symmetric(vertical: 20),
-                  child: PageView.builder(
-                    itemCount: achievements.length,
-                    controller: PageController(viewportFraction: 0.7),
-                    onPageChanged: (int index) =>
-                        setState(() => _index = index),
-                    itemBuilder: (context, i) {
-                      print(achievements[i].file);
-                      return Transform.scale(
-                        scale: i == _index ? 0.95 : 0.85,
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Card(
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        MediaQuery
-                                            .of(context)
-                                            .size
-                                            .width * 0.1)),
-                                child: Container(
-                                  height: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.5,
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.5,
-                                  decoration: new BoxDecoration(
-                                    color: ColorGlobal.colorPrimaryDark,
-                                    image: new DecorationImage(
-                                      image: NetworkImage("https://delta.nitt.edu/recal-uae" + achievements[i].file.toString()),
-                                      fit: BoxFit.cover,
-                                    ),
-                                    border: Border.all(
-                                        color: ColorGlobal.whiteColor,
-                                        width: 2),
-                                    borderRadius: new BorderRadius.all(
-                                        Radius.circular(MediaQuery
-                                            .of(context)
-                                            .size
-                                            .width * 0.1)),
+        body: FutureBuilder(
+          future: _getAchievements(),
+          builder: (BuildContext context, AsyncSnapshot projectSnap) {
+            if (_hasInternet == false) {
+              return Center(child: NoInternetScreen(notifyParent: refresh));
+            }
+            if (projectSnap.data == null) {
+              return Center(
+                child: SpinKitDoubleBounce(
+                  color: ColorGlobal.blueColor,
+                ),
+              );
+            } else {
+              return Container(
+                height: height,
+                width: width,
+                //color: Colors.blue,
+                margin: EdgeInsets.symmetric(vertical: getHeight(20, 1)),
+                child: PageView.builder(
+                  itemCount: achievements.length,
+                  controller: PageController(viewportFraction: 0.65),
+                  onPageChanged: (int index) =>
+                      setState(() => _index = index),
+                  itemBuilder: (context, i) {
+                    print(achievements[i].file);
+                    return Transform.scale(
+                      scale: i == _index ? 0.95 : 0.9,
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Card(
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      height * 0.06)),
+                              child: Container(
+                                height: height * 0.3,
+                                width: height * 0.3,
+                                decoration: new BoxDecoration(
+                                  color: ColorGlobal.colorPrimaryDark,
+                                  image: new DecorationImage(
+                                    image: NetworkImage(Api.imageUrl + achievements[i].file.toString()),
+                                    fit: BoxFit.cover,
                                   ),
+                                  border: Border.all(
+                                      color: ColorGlobal.textColor,
+                                      width: 2),
+                                  borderRadius: new BorderRadius.all(
+                                      Radius.circular(height * 0.06)),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                child: Text(
-                                  achievements[i].name,
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    letterSpacing: 1,
-                                    color: ColorGlobal.textColor.withOpacity(
-                                        0.9),
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 10),
-
-                              Card(
-                                elevation: 2,
-                                clipBehavior: Clip.antiAlias,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Container(
-                                  color: ColorGlobal.textColor,
-                                  padding: EdgeInsets.all(5),
-                                  child: FittedBox(
-                                    fit: BoxFit.fitWidth,
-                                    child: Center(
-                                      child: Text(
-                                        achievements[i].category,
-                                        style: TextStyle(
-                                            color: ColorGlobal.whiteColor,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              SizedBox(height: 5,
-                              ),
-                              Container(
-                                height: MediaQuery.of(context).size.width * 0.5,
-                                child: SingleChildScrollView(
-                                  child: Text(
-                                    achievements[i].description,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: 14,
-                                letterSpacing: 1,
-                                color: ColorGlobal.textColor.withOpacity(0.6),
-                                fontWeight: FontWeight.w600,
                               ),
                             ),
+                            SizedBox(
+                              height: getHeight(10, 1),
+                            ),
+                            Container(
+                              child: Text(
+                                achievements[i].name,
+                                style: TextStyle(
+                                  fontSize: getHeight(18, 1),
+                                  color: ColorGlobal.textColor.withOpacity(
+                                      0.9),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: getHeight(10, 1)),
+                            Card(
+                              elevation: 2,
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(getHeight(10, 1))),
+                              child: Container(
+                                color: ColorGlobal.textColor,
+                                padding: EdgeInsets.all(getHeight(5, 1)),
+                                child: FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: Center(
+                                    child: Text(
+                                      achievements[i].category,
+                                      style: TextStyle(
+                                          color: ColorGlobal.whiteColor,
+                                          fontSize: getHeight(15, 1),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(height: getHeight(10, 1),
+                            ),
+                            Container(
+                              height: height * 0.3,
+                              child: SingleChildScrollView(
+                                child: Text(
+                                  achievements[i].description,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: getHeight(14, 1),
+                              letterSpacing: 1,
+                              color: ColorGlobal.textColor.withOpacity(0.6),
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        )
-                            ],
-                          ),)
-                        ,
-                      );
-                    },
-                  ),
-                );
-              }
-            },
-          ),
+                        ),
+                      )
+                          ],
+                        ),)
+                      ,
+                    );
+                  },
+                ),
+              );
+            }
+          },
         )
     );
   }

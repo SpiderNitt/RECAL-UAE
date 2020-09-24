@@ -180,6 +180,16 @@ class MentorState extends State<WriteMentorScreen>
     }, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
+    }).catchError((error) {
+      Fluttertoast.showToast(
+          msg: "An error occured. Please try again later.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.orange,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return false;
     });
 
     if (response.statusCode == 200) {

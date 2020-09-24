@@ -123,15 +123,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           internetConnection = false;
         });
-        Fluttertoast.showToast(msg: "No Internet Connection",
-            textColor: Colors.white,
-            backgroundColor: Colors.green);
+        Fluttertoast.showToast(
+          msg: "Please connect to internet",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16,
+        );
       }
     } on SocketException catch (_) {
       print('not connected');
-      Fluttertoast.showToast(msg: "No Internet Connection",
-          textColor: Colors.white,
-          backgroundColor: Colors.green);
+      Fluttertoast.showToast(
+        msg: "Please connect to internet",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16,
+      );
       setState(() {
         internetConnection = false;
       });

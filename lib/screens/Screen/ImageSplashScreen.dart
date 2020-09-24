@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/Constant/utils.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/models/User.dart';
 
@@ -58,7 +59,7 @@ class SplashScreenState extends State<ImageSplashScreen> {
   }
 
   Future <Null> _checkLogin () async {
-    var url = "https://delta.nitt.edu/recal-uae/api/auth/check_login/";
+    var url = Api.checkLogin;
     await http.get(url, headers: {'Cookie': cookie}).then((_response) async {
       print(_response.statusCode);
       print(_response.body);

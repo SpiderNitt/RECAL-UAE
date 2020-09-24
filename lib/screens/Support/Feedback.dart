@@ -87,6 +87,16 @@ class FeedbackState extends State<FeedbackScreen>
     }, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
+    }).catchError((error) {
+      Fluttertoast.showToast(
+          msg: "An error occured. Please try again later.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return false;
     });
 
     if (response.statusCode == 200) {
@@ -343,7 +353,7 @@ class FeedbackState extends State<FeedbackScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             AutoSizeText(
-                              "FEEDBACK PLEASE!!",
+                              "HOW CAN WE IMPROVE?",
                               style: TextStyle(
                                   fontSize: UIUtills().getProportionalHeight(
                                       height: 25, choice: 3),

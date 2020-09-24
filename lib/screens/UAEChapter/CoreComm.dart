@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/CoreCommModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
@@ -39,6 +40,19 @@ class CoreCommState extends State<CoreComm> {
       setState(() {
         internet = 0;
       });
+      FocusScope.of(context).unfocus();
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.none) {
+        Fluttertoast.showToast(
+          msg: "Please connect to internet",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16,
+        );
+      }
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await http.get(Api.chapterCore, headers: {
