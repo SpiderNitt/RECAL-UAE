@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'EventPictureDisplay.dart';
+import 'dart:io' show Platform;
 class EventPhotos extends StatefulWidget {
   List<String> eventPictures;
   EventPhotos(this.eventPictures);
@@ -16,6 +17,14 @@ class _EventPhotosState extends State<EventPhotos> {
           title: Text("Event Photos",
             style: TextStyle(color: ColorGlobal.textColor),),
           backgroundColor: ColorGlobal.whiteColor,
+          leading: IconButton(
+              icon: Icon(
+                Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
+                color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
           iconTheme: IconThemeData(color: ColorGlobal.textColor),
         ),
         body: Container(
