@@ -155,7 +155,7 @@ class LoginState extends State<Login> {
       );
       progressDialog.show();
       Future.delayed(Duration(milliseconds: 1000)).then((value) {
-        Widget prog = flag == 1
+        Widget progressWidget = flag == 1
             ? Icon(
                 Icons.check_circle,
                 size: 50,
@@ -167,7 +167,7 @@ class LoginState extends State<Login> {
                 color: Colors.red,
               );
         progressDialog.update(
-            message: show.replaceAll("!", ""), progressWidget: prog);
+            message: show.replaceAll("!", ""), progressWidget: progressWidget);
       });
       Future.delayed(Duration(milliseconds: 2000)).then((value) {
         progressDialog.update(progressWidget: null);
@@ -591,7 +591,7 @@ class LoginState extends State<Login> {
                                           ? "Return to Sign in"
                                           : "Change Password";
                                   pageTitle = pageTitle == "SIGN IN"
-                                      ? "RESET PASSWORD"
+                                      ? "CHANGE PASSWORD"
                                       : "SIGN IN";
                                   emailFocus.unfocus();
                                   passwordFocus.unfocus();

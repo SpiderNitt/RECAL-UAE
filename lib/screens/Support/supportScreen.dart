@@ -64,7 +64,7 @@ class SupportScreenState extends State<SupportScreen> {
                               height: height / 2.75,
                               decoration: BoxDecoration(
                                   image: DecorationImage(
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                                 image: AssetImage(
                                     'assets/images/newSupportbg.jpg'),
                               ))))),

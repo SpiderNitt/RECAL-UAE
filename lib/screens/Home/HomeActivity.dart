@@ -11,6 +11,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/Constant/utils.dart';
+import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/screens/Events/EventsScreen.dart';
 import 'package:iosrecal/models/User.dart';
 import 'package:iosrecal/screens/Home/NoInternet.dart';
@@ -131,7 +132,7 @@ class _HomeActivityState extends State<HomeActivity> {
     print("USERID Profile: $user_id");
     print("cookie profile: $cookie");
 
-    var url = "https://delta.nitt.edu/recal-uae/api/users/profile/";
+    var url = Api.getUser;
     var uri = Uri.parse(url);
     uri = uri.replace(query: "user_id=$user_id");
 
@@ -150,14 +151,14 @@ class _HomeActivityState extends State<HomeActivity> {
           print("picture : " + picture.toString());
           if(picture!=null) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.setString("profile_picture","https://delta.nitt.edu/recal-uae" + picture);
+            prefs.setString("profile_picture",Api.imageUrl + picture);
           }
           print("display picture get: $picture");
           setState(() {
             if (picture != null) {
               setState(() {
                 picture =
-                    "https://delta.nitt.edu/recal-uae" + picture;
+                    Api.imageUrl + picture;
                 getPic = 1;
               });
             }
@@ -184,7 +185,7 @@ class _HomeActivityState extends State<HomeActivity> {
   Future<CoreCommModel> _corecomm() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await http.get(
-        "https://delta.nitt.edu/recal-uae/api/chapter/core/",
+        Api.chapterCore,
         headers: {
           "Accept": "application/json",
           "Cookie": "${prefs.getString("cookie")}",
@@ -230,13 +231,6 @@ class _HomeActivityState extends State<HomeActivity> {
     });
   }
 
-
-  static List<String> _events = [
-    "Social",
-    "Events",
-    "Mentor Support",
-    "Employment",
-  ];
 
 
 
@@ -284,7 +278,7 @@ class _HomeActivityState extends State<HomeActivity> {
 
   }
   _logoutUser() async {
-    var url = "https://delta.nitt.edu/recal-uae/api/auth/logout/";
+    var url = Api.logout;
     await http
         .post(url, headers: {'Cookie': cookie}).then((_response) {
       if (_response.statusCode == 200) {
@@ -341,10 +335,10 @@ class _HomeActivityState extends State<HomeActivity> {
     }
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String URL = 'https://delta.nitt.edu/recal-uae/api/notifications/?id=' + "${prefs.getString("user_id")}" + '&page=1';
-    print(URL);
+    var url = Api.getAllNotifications + "${prefs.getString("user_id")}" + '&page=1';
+    print(url);
     var response = await http.get(
-        URL,
+        url,
         headers: {
           "Accept": "application/json",
           "Cookie": "${prefs.getString("cookie")}",
@@ -501,6 +495,7 @@ class _HomeActivityState extends State<HomeActivity> {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar:PreferredSize(
           preferredSize: Size.fromHeight(getHeight(60, 1)),
           child: AppBar(

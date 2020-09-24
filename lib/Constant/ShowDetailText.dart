@@ -45,7 +45,6 @@ class ShowDetailTextWidget extends StatelessWidget {
       print("zero");
       return 'This field cannot be empty';
     }
-    print("valid");
     return null;
   }
 

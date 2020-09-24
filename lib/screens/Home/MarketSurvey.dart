@@ -16,6 +16,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:iosrecal/Constant/utils.dart';
+import 'dart:io';
 
 int num = 0;
 
@@ -117,24 +118,24 @@ class SurveyState extends State<SurveyScreen> {
 
   Future<bool> onTimeOut() {
     return showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             title: new Text('Session Timeout'),
             content: new Text('Login to continue'),
             actions: <Widget>[
-              new GestureDetector(
-                onTap: () async {
-                  //await _logoutUser();
+              FlatButton(
+                onPressed: () async {
                   navigateAndReload();
                 },
-                child: FlatButton(
-                  color: Colors.red,
-                  child: Text("OK"),
-                ),
+                child: Text("OK"),
               ),
             ],
           ),
-          barrierDismissible: false,
         ) ??
         false;
   }
@@ -163,7 +164,7 @@ class SurveyState extends State<SurveyScreen> {
       return Error8Screen();
     } else if (state == 0) {
       return SpinKitDoubleBounce(
-        color: Colors.lightBlueAccent,
+        color: ColorGlobal.blueColor,
       );
     } else if (state == 1 && positions.length == 0) {
       return NodataScreen();
@@ -265,14 +266,23 @@ class SurveyState extends State<SurveyScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorGlobal.whiteColor,
-          leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: ColorGlobal.textColor,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
+          leading: (Platform.isAndroid)
+              ? IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: ColorGlobal.textColor,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  })
+              : IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: ColorGlobal.textColor,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
           title: Text(
             'Market Survey',
             style: TextStyle(color: ColorGlobal.textColor),

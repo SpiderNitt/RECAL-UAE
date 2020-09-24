@@ -83,7 +83,6 @@ class HomeScreenState extends State<HomeScreen> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: ColorGlobal.whiteColor,
-
           bottomNavigationBar: CurvedNavigationBar(
             backgroundColor: ColorGlobal.whiteColor,
             color: Colors.black,

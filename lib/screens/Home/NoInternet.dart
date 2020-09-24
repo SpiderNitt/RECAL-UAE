@@ -27,9 +27,9 @@ class NoInternetScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          SizedBox(
-                            height: height / 9,
-                          ),
+                          // SizedBox(
+                          //   height: height / 9,
+                          // ),
                           Center(
                             child: FadeIn(
                               child: Text(
@@ -93,4 +93,3 @@ class NoInternetScreen extends StatelessWidget {
     );
   }
 }
-

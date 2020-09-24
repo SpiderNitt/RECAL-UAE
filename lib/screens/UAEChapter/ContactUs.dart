@@ -1,7 +1,10 @@
 import 'dart:io' show Platform;
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iosrecal/Constant/Constant.dart';
+
+import 'package:iosrecal/bloc/KeyboardBloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
@@ -22,6 +25,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
   final TextEditingController messageController = TextEditingController();
   final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
   UIUtills uiUtills = new UIUtills();
+  KeyboardBloc _bloc = new KeyboardBloc();
 
   AnimationController _animationController;
 
@@ -38,6 +42,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
 
   initState() {
     super.initState();
+    _bloc.start();
     uiUtills = new UIUtills();
     _animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1300));
@@ -62,6 +67,11 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
       });
     });
   }
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
+  
 
   double getHeight(double height, int choice) {
     return uiUtills.getProportionalHeight(height: height, choice: choice);
@@ -76,7 +86,6 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
     return GestureDetector(
 
         onTap: () async {
-
           final String message = messageController.text;
           if (message != "") {
             bool b = await _sendMessage(message);
@@ -206,6 +215,17 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
           fontSize: getHeight(16, 2),
         );
         print(responseBody.data);
+
+        return false;
+//        Fluttertoast.showToast(
+//            msg: "An error occured. Please try again",
+//            toastLength: Toast.LENGTH_SHORT,
+//            gravity: ToastGravity.BOTTOM,
+//            timeInSecForIosWeb: 1,
+//            backgroundColor: Colors.red,
+//            textColor: Colors.white,
+//            fontSize: getHeight(16, 2)
+        //);
       }
     } else {
       Fluttertoast.showToast(
@@ -218,6 +238,17 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
         fontSize: getHeight(16, 2),
       );
       print('Server error');
+
+      return false;
+//      Fluttertoast.showToast(
+//          msg: "An error occured. Please try again",
+//          toastLength: Toast.LENGTH_SHORT,
+//          gravity: ToastGravity.BOTTOM,
+//          timeInSecForIosWeb: 1,
+//          backgroundColor: Colors.red,
+//          textColor: Colors.white,
+//          fontSize: getHeight(16, 2)
+//      );
     }
   }
 
@@ -268,6 +299,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
     final double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomPadding: false,
           appBar: AppBar(
             backgroundColor: ColorGlobal.whiteColor,
             leading: IconButton(
@@ -279,139 +311,173 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
               style: TextStyle(color: ColorGlobal.textColor),
             ),
           ),
-          backgroundColor: Color(0xDDFFFFFF),
+          backgroundColor: Colors.white.withOpacity(0.9),
           body: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                      width: width,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Color(0xff3AAFFA), Color(0xff374ABE)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
+            child: Column(
+              children: <Widget>[
+                Container(
+                    width: width,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xff3AAFFA), Color(0xff374ABE)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(0.0, getHeight(10, 2), getWidth(8, 2), 0.0),
-                        child: Column(
-                          children: <Widget>[
-                            Center(
-                              child: Image(
-                                image: AssetImage('assets/images/telephone.png'),
-                                height: width / 4,
-                                width: width / 3,
-                              ),
+                    ),
+//            height : height/2,
+//            color: const Color(0xFF2146A8),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(0.0, getHeight(10, 2), getWidth(8, 2), 0.0),
+                      child: Column(
+                        children: <Widget>[
+                          Center(
+                            child: Image(
+                              image: AssetImage('assets/images/telephone.png'),
+                              height: width / 4,
+                              width: width / 3,
                             ),
-                            SizedBox(height: width / 12),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap: Platform.isAndroid ?   _sendMail : null,
-                                  child: Row(
-                                    children: <Widget>[
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.email,
-                                          color: Colors.white,
-                                        ),
+                          ),
+                          SizedBox(height: width / 12),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: Platform.isAndroid ?   _sendMail : null,
+                                child: Row(
+                                  children: <Widget>[
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.email,
+                                        color: Colors.white,
                                       ),
-                                      Text(
-                                        'Email\nrecaluaechapter@gmail.com',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
+                                    Platform.isAndroid ?
+                                    GestureDetector(
+                                      child: Text("Email\nrecaluaechapter@gmail.com", style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      )),
+                                      onTap: () async {
+                                        if(Platform.isAndroid)
+                                          await _sendMail();
+                                      },
+                                    ) :
+                                    CustomToolTip(text: 'Email\nrecaluaechapter@gmail.com'),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.phone_android,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    uri = "tel://551086104'";
-                                    launch(uri);
-                                  },
-                                  child: Row(
-                                    children: <Widget>[
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.phone_android,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      Text(
-                                        'WhatsApp\n+971-55-1086104',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                                  CustomToolTip(text: 'WhatsApp\n+971-55-1086104'),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: width / 6),
+                        ],
+                      ),
+                    )),
+                Container(
+                  transform:
+                  Matrix4.translationValues(0.0, -width / 6 + 12.0, 0.0),
+                  child: Container(
+                    width: width - 24,
+                    height: width,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(getWidth(16, 2), getHeight(10, 2), getWidth(16, 2), getHeight(10, 2)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Please write about your issue. Someone from the admin team will respond within 24 hrs.',
+                            style: TextStyle(
+                              fontSize: getHeight(18, 2),
+                              letterSpacing: 1.2,
+                              color: Colors.black,
                             ),
-                            SizedBox(height: width / 6),
-                          ],
-                        ),
-                      )),
-                  Container(
-                    transform:
-                    Matrix4.translationValues(0.0, -width / 6 + 12.0, 0.0),
-                    child: Container(
-                      width: width - 24,
-                      height: width,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10.0)),
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(getWidth(16, 2), getHeight(10, 2), getWidth(16, 2), getHeight(10, 2)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Please write about your issue. Someone from the admin team will respond within 24 hrs.',
-                              style: TextStyle(
-                                fontSize: getHeight(18, 2),
-                                letterSpacing: 1.2,
-                                color: Colors.black,
+                          ),
+                          TextField(
+                            controller: messageController,
+                            autocorrect: true,
+                            maxLines: 5,
+                            decoration: InputDecoration(
+                              hintText: 'Enter message to admin',
+                              hintStyle: TextStyle(color: Colors.grey[500]),
+                              filled: true,
+                              fillColor: Colors.white70,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(12.0)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFF3AAFFA), width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(12.0)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFF3AAFFA), width: 2),
                               ),
                             ),
-                            TextField(
-                              controller: messageController,
-                              autocorrect: true,
-                              maxLines: 5,
-                              decoration: InputDecoration(
-                                hintText: 'Enter message to admin',
-                                hintStyle: TextStyle(color: Colors.grey[500]),
-                                filled: true,
-                                fillColor: Colors.white70,
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(12.0)),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF3AAFFA), width: 2),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(12.0)),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF3AAFFA), width: 2),
-                                ),
-                              ),
-                            ),
+                          ),
                           animatedButton(),
                           ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                StreamBuilder<double>(
+                    stream: _bloc.stream,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<double> snapshot) {
+                      print(
+                          'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
+                              'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                      return _bloc.keyboardUtils.isKeyboardOpen == true
+                          ? Container(
+                        height: _bloc.keyboardUtils.keyboardHeight,
+                      )
+                          : Container(
+                        height: 0,
+                        width: 0,
+                      );
+                    }),
+              ],
             ),
           )),
+    );
+  }
+}
+class CustomToolTip extends StatelessWidget {
+
+  String text;
+
+  CustomToolTip({this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return new GestureDetector(
+      child: new Tooltip(preferBelow: false,
+          message: "Copy", child: new Text(text, style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ))),
+      onTap: () {
+        Fluttertoast.showToast(msg: text.contains("@") ?  "Copied Email Address" : "Copied WhatsApp number",textColor: Colors.white,backgroundColor: Colors.green);
+        Clipboard.setData(new ClipboardData(text: text.split('\n')[1]));
+      },
+      onLongPress: () {
+        Fluttertoast.showToast(msg: text.contains("@") ?  "Copied Email Address" : "Copied WhatsApp number",textColor: Colors.white,backgroundColor: Colors.green);
+        Clipboard.setData(new ClipboardData(text: text.split('\n')[1]));
+      },
     );
   }
 }

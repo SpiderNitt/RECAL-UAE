@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/CoreCommModel.dart';
@@ -31,6 +31,7 @@ class CoreCommState extends State<CoreComm> {
   bool error = false;
   var state = 0;
   static List<String> _members = [];
+  String tenure, date;
   int flag = 0;
   Future<CoreCommModel> _corecomm() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -71,6 +72,15 @@ class CoreCommState extends State<CoreComm> {
             responseBody.data['mentor2'] != null
                 ? _members.add(responseBody.data['mentor2'])
                 : print("empty");
+            responseBody.data['tenure'] != null
+                ? tenure = responseBody.data['tenure']
+                : print("empty tenure");
+            responseBody.data['date'] != null
+                ? date = responseBody.data['date']
+                : print("empty date");
+
+            if (tenure != null) print(tenure);
+            if (date != null) print(date);
             if (_members.length > 0)
               setState(() {
                 flag = 1;
@@ -114,21 +124,21 @@ class CoreCommState extends State<CoreComm> {
 
   Future<bool> onTimeOut() {
     return showDialog(
-          context: context,
           barrierDismissible: false,
+          context: context,
           builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             title: new Text('Session Timeout'),
             content: new Text('Login to continue'),
             actions: <Widget>[
-              new GestureDetector(
-                onTap: () async {
-                  //await _logoutUser();
+              FlatButton(
+                onPressed: () async {
                   navigateAndReload();
                 },
-                child: FlatButton(
-                  color: Colors.red,
-                  child: Text("OK"),
-                ),
+                child: Text("OK"),
               ),
             ],
           ),
@@ -158,7 +168,7 @@ class CoreCommState extends State<CoreComm> {
       return NoInternetScreen(notifyParent: refresh);
     } else if (flag == 0) {
       return SpinKitDoubleBounce(
-        color: Colors.lightBlueAccent,
+        color: ColorGlobal.blueColor,
       );
     } else if (flag == 1 && error == false) {
       final size = MediaQuery.of(context).size;
@@ -167,6 +177,7 @@ class CoreCommState extends State<CoreComm> {
       return Center(
         child: SingleChildScrollView(
           child: Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
             margin: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               gradient: new LinearGradient(
@@ -202,7 +213,7 @@ class CoreCommState extends State<CoreComm> {
               child: flag == 1
                   ? Column(children: <Widget>[
                       Text(
-                        "The ongoing members of the core committee of RECAL UAE Chapter are functioning since Oct 2019. The member details are as follows:",
+                        "The ongoing members of the core committee of RECAL UAE Chapter are as follows:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
                           fontSize: UIUtills()
@@ -383,10 +394,23 @@ class CoreCommState extends State<CoreComm> {
         child: Scaffold(
             appBar: AppBar(
               backgroundColor: ColorGlobal.whiteColor,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
+              leading: (Platform.isAndroid)
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: ColorGlobal.textColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                  : IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: ColorGlobal.textColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
               title: Text(
                 'Core Committee',
                 style: TextStyle(color: ColorGlobal.textColor),

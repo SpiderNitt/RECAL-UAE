@@ -559,7 +559,7 @@ class _DashBoardState extends State<DashBoard> {
     );
   }
 
-  Widget getBody(int index){
+  getBody(int index){
     if(index==0){
       return membersItem(0xfff4c83f);
     }else if(index == 1){
@@ -639,7 +639,7 @@ class _DashBoardState extends State<DashBoard> {
                   );
                 }
 
-            };
+            }
             return Center(child: Text("Try Again!"));
           },
         ),
