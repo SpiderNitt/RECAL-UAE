@@ -190,6 +190,57 @@ class _ChapterScreenState extends State<ChapterScreen> {
                         Navigator.push(
                           context,
                           PageTransition(
+                              type: PageTransitionType.leftToRight,
+                              duration: Duration(milliseconds: 300),
+                              child: AchievementsScreen()),);
+                      },
+                      child: Container(
+                        width: width,
+                        color: Colors.transparent,
+                        //color: Colors.red,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment
+                              .center,
+                          children: [
+                            Material(
+                              color: Color(0xcc26cb3c),
+                              borderRadius: BorderRadius.circular(
+                                  getHeight(24, 2)),
+                              child: Center
+                                (
+                                child: Padding
+                                  (
+                                  padding: EdgeInsets.all(
+                                      getWidth(16, 2)),
+                                  child: Icon(
+                                    Icons.brightness_low,
+                                    size: getWidth(30, 2),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: getWidth(8, 2),
+                            ),
+                            Text('Achievements',
+                                style: TextStyle(
+                                    color: ColorGlobal
+                                        .textColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: getWidth(20, 2))),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: getHeight(24, 2),
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          PageTransition(
                               type: PageTransitionType.rightToLeft,
                               duration: Duration(milliseconds: 300),
                               child: PayPage()),);
@@ -308,58 +359,6 @@ class _ChapterScreenState extends State<ChapterScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: getHeight(24, 2),
-                    ),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.leftToRight,
-                              duration: Duration(milliseconds: 300),
-                              child: AchievementsScreen()),);
-                      },
-                      child: Container(
-                        width: width,
-                        color: Colors.transparent,
-                        //color: Colors.red,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment
-                              .center,
-                          children: [
-                            Material(
-                              color: Color(0xcc26cb3c),
-                              borderRadius: BorderRadius.circular(
-                                  getHeight(24, 2)),
-                              child: Center
-                                (
-                                child: Padding
-                                  (
-                                  padding: EdgeInsets.all(
-                                      getWidth(16, 2)),
-                                  child: Icon(
-                                    Icons.brightness_low,
-                                    size: getWidth(30, 2),
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: getWidth(8, 2),
-                            ),
-                            Text('Achievements',
-                                style: TextStyle(
-                                    color: ColorGlobal
-                                        .textColor,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: getWidth(20, 2))),
-                          ],
-                        ),
-                      ),
-                    ),
-
                   ],
                 ),
               ),
