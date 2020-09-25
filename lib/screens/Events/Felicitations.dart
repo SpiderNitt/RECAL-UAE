@@ -116,7 +116,7 @@ class _FelicitationsState extends State<Felicitations> {
                                 width: 24),
                             child: Icon(Icons.person,size: UIUtills()
                                 .getProportionalWidth(
-                                width: 36),),
+                                width: 30),),
                           ),
                           title: snapshot.data[index].felicitated_person!=null?Text(
                             snapshot.data[index].felicitated_person,
@@ -125,7 +125,7 @@ class _FelicitationsState extends State<Felicitations> {
                             style: TextStyle(
                                 fontSize:UIUtills()
                                     .getProportionalHeight(
-                                    height: 20) , color: Colors.black87),
+                                    height: 18) , color: Colors.black87),
                           ):SizedBox(),
                           trailing: Icon(
                             Icons.keyboard_arrow_down,

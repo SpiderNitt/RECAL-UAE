@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
@@ -88,7 +90,7 @@ class LoginState extends State<Login> {
               borderRadius: BorderRadius.circular(20),
             ),
             title: Text('Are you sure?'),
-            content : Text('Do you want to exit the app?'),
+            content : Text('Do you want to exit_ the app?'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -287,8 +289,8 @@ class LoginState extends State<Login> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
+              Platform.isAndroid ?
               GestureDetector(
-                onTap: () => _sendMail(),
                 child: Text(
                   "recaluaechapter@gmail.com",
                   style: GoogleFonts.lato(
@@ -298,7 +300,12 @@ class LoginState extends State<Login> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-              ),
+                onTap: () async {
+                  if(Platform.isAndroid)
+                    await _sendMail();
+                },
+              ) :
+              CustomToolTip(text: 'recaluaechapter@gmail.com'),
             ],
           ),
           actions: [
@@ -314,12 +321,14 @@ class LoginState extends State<Login> {
   }
   _sendMail() async {
     // Android and iOS
-    const uri =
-        'mailto:recaluaechapter@gmail.com?subject=Login Credentials';
-    if (await canLaunch(uri)) {
-      await launch(uri);
-    } else {
-      return;
+    if(Platform.isAndroid) {
+      const uri =
+          'mailto:recaluaechapter@gmail.com?subject=Login Credentials';
+      if (await canLaunch(uri)) {
+        await launch(uri);
+      } else {
+        print("error");
+      }
     }
   }
 
@@ -478,6 +487,8 @@ class LoginState extends State<Login> {
                                   builder: (context, loginData, child) {
                                     return InkWell(
                                       onTap: () async {
+                                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                                        prefs.setInt("first", 10);
                                         if (changePassword == false) {
                                           if (email.text != "" &&
                                               password.text != "") {
@@ -627,6 +638,33 @@ class LoginState extends State<Login> {
           ),
         ),
       ),
+    );
+  }
+}
+class CustomToolTip extends StatelessWidget {
+
+  String text;
+
+  CustomToolTip({this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return new GestureDetector(
+      child: new Tooltip(preferBelow: false,
+          message: "Copy", child: new Text(text, style: GoogleFonts.lato(
+            color: ColorGlobal.blueColor,
+            decoration: TextDecoration.underline,
+            fontSize: 17,
+            fontWeight: FontWeight.w700,
+          ))),
+      onTap: () {
+        Fluttertoast.showToast(msg: "Copied Email Address",textColor: Colors.white,backgroundColor: Colors.green);
+        Clipboard.setData(new ClipboardData(text: text));
+      },
+      onLongPress: () {
+        Fluttertoast.showToast(msg: "Copied Email Address",textColor: Colors.white,backgroundColor: Colors.green);
+        Clipboard.setData(new ClipboardData(text: text));
+      },
     );
   }
 }

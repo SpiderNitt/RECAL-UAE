@@ -84,7 +84,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                       ),
                                     ),
                                   ),
-                                  elevation: 10,
+                                  elevation: 5,
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
                                       new BorderRadius.circular(width / 10)),
@@ -133,7 +133,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                       ),
                                     ),
                                   ),
-                                  elevation: 10,
+                                  elevation: 5,
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
                                       new BorderRadius.circular(width / 10)),
@@ -178,7 +178,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                       child: Text("in",style: TextStyle(color: Color(int.parse("0xff0076b4")), fontWeight: FontWeight.bold, fontSize: width/10),)
                                     ),
                                   ),
-                                  elevation: 10,
+                                  elevation: 5,
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
                                       new BorderRadius.circular(width / 10)),
@@ -236,7 +236,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                     ),
                                   ),
                                 ),
-                                elevation: 10,
+                                elevation: 5,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                     new BorderRadius.circular(width / 10)),
@@ -285,7 +285,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                     ),
                                   ),
                                 ),
-                                elevation: 10,
+                                elevation: 5,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                     new BorderRadius.circular(width / 10)),

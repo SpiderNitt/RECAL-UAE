@@ -284,12 +284,14 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
 
   _sendMail() async {
     // Android and iOS
-    const uri =
-        'mailto:recaluaechapter@gmail.com?subject=Recal UAE Chapter&body=Greetings';
-    if (await canLaunch(uri)) {
-      await launch(uri);
-    } else {
-      return;
+    if(Platform.isAndroid) {
+      const uri =
+          'mailto:recaluaechapter@gmail.com?subject=Recal UAE Chapter&body=Greetings';
+      if (await canLaunch(uri)) {
+        await launch(uri);
+      } else {
+        print("error mail");
+      }
     }
   }
 
@@ -341,30 +343,27 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                           Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              GestureDetector(
-                                onTap: Platform.isAndroid ?   _sendMail : null,
-                                child: Row(
-                                  children: <Widget>[
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.email,
-                                        color: Colors.white,
-                                      ),
+                              Row(
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.email,
+                                      color: Colors.white,
                                     ),
-                                    Platform.isAndroid ?
-                                    GestureDetector(
-                                      child: Text("Email\nrecaluaechapter@gmail.com", style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                      )),
-                                      onTap: () async {
-                                        if(Platform.isAndroid)
-                                          await _sendMail();
-                                      },
-                                    ) :
-                                    CustomToolTip(text: 'Email\nrecaluaechapter@gmail.com'),
-                                  ],
-                                ),
+                                  ),
+                                  Platform.isAndroid ?
+                                  GestureDetector(
+                                    child: Text("Email\nrecaluaechapter@gmail.com", style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    )),
+                                    onTap: () async {
+                                      if(Platform.isAndroid)
+                                        await _sendMail();
+                                    },
+                                  ) :
+                                  CustomToolTip(text: 'Email\nrecaluaechapter@gmail.com'),
+                                ],
                               ),
                               Row(
                                 children: <Widget>[

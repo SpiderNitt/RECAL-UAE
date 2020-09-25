@@ -127,7 +127,6 @@ class _CompletedEventsState extends State<CompletedEvents> with TickerProviderSt
         width: screenSize.width, height: screenSize.height);
     final double width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-
     return eventList.isEmpty? EmptyList(context): finished==true ? Container(
       child: AnimatedList(
           key: animatedListKey,

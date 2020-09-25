@@ -24,7 +24,7 @@ _launchMarket(url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    return;
+    print("error market web");
   }
 }
 

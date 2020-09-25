@@ -40,7 +40,7 @@ _launchLinked(url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    return;
+    print("error linkedin web");
   }
 }
 

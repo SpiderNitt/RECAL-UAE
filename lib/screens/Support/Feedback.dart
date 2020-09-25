@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/bloc/KeyboardBloc.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,6 +34,8 @@ class FeedbackState extends State<FeedbackScreen>
   double _translateY = 0;
   double _rotate = 0;
   double _scale = 1;
+  KeyboardBloc _bloc = new KeyboardBloc();
+
 
   bool show;
   bool sent = false;
@@ -41,6 +44,8 @@ class FeedbackState extends State<FeedbackScreen>
 
   initState() {
     super.initState();
+    _bloc.start();
+
     _animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1300));
     show = true;
@@ -65,7 +70,11 @@ class FeedbackState extends State<FeedbackScreen>
     });
     //_positions();
   }
-
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
   Future<bool> _sendMessage(String body) async {
     FocusScope.of(context).unfocus();
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -344,12 +353,12 @@ class FeedbackState extends State<FeedbackScreen>
                 style: TextStyle(color: ColorGlobal.textColor),
               ),
             ),
-            body: SingleChildScrollView(
-              child: Center(
-                child: Container(
-                  height: height,
-                  color: Colors.white,
-                  child: Column(
+            body: Center(
+              child: Container(
+                height: height,
+                color: Colors.white,
+                child: SingleChildScrollView(
+                  child:  Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -405,9 +414,22 @@ class FeedbackState extends State<FeedbackScreen>
                               height: height / 64,
                             ),
                             animatedButton(),
-                            SizedBox(
-                              height: height / 64,
-                            ),
+                            StreamBuilder<double>(
+                                stream: _bloc.stream,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<double> snapshot) {
+                                  print(
+                                      'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
+                                          'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                                  return _bloc.keyboardUtils.isKeyboardOpen == true
+                                      ? Container(
+                                    height: _bloc.keyboardUtils.keyboardHeight + 10,
+                                  )
+                                      : Container(
+                                    height: 0,
+                                    width: 0,
+                                  );
+                                }),
                           ],
                         ),
                       ),

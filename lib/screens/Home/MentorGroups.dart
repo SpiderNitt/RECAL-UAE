@@ -226,7 +226,7 @@ class _MentorGroupsState extends State<MentorGroups> {
                                         child: AutoSizeText(
                                           groups[index].group,
                                           style: TextStyle(
-                                            fontSize: getHeight(16, 2),
+                                            fontSize: getHeight(22, 2),
                                             color: ColorGlobal.textColor,
                                             fontWeight: FontWeight.bold,
                                             fontStyle: FontStyle.italic,
@@ -238,7 +238,7 @@ class _MentorGroupsState extends State<MentorGroups> {
                                         child: AutoSizeText(
                                           groups[index].leader,
                                           style: TextStyle(
-                                            fontSize: getHeight(16, 2),
+                                            fontSize: getHeight(19, 2),
                                             color: ColorGlobal.textColor,
                                           ),
                                         ),

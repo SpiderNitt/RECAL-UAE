@@ -412,7 +412,7 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                height: height - UIUtills().getProportionalHeight(height: 100, choice: 1),
+                height: UIUtills().getProportionalHeight(height: height,choice: 1) - UIUtills().getProportionalHeight(height: 100, choice: 1),
                 child: PageView(
                   physics: ClampingScrollPhysics(),
                   controller: _pageController,

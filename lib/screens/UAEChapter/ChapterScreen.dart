@@ -358,6 +358,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 10,),
                   ],
                 ),
               ),
