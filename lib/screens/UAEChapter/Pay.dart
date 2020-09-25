@@ -136,7 +136,7 @@ class _PayPageState extends State<PayPage> {
   Widget getPayDetails(){
     if(state==1){
       return Text(
-        payDetails,
+        payDetails==null? 'No Data Available' : payDetails,
         style: TextStyle(
           fontSize: 20.0,
           color: Colors.white,
