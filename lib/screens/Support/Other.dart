@@ -24,7 +24,7 @@ class OtherScreen extends StatefulWidget {
 
 class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
   final TextEditingController messageController = TextEditingController();
-
+  UIUtills uiUtills = new UIUtills();
   final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
   AnimationController _animationController;
@@ -37,16 +37,15 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
   double _scale = 1;
   KeyboardBloc _bloc = new KeyboardBloc();
 
-
   bool show;
   bool sent = false;
   Color _color = Colors.lightBlue;
-  bool finished=false;
-
+  bool finished = false;
 
   initState() {
     super.initState();
     _bloc.start();
+    uiUtills = new UIUtills();
     _animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1300));
     show = true;
@@ -71,10 +70,19 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
     });
     //_positions();
   }
+
   @override
   void dispose() {
     _bloc.dispose();
     super.dispose();
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   Widget animatedButton() {
@@ -149,8 +157,8 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                 AnimatedSize(
                   vsync: this,
                   duration: Duration(milliseconds: 200),
-                  child: sent ?
-                           Icon(Icons.done, color: Colors.white)
+                  child: sent
+                      ? Icon(Icons.done, color: Colors.white)
                       : Container(),
                 ),
                 AnimatedSize(
@@ -183,7 +191,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
           textColor: Colors.white,
           fontSize: 16.0);
     }
-    if(finished==false) {
+    if (finished == false) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final String url = Api.getSupport;
       final response = await http.post(url, body: {
@@ -207,7 +215,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
 
       if (response.statusCode == 200) {
         ResponseBody responseBody =
-        ResponseBody.fromJson(json.decode(response.body));
+            ResponseBody.fromJson(json.decode(response.body));
         if (responseBody.status_code == 200) {
           print("worked!");
           setState(() {
@@ -327,6 +335,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
         child: Scaffold(
             backgroundColor: Color(0xDDFFFFFF),
@@ -372,8 +381,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                             Text(
                               "HOW CAN WE HELP?",
                               style: TextStyle(
-                                  fontSize: UIUtills().getProportionalHeight(
-                                      height: 24, choice: 3),
+                                  fontSize: getHeight(24, 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
                             ),
@@ -381,8 +389,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                             Text(
                               "Please enter your query in the box below",
                               style: TextStyle(
-                                fontSize: UIUtills().getProportionalHeight(
-                                    height: 15, choice: 3),
+                                fontSize: getHeight(15, 3),
                                 color: const Color(0xff3AAFFA),
                               ),
                               textAlign: TextAlign.center,
@@ -421,15 +428,18 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                                     AsyncSnapshot<double> snapshot) {
                                   print(
                                       'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
-                                          'Height: ${_bloc.keyboardUtils.keyboardHeight}');
-                                  return _bloc.keyboardUtils.isKeyboardOpen == true
+                                      'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                                  return _bloc.keyboardUtils.isKeyboardOpen ==
+                                          true
                                       ? Container(
-                                    height: _bloc.keyboardUtils.keyboardHeight + 10,
-                                  )
+                                          height: _bloc.keyboardUtils
+                                                  .keyboardHeight +
+                                              10,
+                                        )
                                       : Container(
-                                    height: 0,
-                                    width: 0,
-                                  );
+                                          height: 0,
+                                          width: 0,
+                                        );
                                 }),
                           ],
                         ),
