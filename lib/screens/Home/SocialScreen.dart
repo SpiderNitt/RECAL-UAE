@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:iosrecal/Constant/utils.dart';
 import 'package:folding_cell/folding_cell.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/screens/Events/EventsScreen.dart';
@@ -13,6 +13,7 @@ class SocialScreen extends StatefulWidget {
 }
 
 class _SocialScreenState extends State<SocialScreen> {
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
@@ -57,9 +58,11 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
   final _foldingCellKey2 = GlobalKey<SimpleFoldingCellState>();
   List<String> options = List();
   List<AssetImage> images = List();
+  UIUtills uiUtills = new UIUtills();
 
   @override
   void initState(){
+    uiUtills = new UIUtills();
     Timer(Duration(milliseconds: 250), () {
       _foldingCellKey1?.currentState?.toggleFold();
       print("Yeah, this line is printed after 1 seconds");
@@ -69,6 +72,14 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
       print("Yeah, this line is printed after 2 seconds");
     });
 
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   void _navigatePage(int num){
@@ -87,7 +98,8 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
     images.add(AssetImage('assets/images/felicitation.png'));
 
     final double width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
+    final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
 
     return Container(
 //      color: Color(0xFF2e282a),
@@ -142,7 +154,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
               options[num],
               style: TextStyle(
                 color: ColorGlobal.textColor,
-                fontSize: 20.0,
+                fontSize: getHeight(20, 2),
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -181,7 +193,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
               options[num],
               style: TextStyle(
                 color: ColorGlobal.textColor,
-                fontSize: 22.0,
+                fontSize: getHeight(22, 2),
                 fontWeight: FontWeight.w600,
               ),
             ),

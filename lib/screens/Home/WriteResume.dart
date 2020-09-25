@@ -117,6 +117,8 @@ class _WriteResumeState extends State<WriteResume> {
   Widget build(BuildContext context) {
     String uri;
     final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

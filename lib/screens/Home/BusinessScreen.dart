@@ -5,6 +5,7 @@ import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/screens/Home/BusinessNetworkList.dart';
 import 'package:iosrecal/screens/Home/DealsExecuted.dart';
 import 'BusinessDashboard.dart';
+import 'package:iosrecal/Constant/utils.dart';
 import 'dart:io' show Platform;
 
 class BusinessScreen extends StatefulWidget {
@@ -57,9 +58,11 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
   final _foldingCellKey3 = GlobalKey<SimpleFoldingCellState>();
   List<String> options = List();
   List<AssetImage> images = List();
+  UIUtills uiUtills = new UIUtills();
 
   @override
   void initState(){
+    uiUtills = new UIUtills();
     Timer(Duration(milliseconds: 250), () {
       _foldingCellKey1?.currentState?.toggleFold();
     });
@@ -69,6 +72,14 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
     Timer(Duration(milliseconds: 750), () {
       _foldingCellKey3?.currentState?.toggleFold();
     });
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   void _navigatePage(int num){
@@ -82,6 +93,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
 
   @override
   Widget build(BuildContext context) {
+
     options.add("Business Dashboard");
     options.add("Business Network List");
     options.add("Deals Executed");
@@ -89,9 +101,9 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
     images.add(AssetImage('assets/images/dashboard.png'));
     images.add(AssetImage('assets/images/database.png'));
     images.add(AssetImage('assets/images/deals_executed.png'));
-
     final double width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
+    final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
 
     return Container(
       child: Column(
@@ -153,7 +165,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
               options[num],
               style: TextStyle(
                 color: ColorGlobal.textColor,
-                fontSize: 20.0,
+                fontSize: getHeight(20, 2),
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -192,7 +204,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
               options[num],
               style: TextStyle(
                 color: ColorGlobal.textColor,
-                fontSize: 22.0,
+                fontSize: getHeight(22, 2),
                 fontWeight: FontWeight.w600,
               ),
             ),

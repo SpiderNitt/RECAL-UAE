@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'dart:io' show Platform;
+import 'package:iosrecal/Constant/utils.dart';
 
 class EmploymentSupport extends StatefulWidget {
   @override
@@ -11,12 +12,27 @@ class EmploymentSupport extends StatefulWidget {
 }
 
 class EmploymentSupportState extends State<EmploymentSupport> {
+  UIUtills uiUtills = new UIUtills();
 
+  @override
+  void initState(){
+    uiUtills = new UIUtills();
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
 
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
+
     return (WillPopScope(
         child: SafeArea(
             child: Scaffold(
@@ -95,7 +111,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                       AutoSizeText(
                                         "Open",
                                         style: TextStyle(
-                                            fontSize: 16.0,
+                                            fontSize: getHeight(16, 2),
                                             color: Color(0xFF433d3e),
                                             fontWeight: FontWeight.w600),
                                         maxLines: 1,
@@ -103,7 +119,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                       AutoSizeText(
                                         "Positions",
                                         style: TextStyle(
-                                            fontSize: 16.0,
+                                            fontSize: getHeight(16, 2),
                                             color: Color(0xFF433d3e),
                                             fontWeight: FontWeight.w600),
                                         maxLines: 1,
@@ -144,7 +160,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                       AutoSizeText(
                                         "Closed",
                                         style: TextStyle(
-                                            fontSize: 16.0,
+                                            fontSize: getHeight(16, 2),
                                             color: Color(0xFF433d3e),
                                             fontWeight: FontWeight.w600),
                                         maxLines: 1,
@@ -152,7 +168,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                       AutoSizeText(
                                         "Positions",
                                         style: TextStyle(
-                                            fontSize: 16.0,
+                                            fontSize: getHeight(16, 2),
                                             color: Color(0xFF433d3e),
                                             fontWeight: FontWeight.w600),
                                         maxLines: 1,
@@ -189,7 +205,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                       AutoSizeText(
                                         "LinkedIn",
                                         style: TextStyle(
-                                            fontSize: 16.0,
+                                            fontSize: getHeight(16, 2),
                                             color: Color(0xFF433d3e),
                                             fontWeight: FontWeight.w600),
                                         maxLines: 1,
@@ -197,7 +213,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                       AutoSizeText(
                                         "Profiles",
                                         style: TextStyle(
-                                            fontSize: 16.0,
+                                            fontSize: getHeight(16, 2),
                                             color: Color(0xFF433d3e),
                                             fontWeight: FontWeight.w600),
                                         maxLines: 1,
@@ -247,7 +263,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                     AutoSizeText(
                                       "Market",
                                       style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: getHeight(16, 2),
                                           color: Color(0xFF433d3e),
                                           fontWeight: FontWeight.w600),
                                       maxLines: 1,
@@ -255,7 +271,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                     AutoSizeText(
                                       "Survey",
                                       style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: getHeight(16, 2),
                                           color: Color(0xFF433d3e),
                                           fontWeight: FontWeight.w600),
                                       maxLines: 1,
@@ -296,7 +312,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                     AutoSizeText(
                                       "Write",
                                       style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: getHeight(16, 2),
                                           color: Color(0xFF433d3e),
                                           fontWeight: FontWeight.w600),
                                       maxLines: 1,
@@ -304,7 +320,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                     AutoSizeText(
                                       "Resume",
                                       style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: getHeight(16, 2),
                                           color: Color(0xFF433d3e),
                                           fontWeight: FontWeight.w600),
                                       maxLines: 1,
