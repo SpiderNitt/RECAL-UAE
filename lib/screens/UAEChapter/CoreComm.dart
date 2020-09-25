@@ -34,6 +34,8 @@ class CoreCommState extends State<CoreComm> {
   static List<String> _members = [];
   String tenure, date;
   int flag = 0;
+  UIUtills uiUtills = new UIUtills();
+
   Future<CoreCommModel> _corecomm() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
@@ -130,6 +132,7 @@ class CoreCommState extends State<CoreComm> {
     super.initState();
     print("Core Committee");
     _corecomm();
+    uiUtills = new UIUtills();
   }
 
   Future<bool> _onBackPressed() {
@@ -158,6 +161,14 @@ class CoreCommState extends State<CoreComm> {
           ),
         ) ??
         false;
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   navigateAndReload() {
@@ -230,8 +241,7 @@ class CoreCommState extends State<CoreComm> {
                         "The ongoing members of the core committee of RECAL UAE Chapter are as follows:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 15, choice: 3),
+                          fontSize: getHeight(15, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -240,8 +250,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nPresident:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 18, choice: 3),
+                          fontSize: getHeight(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -250,8 +259,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[0]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 15, choice: 3),
+                          fontSize: getHeight(15, 3),
                           // fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -260,8 +268,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nVice President:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 18, choice: 3),
+                          fontSize: getHeight(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -270,8 +277,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[1]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 15, choice: 3),
+                          fontSize: getHeight(15, 3),
                           //fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -280,8 +286,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nSecretary:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 18, choice: 3),
+                          fontSize: getHeight(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -290,8 +295,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[2]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 15, choice: 3),
+                          fontSize: getHeight(15, 3),
                           //fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -300,8 +304,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nJoint Secretary:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 18, choice: 3),
+                          fontSize: getHeight(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -310,8 +313,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[3]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 15, choice: 3),
+                          fontSize: getHeight(15, 3),
                           //fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -320,8 +322,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nTreasurer:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 18, choice: 3),
+                          fontSize: getHeight(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -330,8 +331,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[4]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 15, choice: 3),
+                          fontSize: getHeight(15, 3),
                           //fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -340,8 +340,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nVMentor 1:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 18, choice: 3),
+                          fontSize: getHeight(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -350,8 +349,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[5]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 15, choice: 3),
+                          fontSize: getHeight(15, 3),
                           //fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -360,8 +358,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nMentor 2:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 18, choice: 3),
+                          fontSize: getHeight(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -370,8 +367,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[5]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 15, choice: 3),
+                          fontSize: getHeight(15, 3),
                           //fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -398,10 +394,9 @@ class CoreCommState extends State<CoreComm> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final refHeight = 700.666;
-    final refWidth = 360;
-
+    final double width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: SafeArea(
