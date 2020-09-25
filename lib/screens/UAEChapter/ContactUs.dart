@@ -217,15 +217,6 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
         print(responseBody.data);
 
         return false;
-//        Fluttertoast.showToast(
-//            msg: "An error occured. Please try again",
-//            toastLength: Toast.LENGTH_SHORT,
-//            gravity: ToastGravity.BOTTOM,
-//            timeInSecForIosWeb: 1,
-//            backgroundColor: Colors.red,
-//            textColor: Colors.white,
-//            fontSize: getHeight(16, 2)
-        //);
       }
     } else {
       Fluttertoast.showToast(
@@ -240,15 +231,6 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
       print('Server error');
 
       return false;
-//      Fluttertoast.showToast(
-//          msg: "An error occured. Please try again",
-//          toastLength: Toast.LENGTH_SHORT,
-//          gravity: ToastGravity.BOTTOM,
-//          timeInSecForIosWeb: 1,
-//          backgroundColor: Colors.red,
-//          textColor: Colors.white,
-//          fontSize: getHeight(16, 2)
-//      );
     }
   }
 
@@ -299,6 +281,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
