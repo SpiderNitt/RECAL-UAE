@@ -26,7 +26,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
   final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
   AnimationController _animationController;
-
+  UIUtills uiUtills = new UIUtills();
   double _containerPaddingLeft = 20.0;
   double _animationValue;
   double _translateX = 0;
@@ -35,14 +35,14 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
   double _scale = 1;
   KeyboardBloc _bloc = new KeyboardBloc();
 
-
   bool show;
   bool sent = false;
   Color _color = Colors.lightBlue;
-  bool finished=false;
+  bool finished = false;
 
   initState() {
     super.initState();
+    uiUtills = new UIUtills();
     _bloc.start();
     _animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1300));
@@ -68,6 +68,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
     });
     //_positions();
   }
+
   @override
   void dispose() {
     _bloc.dispose();
@@ -88,7 +89,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
-                fontSize: 16.0);
+                fontSize: getHeight(16, 3));
           }
         },
         child: AnimatedContainer(
@@ -179,9 +180,9 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.orange,
           textColor: Colors.white,
-          fontSize: 16.0);
+          fontSize: getHeight(16, 3));
     }
-    if(finished==false) {
+    if (finished == false) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final String url = Api.getSupport;
       final response = await http.post(url, body: {
@@ -199,12 +200,12 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.red,
             textColor: Colors.white,
-            fontSize: 16.0);
+            fontSize: getHeight(16, 3));
         return false;
       });
       if (response.statusCode == 200) {
         ResponseBody responseBody =
-        ResponseBody.fromJson(json.decode(response.body));
+            ResponseBody.fromJson(json.decode(response.body));
         print(responseBody.data);
         if (responseBody.status_code == 200) {
           print("worked!");
@@ -226,7 +227,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
               timeInSecForIosWeb: 1,
               backgroundColor: Colors.orange,
               textColor: Colors.white,
-              fontSize: 16.0);
+              fontSize: getHeight(16, 3));
           print(responseBody.data);
           return false;
         }
@@ -325,11 +326,20 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
     });
   }
 
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     //pr = ProgressDialog(context, type: ProgressDialogType.Normal);
+    uiUtills.updateScreenDimesion(width: width, height: height);
 
     return SafeArea(
         child: Scaffold(
@@ -362,7 +372,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
               child: Container(
                 color: Colors.white,
                 height: height,
-                child: SingleChildScrollView (
+                child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -376,8 +386,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
                             AutoSizeText(
                               "NEED ADMIN HELP?",
                               style: TextStyle(
-                                  fontSize: UIUtills().getProportionalHeight(
-                                      height: 24, choice: 3),
+                                  fontSize: getHeight(24, 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
                             ),
@@ -385,13 +394,12 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
                             AutoSizeText(
                               "Please write your message in the box below",
                               style: TextStyle(
-                                fontSize: UIUtills().getProportionalHeight(
-                                    height: 15, choice: 3),
+                                fontSize: getHeight(15, 3),
                                 color: const Color(0xff3AAFFA),
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            SizedBox(height: 20.0),
+                            SizedBox(height: getHeight(20, 3)),
                             TextField(
                               autocorrect: true,
                               maxLines: 8,
@@ -425,15 +433,18 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
                                     AsyncSnapshot<double> snapshot) {
                                   print(
                                       'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
-                                          'Height: ${_bloc.keyboardUtils.keyboardHeight}');
-                                  return _bloc.keyboardUtils.isKeyboardOpen == true
+                                      'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                                  return _bloc.keyboardUtils.isKeyboardOpen ==
+                                          true
                                       ? Container(
-                                    height: _bloc.keyboardUtils.keyboardHeight + 10,
-                                  )
+                                          height: _bloc.keyboardUtils
+                                                  .keyboardHeight +
+                                              10,
+                                        )
                                       : Container(
-                                    height: 0,
-                                    width: 0,
-                                  );
+                                          height: 0,
+                                          width: 0,
+                                        );
                                 }),
                           ],
                         ),

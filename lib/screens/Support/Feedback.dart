@@ -25,7 +25,7 @@ class FeedbackState extends State<FeedbackScreen>
     with TickerProviderStateMixin {
   final TextEditingController messageController = TextEditingController();
   final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
-
+  UIUtills uiUtills = new UIUtills();
   AnimationController _animationController;
 
   double _containerPaddingLeft = 20.0;
@@ -36,16 +36,15 @@ class FeedbackState extends State<FeedbackScreen>
   double _scale = 1;
   KeyboardBloc _bloc = new KeyboardBloc();
 
-
   bool show;
   bool sent = false;
   Color _color = Colors.lightBlue;
-  bool finished=false;
+  bool finished = false;
 
   initState() {
     super.initState();
     _bloc.start();
-
+    uiUtills = new UIUtills();
     _animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1300));
     show = true;
@@ -70,11 +69,21 @@ class FeedbackState extends State<FeedbackScreen>
     });
     //_positions();
   }
+
   @override
   void dispose() {
     _bloc.dispose();
     super.dispose();
   }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+
   Future<bool> _sendMessage(String body) async {
     FocusScope.of(context).unfocus();
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -88,7 +97,7 @@ class FeedbackState extends State<FeedbackScreen>
           textColor: Colors.white,
           fontSize: 16.0);
     }
-    if(finished==false) {
+    if (finished == false) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final String url = Api.getSupport;
       final response = await http.post(url, body: {
@@ -112,11 +121,11 @@ class FeedbackState extends State<FeedbackScreen>
 
       if (response.statusCode == 200) {
         ResponseBody responseBody =
-        ResponseBody.fromJson(json.decode(response.body));
+            ResponseBody.fromJson(json.decode(response.body));
         if (responseBody.status_code == 200) {
           print("worked!");
           setState(() {
-            finished=true;
+            finished = true;
           });
           _animationController.forward();
           messageController.text = "";
@@ -243,8 +252,7 @@ class FeedbackState extends State<FeedbackScreen>
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
-                fontSize:
-                    UIUtills().getProportionalHeight(height: 16, choice: 3));
+                fontSize: getHeight(16, 3));
           }
         },
         child: AnimatedContainer(
@@ -302,7 +310,8 @@ class FeedbackState extends State<FeedbackScreen>
                 AnimatedSize(
                   vsync: this,
                   duration: Duration(milliseconds: 200),
-                  child: sent? Icon(Icons.done, color: Colors.white)
+                  child: sent
+                      ? Icon(Icons.done, color: Colors.white)
                       : Container(),
                 ),
                 AnimatedSize(
@@ -326,6 +335,7 @@ class FeedbackState extends State<FeedbackScreen>
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
         child: Scaffold(
             backgroundColor: Color(0xDDFFFFFF),
@@ -358,7 +368,7 @@ class FeedbackState extends State<FeedbackScreen>
                 height: height,
                 color: Colors.white,
                 child: SingleChildScrollView(
-                  child:  Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -371,8 +381,7 @@ class FeedbackState extends State<FeedbackScreen>
                             AutoSizeText(
                               "HOW CAN WE IMPROVE?",
                               style: TextStyle(
-                                  fontSize: UIUtills().getProportionalHeight(
-                                      height: 24, choice: 3),
+                                  fontSize: getHeight(24, 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
                             ),
@@ -380,8 +389,7 @@ class FeedbackState extends State<FeedbackScreen>
                             AutoSizeText(
                               "Please write your feedback in the box below",
                               style: TextStyle(
-                                fontSize: UIUtills().getProportionalHeight(
-                                    height: 15, choice: 3),
+                                fontSize: getHeight(15, 3),
                                 color: const Color(0xff3AAFFA),
                               ),
                               textAlign: TextAlign.center,
@@ -420,15 +428,18 @@ class FeedbackState extends State<FeedbackScreen>
                                     AsyncSnapshot<double> snapshot) {
                                   print(
                                       'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
-                                          'Height: ${_bloc.keyboardUtils.keyboardHeight}');
-                                  return _bloc.keyboardUtils.isKeyboardOpen == true
+                                      'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                                  return _bloc.keyboardUtils.isKeyboardOpen ==
+                                          true
                                       ? Container(
-                                    height: _bloc.keyboardUtils.keyboardHeight + 10,
-                                  )
+                                          height: _bloc.keyboardUtils
+                                                  .keyboardHeight +
+                                              10,
+                                        )
                                       : Container(
-                                    height: 0,
-                                    width: 0,
-                                  );
+                                          height: 0,
+                                          width: 0,
+                                        );
                                 }),
                           ],
                         ),
