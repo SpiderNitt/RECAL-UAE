@@ -273,42 +273,39 @@ class LinkedinState extends State<LinkedIn> {
                       margin: const EdgeInsets.all(8),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Row(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Column(
+                            //SizedBox(height: height / 32),
+                            Row(
                               children: <Widget>[
-                                //SizedBox(height: height / 32),
-                                Row(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: width - width / 5,
-                                    ),
-                                    Icon(
-                                      Icons.swap_horiz,
-                                      color: ColorGlobal.blueColor,
-                                    ),
-                                  ],
+                                SizedBox(
+                                  width: width - width / 5,
                                 ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    await _launchLinked(
-                                        positions[index].linkedin);
-                                    cardKey[index].currentState.toggleCard();
-                                  },
-                                  child: AutoSizeText(
-                                    positions[index].linkedin,
-                                    //"Link",
-                                    style: TextStyle(
-                                      fontSize: getHeight(12, 3),
-                                      color: ColorGlobal.textColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
+//                                    Icon(
+//                                      Icons.swap_horiz,
+//                                      color: ColorGlobal.blueColor,
+//                                    ),
                               ],
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                await _launchLinked(
+                                    positions[index].linkedin);
+                                cardKey[index].currentState.toggleCard();
+                              },
+                              child: AutoSizeText(
+                                positions[index].linkedin,
+                                //"Link",
+                                style: TextStyle(
+                                  fontSize: getHeight(12, 3),
+                                  color: ColorGlobal.textColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                                maxLines: 2,
+                                textAlign: TextAlign.start,
+                              ),
                             ),
                           ],
                         ),
@@ -533,42 +530,39 @@ class Search extends SearchDelegate {
                   margin: const EdgeInsets.all(8),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Row(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Column(
+                        //SizedBox(height: height / 32),
+                        Row(
                           children: <Widget>[
-                            //SizedBox(height: height / 32),
-                            Row(
-                              children: <Widget>[
-                                SizedBox(
-                                  width: width - width / 5,
-                                ),
-                                Icon(
-                                  Icons.swap_horiz,
-                                  color: ColorGlobal.blueColor,
-                                ),
-                              ],
+                            SizedBox(
+                              width: width - width / 5,
                             ),
-                            GestureDetector(
-                              onTap: () async {
-                                await _launchLinked(
-                                    modelSuggestionList[index].linkedin);
-                                cardKey[index].currentState.toggleCard();
-                              },
-                              child: AutoSizeText(
-                                modelSuggestionList[index].linkedin,
-                                //"Link",
-                                style: TextStyle(
-                                  fontSize: getHeight(12, 3),
-                                  color: ColorGlobal.textColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                                maxLines: 2,
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
+//                            Icon(
+//                              Icons.swap_horiz,
+//                              color: ColorGlobal.blueColor,
+//                            ),
                           ],
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            await _launchLinked(
+                                modelSuggestionList[index].linkedin);
+                            cardKey[index].currentState.toggleCard();
+                          },
+                          child: AutoSizeText(
+                            modelSuggestionList[index].linkedin,
+                            //"Link",
+                            style: TextStyle(
+                              fontSize: getHeight(12, 3),
+                              color: ColorGlobal.textColor,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                            ),
+                            maxLines: 2,
+                            textAlign: TextAlign.start,
+                          ),
                         ),
                       ],
                     ),

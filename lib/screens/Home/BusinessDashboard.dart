@@ -401,9 +401,10 @@ class _DashBoardState extends State<DashBoard> {
                           child: Padding(
                         padding: EdgeInsets.all(getWidth(16, 2)),
                         child: Image(
-                          image: AssetImage('assets/images/events.png'),
+                          image: AssetImage('assets/images/calendar.png'),
                           height: getWidth(30, 2),
                           width: getWidth(30, 2),
+                          color: Colors.white,
                         ),
                       )))
                 ]),

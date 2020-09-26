@@ -384,6 +384,8 @@ class FeedbackState extends State<FeedbackScreen>
                                   fontSize: getHeight(24, 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
+                              maxLines: 1,
+
                             ),
                             SizedBox(height: height / 64),
                             AutoSizeText(
