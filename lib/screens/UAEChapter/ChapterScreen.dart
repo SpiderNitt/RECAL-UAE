@@ -33,6 +33,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorGlobal.whiteColor,

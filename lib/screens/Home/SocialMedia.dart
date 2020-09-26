@@ -228,7 +228,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                 }),
         title: Text(
           'Social Media',
-          style: GoogleFonts.lato(color: ColorGlobal.textColor),
+          style: TextStyle(color: ColorGlobal.textColor),
         ),
       ),
       body: (internet == 0)

@@ -178,8 +178,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                               horizontal: width/25, vertical: width/50),
                           child: Material(
                             color: Colors.white,
-                            elevation: 14.0,
-                            shadowColor: Color(0x802196F3),
+                            elevation: 5,
                             borderRadius: BorderRadius.circular(3*width/50),
                             child: Padding(
                               padding: EdgeInsets.all(3*width/50),

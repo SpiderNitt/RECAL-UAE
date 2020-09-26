@@ -25,10 +25,14 @@ class SupportScreen extends StatefulWidget {
 class SupportScreenState extends State<SupportScreen> {
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width/3;
+    final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     print(width);
     print(height);
+    UIUtills().updateScreenDimesion(width: width, height: height);
+    print(UIUtills()
+        .getProportionalWidth(
+        width: 16, choice: 3));
     return (
         WillPopScope(
         child: SafeArea(

@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
@@ -90,18 +92,19 @@ class _EventsScreenState extends State<EventsScreen> {
                               .getProportionalHeight(
                               height: 2),
                         ),
-                        Icon(Icons.timer,size: UIUtills()
+                        Icon(Icons.event,size: UIUtills()
                             .getProportionalWidth(
                             width: 24),),
                         Padding(
                           padding: EdgeInsets.all(UIUtills()
                               .getProportionalHeight(
                               height: 8)),
-                          child: Text(
-                            "Upcoming",
-                            style: TextStyle(fontSize: UIUtills()
+                          child: AutoSizeText(
+                            "UPCOMING",
+                            style: GoogleFonts.josefinSans(fontSize: UIUtills()
                                 .getProportionalWidth(
-                                width: 14),),
+                                width: 15), fontWeight: FontWeight.w700),
+                            maxLines: 1,
                           ),
                         ),
                       ],
@@ -115,17 +118,19 @@ class _EventsScreenState extends State<EventsScreen> {
                               .getProportionalHeight(
                               height: 2),
                         ),
-                        Icon(Icons.check_circle,size: UIUtills()
+                        Icon(Icons.event_available,size: UIUtills()
                             .getProportionalWidth(
                             width: 24),),
                         Padding(
                           padding: EdgeInsets.all(UIUtills()
                               .getProportionalHeight(
-                              height: 8)),                          child: Text(
-                            "Completed",
-                            style: TextStyle(fontSize: UIUtills()
+                              height: 8)),
+                          child: AutoSizeText(
+                            "COMPLETED",
+                            style: GoogleFonts.josefinSans(fontSize: UIUtills()
                                 .getProportionalWidth(
-                                width: 14),),
+                                width: 15), fontWeight: FontWeight.w700),
+                            maxLines: 1,
                           ),
                         ),
                       ],

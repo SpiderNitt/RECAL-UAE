@@ -147,6 +147,7 @@ class _MentorGroupsState extends State<MentorGroups> {
     }
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width,height: height);
     final List<Color> colorArray = [Colors.blue, Colors.purple, Colors.blueGrey, Colors.deepOrange, Colors.redAccent];
     return CustomScrollView(
       slivers: <Widget>[
