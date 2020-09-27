@@ -265,9 +265,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           "assets/images/ring.gif", height: 50, width: 50,),
         progressWidgetAlignment: Alignment.center,
         messageTextStyle: TextStyle(
-            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+            color: Colors.black, fontSize: getWidth(18, 1),
+            fontWeight: FontWeight.w600),
         progressTextStyle: TextStyle(
-            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+            color: Colors.black,             fontSize: getWidth(18, 1)
+            , fontWeight: FontWeight.w600),
       );
       progressDialog.show();
       Future.delayed(Duration(milliseconds: 1000)).then((value) {

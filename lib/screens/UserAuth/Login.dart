@@ -138,7 +138,7 @@ class LoginState extends State<Login> {
         progressWidgetAlignment: Alignment.center,
         messageTextStyle: TextStyle(
             color: Colors.black,
-            fontSize: getHeight(18, 1),
+            fontSize: getWidth(18, 1),
             fontWeight: FontWeight.w600),
       );
       progressDialog.show();
@@ -290,23 +290,25 @@ class LoginState extends State<Login> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Platform.isAndroid ?
               GestureDetector(
                 child: Text(
                   "recaluaechapter@gmail.com",
                   style: GoogleFonts.lato(
                     color: ColorGlobal.blueColor,
                     decoration: TextDecoration.underline,
-                    fontSize: getHeight(18, 1),
+                    fontSize: getWidth(18, 1),
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 onTap: () async {
                   if(Platform.isAndroid)
                     await _sendMail();
+                  else {
+                    Fluttertoast.showToast(msg: "Copied Email Address",textColor: Colors.white,backgroundColor: Colors.green);
+                    Clipboard.setData(new ClipboardData(text:"recaluaechapter@gmail.com"));
+                  }
                 },
-              ) :
-              CustomToolTip(text: 'recaluaechapter@gmail.com'),
+              ),
             ],
           ),
           actions: [

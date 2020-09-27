@@ -13,7 +13,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:iosrecal/Constant/utils.dart';
 
 class WriteMentorScreen extends StatefulWidget {
