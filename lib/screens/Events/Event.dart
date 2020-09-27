@@ -623,14 +623,21 @@ picturesListUrl.length>0?  Row(
                         child: (!filesLoading[1] && reminderUrl!=null) ?
                         Column(
                           children: <Widget>[
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.width/2,
-                              child: FadeInImage.memoryNetwork(
-                                placeholder: kTransparentImage,
-                                image: reminderUrl,
-                                fit: BoxFit.cover,
+                            InkWell(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.width/2,
+                                child: FadeInImage.memoryNetwork(
+                                  placeholder: kTransparentImage,
+                                  image: reminderUrl,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
+                                onTap: ()=>{
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => EventPictureDisplay(reminderUrl)))
+                                }
                             ),
                             SizedBox(height: UIUtills()
                                 .getProportionalHeight(
