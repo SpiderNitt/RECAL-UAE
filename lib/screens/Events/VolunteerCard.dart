@@ -36,7 +36,6 @@ class _VolunteerCardState extends State<VolunteerCard> {
     super.initState();
     checkAttended();
   }
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery

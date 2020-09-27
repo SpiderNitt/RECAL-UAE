@@ -106,6 +106,9 @@ class SplashScreenState extends State<ImageSplashScreen> with WidgetsBindingObse
     add = add %2 == 0 ? (add%4==0 ? 15 : 13) : (add%3==0 ? 17: (add%5==0 ? 11 : 21));
     String value = ((int.parse(dots)+add)%101).toString();
     if(int.parse(dots)!=100) {
+      if(!mounted){
+        return;
+      }
       setState(() {
         dots = value;
       });

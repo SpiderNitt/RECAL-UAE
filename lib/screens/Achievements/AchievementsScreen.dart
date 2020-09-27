@@ -188,7 +188,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                               child: Text(
                                 achievements[i].name,
                                 style: TextStyle(
-                                  fontSize: getHeight(18, 1),
+                                  fontSize: getHeight(20, 1),
                                   color: ColorGlobal.textColor.withOpacity(
                                       0.9),
                                   fontWeight: FontWeight.w600,
@@ -211,7 +211,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                       achievements[i].category,
                                       style: TextStyle(
                                           color: ColorGlobal.whiteColor,
-                                          fontSize: getHeight(15, 1),
+                                          fontSize: getHeight(18, 1),
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -228,9 +228,9 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                   achievements[i].description,
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                              fontSize: getHeight(14, 1),
+                              fontSize: getHeight(17, 1),
                               letterSpacing: 1,
-                              color: ColorGlobal.textColor.withOpacity(0.6),
+                              color: ColorGlobal.textColor.withOpacity(0.8),
                               fontWeight: FontWeight.w600,
                             ),
                           ),

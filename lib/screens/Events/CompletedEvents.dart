@@ -37,9 +37,7 @@ class _CompletedEventsState extends State<CompletedEvents> with TickerProviderSt
   }
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery
-        .of(context)
-        .size;
+    final screenSize = MediaQuery.of(context).size;
     UIUtills().updateScreenDimesion(
         width: screenSize.width, height: screenSize.height);
     final double width = MediaQuery.of(context).size.width;
@@ -49,11 +47,10 @@ class _CompletedEventsState extends State<CompletedEvents> with TickerProviderSt
           key: animatedListKey,
           initialItemCount: eventList.length,
           itemBuilder: (BuildContext context, int index,animation){
-            return SizeTransition(child: VolunteerCard(eventList[index],true,widget.status),
+            return SizeTransition(child:VolunteerCard(eventList[index],true,widget.status),
               sizeFactor: animation,);
           }
       ),
-
     );
   }
 }
