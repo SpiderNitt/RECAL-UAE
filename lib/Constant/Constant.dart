@@ -22,7 +22,7 @@ String
     SEEK_GUIDANCE = '/HomeScreen/Employment/SeekGuidance',
     SOCIAL_MEDIA = '/HomeScreen/SocialMedia',
     WRITE_MENTOR = '/SupportScreen/WriteToMentor',
-    FEEDBACK_SUPPORT = '/HomeScreen/SupportScreen/Feedback',
+    FEEDBACK_SUPPORT = '/SupportScreen/Feedback',
     MEMBER_DATABASE = '/HomeScreen/SocialBusiness/Members',
     TECHNICAL_SUPPORT = '/HomeScreen/SupportScreen/TechnicalSupport',
     VOLUNTEER_SUPPORT = '/HomeScreen/SupportScreen/VolunteerSupport',

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/bloc/KeyboardBloc.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,7 +24,7 @@ class OtherScreen extends StatefulWidget {
 
 class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
   final TextEditingController messageController = TextEditingController();
-
+  UIUtills uiUtills = new UIUtills();
   final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
   AnimationController _animationController;
@@ -34,13 +35,17 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
   double _translateY = 0;
   double _rotate = 0;
   double _scale = 1;
+  KeyboardBloc _bloc = new KeyboardBloc();
 
   bool show;
   bool sent = false;
   Color _color = Colors.lightBlue;
+  bool finished = false;
 
   initState() {
     super.initState();
+    _bloc.start();
+    uiUtills = new UIUtills();
     _animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1300));
     show = true;
@@ -64,6 +69,20 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
       });
     });
     //_positions();
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   Widget animatedButton() {
@@ -138,8 +157,8 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                 AnimatedSize(
                   vsync: this,
                   duration: Duration(milliseconds: 200),
-                  child: sent ?
-                           Icon(Icons.done, color: Colors.white)
+                  child: sent
+                      ? Icon(Icons.done, color: Colors.white)
                       : Container(),
                 ),
                 AnimatedSize(
@@ -172,38 +191,55 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
           textColor: Colors.white,
           fontSize: 16.0);
     }
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String url = Api.getSupport;
-    final response = await http.post(url, body: {
-      "user_id": "${prefs.getString("user_id")}",
-      "body": body,
-      "type": "others",
-    }, headers: {
-      "Accept": "application/json",
-      "Cookie": "${prefs.getString("cookie")}",
-    }).catchError((error) {
-      Fluttertoast.showToast(
-          msg: "An error occured. Please try again later.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      return false;
-    });
+    if (finished == false) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String url = Api.getSupport;
+      final response = await http.post(url, body: {
+        "user_id": "${prefs.getString("user_id")}",
+        "body": body,
+        "type": "others",
+      }, headers: {
+        "Accept": "application/json",
+        "Cookie": "${prefs.getString("cookie")}",
+      }).catchError((error) {
+        Fluttertoast.showToast(
+            msg: "An error occured. Please try again later.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return false;
+      });
 
-    if (response.statusCode == 200) {
-      ResponseBody responseBody =
-          ResponseBody.fromJson(json.decode(response.body));
-      if (responseBody.status_code == 200) {
-        _animationController.forward();
-        messageController.text = "";
-        Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
-        print("worked!");
-        return true;
-      } else if (responseBody.status_code == 401) {
-        onTimeOut();
+      if (response.statusCode == 200) {
+        ResponseBody responseBody =
+            ResponseBody.fromJson(json.decode(response.body));
+        if (responseBody.status_code == 200) {
+          print("worked!");
+          setState(() {
+            finished = true;
+          });
+          _animationController.forward();
+          messageController.text = "";
+          Future.delayed(
+              const Duration(seconds: 2), () => Navigator.pop(context));
+          return true;
+        } else if (responseBody.status_code == 401) {
+          onTimeOut();
+        } else {
+          Fluttertoast.showToast(
+              msg: "An error occured. Please try again later.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.orange,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          print(responseBody.data);
+          return false;
+        }
       } else {
         Fluttertoast.showToast(
             msg: "An error occured. Please try again later.",
@@ -213,20 +249,9 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
             backgroundColor: Colors.orange,
             textColor: Colors.white,
             fontSize: 16.0);
-        print(responseBody.data);
+        print('Server error');
         return false;
       }
-    } else {
-      Fluttertoast.showToast(
-          msg: "An error occured. Please try again later.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.orange,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      print('Server error');
-      return false;
     }
   }
 
@@ -310,6 +335,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
         child: Scaffold(
             backgroundColor: Color(0xDDFFFFFF),
@@ -337,11 +363,11 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                 style: TextStyle(color: ColorGlobal.textColor),
               ),
             ),
-            body: SingleChildScrollView(
-              child: Center(
-                child: Container(
-                  color: Colors.white,
-                  height: height,
+            body: Center(
+              child: Container(
+                color: Colors.white,
+                height: height,
+                child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -353,19 +379,19 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             Text(
-                              "HAVE A QUERY!!",
+                              "HOW CAN WE HELP?",
                               style: TextStyle(
-                                  fontSize: UIUtills().getProportionalHeight(
-                                      height: 25, choice: 3),
+                                  fontSize: getHeight(24, 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
+                              maxLines: 1,
+
                             ),
                             SizedBox(height: height / 64),
                             Text(
-                              "Please write your message in the box below",
+                              "Please enter your query in the box below",
                               style: TextStyle(
-                                fontSize: UIUtills().getProportionalHeight(
-                                    height: 15, choice: 3),
+                                fontSize: getHeight(15, 3),
                                 color: const Color(0xff3AAFFA),
                               ),
                               textAlign: TextAlign.center,
@@ -398,9 +424,25 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                               height: height / 64,
                             ),
                             animatedButton(),
-                            SizedBox(
-                              height: height / 64,
-                            ),
+                            StreamBuilder<double>(
+                                stream: _bloc.stream,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<double> snapshot) {
+                                  print(
+                                      'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
+                                      'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                                  return _bloc.keyboardUtils.isKeyboardOpen ==
+                                          true
+                                      ? Container(
+                                          height: _bloc.keyboardUtils
+                                                  .keyboardHeight +
+                                              10,
+                                        )
+                                      : Container(
+                                          height: 0,
+                                          width: 0,
+                                        );
+                                }),
                           ],
                         ),
                       ),

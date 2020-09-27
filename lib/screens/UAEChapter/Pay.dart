@@ -136,7 +136,7 @@ class _PayPageState extends State<PayPage> {
   Widget getPayDetails(){
     if(state==1){
       return Text(
-        payDetails,
+        payDetails==null? 'No Data Available' : payDetails,
         style: TextStyle(
           fontSize: 20.0,
           color: Colors.white,
@@ -155,6 +155,9 @@ class _PayPageState extends State<PayPage> {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

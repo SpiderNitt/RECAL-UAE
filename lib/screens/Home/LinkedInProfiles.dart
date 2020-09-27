@@ -40,7 +40,7 @@ _launchLinked(url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    return;
+    print("error linkedin web");
   }
 }
 
@@ -54,12 +54,21 @@ class LinkedinState extends State<LinkedIn> {
   var state = 0;
   int internet = 1;
   int error = 0;
-
+  UIUtills uiUtills = new UIUtills();
   List<String> fullList;
   List<GlobalKey<FlipCardState>> cardKey;
   initState() {
     super.initState();
     _positions();
+    uiUtills = new UIUtills();
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   Future<String> _positions() async {
@@ -89,7 +98,7 @@ class LinkedinState extends State<LinkedIn> {
           positions =
               list.map((model) => LinkedinModel.fromJson(model)).toList();
           positions.removeWhere((element) =>
-          element.linkedin == null || element.linkedin.trim() == "");
+              element.linkedin == null || element.linkedin.trim() == "");
           fullList = positions.map((e) => e.user).toList();
           cardKey = List<GlobalKey<FlipCardState>>.generate(
               positions.length, (index) => new GlobalObjectKey(index));
@@ -200,7 +209,7 @@ class LinkedinState extends State<LinkedIn> {
                               CircleAvatar(
                                 radius: width / 14,
                                 backgroundColor:
-                                colorArray.elementAt(Random().nextInt(4)),
+                                    colorArray.elementAt(Random().nextInt(4)),
                                 child: Text(
                                   positions[index].user.toUpperCase()[0],
                                   style: TextStyle(
@@ -228,9 +237,7 @@ class LinkedinState extends State<LinkedIn> {
                                     child: AutoSizeText(
                                       positions[index].user.toUpperCase(),
                                       style: TextStyle(
-                                        fontSize: UIUtills()
-                                            .getProportionalHeight(
-                                            height: 16, choice: 3),
+                                        fontSize: getHeight(16, 3),
                                         color: ColorGlobal.textColor,
                                         fontWeight: FontWeight.bold,
                                         fontStyle: FontStyle.italic,
@@ -266,44 +273,39 @@ class LinkedinState extends State<LinkedIn> {
                       margin: const EdgeInsets.all(8),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Row(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Column(
+                            //SizedBox(height: height / 32),
+                            Row(
                               children: <Widget>[
-                                //SizedBox(height: height / 32),
-                                Row(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: width - width / 5,
-                                    ),
-                                    Icon(
-                                      Icons.swap_horiz,
-                                      color: ColorGlobal.blueColor,
-                                    ),
-                                  ],
+                                SizedBox(
+                                  width: width - width / 5,
                                 ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    await _launchLinked(
-                                        positions[index].linkedin);
-                                    cardKey[index].currentState.toggleCard();
-                                  },
-                                  child: AutoSizeText(
-                                    positions[index].linkedin,
-                                    //"Link",
-                                    style: TextStyle(
-                                      fontSize: UIUtills()
-                                          .getProportionalHeight(
-                                          height: 12, choice: 3),
-                                      color: ColorGlobal.textColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
+//                                    Icon(
+//                                      Icons.swap_horiz,
+//                                      color: ColorGlobal.blueColor,
+//                                    ),
                               ],
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                await _launchLinked(
+                                    positions[index].linkedin);
+                                cardKey[index].currentState.toggleCard();
+                              },
+                              child: AutoSizeText(
+                                positions[index].linkedin,
+                                //"Link",
+                                style: TextStyle(
+                                  fontSize: getHeight(12, 3),
+                                  color: ColorGlobal.textColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                                maxLines: 2,
+                                textAlign: TextAlign.start,
+                              ),
                             ),
                           ],
                         ),
@@ -319,6 +321,7 @@ class LinkedinState extends State<LinkedIn> {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -345,11 +348,11 @@ class LinkedinState extends State<LinkedIn> {
               onPressed: () =>
                   showSearch(context: context, delegate: Search(positions))
                       .then((value) {
-                    setState(() {
-                      state = 0;
-                      _positions();
-                    });
-                  }),
+                setState(() {
+                  state = 0;
+                  _positions();
+                });
+              }),
               icon: Icon(
                 Icons.search,
                 color: ColorGlobal.textColor,
@@ -369,6 +372,7 @@ class LinkedinState extends State<LinkedIn> {
 
 class Search extends SearchDelegate {
   List<GlobalKey<FlipCardState>> cardKey;
+  UIUtills uiUtills = new UIUtills();
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
@@ -377,6 +381,14 @@ class Search extends SearchDelegate {
 //        onPressed: () => query="",
 //      )
     ];
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   @override
@@ -415,9 +427,9 @@ class Search extends SearchDelegate {
       modelSuggestionList = listExample.map((e) => e).toList();
     } else {
       suggestionList.addAll(listExample.map((e) => e.user).toList().where(
-              (element) => element.toLowerCase().contains(query.toLowerCase())));
+          (element) => element.toLowerCase().contains(query.toLowerCase())));
       modelSuggestionList.addAll(listExample.map((e) => e).toList().where(
-              (element) =>
+          (element) =>
               element.user.toLowerCase().contains(query.toLowerCase())));
     }
     cardKey = List<GlobalKey<FlipCardState>>.generate(
@@ -439,132 +451,124 @@ class Search extends SearchDelegate {
               Colors.redAccent
             ];
             return FlipCard(
-                key: cardKey[index],
-                front: Container(
-                    height: height / 8,
-                    alignment: Alignment.topRight,
-                    child: Card(
-                      //color: ColorGlobal.blueColor,
-                      elevation: 5,
-                      shadowColor: const Color(0x802196F3),
-                      margin: const EdgeInsets.all(8),
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: width / 18,
+              key: cardKey[index],
+              front: Container(
+                  height: height / 8,
+                  alignment: Alignment.topRight,
+                  child: Card(
+                    //color: ColorGlobal.blueColor,
+                    elevation: 5,
+                    shadowColor: const Color(0x802196F3),
+                    margin: const EdgeInsets.all(8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width: width / 18,
+                          ),
+                          CircleAvatar(
+                            radius: width / 14,
+                            backgroundColor:
+                                colorArray.elementAt(Random().nextInt(4)),
+                            child: Text(
+                              modelSuggestionList[index].user.toUpperCase()[0],
+                              style: TextStyle(
+                                  fontSize: width / 14,
+                                  color: ColorGlobal.whiteColor),
                             ),
-                            CircleAvatar(
-                              radius: width / 14,
-                              backgroundColor:
-                              colorArray.elementAt(Random().nextInt(4)),
-                              child: Text(
-                                modelSuggestionList[index]
-                                    .user
-                                    .toUpperCase()[0],
+                          ),
+                          SizedBox(
+                            width: width / 16,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              // Container(
+                              //   width: width - width / 2.75,
+                              //   child: Align(
+                              //     alignment: Alignment.topRight,
+                              //     child: Icon(
+                              //       Icons.swap_horiz,
+                              //       color: ColorGlobal.blueColor,
+                              //     ),
+                              //   ),
+                              // ),
+                              AutoSizeText(
+                                modelSuggestionList[index].user.toUpperCase(),
                                 style: TextStyle(
-                                    fontSize: width / 14,
-                                    color: ColorGlobal.whiteColor),
+                                  fontSize: getHeight(16, 3),
+                                  color: ColorGlobal.textColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: width / 16,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                // Container(
-                                //   width: width - width / 2.75,
-                                //   child: Align(
-                                //     alignment: Alignment.topRight,
-                                //     child: Icon(
-                                //       Icons.swap_horiz,
-                                //       color: ColorGlobal.blueColor,
-                                //     ),
-                                //   ),
-                                // ),
-                                AutoSizeText(
-                                  modelSuggestionList[index].user.toUpperCase(),
-                                  style: TextStyle(
-                                    fontSize: UIUtills().getProportionalHeight(
-                                        height: 16, choice: 3),
-                                    color: ColorGlobal.textColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            // SizedBox(
-                            //     width: width -
-                            //         width / 1.5 -
-                            //         positions[index].user.length),
+                            ],
+                          ),
+                          // SizedBox(
+                          //     width: width -
+                          //         width / 1.5 -
+                          //         positions[index].user.length),
 
-                            // Align(
-                            //   alignment: Alignment.topRight,
-                            //   child: Icon(
-                            //     Icons.swap_horiz,
-                            //     color: ColorGlobal.blueColor,
-                            //   ),
-                            // ),
-                          ],
-                        ),
-                      ),
-                    )),
-                back: Container(
-                    height: height / 8,
-                    child: Card(
-                      //color: ColorGlobal.blueColor,
-                      elevation: 5,
-//                              shadowColor: const Color(0x802196F3),
-                      margin: const EdgeInsets.all(8),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                //SizedBox(height: height / 32),
-                                Row(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: width - width / 5,
-                                    ),
-                                    Icon(
-                                      Icons.swap_horiz,
-                                      color: ColorGlobal.blueColor,
-                                    ),
-                                  ],
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    await _launchLinked(
-                                        modelSuggestionList[index].linkedin);
-                                    cardKey[index].currentState.toggleCard();
-                                  },
-                                  child: AutoSizeText(
-                                    modelSuggestionList[index].linkedin,
-                                    //"Link",
-                                    style: TextStyle(
-                                      fontSize: UIUtills()
-                                          .getProportionalHeight(
-                                          height: 12, choice: 3),
-                                      color: ColorGlobal.textColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                          // Align(
+                          //   alignment: Alignment.topRight,
+                          //   child: Icon(
+                          //     Icons.swap_horiz,
+                          //     color: ColorGlobal.blueColor,
+                          //   ),
+                          // ),
+                        ],
                       ),
                     ),
+                  )),
+              back: Container(
+                height: height / 8,
+                child: Card(
+                  //color: ColorGlobal.blueColor,
+                  elevation: 5,
+//                              shadowColor: const Color(0x802196F3),
+                  margin: const EdgeInsets.all(8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        //SizedBox(height: height / 32),
+                        Row(
+                          children: <Widget>[
+                            SizedBox(
+                              width: width - width / 5,
+                            ),
+//                            Icon(
+//                              Icons.swap_horiz,
+//                              color: ColorGlobal.blueColor,
+//                            ),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            await _launchLinked(
+                                modelSuggestionList[index].linkedin);
+                            cardKey[index].currentState.toggleCard();
+                          },
+                          child: AutoSizeText(
+                            modelSuggestionList[index].linkedin,
+                            //"Link",
+                            style: TextStyle(
+                              fontSize: getHeight(12, 3),
+                              color: ColorGlobal.textColor,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                            ),
+                            maxLines: 2,
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
+              ),
             );
           },
         ),

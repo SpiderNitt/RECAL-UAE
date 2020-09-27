@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/PositionModel.dart';
@@ -130,7 +132,8 @@ class _OpenPositionsState extends State<OpenPositions> {
   Widget build(BuildContext context) {
     String uri;
     final double width = MediaQuery.of(context).size.width;
-
+    final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -180,8 +183,7 @@ class _OpenPositionsState extends State<OpenPositions> {
                               horizontal: width/25, vertical: width/50),
                           child: Material(
                             color: Colors.white,
-                            elevation: 14.0,
-                            shadowColor: Color(0x802196F3),
+                            elevation: 5,
                             borderRadius: BorderRadius.circular(3*width/50),
                             child: Padding(
                               padding: EdgeInsets.all(3*width/50),
@@ -338,13 +340,7 @@ class _OpenPositionsState extends State<OpenPositions> {
                                                   fontSize: getHeight(13, 2)),
                                               maxLines: 1,
                                             ),
-                                            AutoSizeText(openPositions[index].contact,
-                                              style: TextStyle(
-                                                  color: ColorGlobal.textColor,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: getHeight(20, 2)),
-                                              maxLines: 2,
-                                            )
+                                            CustomToolTip(text: openPositions[index].contact,),
                                           ],
                                         ),
                                       ),
@@ -364,6 +360,46 @@ class _OpenPositionsState extends State<OpenPositions> {
           ),
         ),
       ),
+    );
+  }
+}
+class CustomToolTip extends StatelessWidget {
+
+  String text;
+  UIUtills uiUtills = new UIUtills();
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+  CustomToolTip({this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
+    return new GestureDetector(
+      child: new Tooltip(preferBelow: false,
+          message: "Copy", child:
+          AutoSizeText(text,
+            style: TextStyle(
+                color: ColorGlobal.textColor,
+                fontWeight: FontWeight.w500,
+                fontSize: getHeight(20, 2)),
+            maxLines: 2,
+          ) ),
+      onTap: () {
+        Fluttertoast.showToast(msg: "Copied Contact details",textColor: Colors.white,backgroundColor: Colors.green);
+        Clipboard.setData(new ClipboardData(text: text));
+      },
+      onDoubleTap: () {
+        Fluttertoast.showToast(msg: "Copied Contact details",textColor: Colors.white,backgroundColor: Colors.green);
+        Clipboard.setData(new ClipboardData(text: text));
+      },
     );
   }
 }

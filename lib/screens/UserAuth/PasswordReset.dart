@@ -75,7 +75,7 @@ class _PasswordResetState extends State<PasswordReset> {
         progressWidgetAlignment: Alignment.center,
         messageTextStyle: TextStyle(
             color: Colors.black,
-            fontSize: getHeight(18, 1),
+            fontSize: getWidth(18, 1),
             fontWeight: FontWeight.w600),
       );
       progressDialog.show();

@@ -14,6 +14,8 @@ class LoginData {
   User user;
 
   Future<void> _loginUser(String email, String password) async {
+    email = email.trim();
+    password = password.trim();
     bool internetConnection=false;
     try {
       final result = await InternetAddress.lookup('google.com');

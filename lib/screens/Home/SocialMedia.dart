@@ -80,10 +80,20 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
   String instagram = "";
   String youtube = "";
   String linkedin = "";
+  UIUtills uiUtills = new UIUtills();
 
   initState() {
     super.initState();
     _chapter();
+    uiUtills = new UIUtills();
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   Future<String> _chapter() async {
@@ -194,7 +204,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
-
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -218,7 +228,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                 }),
         title: Text(
           'Social Media',
-          style: GoogleFonts.lato(color: ColorGlobal.textColor),
+          style: TextStyle(color: ColorGlobal.textColor),
         ),
       ),
       body: (internet == 0)
@@ -242,7 +252,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          SizedBox(height: 20.0),
+                          SizedBox(height: getHeight(20, 3)),
                           Container(
                             height: height / 8,
                             alignment: Alignment.center,
@@ -293,7 +303,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20.0),
+                          SizedBox(height: getHeight(20, 3)),
                           Container(
                             height: height / 8,
                             alignment: Alignment.center,
@@ -344,7 +354,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20.0),
+                          SizedBox(height: getHeight(20, 3)),
                           Container(
                             height: height / 8,
                             alignment: Alignment.center,
@@ -395,7 +405,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20.0),
+                          SizedBox(height: getHeight(20, 3)),
                           Container(
                             height: height / 8,
                             alignment: Alignment.center,
@@ -446,7 +456,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20.0),
+                          SizedBox(height: getHeight(20, 3)),
                           Container(
                             height: height / 8,
                             alignment: Alignment.center,
@@ -497,7 +507,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20.0),
+                          SizedBox(height: getHeight(20, 3)),
                         ],
                       ),
                     ),

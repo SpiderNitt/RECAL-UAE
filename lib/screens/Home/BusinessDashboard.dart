@@ -401,9 +401,10 @@ class _DashBoardState extends State<DashBoard> {
                           child: Padding(
                         padding: EdgeInsets.all(getWidth(16, 2)),
                         child: Image(
-                          image: AssetImage('assets/images/events.png'),
+                          image: AssetImage('assets/images/calendar.png'),
                           height: getWidth(30, 2),
                           width: getWidth(30, 2),
+                          color: Colors.white,
                         ),
                       )))
                 ]),
@@ -571,6 +572,9 @@ class _DashBoardState extends State<DashBoard> {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -591,7 +595,6 @@ class _DashBoardState extends State<DashBoard> {
         body: FutureBuilder(
           future: makeRequests(),
           builder: (BuildContext context, AsyncSnapshot snapshot){
-            print("entering switch");
             switch(snapshot.connectionState){
               case ConnectionState.none:
                 print("no connection");
@@ -605,28 +608,21 @@ class _DashBoardState extends State<DashBoard> {
                   ),
                 );
               case ConnectionState.done:
-                print("connection done");
                 if(snapshot.hasError){
-                  print("Got error");
                   return _internet == true ? Center(child: Error8Screen()) : Center(child: NoInternetScreen(notifyParent: refresh));
                 }else{
-                  print("in else");
                   if(_hasError){
-                    print("has error");
                     return Center(child: Error8Screen());
                   }
                   if(data.length == 0){
-                    print("data length is 0");
                     return Center(child: NodataScreen());
                   }
                   if(state<3){
-                    print("state is less than 3");
                     return Center(child: SpinKitDoubleBounce(
                       color: ColorGlobal.blueColor,
                     ),
                     );
                   }
-                  print("reached staggered view");
                   return StaggeredGridView.countBuilder(
                     crossAxisCount: 2,
                     itemCount: 3,

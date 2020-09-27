@@ -22,12 +22,12 @@ class UIUtills {
   final double _refrenceScreenWidth = 360;
 
   void updateScreenDimesion({double width, double height}) {
-    _screenWidth = (width != null) ? width : _screenWidth;
-    _screenHeight = (height != null) ? height : _screenHeight;
+    _screenWidth = width;
+    _screenHeight = height;
   }
 
   double getProportionalHeight({double height, int choice = 0}) {
-    if (_screenHeight == null) return height;
+//    if (_screenHeight == null) return height;
     if (choice == 0)
       return _screenHeight * height / _refrenceScreenHeight;
     else if (choice == 1)
@@ -41,8 +41,9 @@ class UIUtills {
   }
 
   double getProportionalWidth({double width, int choice = 0}) {
-    if (_screenWidth == null) return width;
+//    if (_screenWidth == null) return width;
     var w;
+    print("screen_width $screenWidth" );
     if (choice == 0)
       w = _screenWidth * width / _refrenceScreenWidth;
     else if (choice == 1)

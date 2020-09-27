@@ -15,7 +15,7 @@ class IntroPage extends StatefulWidget {
       picture: "RECAL",
       imageIcon: Icons.people,
       imagecolor: Colors.blue,
-      asset: "assets/images/admin.jpeg",
+      asset: null,
     ),
     Walkthrough(
       title: "Events",

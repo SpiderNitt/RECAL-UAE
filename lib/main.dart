@@ -14,7 +14,6 @@ import 'screens/Home/SocialScreen.dart';
 import 'screens/Home/WriteToMentor.dart';
 import 'screens/Home/AlumniPlaced.dart';
 import 'screens/Home/OpenPositions.dart';
-import 'screens/Home/SeekGuidance.dart';
 
 //import 'screens/Home/WriteAdmin.dart';
 import 'screens/Home/NotificationMenu.dart';
@@ -23,7 +22,6 @@ import 'screens/Support/WriteAdmin.dart';
 import 'Constant/Constant.dart';
 import 'Constant/Constant.dart';
 import 'screens/Home/MarketSurvey.dart';
-import 'screens/Home/SeekGuidance.dart';
 import 'screens/Home/WriteResume.dart';
 import 'screens/Home/LinkedInProfiles.dart';
 import 'screens/Home/MentorGroups.dart';
@@ -75,7 +73,6 @@ void main() {
           ALUMNI_PLACED_SCREEN: (BuildContext context) => new AlumniPlaced(),
           MARKET_SURVEY: (BuildContext context) => new SurveyScreen(),
           WRITE_TO_ADMIN: (BuildContext context) => new WriteAdmin(),
-          SEEK_GUIDANCE: (BuildContext context) => new SeekGuidanceScreen(),
           MEMBER_DATABASE: (BuildContext context) => new MemberDatabase(),
           SUPPORT_SCREEN: (BuildContext context) => new SupportScreen(),
           TECHNICAL_SUPPORT: (BuildContext context) => new TechnicalSupport(),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -117,17 +118,20 @@ class _WriteResumeState extends State<WriteResume> {
   Widget build(BuildContext context) {
     String uri;
     final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorGlobal.whiteColor,
           leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: ColorGlobal.textColor,
+              icon: Icon(
+                Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
+                color: ColorGlobal.textColor,
               ),
               onPressed: () {
                 Navigator.pop(context);
-              }
-          ),
+              }),
           title: Text(
             'Write Resume',
             style: TextStyle(color: ColorGlobal.textColor),

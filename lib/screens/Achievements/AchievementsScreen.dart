@@ -170,7 +170,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                 decoration: new BoxDecoration(
                                   color: ColorGlobal.whiteColor,
                                   image: new DecorationImage(
-                                    image: NetworkImage(Api.imageUrl + achievements[i].file.toString()),
+                                    image: NetworkImage(Api.imageUrl + achievements[i].file.toString(), ),
                                     fit: BoxFit.cover,
                                   ),
                                   border: Border.all(

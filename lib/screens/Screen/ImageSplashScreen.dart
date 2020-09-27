@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -43,7 +42,6 @@ class SplashScreenState extends State<ImageSplashScreen> with WidgetsBindingObse
     String cookie1 = prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
 
     flag = prefs.getInt("first")==null ? 0 : prefs.getInt("first");
-    prefs.setInt("first", 10);
     print("splash: " + email1);
     print("first: $flag");
 
@@ -104,11 +102,9 @@ class SplashScreenState extends State<ImageSplashScreen> with WidgetsBindingObse
   void changeDots(Timer timer) {
     int add = Random().nextInt(7);
     add = add %2 == 0 ? (add%4==0 ? 15 : 13) : (add%3==0 ? 17: (add%5==0 ? 11 : 21));
-    String value = ((int.parse(dots)+add)%101).toString();
-    if(int.parse(dots)!=100) {
-      if(!mounted){
-        return;
-      }
+    String value = ((int.parse(dots)+add) > 100 ? 100 : (int.parse(dots)+add)).toString();
+    if(int.parse(dots)<=100) {
+      if(!mounted) return;
       setState(() {
         dots = value;
       });

@@ -7,7 +7,6 @@ import 'package:page_transition/page_transition.dart';
 import 'ContactUs.dart';
 import 'Pay.dart';
 import 'VisionandMission.dart';
-import 'Sponsors.dart';
 import 'CoreComm.dart';
 import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/Constant/ColorGlobal.dart';
@@ -34,6 +33,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorGlobal.whiteColor,
@@ -347,7 +347,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
 //                              Text('Discounts', style: TextStyle(
 //                                  color: Color(0xcc3399fe),
 //                                  fontSize: 13.0)),
-                                Text('Contact Us',
+                                Text('Contact',
                                     style: TextStyle(
                                         color: ColorGlobal
                                             .textColor,
@@ -359,6 +359,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 10,),
                   ],
                 ),
               ),

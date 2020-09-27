@@ -30,7 +30,7 @@ class _UpcomingEventsState extends State<UpcomingEvents> with TickerProviderStat
 
   Widget EmptyList(){
     return Center(
-      child: Text("No events yet !!",style: GoogleFonts.kalam(fontSize: 22,color: ColorGlobal.textColor)),
+      child: Text("No upcoming events",style: GoogleFonts.josefinSans(fontSize: 22,color: ColorGlobal.textColor)),
     );
   }
   @override
@@ -40,7 +40,7 @@ class _UpcomingEventsState extends State<UpcomingEvents> with TickerProviderStat
           key: animatedListKey,
           initialItemCount: eventList.length,
           itemBuilder: (BuildContext context, int index,animation){
-            return SizeTransition(child: VolunteerCard(eventList[index],false,0),
+            return SizeTransition(child: VolunteerCard(eventList[index],false,0,2),
               sizeFactor: animation,);
           }
       ),

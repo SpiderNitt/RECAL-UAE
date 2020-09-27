@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iosrecal/Constant/CustomToolTip.dart';
 import 'package:iosrecal/Constant/utils.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
 import 'package:iosrecal/bloc/KeyboardBloc.dart';
@@ -37,16 +40,12 @@ class LoginState extends State<Login> {
   bool internetConnection=true;
 
   TextEditingController email =
-      new TextEditingController(text: "narensai319@gmail.com");
+      new TextEditingController(text: "");
   TextEditingController password =
-      new TextEditingController(text: "1j7P1T3ync2I");
-  TextEditingController newPassword = new TextEditingController(text: "");
-  TextEditingController confirmPassword = new TextEditingController(text: "");
+      new TextEditingController(text: "");
 
   FocusNode emailFocus = new FocusNode();
   FocusNode passwordFocus = new FocusNode();
-  FocusNode newPasswordFocus = new FocusNode();
-  FocusNode confirmPasswordFocus = new FocusNode();
 
   bool changePassword = false;
   String primaryButtonText = "SIGN IN";
@@ -55,34 +54,23 @@ class LoginState extends State<Login> {
 
   ProgressDialog progressDialog;
 
-  List<String> result = new List<String>();
-
   Color getColorFromColorCode(String code) {
     return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
   }
 
   _initController() {
-    email = new TextEditingController(text: "narensai319@gmail.com");
-    password = new TextEditingController(text: "123456");
-    newPassword = new TextEditingController(text: "");
-    confirmPassword = new TextEditingController(text: "");
-
+    email = new TextEditingController(text: "");
+    password = new TextEditingController(text: "");
     emailFocus = new FocusNode();
     passwordFocus = new FocusNode();
-    newPasswordFocus = new FocusNode();
-    confirmPasswordFocus = new FocusNode();
     _bloc.start();
   }
 
   _disposeController() {
     email.clear();
     password.clear();
-    newPassword.clear();
-    confirmPassword.clear();
     emailFocus.unfocus();
     passwordFocus.unfocus();
-    newPasswordFocus.unfocus();
-    confirmPasswordFocus.unfocus();
     _bloc.dispose();
   }
 
@@ -103,7 +91,7 @@ class LoginState extends State<Login> {
               borderRadius: BorderRadius.circular(20),
             ),
             title: Text('Are you sure?'),
-            content : Text('Do you want to exit the app?'),
+            content : Text('Do you want to exit_ the app?'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -150,7 +138,7 @@ class LoginState extends State<Login> {
         progressWidgetAlignment: Alignment.center,
         messageTextStyle: TextStyle(
             color: Colors.black,
-            fontSize: getHeight(18, 1),
+            fontSize: getWidth(18, 1),
             fontWeight: FontWeight.w600),
       );
       progressDialog.show();
@@ -303,16 +291,23 @@ class LoginState extends State<Login> {
                 ),
               ),
               GestureDetector(
-                onTap: () => _sendMail(),
                 child: Text(
                   "recaluaechapter@gmail.com",
                   style: GoogleFonts.lato(
                     color: ColorGlobal.blueColor,
                     decoration: TextDecoration.underline,
-                    fontSize: getHeight(18, 1),
+                    fontSize: getWidth(18, 1),
                     fontWeight: FontWeight.w700,
                   ),
                 ),
+                onTap: () async {
+                  if(Platform.isAndroid)
+                    await _sendMail();
+                  else {
+                    Fluttertoast.showToast(msg: "Copied Email Address",textColor: Colors.white,backgroundColor: Colors.green);
+                    Clipboard.setData(new ClipboardData(text:"recaluaechapter@gmail.com"));
+                  }
+                },
               ),
             ],
           ),
@@ -329,12 +324,14 @@ class LoginState extends State<Login> {
   }
   _sendMail() async {
     // Android and iOS
-    const uri =
-        'mailto:recaluaechapter@gmail.com?subject=Login Credentials';
-    if (await canLaunch(uri)) {
-      await launch(uri);
-    } else {
-      return;
+    if(Platform.isAndroid) {
+      const uri =
+          'mailto:recaluaechapter@gmail.com?subject=Login Credentials';
+      if (await canLaunch(uri)) {
+        await launch(uri);
+      } else {
+        print("error");
+      }
     }
   }
 
@@ -493,6 +490,8 @@ class LoginState extends State<Login> {
                                   builder: (context, loginData, child) {
                                     return InkWell(
                                       onTap: () async {
+                                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                                        prefs.setInt("first", 10);
                                         if (changePassword == false) {
                                           if (email.text != "" &&
                                               password.text != "") {
@@ -597,10 +596,7 @@ class LoginState extends State<Login> {
                                   passwordFocus.unfocus();
                                 });
                               },
-                              child: AnimatedSwitcher(
-                                duration: Duration(seconds: 1),
-                                child: secondaryWidget(),
-                              ),
+                              child: secondaryWidget(),
                             ),
                           ),
                           Padding(
@@ -648,3 +644,4 @@ class LoginState extends State<Login> {
     );
   }
 }
+

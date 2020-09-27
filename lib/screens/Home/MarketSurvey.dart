@@ -24,7 +24,7 @@ _launchMarket(url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    return;
+    print("error market web");
   }
 }
 
@@ -64,11 +64,20 @@ class SurveyState extends State<SurveyScreen> {
   int internet = 1;
   int error = 0;
   List<GlobalKey<FlipCardState>> cardKey;
-
+  UIUtills uiUtills = new UIUtills();
   @override
   void initState() {
     super.initState();
     _positions();
+    uiUtills = new UIUtills();
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
   Future<String> _positions() async {
@@ -174,6 +183,7 @@ class SurveyState extends State<SurveyScreen> {
       itemBuilder: (context, index) {
         final double width = MediaQuery.of(context).size.width;
         final double height = MediaQuery.of(context).size.height;
+        uiUtills.updateScreenDimesion(width: width, height: height);
         return FlipCard(
             key: cardKey[index],
             front: Container(
@@ -208,8 +218,7 @@ class SurveyState extends State<SurveyScreen> {
                               AutoSizeText(
                                 positions[index].text.toUpperCase(),
                                 style: TextStyle(
-                                  fontSize: UIUtills().getProportionalHeight(
-                                      height: 20, choice: 3),
+                                  fontSize: getHeight(20, 3),
                                   color: ColorGlobal.textColor,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -239,8 +248,7 @@ class SurveyState extends State<SurveyScreen> {
                       child: AutoSizeText(
                         positions[index].link,
                         style: TextStyle(
-                          fontSize: UIUtills()
-                              .getProportionalHeight(height: 10, choice: 3),
+                          fontSize: getHeight(10, 3),
                           color: ColorGlobal.textColor,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic,
@@ -262,6 +270,7 @@ class SurveyState extends State<SurveyScreen> {
 
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/Constant/Constant.dart';
 import 'package:iosrecal/models/MemberModel.dart';
@@ -121,7 +124,9 @@ class _MemberDatabaseState extends State<MemberDatabase> {
   @override
   Widget build(BuildContext context) {
     final List<Color> colorArray = [Colors.blue, Colors.purple, Colors.blueGrey, Colors.deepOrange, Colors.redAccent];
-
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -193,7 +198,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                             //backgroundColor: Colors.red,
                             children: [
                               members[index].email!=null ? ListTile(
-                                title: AutoSizeText(members[index].email, style : TextStyle(fontSize: getHeight(16,2)), maxLines: 1,),
+                                title: CustomToolTip(text: members[index].email,),
                                 leading: Icon(Icons.email,  size: getHeight(26,2), color: Colors.indigoAccent),
                               ) : Container(),
                               ListTile(
@@ -231,6 +236,40 @@ class _MemberDatabaseState extends State<MemberDatabase> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomToolTip extends StatelessWidget {
+
+  String text;
+  UIUtills uiUtills = new UIUtills();
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+  CustomToolTip({this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
+    return new GestureDetector(
+      child: new Tooltip(preferBelow: false,
+          message: "Copy", child: AutoSizeText(text, style :TextStyle(fontSize: getHeight(16,2)), maxLines: 1,)),
+      onTap: () {
+        Fluttertoast.showToast(msg: "Copied Email Address",textColor: Colors.white,backgroundColor: Colors.green);
+        Clipboard.setData(new ClipboardData(text: text));
+      },
+      onDoubleTap: () {
+        Fluttertoast.showToast(msg: "Copied Email Address",textColor: Colors.white,backgroundColor: Colors.green);
+        Clipboard.setData(new ClipboardData(text: text));
+      },
     );
   }
 }

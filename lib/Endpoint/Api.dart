@@ -1,6 +1,7 @@
 class Api {
-  static final String host = "https://delta.nitt.edu/recal-uae/api/"; //"https://www.recaluaechapter.com/api/api/";
-  static final String imageUrl = "https://delta.nitt.edu/recal-uae"; //"https://www.recaluaechapter.com/api/";
+  static final String host = "https://www.recaluaechapter.com/api/api/"; //"https://www.recaluaechapter.com/api/api/";
+  static final String imageUrl = "https://www.recaluaechapter.com/api"; //"https://www.recaluaechapter.com/api";
+  static final String getBaseFileUrl = imageUrl;
   static final String checkLogin = host + "auth/check_login";
   static final String login = host + "auth/app_login/";
   static final String passwordReset = host + "auth/pass_reset/";
@@ -37,6 +38,5 @@ class Api {
   static final String getAllEvents = host + "events/all_events/";
   static final String getAttendees = host + "event/attendees/";
   static final String getFile=host+"events/get_file/";
-  static final String getBaseFileUrl = "https://delta.nitt.edu/recal-uae";
   static final String getSupport = host + 'employment/support';
 }

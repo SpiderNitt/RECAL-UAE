@@ -59,7 +59,7 @@ class ShowDetailTextWidget extends StatelessWidget {
         readOnly: readOnly==null? false : true,
         keyboardType: type=='number'? TextInputType.numberWithOptions(signed: false,decimal: false) : type=='phone' ? TextInputType.phone : TextInputType.text,
         inputFormatters: type=='number' ? [WhitelistingTextInputFormatter.digitsOnly] : null ,
-        validator: type=="phone" ? (value) => validateMobile(value) : (value) => emptyValidation(value) ,
+        validator: (value) => emptyValidation(value) ,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 10),   //  <- you can it to 0.0 for no space
           enabledBorder: UnderlineInputBorder(

@@ -22,20 +22,46 @@ class VolunteerCard extends StatefulWidget {
   bool isCompleted;
   bool isAttended=false;
   bool isCheckAttended=false;
+  int attended = 2;
   int status;
-  VolunteerCard( this.currEvent,this.isCompleted,this.status);
+  VolunteerCard( this.currEvent,this.isCompleted,this.status, this.attended);
 
   @override
   _VolunteerCardState createState() => _VolunteerCardState();
 }
 
-class _VolunteerCardState extends State<VolunteerCard> {
+class _VolunteerCardState extends State<VolunteerCard> with WidgetsBindingObserver {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    checkAttended();
+    WidgetsBinding.instance.addObserver(this);
+//    checkAttended();
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+//  @override
+//  void didChangeAppLifecycleState(AppLifecycleState state) {
+//    if(state == AppLifecycleState.resumed){
+//      print("resumed");
+//      checkAttended();
+//    }
+//    else if(state == AppLifecycleState.inactive){
+//      print("inactive");
+//    }
+//    else if(state == AppLifecycleState.paused){
+//      print("paused");
+//    }
+//    else if(state == AppLifecycleState.detached){
+//      print("detached");
+//    }
+//  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery
@@ -44,15 +70,25 @@ class _VolunteerCardState extends State<VolunteerCard> {
     UIUtills().updateScreenDimesion(
         width: screenSize.width, height: screenSize.height);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(UIUtills()
+          .getProportionalHeight(
+          height: 8)),
       child: Card(
         elevation: 5,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(UIUtills()
+              .getProportionalHeight(
+              height: 15)),
         ),
         child: Container(
           child: Padding(
-            padding: EdgeInsets.only(top: 2, right: 4,bottom:6),
+            padding: EdgeInsets.only(top: UIUtills()
+                .getProportionalHeight(
+                height: 2), right: UIUtills()
+                .getProportionalWidth(
+                width: 4),bottom:UIUtills()
+                .getProportionalHeight(
+                height: 6)),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -65,28 +101,44 @@ class _VolunteerCardState extends State<VolunteerCard> {
                         style: TextStyle(
                             color: ColorGlobal.color2,
                             fontWeight: FontWeight.bold,
-                            fontSize: 16),
+                            fontSize: UIUtills()
+                                .getProportionalHeight(
+                                height: 16)),
                       ): Text(
                         getDate(),
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: UIUtills()
+                                .getProportionalHeight(
+                                height: 16),
                             color: ColorGlobal.color2,
                             fontWeight: FontWeight.bold),
                       ),
 
                       margin: EdgeInsets.only(
-                          left: 14, top: 6, right: 4, bottom: 2),
+                          left: UIUtills()
+                              .getProportionalWidth(
+                              width: 14), top: UIUtills()
+                          .getProportionalHeight(
+                          height: 6), right: UIUtills()
+                          .getProportionalWidth(
+                          width: 4), bottom: UIUtills()
+                          .getProportionalHeight(
+                          height: 2)),
                     ),
                     widget.isCompleted==true ?
                     Container(
-                      margin: EdgeInsets.only(top: 6),
+                      margin: EdgeInsets.only(top: UIUtills()
+                          .getProportionalHeight(
+                          height: 6)),
                       child:getAttendWidget(),
                     ) : SizedBox(),
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 4),
+                  margin: EdgeInsets.only(top: UIUtills()
+                      .getProportionalHeight(
+                      height: 4)),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,7 +146,9 @@ class _VolunteerCardState extends State<VolunteerCard> {
                       Row(
                         children: <Widget>[
                           Container(
-                            margin:EdgeInsets.only(left: 10),
+                            margin:EdgeInsets.only(left: UIUtills()
+                                .getProportionalWidth(
+                                width: 10)),
                             child: Icon(
                               Icons.event_note,
                               size: UIUtills()
@@ -104,7 +158,9 @@ class _VolunteerCardState extends State<VolunteerCard> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(left: 4),
+                            margin: EdgeInsets.only(left: UIUtills()
+                                .getProportionalWidth(
+                                width: 4)),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -115,12 +171,16 @@ class _VolunteerCardState extends State<VolunteerCard> {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         color: Colors.black54,
-                                        fontSize: 16,
+                                        fontSize: UIUtills()
+                                            .getProportionalHeight(
+                                            height: 16),
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.only(top: 3),
+                                  margin: EdgeInsets.only(top: UIUtills()
+                                      .getProportionalHeight(
+                                      height: 3)),
                                   child: Text(
                                     getTime(),
                                     style: TextStyle(
@@ -137,8 +197,10 @@ class _VolunteerCardState extends State<VolunteerCard> {
                           .getProportionalWidth(
                           width: 22),),onPressed: (){
                         Navigator.push(context, MaterialPageRoute(builder:(context)=>
-                        widget.status==2?Felicitations(widget.currEvent.event_id):Event(widget.isCompleted,widget.currEvent))).then((value) => checkAttended());
-                      },),margin: EdgeInsets.only(right: 8),),
+                        widget.status==2?Felicitations(widget.currEvent.event_id):Event(widget.isCompleted,widget.currEvent)));
+                      },),margin: EdgeInsets.only(right: UIUtills()
+                          .getProportionalWidth(
+                          width: 8)),),
                     ],
                   ),
                 ),
@@ -150,8 +212,8 @@ class _VolunteerCardState extends State<VolunteerCard> {
     );
   }
   Widget getAttendWidget() {
-    if(widget.isCheckAttended){
-      if(widget.isAttended){
+    if(widget.attended!=2){
+      if(widget.attended==1){
         return Icon(Icons.check_circle,color: Colors.green,size: UIUtills()
             .getProportionalWidth(
             width: 24),);
@@ -166,43 +228,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
       return SizedBox();
     }
   }
-  Future<void> checkAttended() async {
-    var uri=Uri.parse(Api.getAttendees);
-    uri = uri.replace(query: "id="+widget.currEvent.event_id.toString());
-    SharedPreferences prefs=await SharedPreferences.getInstance();
-    var response=await http.get(
-        uri,
-        headers: {
-          "Accept" : "application/json",
-          "Cookie" : "${prefs.getString("cookie")}",
-        }
-    ) .then((_response) {
-      ResponseBody responseBody = new ResponseBody();
-      print('Response body:for attendees ${_response.body}'+ 'userid: ${prefs.getString('user_id')}');
-      if (_response.statusCode == 200) {
-        responseBody = ResponseBody.fromJson(json.decode(_response.body));
-        if (responseBody.status_code == 200) {
-          if(responseBody.data.length!=0) {
-            for (var u in responseBody.data) {
-              if(u['attendee_id'].toString()== prefs.getString('user_id')){
-                setState(() {
-                  widget.isAttended=true;
-                });
-              }
-            }
-            setState(() {
-              widget.isCheckAttended=true;
-            });
-          }
-        } else {
-          print(responseBody.data);
-        }
-      } else {
-        print('Server error');
-      }
-    });
 
-  }
   String getDate(){
     var date=DateTime.parse(widget.currEvent.datetime);
     var updateddate=DateFormat.yMMMMd().format(date);

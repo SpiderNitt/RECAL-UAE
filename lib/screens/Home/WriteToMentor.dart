@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:iosrecal/Constant/Constant.dart';
+import 'package:iosrecal/bloc/KeyboardBloc.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -12,7 +13,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:iosrecal/Endpoint/Api.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:iosrecal/Constant/utils.dart';
 
 class WriteMentorScreen extends StatefulWidget {
@@ -33,13 +33,18 @@ class MentorState extends State<WriteMentorScreen>
   double _translateY = 0;
   double _rotate = 0;
   double _scale = 1;
+  KeyboardBloc _bloc = new KeyboardBloc();
+  UIUtills uiUtills = new UIUtills();
 
   bool show;
   bool sent = false;
   Color _color = Colors.lightBlue;
+  bool finished = false;
 
   initState() {
     super.initState();
+    _bloc.start();
+    uiUtills = new UIUtills();
     _animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1300));
     show = true;
@@ -65,6 +70,20 @@ class MentorState extends State<WriteMentorScreen>
     //_positions();
   }
 
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+
   Widget animatedButton() {
     return GestureDetector(
         onTap: () async {
@@ -79,7 +98,7 @@ class MentorState extends State<WriteMentorScreen>
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
-                fontSize: 16.0);
+                fontSize: getHeight(16, 3));
           }
         },
         child: AnimatedContainer(
@@ -171,38 +190,55 @@ class MentorState extends State<WriteMentorScreen>
           textColor: Colors.white,
           fontSize: 16.0);
     }
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String url = Api.getSupport;
-    final response = await http.post(url, body: {
-      "user_id": "${prefs.getString("user_id")}",
-      "body": body,
-      "type": "write to mentor",
-    }, headers: {
-      "Accept": "application/json",
-      "Cookie": "${prefs.getString("cookie")}",
-    }).catchError((error) {
-      Fluttertoast.showToast(
-          msg: "An error occured. Please try again later.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.orange,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      return false;
-    });
+    if (finished == false) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String url = Api.getSupport;
+      final response = await http.post(url, body: {
+        "user_id": "${prefs.getString("user_id")}",
+        "body": body,
+        "type": "write to mentor",
+      }, headers: {
+        "Accept": "application/json",
+        "Cookie": "${prefs.getString("cookie")}",
+      }).catchError((error) {
+        Fluttertoast.showToast(
+            msg: "An error occured. Please try again later.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.orange,
+            textColor: Colors.white,
+            fontSize: getHeight(16, 3));
+        return false;
+      });
 
-    if (response.statusCode == 200) {
-      ResponseBody responseBody =
-          ResponseBody.fromJson(json.decode(response.body));
-      if (responseBody.status_code == 200) {
-        print("worked!");
-        _animationController.forward();
-        messageController.text = "";
-        Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
-        return true;
-      } else if (responseBody.status_code == 401) {
-        onTimeOut();
+      if (response.statusCode == 200) {
+        ResponseBody responseBody =
+            ResponseBody.fromJson(json.decode(response.body));
+        if (responseBody.status_code == 200) {
+          print("worked!");
+          setState(() {
+            finished = true;
+          });
+          _animationController.forward();
+          messageController.text = "";
+          Future.delayed(
+              const Duration(seconds: 2), () => Navigator.pop(context));
+          return true;
+        } else if (responseBody.status_code == 401) {
+          onTimeOut();
+        } else {
+          Fluttertoast.showToast(
+              msg: "An error occured. Please try again later.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          print(responseBody.data);
+          return false;
+        }
       } else {
         Fluttertoast.showToast(
             msg: "An error occured. Please try again later.",
@@ -212,20 +248,9 @@ class MentorState extends State<WriteMentorScreen>
             backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 16.0);
-        print(responseBody.data);
+        print('Server error');
         return false;
       }
-    } else {
-      Fluttertoast.showToast(
-          msg: "An error occured. Please try again later.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      print('Server error');
-      return false;
     }
   }
 
@@ -264,6 +289,7 @@ class MentorState extends State<WriteMentorScreen>
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
         child: Scaffold(
             backgroundColor: Color(0xDDFFFFFF),
@@ -291,11 +317,11 @@ class MentorState extends State<WriteMentorScreen>
                 style: TextStyle(color: ColorGlobal.textColor),
               ),
             ),
-            body: SingleChildScrollView(
-              child: Center(
-                child: Container(
-                  color: Colors.white,
-                  height: height,
+            body: Center(
+              child: Container(
+                color: Colors.white,
+                height: height,
+                child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -307,24 +333,25 @@ class MentorState extends State<WriteMentorScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             AutoSizeText(
-                              "NEED MENTOR HELP!!",
+                              "NEED MENTOR SUPPORT?",
                               style: TextStyle(
-                                  fontSize: UIUtills().getProportionalHeight(
-                                      height: 25, choice: 3),
+                                  fontSize: getHeight(24, 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
+                              maxLines: 1,
                             ),
                             SizedBox(height: height / 64),
                             AutoSizeText(
                               "Please write your message in the box below",
                               style: TextStyle(
-                                fontSize: UIUtills().getProportionalHeight(
-                                    height: 15, choice: 3),
+                                fontSize: getHeight(15, 3),
                                 color: const Color(0xff3AAFFA),
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            SizedBox(height: 20.0),
+                            SizedBox(
+                              height: getHeight(20, 3),
+                            ),
                             TextField(
                               autocorrect: true,
                               maxLines: 8,
@@ -352,9 +379,25 @@ class MentorState extends State<WriteMentorScreen>
                               height: height / 64,
                             ),
                             animatedButton(),
-                            SizedBox(
-                              height: height / 64,
-                            ),
+                            StreamBuilder<double>(
+                                stream: _bloc.stream,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<double> snapshot) {
+                                  print(
+                                      'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
+                                      'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                                  return _bloc.keyboardUtils.isKeyboardOpen ==
+                                          true
+                                      ? Container(
+                                          height: _bloc.keyboardUtils
+                                                  .keyboardHeight +
+                                              10,
+                                        )
+                                      : Container(
+                                          height: 0,
+                                          width: 0,
+                                        );
+                                }),
                           ],
                         ),
                       ),

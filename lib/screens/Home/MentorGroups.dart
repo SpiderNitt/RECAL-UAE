@@ -147,6 +147,7 @@ class _MentorGroupsState extends State<MentorGroups> {
     }
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width,height: height);
     final List<Color> colorArray = [Colors.blue, Colors.purple, Colors.blueGrey, Colors.deepOrange, Colors.redAccent];
     return CustomScrollView(
       slivers: <Widget>[
@@ -226,7 +227,7 @@ class _MentorGroupsState extends State<MentorGroups> {
                                         child: AutoSizeText(
                                           groups[index].group,
                                           style: TextStyle(
-                                            fontSize: getHeight(16, 2),
+                                            fontSize: getHeight(22, 2),
                                             color: ColorGlobal.textColor,
                                             fontWeight: FontWeight.bold,
                                             fontStyle: FontStyle.italic,
@@ -238,7 +239,7 @@ class _MentorGroupsState extends State<MentorGroups> {
                                         child: AutoSizeText(
                                           groups[index].leader,
                                           style: TextStyle(
-                                            fontSize: getHeight(16, 2),
+                                            fontSize: getHeight(19, 2),
                                             color: ColorGlobal.textColor,
                                           ),
                                         ),

@@ -116,16 +116,16 @@ class _FelicitationsState extends State<Felicitations> {
                                 width: 24),
                             child: Icon(Icons.person,size: UIUtills()
                                 .getProportionalWidth(
-                                width: 36),),
+                                width: 30),),
                           ),
                           title: snapshot.data[index].felicitated_person!=null?Text(
                             snapshot.data[index].felicitated_person,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: UIUtills()
+                                fontSize:UIUtills()
                                     .getProportionalHeight(
-                                    height: 20), color: Colors.black87),
+                                    height: 18) , color: Colors.black87),
                           ):SizedBox(),
                           trailing: Icon(
                             Icons.keyboard_arrow_down,
@@ -135,7 +135,9 @@ class _FelicitationsState extends State<Felicitations> {
                               width: 22),),
                           children: <Widget>[
                             Container(
-                                margin: EdgeInsets.all(6),child: snapshot.data[index].achievement!=null?Text(snapshot.data[index].achievement,style: TextStyle(fontSize: 18),):Text("Not available"))
+                                margin: EdgeInsets.all(6),child: snapshot.data[index].achievement!=null?Text(snapshot.data[index].achievement,style: TextStyle(fontSize: UIUtills()
+                                .getProportionalHeight(
+                                height: 18)),):Text("Not available"))
                           ],
                         ),
                       ),
