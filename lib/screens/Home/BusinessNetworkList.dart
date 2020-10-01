@@ -166,7 +166,7 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
               style: TextStyle(
                 color: ColorGlobal.textColor,
                 fontWeight: FontWeight.w700,
-                fontSize: getHeight(18, 2),
+                fontSize: getWidth(18, 2),
               ),
             maxLines: 1,
             ),
@@ -175,6 +175,7 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
             child: Icon(
               Icons.person,
               color: ColorGlobal.whiteColor,
+              size: getWidth(28, 2),
             ),
           ),
         );

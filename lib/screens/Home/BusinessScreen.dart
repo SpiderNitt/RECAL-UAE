@@ -165,7 +165,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
               options[num],
               style: TextStyle(
                 color: ColorGlobal.textColor,
-                fontSize: getHeight(20, 2),
+                fontSize: getWidth(20, 2),
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -204,7 +204,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
               options[num],
               style: TextStyle(
                 color: ColorGlobal.textColor,
-                fontSize: getHeight(22, 2),
+                fontSize: getWidth(22, 2),
                 fontWeight: FontWeight.w600,
               ),
             ),

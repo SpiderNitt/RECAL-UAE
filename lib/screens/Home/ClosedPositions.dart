@@ -207,7 +207,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                               AutoSizeText('Position',
                                                   style: TextStyle(
                                                       color: Color(0xfff4c83f),
-                                                      fontSize: getHeight(13,2)),
+                                                      fontSize: getWidth(13,2)),
                                                 maxLines: 1,
                                               ),
                                               AutoSizeText(
@@ -216,7 +216,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                                       color:
                                                           ColorGlobal.textColor,
                                                       fontWeight: FontWeight.w500,
-                                                      fontSize: getHeight(20,2)),
+                                                      fontSize: getWidth(20,2)),
                                               maxLines: 1,
                                               )
                                             ],
@@ -250,14 +250,14 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                             AutoSizeText('Company',
                                                 style: TextStyle(
                                                     color: Color(0xffed622b),
-                                                    fontSize: getHeight(13,2)),
+                                                    fontSize: getWidth(13,2)),
                                             maxLines: 1,
                                             ),
                                             AutoSizeText(closedPositions[index].company,
                                                 style: TextStyle(
                                                     color: ColorGlobal.textColor,
                                                     fontWeight: FontWeight.w500,
-                                                    fontSize: getHeight(20,2)),
+                                                    fontSize: getWidth(20,2)),
                                             maxLines: 1,
                                             )
                                           ],
@@ -291,14 +291,14 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                             AutoSizeText('Description',
                                               style: TextStyle(
                                                   color: Color(0xcc982ef0),
-                                                  fontSize: getHeight(13,2)),
+                                                  fontSize: getWidth(13,2)),
                                               maxLines: 1,
                                             ),
                                             AutoSizeText(closedPositions[index].description,
                                               style: TextStyle(
                                                   color: ColorGlobal.textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: getHeight(20,2)),
+                                                  fontSize: getWidth(20,2)),
                                               maxLines: 7,
                                             )
                                           ],

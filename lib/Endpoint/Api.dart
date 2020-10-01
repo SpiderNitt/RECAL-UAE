@@ -1,6 +1,6 @@
 class Api {
-  static final String host = "https://www.recaluaechapter.com/api/api/"; //"https://www.recaluaechapter.com/api/api/";
-  static final String imageUrl = "https://www.recaluaechapter.com/api"; //"https://www.recaluaechapter.com/api";
+  static final String host = "https://www.recaluaechapter.com/api/api/";
+  static final String imageUrl = "https://www.recaluaechapter.com/api";
   static final String getBaseFileUrl = imageUrl;
   static final String checkLogin = host + "auth/check_login";
   static final String login = host + "auth/app_login/";

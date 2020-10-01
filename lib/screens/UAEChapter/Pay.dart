@@ -180,7 +180,7 @@ class _PayPageState extends State<PayPage> {
                 'If you are paying for your annual membership or contributing towards an upcoming event, please transfer/deposit in the following bank account',
                 style: TextStyle(
                   color: const Color(0xFF544F50),
-                  fontSize: getHeight(18, 2),
+                  fontSize: getWidth(18, 2),
                   letterSpacing: 1.2,
                   wordSpacing: 1.2,
                 ),
@@ -204,7 +204,7 @@ class _PayPageState extends State<PayPage> {
               child: Text(
                   'Note:',
                   style: TextStyle(
-                    fontSize: getHeight(18, 2),
+                    fontSize: getWidth(18, 2),
                     color: const Color(0xFF544F50),
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,
@@ -216,9 +216,9 @@ class _PayPageState extends State<PayPage> {
             Padding(
               padding: EdgeInsets.fromLTRB(getWidth(16, 2), 0.0, getWidth(16, 2), 0.0),
               child: Text(
-                  '\u2022 Once the payment is received, you will receive a notification on this app within 24 hours. ',
+                  'Once the payment is received, you will receive a notification on this app within 24 hours. ',
                   style: TextStyle(
-                    fontSize: getHeight(18, 2),
+                    fontSize: getWidth(18, 2),
                     color: const Color(0xFF544F50),
                   )
               ),

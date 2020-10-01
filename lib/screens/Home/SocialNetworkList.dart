@@ -182,7 +182,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                           return members[index].name !=null ? ExpansionTile(
                             title: AutoSizeText(members[index].name,
                               style: TextStyle(
-                                fontSize: getHeight(18, 2),
+                                fontSize: getWidth(18, 2),
                                 color: ColorGlobal.textColor,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -199,26 +199,26 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                             children: [
                               members[index].email!=null ? ListTile(
                                 title: CustomToolTip(text: members[index].email,),
-                                leading: Icon(Icons.email,  size: getHeight(26,2), color: Colors.indigoAccent),
+                                leading: Icon(Icons.email,  size: getWidth(26,2), color: Colors.indigoAccent),
                               ) : Container(),
                               ListTile(
-                                title: AutoSizeText(members[index].organization, style : TextStyle(fontSize: getHeight(16,2)), maxLines: 1,),
-                                leading: Icon(Icons.business, size: getHeight(26,2), color: Colors.orange),
+                                title: AutoSizeText(members[index].organization, style : TextStyle(fontSize: getWidth(16,2)), maxLines: 1,),
+                                leading: Icon(Icons.business, size: getWidth(26,2), color: Colors.orange),
                               ),
                               members[index].position!=null ? ListTile(
-                                title: AutoSizeText(members[index].position, style : TextStyle(fontSize: getHeight(16,2)), maxLines: 1,),
-                                leading: Icon(Icons.business_center, size: getHeight(26,2), color: Colors.green),
+                                title: AutoSizeText(members[index].position, style : TextStyle(fontSize: getWidth(16,2)), maxLines: 1,),
+                                leading: Icon(Icons.business_center, size: getWidth(26,2), color: Colors.green),
                               ) : Container(),
                               !isEmpty(members[index].linkedIn_link) ? ListTile(
                                 title: new GestureDetector(
-                                    child: new AutoSizeText(members[index].linkedIn_link, style : TextStyle(fontSize: getHeight(16,2)), maxLines: 1,),
+                                    child: new AutoSizeText(members[index].linkedIn_link, style : TextStyle(fontSize: getWidth(16,2)), maxLines: 1,),
                                     onTap: () =>
                                         launch(members[index].linkedIn_link)
                                 ),
                                 leading: Image(
                                   image: AssetImage('assets/images/linkedin.png'),
-                                  height: getHeight(24, 2),
-                                  width: getHeight(24, 2),
+                                  height: getWidth(24, 2),
+                                  width: getWidth(24, 2),
                                 ),
                               ) : Container(),
                             ],
@@ -261,7 +261,7 @@ class CustomToolTip extends StatelessWidget {
     uiUtills.updateScreenDimesion(width: width, height: height);
     return new GestureDetector(
       child: new Tooltip(preferBelow: false,
-          message: "Copy", child: AutoSizeText(text, style :TextStyle(fontSize: getHeight(16,2)), maxLines: 1,)),
+          message: "Copy", child: AutoSizeText(text, style :TextStyle(fontSize: getWidth(16,2)), maxLines: 1,)),
       onTap: () {
         Fluttertoast.showToast(msg: "Copied Email Address",textColor: Colors.white,backgroundColor: Colors.green);
         Clipboard.setData(new ClipboardData(text: text));

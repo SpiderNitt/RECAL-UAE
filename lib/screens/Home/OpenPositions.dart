@@ -213,7 +213,7 @@ class _OpenPositionsState extends State<OpenPositions> {
                                             AutoSizeText('Position',
                                               style: TextStyle(
                                                   color: Color(0xfff4c83f),
-                                                  fontSize: getHeight(13, 2)),
+                                                  fontSize: getWidth(13, 2)),
                                               maxLines: 1,
                                             ),
                                             AutoSizeText(openPositions[index].position,
@@ -221,7 +221,7 @@ class _OpenPositionsState extends State<OpenPositions> {
                                                   color:
                                                   ColorGlobal.textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: getHeight(20, 2)),
+                                                  fontSize: getWidth(20, 2)),
                                               maxLines: 1,
                                             )
                                           ],

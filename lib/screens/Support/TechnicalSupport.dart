@@ -92,7 +92,7 @@ class TechnicalState extends State<TechnicalSupport>
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
-                fontSize: getHeight(16, 3));
+                fontSize: getWidth(16, 3));
           }
         },
         child: AnimatedContainer(
@@ -229,7 +229,7 @@ class TechnicalState extends State<TechnicalSupport>
               timeInSecForIosWeb: 1,
               backgroundColor: Colors.orange,
               textColor: Colors.white,
-              fontSize: getHeight(16, 3));
+              fontSize: getWidth(16, 3));
           print(responseBody.data);
           return false;
         }
@@ -241,7 +241,7 @@ class TechnicalState extends State<TechnicalSupport>
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.orange,
             textColor: Colors.white,
-            fontSize: getHeight(16, 3));
+            fontSize: getWidth(16, 3));
         print('Server error');
         return false;
       }
@@ -382,7 +382,7 @@ class TechnicalState extends State<TechnicalSupport>
                             AutoSizeText(
                               "HAVE TECHNICAL ISSUES?",
                               style: TextStyle(
-                                  fontSize: getHeight(24, 3),
+                                  fontSize: getWidth(24, 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
                               maxLines: 1,
@@ -392,7 +392,7 @@ class TechnicalState extends State<TechnicalSupport>
                             AutoSizeText(
                               "Please write your message in the box below",
                               style: TextStyle(
-                                fontSize: getHeight(15, 3),
+                                fontSize: getWidth(15, 3),
                                 color: const Color(0xff3AAFFA),
                               ),
                               textAlign: TextAlign.center,

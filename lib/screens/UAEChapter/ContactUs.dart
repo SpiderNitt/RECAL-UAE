@@ -97,7 +97,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
-                fontSize: getHeight(16, 2));
+                fontSize: getWidth(16, 2));
           }
         },
         child: AnimatedContainer(
@@ -179,7 +179,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-          fontSize: getHeight(16, 2),
+          fontSize: getWidth(16, 2),
       );
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -212,7 +212,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-          fontSize: getHeight(16, 2),
+          fontSize: getWidth(16, 2),
         );
         print(responseBody.data);
 
@@ -226,7 +226,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.red,
         textColor: Colors.white,
-        fontSize: getHeight(16, 2),
+        fontSize: getWidth(16, 2),
       );
       print('Server error');
 
@@ -382,7 +382,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                           Text(
                             'Please write about your issue. Someone from the admin team will respond within 24 hrs.',
                             style: TextStyle(
-                              fontSize: getHeight(18, 2),
+                              fontSize: getWidth(18, 2),
                               letterSpacing: 1.2,
                               color: Colors.black,
                             ),

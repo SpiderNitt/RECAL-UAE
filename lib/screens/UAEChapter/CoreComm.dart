@@ -241,7 +241,7 @@ class CoreCommState extends State<CoreComm> {
                         "The ongoing members of the core committee of RECAL UAE Chapter are as follows:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(15, 3),
+                          fontSize: getWidth(15, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -250,7 +250,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nPresident:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(18, 3),
+                          fontSize: getWidth(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -259,7 +259,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[0]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(15, 3),
+                          fontSize: getWidth(15, 3),
                           // fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -268,7 +268,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nVice President:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(18, 3),
+                          fontSize: getWidth(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -277,7 +277,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[1]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(15, 3),
+                          fontSize: getWidth(15, 3),
                           //fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -286,7 +286,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nSecretary:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(18, 3),
+                          fontSize: getWidth(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -295,7 +295,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[2]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(15, 3),
+                          fontSize: getWidth(15, 3),
                           //fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -304,7 +304,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nJoint Secretary:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(18, 3),
+                          fontSize: getWidth(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -313,7 +313,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[3]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(15, 3),
+                          fontSize: getWidth(15, 3),
                           //fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -322,7 +322,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nTreasurer:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(18, 3),
+                          fontSize: getWidth(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -331,7 +331,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[4]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(15, 3),
+                          fontSize: getWidth(15, 3),
                           //fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -340,7 +340,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nVMentor 1:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(18, 3),
+                          fontSize: getWidth(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -349,7 +349,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[5]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(15, 3),
+                          fontSize: getWidth(15, 3),
                           //fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -358,7 +358,7 @@ class CoreCommState extends State<CoreComm> {
                         "\nMentor 2:",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(18, 3),
+                          fontSize: getWidth(18, 3),
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -367,7 +367,7 @@ class CoreCommState extends State<CoreComm> {
                         "${_members[5]}",
                         style: TextStyle(
                           color: Color(0xFF544F50),
-                          fontSize: getHeight(15, 3),
+                          fontSize: getWidth(15, 3),
                           //fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,

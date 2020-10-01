@@ -91,7 +91,7 @@ class LoginState extends State<Login> {
               borderRadius: BorderRadius.circular(20),
             ),
             title: Text('Are you sure?'),
-            content : Text('Do you want to exit_ the app?'),
+            content : Text('Do you want to exit the app?'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -172,7 +172,7 @@ class LoginState extends State<Login> {
       primaryButtonText,
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: getHeight(18, 1),
+        fontSize: getWidth(18, 1),
         color: ColorGlobal.whiteColor,
         fontWeight: FontWeight.w700,
       ),
@@ -184,7 +184,7 @@ class LoginState extends State<Login> {
       secondaryButtonText,
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: getHeight(16, 1),
+        fontSize: getWidth(16, 1),
         color: ColorGlobal.textColor.withOpacity(0.9),
         fontWeight: FontWeight.w500,
       ),
@@ -286,7 +286,7 @@ class LoginState extends State<Login> {
                 "Write an email to",
                 style: GoogleFonts.lato(
                   color: ColorGlobal.textColor,
-                  fontSize: getHeight(18, 1),
+                  fontSize: getWidth(18, 1),
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -405,7 +405,7 @@ class LoginState extends State<Login> {
                           'RECAL UAE CHAPTER',
                           style: GoogleFonts.lato(
                             color: ColorGlobal.textColor,
-                            fontSize: getHeight(22, 1),
+                            fontSize: getWidth(22, 1),
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -436,7 +436,7 @@ class LoginState extends State<Login> {
                                 pageTitle,
                                 style: GoogleFonts.josefinSans(
                                   color: ColorGlobal.textColor,
-                                  fontSize: getHeight(18, 1),
+                                  fontSize: getWidth(18, 1),
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -607,7 +607,7 @@ class LoginState extends State<Login> {
                                 "Don't have credentials?",
                                 maxLines: 4,
                                 style: TextStyle(
-                                  fontSize: getHeight(18, 1),
+                                  fontSize: getWidth(18, 1),
                                   color: ColorGlobal.blueColor.withOpacity(0.9),
                                   fontWeight: FontWeight.w300,
                                   decoration: TextDecoration.underline,

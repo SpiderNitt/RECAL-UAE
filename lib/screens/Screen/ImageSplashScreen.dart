@@ -209,7 +209,7 @@ class SplashScreenState extends State<ImageSplashScreen> with WidgetsBindingObse
                     padding: EdgeInsets.all(getWidth(30, 1)),
                     child: Text(
                       "RECAL UAE CHAPTER",
-                      style: GoogleFonts.josefinSans(fontSize: getHeight(23,1), fontWeight: FontWeight.bold, color: ColorGlobal.textColor),
+                      style: GoogleFonts.josefinSans(fontSize: getWidth(23,1), fontWeight: FontWeight.bold, color: ColorGlobal.textColor),
                     ),
                   ),
                 ],
@@ -222,14 +222,14 @@ class SplashScreenState extends State<ImageSplashScreen> with WidgetsBindingObse
                       padding: EdgeInsets.symmetric(vertical: getHeight(10, 1)),
                       child: SpinKitWave(
                       color: getColorFromColorCode("#6289ce"),
-                      size: getHeight(50, 1),
+                      size: getWidth(50, 1),
                       duration :Duration(milliseconds: 1000)
                       ),
                     ),
                   ),
                   Text(
                     "Loading $dots%",
-                    style: GoogleFonts.josefinSans(fontSize: getHeight(20, 1), fontWeight: FontWeight.w500, color: ColorGlobal.textColor),
+                    style: GoogleFonts.josefinSans(fontSize: getWidth(20, 1), fontWeight: FontWeight.w500, color: ColorGlobal.textColor),
                   ),
                 ],
               ),

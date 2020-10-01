@@ -336,7 +336,7 @@ refresh () {
                                     "${snapshot.data["name"]}",
                                     wrapWords: true,
                                     style: TextStyle(
-                                      fontSize: getHeight(18, 1),
+                                      fontSize: getWidth(18, 1),
                                       color: ColorGlobal.textColor
                                           .withOpacity(0.9),
                                       fontWeight: FontWeight.w400,
@@ -349,7 +349,7 @@ refresh () {
                                   "${snapshot.data["email"]}",
                                   wrapWords: true,
                                   style: TextStyle(
-                                    fontSize: getHeight(16, 1),
+                                    fontSize: getWidth(16, 1),
                                     color: ColorGlobal.textColor
                                         .withOpacity(0.6),
                                     fontWeight: FontWeight.w600,

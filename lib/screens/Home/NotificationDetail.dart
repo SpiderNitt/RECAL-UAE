@@ -131,7 +131,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
     if(state==1){
       return Text(notification.body,
         style: TextStyle(
-          fontSize: getHeight(20, 2),
+          fontSize: getWidth(20, 2),
           fontStyle: FontStyle.italic,
         ),
       );
@@ -201,7 +201,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                            notificationsModel.title,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: getHeight(24, 2),
+                              fontSize: getWidth(24, 2),
                             ),
                           ),
                         ),

@@ -45,7 +45,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
             children: <Widget>[
               Text(
                 'UAE CHAPTER',
-                style: GoogleFonts.josefinSans(color: ColorGlobal.textColor, fontWeight: FontWeight.bold,fontSize: 20),
+                style: GoogleFonts.josefinSans(color: ColorGlobal.textColor, fontWeight: FontWeight.bold,fontSize: getWidth(20, 1)),
               ),
             ],
           ),

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iosrecal/Constant/utils.dart';
 
 import 'ColorGlobal.dart';
 
@@ -14,7 +15,7 @@ class ShowDetailTextWidget extends StatelessWidget {
   final Color color;
   final String type;
   final bool readOnly;
-
+  UIUtills uiUtills = new UIUtills();
 
   ShowDetailTextWidget({
     this.hintText,
@@ -48,9 +49,20 @@ class ShowDetailTextWidget extends StatelessWidget {
     return null;
   }
 
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
     return TextFormField(
       onChanged: onChanged,
       cursorColor: ColorGlobal.textColor,

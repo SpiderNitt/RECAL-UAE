@@ -252,7 +252,7 @@ class FeedbackState extends State<FeedbackScreen>
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
-                fontSize: getHeight(16, 3));
+                fontSize: getWidth(16, 3));
           }
         },
         child: AnimatedContainer(
@@ -381,7 +381,7 @@ class FeedbackState extends State<FeedbackScreen>
                             AutoSizeText(
                               "HOW CAN WE IMPROVE?",
                               style: TextStyle(
-                                  fontSize: getHeight(24, 3),
+                                  fontSize: getWidth(24, 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
                               maxLines: 1,
@@ -391,7 +391,7 @@ class FeedbackState extends State<FeedbackScreen>
                             AutoSizeText(
                               "Please write your feedback in the box below",
                               style: TextStyle(
-                                fontSize: getHeight(15, 3),
+                                fontSize: getWidth(15, 3),
                                 color: const Color(0xff3AAFFA),
                               ),
                               textAlign: TextAlign.center,

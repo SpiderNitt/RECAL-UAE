@@ -98,7 +98,7 @@ class MentorState extends State<WriteMentorScreen>
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
-                fontSize: getHeight(16, 3));
+                fontSize: getWidth(16, 3));
           }
         },
         child: AnimatedContainer(
@@ -208,7 +208,7 @@ class MentorState extends State<WriteMentorScreen>
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.orange,
             textColor: Colors.white,
-            fontSize: getHeight(16, 3));
+            fontSize: getWidth(16, 3));
         return false;
       });
 
@@ -335,7 +335,7 @@ class MentorState extends State<WriteMentorScreen>
                             AutoSizeText(
                               "NEED MENTOR SUPPORT?",
                               style: TextStyle(
-                                  fontSize: getHeight(24, 3),
+                                  fontSize: getWidth(24, 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
                               maxLines: 1,
@@ -344,7 +344,7 @@ class MentorState extends State<WriteMentorScreen>
                             AutoSizeText(
                               "Please write your message in the box below",
                               style: TextStyle(
-                                fontSize: getHeight(15, 3),
+                                fontSize: getWidth(15, 3),
                                 color: const Color(0xff3AAFFA),
                               ),
                               textAlign: TextAlign.center,

@@ -236,7 +236,7 @@ class _NotificationsMenuState extends State<NotificationsMenu> {
                       "${date[2]}-${date[1]}-${date[0]}",
                       style: GoogleFonts.lato(
                         fontWeight: FontWeight.w300,
-                        fontSize: getHeight(15, 2),
+                        fontSize: getWidth(15, 2),
                       ),
                     ),
                   ],

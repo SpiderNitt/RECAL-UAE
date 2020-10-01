@@ -216,8 +216,8 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: <Widget>
                                             [
-                                              AutoSizeText('Name', style: TextStyle(color: Color(0xfff4c83f), fontSize: getHeight(13, 2)), maxLines: 1,),
-                                              AutoSizeText(members[index].name, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getHeight(18, 2)), maxLines: 1,)
+                                              AutoSizeText('Name', style: TextStyle(color: Color(0xfff4c83f), fontSize: getWidth(13, 2)), maxLines: 1,),
+                                              AutoSizeText(members[index].name, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getWidth(18, 2)), maxLines: 1,)
                                             ],
                                           ),
                                         ),
@@ -256,8 +256,8 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: <Widget>
                                           [
-                                            AutoSizeText('Industry', style: TextStyle(color: Color(0xffed622b), fontSize: getHeight(13, 2)), maxLines: 1,),
-                                            AutoSizeText(members[index].industry, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getHeight(18, 2)), maxLines: 5,)
+                                            AutoSizeText('Industry', style: TextStyle(color: Color(0xffed622b), fontSize: getWidth(13, 2)), maxLines: 1,),
+                                            AutoSizeText(members[index].industry, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getWidth(18, 2)), maxLines: 5,)
                                           ],
                                         ),
                                       ),
@@ -296,8 +296,8 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: <Widget>
                                           [
-                                            AutoSizeText('Business Type', style: TextStyle(color: Color(0xcc26cb3c), fontSize: getHeight(13, 2)), maxLines: 1,),
-                                            AutoSizeText(members[index].business_type, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getHeight(18, 2)), maxLines: 5,)
+                                            AutoSizeText('Business Type', style: TextStyle(color: Color(0xcc26cb3c), fontSize: getWidth(13, 2)), maxLines: 1,),
+                                            AutoSizeText(members[index].business_type, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getWidth(18, 2)), maxLines: 5,)
                                           ],
                                         ),
                                       ),
@@ -336,8 +336,8 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: <Widget>
                                           [
-                                            AutoSizeText('Company Brief', style: TextStyle(color: Color(0xccff3266), fontSize: getHeight(13, 2)), maxLines: 1,),
-                                            AutoSizeText(members[index].company_brief, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getHeight(18, 2)), maxLines: 5,)
+                                            AutoSizeText('Company Brief', style: TextStyle(color: Color(0xccff3266), fontSize: getWidth(13, 2)), maxLines: 1,),
+                                            AutoSizeText(members[index].company_brief, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getWidth(18, 2)), maxLines: 5,)
                                           ],
                                         ),
                                       ),
@@ -380,13 +380,13 @@ class _DealsExecutedState extends State<DealsExecuted> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: <Widget>
                                             [
-                                              AutoSizeText('Deal Value', style: TextStyle(color: Color(0xcc982ef0), fontSize: getHeight(13, 2)), maxLines: 1,),
-                                              AutoSizeText(members[index].deal_value, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getHeight(18, 2)), maxLines: 1,),
+                                              AutoSizeText('Deal Value', style: TextStyle(color: Color(0xcc982ef0), fontSize: getWidth(13, 2)), maxLines: 1,),
+                                              AutoSizeText(members[index].deal_value, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getWidth(18, 2)), maxLines: 1,),
                                               SizedBox(
                                                 height: width/50,
                                               ),
-                                              AutoSizeText('Deal Details', style: TextStyle(color: Color(0xcc982ef0), fontSize: getHeight(13, 2)), maxLines: 5,),
-                                              AutoSizeText(members[index].deal_details, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getHeight(18, 2)), maxLines: 1,),
+                                              AutoSizeText('Deal Details', style: TextStyle(color: Color(0xcc982ef0), fontSize: getWidth(13, 2)), maxLines: 5,),
+                                              AutoSizeText(members[index].deal_details, style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w500, fontSize: getWidth(18, 2)), maxLines: 1,),
                                             ],
                                           ),
                                         ),
@@ -400,7 +400,7 @@ class _DealsExecutedState extends State<DealsExecuted> {
                       },
                       staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
                       crossAxisSpacing: getWidth(12, 2),
-                      mainAxisSpacing: getHeight(12, 2),
+                      mainAxisSpacing: getWidth(12, 2),
                     );
                   }
 

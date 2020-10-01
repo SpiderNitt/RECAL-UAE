@@ -197,7 +197,6 @@ class LinkedinState extends State<LinkedIn> {
                       child: Card(
                         //color: ColorGlobal.blueColor,
                         elevation: 5,
-                        shadowColor: const Color(0x802196F3),
                         margin: const EdgeInsets.all(8),
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
@@ -237,7 +236,7 @@ class LinkedinState extends State<LinkedIn> {
                                     child: AutoSizeText(
                                       positions[index].user.toUpperCase(),
                                       style: TextStyle(
-                                        fontSize: getHeight(16, 3),
+                                        fontSize: getWidth(16, 3),
                                         color: ColorGlobal.textColor,
                                         fontWeight: FontWeight.bold,
                                         fontStyle: FontStyle.italic,
@@ -268,8 +267,6 @@ class LinkedinState extends State<LinkedIn> {
                     child: Card(
                       //color: ColorGlobal.blueColor,
                       elevation: 5,
-//                              shadowColor: const Color(0x802196F3),
-
                       margin: const EdgeInsets.all(8),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -298,7 +295,7 @@ class LinkedinState extends State<LinkedIn> {
                                 positions[index].linkedin,
                                 //"Link",
                                 style: TextStyle(
-                                  fontSize: getHeight(12, 3),
+                                  fontSize: getWidth(12, 3),
                                   color: ColorGlobal.textColor,
                                   fontWeight: FontWeight.bold,
                                   fontStyle: FontStyle.italic,
@@ -458,7 +455,6 @@ class Search extends SearchDelegate {
                   child: Card(
                     //color: ColorGlobal.blueColor,
                     elevation: 5,
-                    shadowColor: const Color(0x802196F3),
                     margin: const EdgeInsets.all(8),
                     child: Padding(
                       padding: const EdgeInsets.all(2.0),
@@ -497,7 +493,7 @@ class Search extends SearchDelegate {
                               AutoSizeText(
                                 modelSuggestionList[index].user.toUpperCase(),
                                 style: TextStyle(
-                                  fontSize: getHeight(16, 3),
+                                  fontSize: getWidth(16, 3),
                                   color: ColorGlobal.textColor,
                                   fontWeight: FontWeight.bold,
                                   fontStyle: FontStyle.italic,
@@ -526,7 +522,6 @@ class Search extends SearchDelegate {
                 child: Card(
                   //color: ColorGlobal.blueColor,
                   elevation: 5,
-//                              shadowColor: const Color(0x802196F3),
                   margin: const EdgeInsets.all(8),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -555,7 +550,7 @@ class Search extends SearchDelegate {
                             modelSuggestionList[index].linkedin,
                             //"Link",
                             style: TextStyle(
-                              fontSize: getHeight(12, 3),
+                              fontSize: getWidth(12, 3),
                               color: ColorGlobal.textColor,
                               fontWeight: FontWeight.bold,
                               fontStyle: FontStyle.italic,

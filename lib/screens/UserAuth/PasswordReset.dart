@@ -219,7 +219,7 @@ class _PasswordResetState extends State<PasswordReset> {
                         "Cannot go back at this stage",
                         style: GoogleFonts.lato(
                           color: ColorGlobal.textColor,
-                          fontSize: getHeight(20, 1),
+                          fontSize: getWidth(20, 1),
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -234,7 +234,7 @@ class _PasswordResetState extends State<PasswordReset> {
                         child: Text("OK",
                             style: GoogleFonts.lato(
                               color: ColorGlobal.blueColor,
-                              fontSize: getHeight(18, 1),
+                              fontSize: getWidth(18, 1),
                               fontWeight: FontWeight.w700,
                             )),
                       ),
@@ -303,7 +303,7 @@ class _PasswordResetState extends State<PasswordReset> {
                         'RECAL UAE CHAPTER',
                         style: GoogleFonts.lato(
                           color: ColorGlobal.textColor,
-                          fontSize: getHeight(22, 1),
+                          fontSize: getWidth(22, 1),
                           fontWeight: FontWeight.w900,
                         ),
                       ),
@@ -334,7 +334,7 @@ class _PasswordResetState extends State<PasswordReset> {
                               "CHANGE PASSWORD",
                               style: GoogleFonts.josefinSans(
                                 color: ColorGlobal.textColor,
-                                fontSize: getHeight(18, 1),
+                                fontSize: getWidth(18, 1),
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -423,7 +423,7 @@ class _PasswordResetState extends State<PasswordReset> {
                                           "CHANGE PASSWORD",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                            fontSize: getHeight(18, 1),
+                                            fontSize: getWidth(18, 1),
                                             color: ColorGlobal.whiteColor,
                                             fontWeight: FontWeight.w700,
                                           ),

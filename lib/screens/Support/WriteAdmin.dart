@@ -89,7 +89,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
-                fontSize: getHeight(16, 3));
+                fontSize: getWidth(16, 3));
           }
         },
         child: AnimatedContainer(
@@ -180,7 +180,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.orange,
           textColor: Colors.white,
-          fontSize: getHeight(16, 3));
+          fontSize: getWidth(16, 3));
     }
     if (finished == false) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -200,7 +200,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.red,
             textColor: Colors.white,
-            fontSize: getHeight(16, 3));
+            fontSize: getWidth(16, 3));
         return false;
       });
       if (response.statusCode == 200) {
@@ -227,7 +227,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
               timeInSecForIosWeb: 1,
               backgroundColor: Colors.orange,
               textColor: Colors.white,
-              fontSize: getHeight(16, 3));
+              fontSize: getWidth(16, 3));
           print(responseBody.data);
           return false;
         }
@@ -239,7 +239,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.orange,
             textColor: Colors.white,
-            fontSize: 16.0);
+            fontSize: getWidth(16, 3));
         print('Server error');
         return false;
       }
@@ -386,7 +386,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
                             AutoSizeText(
                               "NEED ADMIN HELP?",
                               style: TextStyle(
-                                  fontSize: getHeight(24, 3),
+                                  fontSize: getWidth(24, 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
                               maxLines: 1,
@@ -396,7 +396,7 @@ class AdminState extends State<WriteAdmin> with TickerProviderStateMixin {
                             AutoSizeText(
                               "Please write your message in the box below",
                               style: TextStyle(
-                                fontSize: getHeight(15, 3),
+                                fontSize: getWidth(15, 3),
                                 color: const Color(0xff3AAFFA),
                               ),
                               textAlign: TextAlign.center,

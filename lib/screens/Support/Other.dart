@@ -381,7 +381,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                             Text(
                               "HOW CAN WE HELP?",
                               style: TextStyle(
-                                  fontSize: getHeight(24, 3),
+                                  fontSize: getWidth(24, 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
                               maxLines: 1,
@@ -391,7 +391,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                             Text(
                               "Please enter your query in the box below",
                               style: TextStyle(
-                                fontSize: getHeight(15, 3),
+                                fontSize: getWidth(15, 3),
                                 color: const Color(0xff3AAFFA),
                               ),
                               textAlign: TextAlign.center,

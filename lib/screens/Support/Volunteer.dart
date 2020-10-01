@@ -92,7 +92,7 @@ class VolunteerState extends State<VolunteerScreen>
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
-                fontSize: getHeight(16, 3));
+                fontSize: getWidth(16, 3));
           }
         },
         child: AnimatedContainer(
@@ -182,7 +182,7 @@ class VolunteerState extends State<VolunteerScreen>
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.orange,
           textColor: Colors.white,
-          fontSize: getHeight(16, 3));
+          fontSize: getWidth(16, 3));
     }
     if (finished == false) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -203,7 +203,7 @@ class VolunteerState extends State<VolunteerScreen>
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.red,
             textColor: Colors.white,
-            fontSize: getHeight(16, 3));
+            fontSize: getWidth(16, 3));
         return false;
       });
 
@@ -230,7 +230,7 @@ class VolunteerState extends State<VolunteerScreen>
               timeInSecForIosWeb: 1,
               backgroundColor: Colors.orange,
               textColor: Colors.white,
-              fontSize: getHeight(16, 3));
+              fontSize: getWidth(16, 3));
           print(responseBody.data);
           return false;
         }
@@ -242,7 +242,7 @@ class VolunteerState extends State<VolunteerScreen>
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.orange,
             textColor: Colors.white,
-            fontSize: getHeight(16, 3));
+            fontSize: getWidth(16, 3));
         print('Server error');
         return false;
       }
@@ -383,7 +383,7 @@ class VolunteerState extends State<VolunteerScreen>
                             AutoSizeText(
                               "WANT TO VOLUNTEER?",
                               style: TextStyle(
-                                  fontSize: getHeight(24, 3),
+                                  fontSize: getWidth(24, 3),
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
                               maxLines: 1,
@@ -393,7 +393,7 @@ class VolunteerState extends State<VolunteerScreen>
                             AutoSizeText(
                               "Please write your message in the box below",
                               style: TextStyle(
-                                fontSize: getHeight(15, 3),
+                                fontSize: getWidth(15, 3),
                                 color: const Color(0xff3AAFFA),
                               ),
                               textAlign: TextAlign.center,

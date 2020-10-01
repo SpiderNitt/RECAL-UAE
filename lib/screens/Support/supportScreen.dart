@@ -49,7 +49,7 @@ class SupportScreenState extends State<SupportScreen> {
                         style: GoogleFonts.josefinSans(
                             color: ColorGlobal.textColor,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                            fontSize: UIUtills().getProportionalWidth(width: 20,choice: 1)),
                       ),
                     ],
                   ),

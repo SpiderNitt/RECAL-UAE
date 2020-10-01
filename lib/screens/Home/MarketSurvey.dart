@@ -191,8 +191,7 @@ class SurveyState extends State<SurveyScreen> {
                 child: GestureDetector(
                   child: Card(
                     //color: ColorGlobal.blueColor,
-                    elevation: 20,
-                    shadowColor: const Color(0x802196F3),
+                    elevation: 5,
                     margin: const EdgeInsets.all(8),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -218,7 +217,7 @@ class SurveyState extends State<SurveyScreen> {
                               AutoSizeText(
                                 positions[index].text.toUpperCase(),
                                 style: TextStyle(
-                                  fontSize: getHeight(20, 3),
+                                  fontSize: getWidth(18, 3),
                                   color: ColorGlobal.textColor,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -236,8 +235,7 @@ class SurveyState extends State<SurveyScreen> {
                 height: height / 7,
                 child: Card(
                   //color: ColorGlobal.blueColor,
-                  elevation: 20,
-                  shadowColor: const Color(0x802196F3),
+                  elevation: 5,
                   margin: const EdgeInsets.all(8),
                   child: Center(
                     child: GestureDetector(
@@ -248,7 +246,7 @@ class SurveyState extends State<SurveyScreen> {
                       child: AutoSizeText(
                         positions[index].link,
                         style: TextStyle(
-                          fontSize: getHeight(10, 3),
+                          fontSize: getWidth(10, 3),
                           color: ColorGlobal.textColor,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic,

@@ -840,7 +840,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   "Change Profile Photo",
                                   style: TextStyle(
                                       color: ColorGlobal.blueColor,
-                                      fontSize: getHeight(16, 1),
+                                      fontSize: getWidth(16, 1),
                                       fontWeight: FontWeight.w400),
                                 ),
                               ),

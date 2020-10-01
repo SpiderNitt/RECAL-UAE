@@ -185,7 +185,7 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
                         vision,
                         style: TextStyle(
                           fontSize:
-                          UIUtills().getProportionalHeight(height: 15, choice: 1),
+                          UIUtills().getProportionalWidth(width: 15, choice: 1),
                           color: ColorGlobal.textColor,
                         ),
                         maxLines: 50,
@@ -232,7 +232,7 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
                       "NO DATA AVAILABLE",
                       style: TextStyle(
                         fontSize:
-                        UIUtills().getProportionalHeight(height: 20, choice: 1),
+                        UIUtills().getProportionalWidth(width: 20, choice: 1),
                         color: ColorGlobal.textColor,
                       ),
                       textAlign: TextAlign.center,
@@ -292,7 +292,7 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
                         vision,
                         style: TextStyle(
                           fontSize:
-                          UIUtills().getProportionalHeight(height: 15, choice: 1),
+                          UIUtills().getProportionalWidth(width: 15, choice: 1),
                           color: ColorGlobal.textColor,
                         ),
                         maxLines: 50,
@@ -338,7 +338,7 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
                       "NO DATA AVAILABLE",
                       style: TextStyle(
                         fontSize:
-                        UIUtills().getProportionalHeight(height: 20, choice: 1),
+                        UIUtills().getProportionalWidth(width: 20, choice: 1),
                         color: ColorGlobal.textColor,
                       ),
                       textAlign: TextAlign.center,

@@ -552,7 +552,7 @@ class _HomeActivityState extends State<HomeActivity> {
             leading: Card(
               child: CircleAvatar(
                 backgroundColor: Colors.white,
-                radius: getHeight(60, 1),
+                radius: getWidth(60, 1),
                 child: Image.asset(
                   'assets/images/recal_circle.png',
                   fit: BoxFit.contain,
@@ -571,7 +571,7 @@ class _HomeActivityState extends State<HomeActivity> {
                 padding: EdgeInsets.only(right: getWidth(20, 1)),
                 icon: Icon(
                   Icons.exit_to_app,
-                  size: getHeight(35, 1),
+                  size: getWidth(35, 1),
                   color: ColorGlobal.textColor,
                 ),
                 onPressed: () {

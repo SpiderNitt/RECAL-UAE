@@ -170,8 +170,7 @@ class _WriteResumeState extends State<WriteResume> {
                             horizontal: width/25, vertical: width/50),
                         child: Material(
                           color: Colors.white,
-                          elevation: 14.0,
-                          shadowColor: Color(0x802196F3),
+                          elevation: 5,
                           borderRadius: BorderRadius.circular(3*width/50),
                           child: Padding
                             (
@@ -218,14 +217,14 @@ class _WriteResumeState extends State<WriteResume> {
                                           [
                                             AutoSizeText('Name', style: TextStyle(
                                                 color: Color(0xfff4c83f),
-                                                fontSize: getHeight(13, 2)),
+                                                fontSize: getWidth(13, 2)),
                                             maxLines: 1,
                                             ),
                                             AutoSizeText(writers[index].writer_name,
                                                 style: TextStyle(
                                                     color: ColorGlobal.textColor,
                                                     fontWeight: FontWeight.w500,
-                                                    fontSize: getHeight(20, 2)),
+                                                    fontSize: getWidth(20, 2)),
                                             maxLines: 1,
                                             ),
                                           ],
@@ -279,7 +278,7 @@ class _WriteResumeState extends State<WriteResume> {
                                                 style: TextStyle(
                                                     color:
                                                     Color(0xcc982ef0),
-                                                    fontSize: getHeight(13, 2)),
+                                                    fontSize: getWidth(13, 2)),
                                             maxLines: 1,
                                             ),
                                             AutoSizeText(writers[index].contact_number,
@@ -288,7 +287,7 @@ class _WriteResumeState extends State<WriteResume> {
                                                         .textColor,
                                                     fontWeight:
                                                     FontWeight.w500,
-                                                    fontSize: getHeight(20, 2)),
+                                                    fontSize: getWidth(20, 2)),
                                             maxLines: 1,
                                             ),
                                           ],
@@ -337,7 +336,7 @@ class _WriteResumeState extends State<WriteResume> {
                                         [
                                           AutoSizeText('Email', style: TextStyle(
                                               color: Color(0xccff3266),
-                                              fontSize: getHeight(13, 2)),
+                                              fontSize: getWidth(13, 2)),
                                           maxLines: 1,
                                           ),
                                           AutoSizeText(writers[index].email,
@@ -345,7 +344,7 @@ class _WriteResumeState extends State<WriteResume> {
                                                   color: ColorGlobal
                                                       .textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: getHeight(20, 2)),
+                                                  fontSize: getWidth(20, 2)),
                                           maxLines: 1,
                                           ),
                                         ],
@@ -393,7 +392,7 @@ class _WriteResumeState extends State<WriteResume> {
                                         [
                                           AutoSizeText('Discounts', style: TextStyle(
                                               color: Color(0xcc3399fe),
-                                              fontSize: getHeight(13, 2)),
+                                              fontSize: getWidth(13, 2)),
                                           maxLines: 1,
                                           ),
                                           AutoSizeText(writers[index].discounts,
@@ -401,7 +400,7 @@ class _WriteResumeState extends State<WriteResume> {
                                                   color: ColorGlobal
                                                       .textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: getHeight(20, 2)),
+                                                  fontSize: getWidth(20, 2)),
                                           maxLines: 1,
                                           ),
                                         ],
@@ -449,7 +448,7 @@ class _WriteResumeState extends State<WriteResume> {
                                         [
                                           AutoSizeText('Link', style: TextStyle(
                                               color: Color(0xcc26cb3c),
-                                              fontSize: getHeight(13, 2)),
+                                              fontSize: getWidth(13, 2)),
                                           maxLines: 1,
                                           ),
                                           GestureDetector(
@@ -460,7 +459,7 @@ class _WriteResumeState extends State<WriteResume> {
                                                     color: ColorGlobal
                                                         .textColor,
                                                     fontWeight: FontWeight.w500,
-                                                    fontSize: getHeight(20, 2)),
+                                                    fontSize: getWidth(20, 2)),
                                             maxLines: 1,
                                             ),
                                           )
@@ -477,10 +476,10 @@ class _WriteResumeState extends State<WriteResume> {
                     },
                     staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
                     crossAxisSpacing: getWidth(12, 2),
-                    mainAxisSpacing: getHeight(12, 2),
+                    mainAxisSpacing: getWidth(12, 2),
                   );
                 }
-            };
+            }
             return Center(child: Text("Try Again!"));
           },
         ),
