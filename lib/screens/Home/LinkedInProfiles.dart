@@ -51,12 +51,20 @@ class LinkedIn extends StatefulWidget {
 
 class LinkedinState extends State<LinkedIn> {
   var positions = new List<LinkedinModel>();
+  var saveColors = new List<Color>();
   var state = 0;
   int internet = 1;
   int error = 0;
   UIUtills uiUtills = new UIUtills();
   List<String> fullList;
   List<GlobalKey<FlipCardState>> cardKey;
+  final List<Color> colorArray = [
+    Colors.blue,
+    Colors.purple,
+    Colors.blueGrey,
+    Colors.deepOrange,
+    Colors.redAccent
+  ];
   initState() {
     super.initState();
     _positions();
@@ -72,6 +80,7 @@ class LinkedinState extends State<LinkedIn> {
   }
 
   Future<String> _positions() async {
+
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
@@ -102,6 +111,7 @@ class LinkedinState extends State<LinkedIn> {
           fullList = positions.map((e) => e.user).toList();
           cardKey = List<GlobalKey<FlipCardState>>.generate(
               positions.length, (index) => new GlobalObjectKey(index));
+          saveColors = List<Color>.generate(positions.length, (index) =>  colorArray.elementAt(Random().nextInt(4)));
           print("Answer");
           print(positions.length);
           state = 1;
@@ -179,13 +189,6 @@ class LinkedinState extends State<LinkedIn> {
           itemBuilder: (context, index) {
             final double width = MediaQuery.of(context).size.width;
             final double height = MediaQuery.of(context).size.height;
-            final List<Color> colorArray = [
-              Colors.blue,
-              Colors.purple,
-              Colors.blueGrey,
-              Colors.deepOrange,
-              Colors.redAccent
-            ];
             print(width);
             print(height);
             return FlipCard(
@@ -207,8 +210,7 @@ class LinkedinState extends State<LinkedIn> {
                               ),
                               CircleAvatar(
                                 radius: width / 14,
-                                backgroundColor:
-                                    colorArray.elementAt(Random().nextInt(4)),
+                                backgroundColor: saveColors[index],
                                 child: Text(
                                   positions[index].user.toUpperCase()[0],
                                   style: TextStyle(
@@ -341,18 +343,15 @@ class LinkedinState extends State<LinkedIn> {
                     Navigator.pop(context);
                   }),
           actions: [
-            IconButton(
-              onPressed: () =>
-                  showSearch(context: context, delegate: Search(positions))
-                      .then((value) {
-                setState(() {
-                  state = 0;
-                  _positions();
-                });
-              }),
-              icon: Icon(
-                Icons.search,
-                color: ColorGlobal.textColor,
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: IconButton(
+                onPressed: () =>
+                    showSearch(context: context, delegate: Search(positions,saveColors)),
+                icon: Icon(
+                  Icons.search,
+                  color: ColorGlobal.textColor,
+                ),
               ),
             )
           ],
@@ -412,41 +411,35 @@ class Search extends SearchDelegate {
     );
   }
 
-  final List<LinkedinModel> listExample;
-  Search(this.listExample);
+  final List<LinkedinModel> listProfiles;
+  final List<Color> saveColor;
+  Search(this.listProfiles, this.saveColor);
 
   @override
   Widget buildSuggestions(BuildContext context) {
     List<String> suggestionList = new List<String>();
     List<LinkedinModel> modelSuggestionList = new List<LinkedinModel>();
     if (query.isEmpty) {
-      suggestionList = listExample.map((e) => e.user).toList();
-      modelSuggestionList = listExample.map((e) => e).toList();
+      suggestionList = listProfiles.map((e) => e.user).toList();
+      modelSuggestionList = listProfiles.map((e) => e).toList();
     } else {
-      suggestionList.addAll(listExample.map((e) => e.user).toList().where(
+      suggestionList.addAll(listProfiles.map((e) => e.user).toList().where(
           (element) => element.toLowerCase().contains(query.toLowerCase())));
-      modelSuggestionList.addAll(listExample.map((e) => e).toList().where(
+      modelSuggestionList.addAll(listProfiles.map((e) => e).toList().where(
           (element) =>
               element.user.toLowerCase().contains(query.toLowerCase())));
     }
     cardKey = List<GlobalKey<FlipCardState>>.generate(
-        modelSuggestionList.length, (index) => new GlobalObjectKey(index));
+        modelSuggestionList.length, (index) => new GlobalObjectKey(index + Random().nextInt(10000)));
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
           itemCount: modelSuggestionList.length,
           itemBuilder: (context, index) {
             final double width = MediaQuery.of(context).size.width;
             final double height = MediaQuery.of(context).size.height;
-            final List<Color> colorArray = [
-              Colors.blue,
-              Colors.purple,
-              Colors.blueGrey,
-              Colors.deepOrange,
-              Colors.redAccent
-            ];
             return FlipCard(
               key: cardKey[index],
               front: Container(
@@ -465,8 +458,7 @@ class Search extends SearchDelegate {
                           ),
                           CircleAvatar(
                             radius: width / 14,
-                            backgroundColor:
-                                colorArray.elementAt(Random().nextInt(4)),
+                            backgroundColor: saveColor[index],
                             child: Text(
                               modelSuggestionList[index].user.toUpperCase()[0],
                               style: TextStyle(
@@ -501,18 +493,6 @@ class Search extends SearchDelegate {
                               ),
                             ],
                           ),
-                          // SizedBox(
-                          //     width: width -
-                          //         width / 1.5 -
-                          //         positions[index].user.length),
-
-                          // Align(
-                          //   alignment: Alignment.topRight,
-                          //   child: Icon(
-                          //     Icons.swap_horiz,
-                          //     color: ColorGlobal.blueColor,
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),
@@ -534,10 +514,6 @@ class Search extends SearchDelegate {
                             SizedBox(
                               width: width - width / 5,
                             ),
-//                            Icon(
-//                              Icons.swap_horiz,
-//                              color: ColorGlobal.blueColor,
-//                            ),
                           ],
                         ),
                         GestureDetector(

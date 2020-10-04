@@ -57,8 +57,10 @@ class _ClosedPositionsState extends State<ClosedPositions> {
 
         positions.forEach((element) {
           print(element.company);
-          if(DateTime.now().isAfter(DateTime.parse(element.open_until))){
-            closedPositions.add(element);
+          if(element.open_until!=null) {
+            if (DateTime.now().isAfter(DateTime.parse(element.open_until))) {
+              closedPositions.add(element);
+            }
           }
         });
 
@@ -186,7 +188,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                 children: [
                                   Row(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                          CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Icon(
                                           Icons.business_center,
@@ -217,7 +219,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                                           ColorGlobal.textColor,
                                                       fontWeight: FontWeight.w500,
                                                       fontSize: getWidth(20,2)),
-                                              maxLines: 1,
+                                              maxLines: 3,
                                               )
                                             ],
                                           ),
@@ -229,7 +231,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                   ),
                                   Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Icon(
                                         Icons.business,
@@ -258,7 +260,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                                     color: ColorGlobal.textColor,
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: getWidth(20,2)),
-                                            maxLines: 1,
+                                            maxLines: 3,
                                             )
                                           ],
                                         ),
@@ -270,7 +272,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                   ),
                                   Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Icon(
                                         Icons.description,
@@ -305,9 +307,6 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                         ),
                                       ),
                                     ],
-                                  ),
-                                  SizedBox(
-                                    height: 3*width/50,
                                   ),
                                 ],
                               ),
