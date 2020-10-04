@@ -11,7 +11,7 @@ class NodataScreen extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
 
     return Center(
-        child: Text("No data available!",
+        child: Text("No data available",
             style: GoogleFonts.josefinSans(
                 fontSize:
                     UIUtills().getProportionalHeight(height: 25, choice: 3),
