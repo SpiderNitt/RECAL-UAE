@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iosrecal/Constant/CustomToolTip.dart';
-import 'package:iosrecal/Constant/utils.dart';
-import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:iosrecal/widgets/CustomToolTip.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:iosrecal/constants/Api.dart';
 import 'package:iosrecal/bloc/KeyboardBloc.dart';
 import 'package:iosrecal/models/LoginData.dart';
 
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:iosrecal/models/User.dart';
-import 'package:iosrecal/Constant/Constant.dart';
-import 'package:iosrecal/Constant/ColorGlobal.dart';
-import 'package:iosrecal/Constant/TextField.dart';
+import 'package:iosrecal/routes.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/widgets/TextField.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +36,7 @@ class LoginState extends State<Login> {
   bool _keyboard = false;
   bool args;
   KeyboardBloc _bloc = new KeyboardBloc();
-  UIUtills uiUtills = new UIUtills();
+  UIUtility uiUtills = new UIUtility();
   bool internetConnection=true;
 
   TextEditingController email =
@@ -246,7 +246,7 @@ class LoginState extends State<Login> {
                   setState(() {
                     _deleteUserDetails();
                     _initController();
-                    uiUtills = new UIUtills();
+                    uiUtills = new UIUtility();
                     internetConnection=false;
                     changePassword = false;
                     primaryButtonText = "SIGN IN";
@@ -340,7 +340,7 @@ class LoginState extends State<Login> {
     super.initState();
     _deleteUserDetails();
     _initController();
-    uiUtills = new UIUtills();
+    uiUtills = new UIUtility();
   }
 
   @override
