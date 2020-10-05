@@ -333,8 +333,8 @@ class _EventState extends State<Event> {
                                   style: TextStyle(
                                         color: Colors.black54,
                                         fontSize:  UIUtills()
-                                            .getProportionalHeight(
-                                            height: 15),
+                                            .getProportionalWidth(
+                                            width: 15),
                                         fontWeight:
                                         FontWeight.bold),
                                 ),
@@ -356,13 +356,13 @@ class _EventState extends State<Event> {
                                         ? TextStyle(
                                         color: Colors.black45,
                                         fontSize:  UIUtills()
-                                            .getProportionalHeight(
-                                            height: 15))
+                                            .getProportionalWidth(
+                                            width: 15))
                                         : TextStyle(
                                         color: Colors.black54,
                                         fontSize:  UIUtills()
-                                            .getProportionalHeight(
-                                            height: 15),
+                                            .getProportionalWidth(
+                                            width: 15),
                                         fontWeight:
                                         FontWeight.bold),
                                   )
@@ -389,8 +389,8 @@ class _EventState extends State<Event> {
                           //overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: GoogleFonts.lato(fontSize:  UIUtills()
-                              .getProportionalHeight(
-                              height: 20),
+                              .getProportionalWidth(
+                              width: 20),
                             fontWeight: FontWeight.w700,
                             color: ColorGlobal.textColor,
                           ),
@@ -403,20 +403,20 @@ class _EventState extends State<Event> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       widget.currEvent.event_description!=""?Container(margin:EdgeInsets.only(top: 8,bottom: 4),child: Text("DESCRIPTION",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize: UIUtills()
-                          .getProportionalHeight(
-                          height: 16)))):SizedBox(),
+                          .getProportionalWidth(
+                          width: 16)))):SizedBox(),
                       widget.currEvent.event_description!=""?
                       secondHalf.isEmpty
     ? Container(
                           child: Text(firstHalf,style:  GoogleFonts.roboto(fontSize:  UIUtills()
-                              .getProportionalHeight(
-                              height: 15),color: ColorGlobal.textColor),))
+                              .getProportionalWidth(
+                              width: 15),color: ColorGlobal.textColor),))
         :  Column(
     children: <Widget>[
      Container(
          child: Text(flag ? (firstHalf + "...") : (firstHalf + secondHalf),style:  GoogleFonts.roboto(fontSize:  UIUtills()
-             .getProportionalHeight(
-             height: 15),color: ColorGlobal.textColor),)),
+             .getProportionalWidth(
+             width: 15),color: ColorGlobal.textColor),)),
      InkWell(
     child: Row(
     mainAxisAlignment: MainAxisAlignment.end,
@@ -424,8 +424,8 @@ class _EventState extends State<Event> {
       Text(
     flag ? "show more" : "show less",
     style: new TextStyle(color: Colors.blue,fontSize:  UIUtills()
-        .getProportionalHeight(
-        height: 14)),
+        .getProportionalWidth(
+        width: 14)),
     ),
     ],
     ),
@@ -452,8 +452,8 @@ class _EventState extends State<Event> {
                                  detailsInfo.detail_message,
                             style: TextStyle(
                                 color: Colors.black54, fontSize:  UIUtills()
-                                .getProportionalHeight(
-                                height: 15)),
+                                .getProportionalWidth(
+                                width: 15)),
                           )) : SizedBox(),
                       SizedBox(
                         height: UIUtills()
@@ -483,8 +483,8 @@ class _EventState extends State<Event> {
                 "AMENDMENT MESSAGE",
                   style: TextStyle(
                       color: ColorGlobal.textColor.withOpacity(0.8), fontSize:  UIUtills()
-                      .getProportionalHeight(
-                      height: 16),fontWeight: FontWeight.w600),
+                      .getProportionalWidth(
+                      width: 16),fontWeight: FontWeight.w600),
                 ),
                 Column(
                   children: <Widget>[
@@ -492,8 +492,8 @@ class _EventState extends State<Event> {
                       detailsInfo.detail_amendment_message,
                       style: TextStyle(
                           color: Colors.black54, fontSize:  UIUtills()
-                          .getProportionalHeight(
-                          height: 15)),
+                          .getProportionalWidth(
+                          width: 15)),
                     ),
                   ],
                 ),
@@ -526,14 +526,14 @@ picturesListUrl.length>0?  Row(
                               Container(
                                   margin: EdgeInsets.only(left: 5),
                                   child: Text("EVENT GALLERY",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize: UIUtills()
-                                      .getProportionalHeight(
-                                      height: 16)))),
+                                      .getProportionalWidth(
+                                      width: 16)))),
                               carouselListUrl.length>5?InkWell(
                                   child: Text("More",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,color:Colors.indigo,fontSize:  UIUtills()
-                                          .getProportionalHeight(
-                                          height: 14))),
+                                          .getProportionalWidth(
+                                          width: 14))),
                                   onTap: () =>
                                   {
                                     Navigator.push(
@@ -623,14 +623,23 @@ picturesListUrl.length>0?  Row(
                         child: (!filesLoading[1] && reminderUrl!=null) ?
                         Column(
                           children: <Widget>[
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.width/2,
-                              child: FadeInImage.memoryNetwork(
-                                placeholder: kTransparentImage,
-                                image: reminderUrl,
-                                fit: BoxFit.cover,
+                            InkWell(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.width/2,
+                                child: FadeInImage.memoryNetwork(
+                                  placeholder: kTransparentImage,
+                                  image: reminderUrl,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
+                                onTap: () =>
+                                {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => EventPictureDisplay(reminderUrl)))
+                                }
                             ),
                             SizedBox(height: UIUtills()
                                 .getProportionalHeight(
@@ -689,8 +698,8 @@ picturesListUrl.length>0?  Row(
                                                           .textColor,
                                                       fontWeight: FontWeight.w600,
                                                       fontSize:  UIUtills()
-                                                          .getProportionalHeight(
-                                                          height: 16)),
+                                                          .getProportionalWidth(
+                                                          width: 16)),
                                                 ),
                                               ),
                                             ],
@@ -739,8 +748,8 @@ picturesListUrl.length>0?  Row(
                                   Text(
                                     "No Sponsors for this event",
                                     style: TextStyle(color: Colors.black38,fontSize:  UIUtills()
-                                        .getProportionalHeight(
-                                        height: 14)),
+                                        .getProportionalWidth(
+                                        width: 14)),
                                   ),
                                 ],
                               );
@@ -749,8 +758,8 @@ picturesListUrl.length>0?  Row(
                                   child: Text(
                                     "Server Error..Try again after sometime",
                                     style: TextStyle(color: Colors.blueGrey,fontSize: UIUtills()
-                                        .getProportionalHeight(
-                                        height: 14)),
+                                        .getProportionalWidth(
+                                        width: 14)),
                                   ));
                             } else {
                               return Center(
@@ -768,8 +777,8 @@ picturesListUrl.length>0?  Row(
                                     Container(
                                         margin: EdgeInsets.only(left: 4),
                                       child: Text("EVENT SPONSORS",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize: UIUtills()
-                                          .getProportionalHeight(
-                                          height: 16))),),
+                                          .getProportionalWidth(
+                                          width: 16))),),
                                   ],
                                 ),
                                 Container(
@@ -853,8 +862,8 @@ picturesListUrl.length>0?  Row(
                                                         .ellipsis,
                                                     style: TextStyle(
                                                       fontSize:  UIUtills()
-                                                          .getProportionalHeight(
-                                                          height: 15),
+                                                          .getProportionalWidth(
+                                                          width: 15),
                                                         fontWeight:
                                                         FontWeight
                                                             .bold),
@@ -892,8 +901,8 @@ picturesListUrl.length>0?  Row(
                                                             TextOverflow
                                                                 .ellipsis,
                                                             style: TextStyle(fontSize:  UIUtills()
-                                                                .getProportionalHeight(
-                                                                height: 15)),
+                                                                .getProportionalWidth(
+                                                                width: 15)),
                                                             maxLines: 1,
                                                           ),
                                                         ),
@@ -932,8 +941,8 @@ picturesListUrl.length>0?  Row(
                                       Container(
                                           margin: EdgeInsets.only(left: 4),
                                           child: Text("EVENT LINKS",style:TextStyle(fontWeight: FontWeight.w600,color:ColorGlobal.textColor.withOpacity(0.8),fontSize: UIUtills()
-                                              .getProportionalHeight(
-                                              height: 16))),
+                                              .getProportionalWidth(
+                                              width: 16))),
                                       )
                                     ],
                                   ),

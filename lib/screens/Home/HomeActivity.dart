@@ -705,7 +705,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                   child: unreadMessages !=0 ? Badge(
                                     badgeContent: Text(unreadMessages>9 ? "9+" : unreadMessages.toString(),style: TextStyle(color: Colors.white),),
                                     badgeColor: Colors.green,
-                                    position: BadgePosition.topRight(top: -8, right: -8),
+                                    position: BadgePosition(top:0, end:0),
                                     child: Image.asset(
                                       'assets/images/chat.png',
                                       color: Colors.blue[800],

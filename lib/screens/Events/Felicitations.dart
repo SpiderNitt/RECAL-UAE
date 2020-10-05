@@ -64,8 +64,8 @@ class _FelicitationsState extends State<Felicitations> {
                 if(isEmpty){
                   return Center(
                       child:Text("No felicitations for this event",style:GoogleFonts.josefinSans(fontSize: UIUtills()
-                          .getProportionalHeight(
-                          height: 22),color: ColorGlobal.textColor))
+                          .getProportionalWidth(
+                          width: 22),color: ColorGlobal.textColor))
                   );
                 }else if(internet==0){
                   return (Center(child:NoInternetScreen()));
@@ -124,8 +124,8 @@ class _FelicitationsState extends State<Felicitations> {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                                 fontSize:UIUtills()
-                                    .getProportionalHeight(
-                                    height: 18) , color: Colors.black87),
+                                    .getProportionalWidth(
+                                    width: 18) , color: Colors.black87),
                           ):SizedBox(),
                           trailing: Icon(
                             Icons.keyboard_arrow_down,
@@ -136,8 +136,8 @@ class _FelicitationsState extends State<Felicitations> {
                           children: <Widget>[
                             Container(
                                 margin: EdgeInsets.all(6),child: snapshot.data[index].achievement!=null?Text(snapshot.data[index].achievement,style: TextStyle(fontSize: UIUtills()
-                                .getProportionalHeight(
-                                height: 18)),):Text("Not available"))
+                                .getProportionalWidth(
+                                width: 18)),):Text("Not available"))
                           ],
                         ),
                       ),

@@ -80,7 +80,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                         Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.downToUp,
+                              type: PageTransitionType.bottomToTop,
                               duration: Duration(milliseconds: 300),
                               child: VisionMission()),);
                       },
@@ -304,7 +304,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                         Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.downToUp,
+                              type: PageTransitionType.bottomToTop,
                               duration: Duration(milliseconds: 300),
                               child: ContactUs()),);
                       },
