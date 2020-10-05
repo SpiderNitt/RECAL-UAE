@@ -74,9 +74,8 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
             final_members.add(element);
             names.add(element.name);
           }
-
         });
-
+        final_members.sort((a,b)=> a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         setState(() {
           state = 1;
         });

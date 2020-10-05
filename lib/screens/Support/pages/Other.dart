@@ -359,7 +359,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                         Navigator.pop(context);
                       }),
               title: Text(
-                'Other',
+                'Other Queries',
                 style: TextStyle(color: ColorGlobal.textColor),
               ),
             ),
@@ -402,7 +402,7 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                               maxLines: 8,
                               controller: messageController,
                               decoration: InputDecoration(
-                                hintText: 'Enter details',
+                                hintText: 'Enter your query',
                                 hintStyle: TextStyle(color: Colors.grey[500]),
                                 filled: true,
                                 fillColor: Colors.white70,

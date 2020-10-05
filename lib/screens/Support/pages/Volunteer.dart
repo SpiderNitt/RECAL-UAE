@@ -404,7 +404,7 @@ class VolunteerState extends State<VolunteerScreen>
                               maxLines: 5,
                               controller: messageController,
                               decoration: InputDecoration(
-                                hintText: 'Enter feedback',
+                                hintText: 'Enter your message',
                                 hintStyle: TextStyle(color: Colors.grey[500]),
                                 filled: true,
                                 fillColor: Colors.white70,

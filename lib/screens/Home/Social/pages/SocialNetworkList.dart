@@ -65,6 +65,7 @@ class _MemberDatabaseState extends State<MemberDatabase> {
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
         members = list.map((model) => MemberModel.fromJson(model)).toList();
+        members.sort((a,b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
       }else if(responseBody.status_code == 401){
         onTimeOut();
       }else{
@@ -197,15 +198,15 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                             ),
                             //backgroundColor: Colors.red,
                             children: [
-                              members[index].email!=null ? ListTile(
+                              members[index].email!=null && members[index].email.trim()!="" ? ListTile(
                                 title: CustomToolTip(text: members[index].email,),
                                 leading: Icon(Icons.email,  size: getWidth(26,2), color: Colors.indigoAccent),
                               ) : Container(),
-                              ListTile(
+                              members[index].organization!=null && members[index].organization.trim()!="" ? ListTile(
                                 title: AutoSizeText(members[index].organization, style : TextStyle(fontSize: getWidth(16,2)), maxLines: 1,),
                                 leading: Icon(Icons.business, size: getWidth(26,2), color: Colors.orange),
-                              ),
-                              members[index].position!=null ? ListTile(
+                              ) : Container(),
+                              members[index].position!=null && members[index].position.trim()!="" ? ListTile(
                                 title: AutoSizeText(members[index].position, style : TextStyle(fontSize: getWidth(16,2)), maxLines: 1,),
                                 leading: Icon(Icons.business_center, size: getWidth(26,2), color: Colors.green),
                               ) : Container(),

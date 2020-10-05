@@ -403,7 +403,7 @@ class TechnicalState extends State<TechnicalSupport>
                               maxLines: 8,
                               controller: messageController,
                               decoration: InputDecoration(
-                                hintText: 'Enter message',
+                                hintText: 'Describe your issue',
                                 hintStyle: TextStyle(color: Colors.grey[500]),
                                 filled: true,
                                 fillColor: Colors.white70,

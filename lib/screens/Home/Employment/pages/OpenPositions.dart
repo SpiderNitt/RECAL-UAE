@@ -149,6 +149,19 @@ class _OpenPositionsState extends State<OpenPositions> {
               onPressed: () {
                 Navigator.pop(context);
               }),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: IconButton(
+                onPressed: () =>
+                    showSearch(context: context, delegate: Search(openPositions)),
+                icon: Icon(
+                  Icons.search,
+                  color: ColorGlobal.textColor,
+                ),
+              ),
+            )
+          ],
           title: Text(
             'Open Positions',
             style: TextStyle(color: ColorGlobal.textColor),
@@ -381,6 +394,222 @@ class _OpenPositionsState extends State<OpenPositions> {
     );
   }
 }
+class Search extends SearchDelegate {
+  UIUtility uiUtills = new UIUtility();
+  @override
+  String get searchFieldLabel => "Position, Companies";
+  @override
+  TextStyle get searchFieldStyle => TextStyle(fontSize: getWidth(18, 1));
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return <Widget>[
+    ];
+  }
+
+  double getHeight(double height, int choice) {
+    return uiUtills.getProportionalHeight(height: height, choice: choice);
+  }
+
+  double getWidth(double width, int choice) {
+    return uiUtills.getProportionalWidth(width: width, choice: choice);
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 10),
+      child: IconButton(
+        icon: Icon(Icons.close, color: ColorGlobal.textColor),
+        onPressed: () => Navigator.pop(context),
+      ),
+    );
+  }
+
+  String selectedResult = "";
+  @override
+  Widget buildResults(BuildContext context) {
+    return Container(
+      child: Center(
+        child: Text(
+          selectedResult,
+          style: TextStyle(color: ColorGlobal.textColor),
+        ),
+      ),
+    );
+  }
+
+  final List<PositionModel> listPositions;
+  Search(this.listPositions);
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<PositionModel> modelSuggestionList = new List<PositionModel>();
+    if (query.isEmpty) {
+      modelSuggestionList = listPositions.map((e) => e).toList();
+    } else {
+      modelSuggestionList.addAll(listPositions.map((e) => e).toList().where(
+              (element) => (element.position + " " + element.description + " " + element.company).toLowerCase().contains(query.toLowerCase())));
+    }
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
+
+                return Center(
+                  child: ListView.builder(
+                    itemCount: modelSuggestionList.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () => Navigator.push(context, MaterialPageRoute( builder: (context) => JobDetail(modelSuggestionList[index]))),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: width/25, vertical: width/50),
+                          child: Material(
+                            color: Colors.white,
+                            elevation: 5,
+                            borderRadius: BorderRadius.circular(3*width/50),
+                            child: Padding(
+                              padding: EdgeInsets.all(3*width/50),
+                              child: Column(
+                                children: [
+//                                    openPositions[index].open_until!=null?
+//                                    Row(
+//                                      mainAxisAlignment: MainAxisAlignment.end,
+//                                      children: [
+//                                        AutoSizeText("Open Until: ${openPositions[index].open_until}",
+//                                          style: TextStyle(
+//                                              color: Colors.red,
+//                                              fontSize: getWidth(13, 2)),
+//                                          maxLines: 1,
+//                                        ),
+//                                      ],
+//                                    ): SizedBox(),
+                                  Row(
+                                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.business_center,
+                                        size: width/10,
+                                        color: Color(0xcc982ef0),
+                                      ),
+                                      SizedBox(
+                                        width: 3*width/100,
+                                      ),
+                                      Container(
+                                        width: 67*width/100,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            AutoSizeText('Position',
+                                              style: TextStyle(
+                                                  color: Color(0xcc982ef0),
+                                                  fontSize: getWidth(13, 2)),
+                                              maxLines: 1,
+                                            ),
+                                            AutoSizeText(modelSuggestionList[index].position,
+                                              style: TextStyle(
+                                                  color:
+                                                  ColorGlobal.textColor,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: getWidth(20, 2)),
+                                              maxLines: 3,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 3*width/50,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Icon(
+                                        Icons.business,
+                                        size: width/10,
+                                        color: Color(0xffed622b),
+                                      ),
+                                      SizedBox(
+                                        width: 3*width/100,
+                                      ),
+                                      Container(
+                                        width: 67*width/100,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            AutoSizeText('Company',
+                                              style: TextStyle(
+                                                  color: Color(0xffed622b),
+                                                  fontSize: getHeight(13, 2)),
+                                              maxLines: 1,
+                                            ),
+                                            AutoSizeText(modelSuggestionList[index].company,
+                                              style: TextStyle(
+                                                  color: ColorGlobal.textColor,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: getHeight(20, 2)),
+                                              maxLines: 3,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 3*width/50,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Icon(
+                                        Icons.phone,
+                                        size: width/10,
+                                        color: Color(0xcc26cb3c),
+                                      ),
+                                      SizedBox(
+                                        width: 3*width/100,
+                                      ),
+                                      Container(
+                                        width: 67*width/100,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            AutoSizeText('Contact',
+                                              style: TextStyle(
+                                                  color: Color(0xcc26cb3c),
+                                                  fontSize: getHeight(13, 2)),
+                                              maxLines: 1,
+                                            ),
+                                            CustomToolTip(text: modelSuggestionList[index].contact,),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+  }
+}
+
 class CustomToolTip extends StatelessWidget {
 
   String text;

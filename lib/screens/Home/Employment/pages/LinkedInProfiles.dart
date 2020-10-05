@@ -108,6 +108,7 @@ class LinkedinState extends State<LinkedIn> {
               list.map((model) => LinkedinModel.fromJson(model)).toList();
           positions.removeWhere((element) =>
               element.linkedin == null || element.linkedin.trim() == "");
+          positions.sort((a,b)=> a.user.toLowerCase().compareTo(b.user.toLowerCase()));
           fullList = positions.map((e) => e.user).toList();
           cardKey = List<GlobalKey<FlipCardState>>.generate(
               positions.length, (index) => new GlobalObjectKey(index));
@@ -170,6 +171,10 @@ class LinkedinState extends State<LinkedIn> {
   }
 
   Widget getBody() {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    uiUtills.updateScreenDimesion(width: width, height: height);
+
     if (internet == 0) {
       return NoInternetScreen(notifyParent: refresh);
     } else if (error == 1) {
@@ -370,6 +375,8 @@ class Search extends SearchDelegate {
   List<GlobalKey<FlipCardState>> cardKey;
   UIUtility uiUtills = new UIUtility();
   @override
+  TextStyle get searchFieldStyle => TextStyle(fontSize: getWidth(18, 1));
+  @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
 //      IconButton(
@@ -417,14 +424,10 @@ class Search extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> suggestionList = new List<String>();
     List<LinkedinModel> modelSuggestionList = new List<LinkedinModel>();
     if (query.isEmpty) {
-      suggestionList = listProfiles.map((e) => e.user).toList();
       modelSuggestionList = listProfiles.map((e) => e).toList();
     } else {
-      suggestionList.addAll(listProfiles.map((e) => e.user).toList().where(
-          (element) => element.toLowerCase().contains(query.toLowerCase())));
       modelSuggestionList.addAll(listProfiles.map((e) => e).toList().where(
           (element) =>
               element.user.toLowerCase().contains(query.toLowerCase())));
