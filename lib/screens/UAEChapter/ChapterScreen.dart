@@ -2,14 +2,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iosrecal/screens/Achievements/AchievementsScreen.dart';
+import 'package:iosrecal/screens/UAEChapter/pages/AchievementsScreen.dart';
 import 'package:page_transition/page_transition.dart';
-import 'ContactUs.dart';
-import 'Pay.dart';
-import 'VisionandMission.dart';
-import 'CoreComm.dart';
-import 'package:iosrecal/Constant/utils.dart';
-import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'pages/ContactUs.dart';
+import 'pages/Pay.dart';
+import 'pages/VisionandMission.dart';
+import 'pages/CoreComm.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
 
 class ChapterScreen extends StatefulWidget {
   const ChapterScreen({Key key}) : super(key: key);
@@ -19,7 +19,7 @@ class ChapterScreen extends StatefulWidget {
 }
 
 class _ChapterScreenState extends State<ChapterScreen> {
-  UIUtills uiUtills = new UIUtills();
+  UIUtility uiUtills = new UIUtility();
 
   double getHeight(double height, int choice) {
     return uiUtills.getProportionalHeight(height: height, choice: choice);
@@ -80,7 +80,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                         Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.bottomToTop,
+                              type: PageTransitionType.downToUp,
                               duration: Duration(milliseconds: 300),
                               child: VisionMission()),);
                       },
@@ -304,7 +304,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                         Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.bottomToTop,
+                              type: PageTransitionType.downToUp,
                               duration: Duration(milliseconds: 300),
                               child: ContactUs()),);
                       },

@@ -4,17 +4,17 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:iosrecal/Constant/utils.dart';
-import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:iosrecal/constants/Api.dart';
 import 'package:iosrecal/models/User.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/screens/Home/NoInternet.dart';
+import 'package:iosrecal/widgets/NoInternet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:iosrecal/Constant/Constant.dart';
-import 'package:iosrecal/Constant/ColorGlobal.dart';
+import 'package:iosrecal/routes.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
 import 'package:badges/badges.dart';
-import 'EditProfile.dart';
+import 'pages/EditProfile.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileScreen extends StatefulWidget {
@@ -30,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   User recal_user;
   int getPic = 0;
   bool internetConnection = false;
-  UIUtills uiUtills = new UIUtills();
+  UIUtility uiUtills = new UIUtility();
 
 
   Future<dynamic> _fetchPrimaryDetails() async {
@@ -220,7 +220,7 @@ refresh () {
   void initState() {
     // TODO: implement initState
     super.initState();
-    uiUtills = new UIUtills();
+    uiUtills = new UIUtility();
     user = _fetchPrimaryDetails();
     _getUserPicture();
   }
@@ -408,7 +408,7 @@ refresh () {
 }
 
 class PictureScreen extends StatelessWidget {
-  UIUtills uiUtills = new UIUtills();
+  UIUtility uiUtills = new UIUtility();
   double getHeight(double height, int choice) {
     return uiUtills.getProportionalHeight(height: height, choice: choice);
   }
