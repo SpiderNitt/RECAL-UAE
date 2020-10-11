@@ -43,6 +43,7 @@ class _HomeActivityState extends State<HomeActivity> {
   String cookie = "";
   int unreadMessages=0;
   bool internetConnection=true;
+  String userName;
   UIUtility uiUtills = new UIUtility();
 
 
@@ -179,7 +180,12 @@ class _HomeActivityState extends State<HomeActivity> {
           profile_pic_flag=1;
           recal_user =
               User.fromProfile(json.decode(json.encode(responseBody.data)));
-          picture = recal_user.profile_pic;
+          setState(() {
+            picture = recal_user.profile_pic;
+            userName = recal_user.name;
+          });
+          prefs.setString("name", recal_user.name);
+          prefs.setString("email", recal_user.email);
           print("picture : " + picture.toString());
           if(picture!=null) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -633,55 +639,33 @@ class _HomeActivityState extends State<HomeActivity> {
                           ) : CircleAvatar(
                                 radius: width/14,
                                 backgroundColor: Colors.orange,
-                                child: FutureBuilder<dynamic> (
-                                  future: user,
-                                  builder: (context,snapshot) {
-                                    if(snapshot.hasData) {
-                                      return Text("${snapshot.data["name"]}".toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: width/14),);
-                                    }
-                                    else if (snapshot.hasError) {
-                                      onTimeOut();
-                                    }
-                                    return CircularProgressIndicator();
-                                  },
+                                child: Text(userName.toUpperCase()[0], style: TextStyle(color: Colors.white, fontSize: width/14),)
                                 ),
                               )
                       ),
                     ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.only(top:10.0,left: 20,right: 20, bottom: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        FutureBuilder<dynamic>(
-                          future: user,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Expanded(
-                                child: Container(
-                                  width: width*0.99,
-                                  child: Center(
-                                    child: AutoSizeText(
-                                      "Welcome "+"${snapshot.data["name"]}",
-                                      style: GoogleFonts.josefinSans(
-                                          fontSize: getWidth(25, 1),
-                                          fontWeight: FontWeight.bold,
-                                          color: ColorGlobal.whiteColor
-                                      ),
-                                      maxLines: 1,
-                                    ),
-                                  ),
+                        Expanded(
+                          child: Container(
+                            width: width*0.99,
+                            child: Center(
+                              child: AutoSizeText(
+                                "Welcome "+ userName,
+                                style: GoogleFonts.josefinSans(
+                                    fontSize: getWidth(25, 1),
+                                    fontWeight: FontWeight.bold,
+                                    color: ColorGlobal.whiteColor
                                 ),
-                              );
-                            } else if (snapshot.hasError) {
-                              onTimeOut();
-                            }
-                            // By default, show a loading spinner.
-                            return CircularProgressIndicator();
-                          },
-                        ),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -703,9 +687,9 @@ class _HomeActivityState extends State<HomeActivity> {
                                   backgroundColor: Colors.white,
                                   radius: width / 10,
                                   child: unreadMessages !=0 ? Badge(
-                                    badgeContent: Text(unreadMessages>9 ? "9+" : unreadMessages.toString(),style: TextStyle(color: Colors.white),),
-                                    badgeColor: Colors.green,
-                                    position: BadgePosition(top:0, right: 0),
+                                    badgeContent: Text(unreadMessages>9 ? "9+" : unreadMessages.toString(),style: TextStyle(color: Colors.white, fontSize: unreadMessages>9 ? getWidth(10, 1) :  getWidth(12, 1)),),
+                                    badgeColor: Colors.red,
+                                    position: BadgePosition(top:-getWidth(9, 1), end: -getWidth(9, 1)),
                                     child: Image.asset(
                                       'assets/images/chat.png',
                                       color: Colors.blue[800],
