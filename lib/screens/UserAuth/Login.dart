@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iosrecal/Constant/CustomToolTip.dart';
-import 'package:iosrecal/Constant/utils.dart';
-import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:iosrecal/widgets/CustomToolTip.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:iosrecal/constants/Api.dart';
 import 'package:iosrecal/bloc/KeyboardBloc.dart';
 import 'package:iosrecal/models/LoginData.dart';
 
 import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:iosrecal/models/User.dart';
-import 'package:iosrecal/Constant/Constant.dart';
-import 'package:iosrecal/Constant/ColorGlobal.dart';
-import 'package:iosrecal/Constant/TextField.dart';
+import 'package:iosrecal/routes.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/widgets/TextField.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +36,7 @@ class LoginState extends State<Login> {
   bool _keyboard = false;
   bool args;
   KeyboardBloc _bloc = new KeyboardBloc();
-  UIUtills uiUtills = new UIUtills();
+  UIUtility uiUtills = new UIUtility();
   bool internetConnection=true;
 
   TextEditingController email =
@@ -91,7 +91,7 @@ class LoginState extends State<Login> {
               borderRadius: BorderRadius.circular(20),
             ),
             title: Text('Are you sure?'),
-            content : Text('Do you want to exit_ the app?'),
+            content : Text('Do you want to exit the app?'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -138,7 +138,7 @@ class LoginState extends State<Login> {
         progressWidgetAlignment: Alignment.center,
         messageTextStyle: TextStyle(
             color: Colors.black,
-            fontSize: getHeight(18, 1),
+            fontSize: getWidth(18, 1),
             fontWeight: FontWeight.w600),
       );
       progressDialog.show();
@@ -172,7 +172,7 @@ class LoginState extends State<Login> {
       primaryButtonText,
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: getHeight(18, 1),
+        fontSize: getWidth(18, 1),
         color: ColorGlobal.whiteColor,
         fontWeight: FontWeight.w700,
       ),
@@ -184,7 +184,7 @@ class LoginState extends State<Login> {
       secondaryButtonText,
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: getHeight(16, 1),
+        fontSize: getWidth(16, 1),
         color: ColorGlobal.textColor.withOpacity(0.9),
         fontWeight: FontWeight.w500,
       ),
@@ -246,7 +246,7 @@ class LoginState extends State<Login> {
                   setState(() {
                     _deleteUserDetails();
                     _initController();
-                    uiUtills = new UIUtills();
+                    uiUtills = new UIUtility();
                     internetConnection=false;
                     changePassword = false;
                     primaryButtonText = "SIGN IN";
@@ -286,27 +286,29 @@ class LoginState extends State<Login> {
                 "Write an email to",
                 style: GoogleFonts.lato(
                   color: ColorGlobal.textColor,
-                  fontSize: getHeight(18, 1),
+                  fontSize: getWidth(18, 1),
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Platform.isAndroid ?
               GestureDetector(
                 child: Text(
                   "recaluaechapter@gmail.com",
                   style: GoogleFonts.lato(
                     color: ColorGlobal.blueColor,
                     decoration: TextDecoration.underline,
-                    fontSize: getHeight(18, 1),
+                    fontSize: getWidth(18, 1),
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 onTap: () async {
                   if(Platform.isAndroid)
                     await _sendMail();
+                  else {
+                    Fluttertoast.showToast(msg: "Copied Email Address",textColor: Colors.white,backgroundColor: Colors.green);
+                    Clipboard.setData(new ClipboardData(text:"recaluaechapter@gmail.com"));
+                  }
                 },
-              ) :
-              CustomToolTip(text: 'recaluaechapter@gmail.com'),
+              ),
             ],
           ),
           actions: [
@@ -338,7 +340,7 @@ class LoginState extends State<Login> {
     super.initState();
     _deleteUserDetails();
     _initController();
-    uiUtills = new UIUtills();
+    uiUtills = new UIUtility();
   }
 
   @override
@@ -403,7 +405,7 @@ class LoginState extends State<Login> {
                           'RECAL UAE CHAPTER',
                           style: GoogleFonts.lato(
                             color: ColorGlobal.textColor,
-                            fontSize: getHeight(22, 1),
+                            fontSize: getWidth(22, 1),
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -434,7 +436,7 @@ class LoginState extends State<Login> {
                                 pageTitle,
                                 style: GoogleFonts.josefinSans(
                                   color: ColorGlobal.textColor,
-                                  fontSize: getHeight(18, 1),
+                                  fontSize: getWidth(18, 1),
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -605,7 +607,7 @@ class LoginState extends State<Login> {
                                 "Don't have credentials?",
                                 maxLines: 4,
                                 style: TextStyle(
-                                  fontSize: getHeight(18, 1),
+                                  fontSize: getWidth(18, 1),
                                   color: ColorGlobal.blueColor.withOpacity(0.9),
                                   fontWeight: FontWeight.w300,
                                   decoration: TextDecoration.underline,

@@ -5,7 +5,7 @@ import 'dart:io';
 import 'ResponseBody.dart';
 import 'User.dart';
 import 'package:http/http.dart' as http;
-import 'package:iosrecal/Endpoint/Api.dart';
+import 'package:iosrecal/constants/Api.dart';
 
 class LoginData {
   LoginData({this.email, this.password, this.user});

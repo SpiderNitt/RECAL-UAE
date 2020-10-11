@@ -5,20 +5,20 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iosrecal/Constant/Constant.dart';
-import 'package:iosrecal/Constant/utils.dart';
-import 'package:iosrecal/Endpoint/Api.dart';
-import 'package:iosrecal/screens/Events/Event.dart';
+import 'package:iosrecal/routes.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:iosrecal/constants/Api.dart';
+import 'package:iosrecal/screens/Events/pages/Event.dart';
 import 'package:iosrecal/models/EventInfo.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/screens/Home/NoInternet.dart';
-import 'package:iosrecal/screens/Home/errorWrong.dart';
+import 'package:iosrecal/widgets/NoInternet.dart';
+import 'package:iosrecal/widgets/Error.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:iosrecal/Constant/ColorGlobal.dart';
-import 'CompletedEvents.dart';
-import 'UpcomingEvents.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'pages/CompletedEvents.dart';
+import 'pages/UpcomingEvents.dart';
 import 'dart:io' show Platform;
-import 'UpcomingEvents.dart';
+import 'pages/UpcomingEvents.dart';
 import 'package:http/http.dart' as http;
 
 class EventsScreen extends StatefulWidget {
@@ -41,7 +41,7 @@ class _EventsScreenState extends State<EventsScreen> {
     final screenSize = MediaQuery
         .of(context)
         .size;
-    UIUtills().updateScreenDimesion(
+    UIUtility().updateScreenDimesion(
         width: screenSize.width, height: screenSize.height);
     return SafeArea (
       child: Scaffold(
@@ -88,20 +88,20 @@ class _EventsScreenState extends State<EventsScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                          height: UIUtills()
+                          height: UIUtility()
                               .getProportionalHeight(
                               height: 2),
                         ),
-                        Icon(Icons.event,size: UIUtills()
+                        Icon(Icons.event,size: UIUtility()
                             .getProportionalWidth(
                             width: 24),),
                         Padding(
-                          padding: EdgeInsets.all(UIUtills()
+                          padding: EdgeInsets.all(UIUtility()
                               .getProportionalHeight(
                               height: 8)),
                           child: AutoSizeText(
                             "UPCOMING",
-                            style: GoogleFonts.josefinSans(fontSize: UIUtills()
+                            style: GoogleFonts.josefinSans(fontSize: UIUtility()
                                 .getProportionalWidth(
                                 width: 15), fontWeight: FontWeight.w700),
                             maxLines: 1,
@@ -114,20 +114,20 @@ class _EventsScreenState extends State<EventsScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                          height: UIUtills()
+                          height: UIUtility()
                               .getProportionalHeight(
                               height: 2),
                         ),
-                        Icon(Icons.event_available,size: UIUtills()
+                        Icon(Icons.event_available,size: UIUtility()
                             .getProportionalWidth(
                             width: 24),),
                         Padding(
-                          padding: EdgeInsets.all(UIUtills()
+                          padding: EdgeInsets.all(UIUtility()
                               .getProportionalHeight(
                               height: 8)),
                           child: AutoSizeText(
                             "COMPLETED",
-                            style: GoogleFonts.josefinSans(fontSize: UIUtills()
+                            style: GoogleFonts.josefinSans(fontSize: UIUtility()
                                 .getProportionalWidth(
                                 width: 15), fontWeight: FontWeight.w700),
                             maxLines: 1,
