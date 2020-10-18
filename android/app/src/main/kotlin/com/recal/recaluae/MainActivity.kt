@@ -1,4 +1,4 @@
-package com.example.iosrecal
+package com.mexample.iosrecal
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
