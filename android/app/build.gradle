@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
+def keystorePropertiesFile = rootProject.file('app/key.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
@@ -63,9 +63,9 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true // add this
-            shrinkResources true // add this
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro' // add this
+            minifyEnabled true
+            multiDexEnabled true
+            shrinkResources true
             signingConfig signingConfigs.release
         }
     }
