@@ -188,7 +188,7 @@ class LinkedinState extends State<LinkedIn> {
     }
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(getHeight(8, 1)),
         child: ListView.builder(
           itemCount: positions.length,
           itemBuilder: (context, index) {
@@ -205,7 +205,7 @@ class LinkedinState extends State<LinkedIn> {
                       child: Card(
                         //color: ColorGlobal.blueColor,
                         elevation: 5,
-                        margin: const EdgeInsets.all(8),
+//                        margin: const EdgeInsets.symmetric(8),
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Row(
@@ -246,7 +246,6 @@ class LinkedinState extends State<LinkedIn> {
                                         fontSize: getWidth(16, 3),
                                         color: ColorGlobal.textColor,
                                         fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.italic,
                                       ),
                                     ),
                                   )
@@ -274,7 +273,7 @@ class LinkedinState extends State<LinkedIn> {
                     child: Card(
                       //color: ColorGlobal.blueColor,
                       elevation: 5,
-                      margin: const EdgeInsets.all(8),
+//                      margin: const EdgeInsets.all(8),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -305,7 +304,6 @@ class LinkedinState extends State<LinkedIn> {
                                   fontSize: getWidth(12, 3),
                                   color: ColorGlobal.textColor,
                                   fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
                                 ),
                                 maxLines: 2,
                                 textAlign: TextAlign.start,
@@ -451,7 +449,7 @@ class Search extends SearchDelegate {
                   child: Card(
                     //color: ColorGlobal.blueColor,
                     elevation: 5,
-                    margin: const EdgeInsets.all(8),
+//                    margin: const EdgeInsets.all(8),
                     child: Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: Row(
@@ -491,7 +489,6 @@ class Search extends SearchDelegate {
                                   fontSize: getWidth(16, 3),
                                   color: ColorGlobal.textColor,
                                   fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
                                 ),
                               ),
                             ],
@@ -505,7 +502,7 @@ class Search extends SearchDelegate {
                 child: Card(
                   //color: ColorGlobal.blueColor,
                   elevation: 5,
-                  margin: const EdgeInsets.all(8),
+//                  margin: const EdgeInsets.all(8),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -532,7 +529,6 @@ class Search extends SearchDelegate {
                               fontSize: getWidth(12, 3),
                               color: ColorGlobal.textColor,
                               fontWeight: FontWeight.bold,
-                              fontStyle: FontStyle.italic,
                             ),
                             maxLines: 2,
                             textAlign: TextAlign.start,

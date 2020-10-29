@@ -42,7 +42,7 @@ class _CompletedEventsState extends State<CompletedEvents> with TickerProviderSt
   }
   Widget EmptyList(BuildContext context){
     return Center(
-      child: Text("No events to show",style: GoogleFonts.josefinSans(fontSize: 22,color: ColorGlobal.textColor),),
+      child: Text("No events to show",style: GoogleFonts.josefinSans(fontSize: UIUtility().getProportionalWidth(width: 22,choice: 1),color: ColorGlobal.textColor),),
     );
   }
   Future updateList(index) async {

@@ -208,8 +208,8 @@ class _EventState extends State<Event> {
                                      style: TextStyle(
                                          color: Colors.black87,
                                          fontSize: UIUtility()
-                                             .getProportionalHeight(
-                                             height: 16)),
+                                             .getProportionalWidth(
+                                             width: 16)),
                                    )),
                              ),
                            ],
@@ -884,8 +884,8 @@ picturesListUrl.length>0?  Row(
                                                       .center,
                                                   children: <Widget>[
                                                     Icon(Icons.phone,size:  UIUtility()
-                                                        .getProportionalHeight(
-                                                        height: 20),),
+                                                        .getProportionalWidth(
+                                                        width: 20),),
                                                     Container(
                                                       margin: EdgeInsets.only(
                                                           left: 4),

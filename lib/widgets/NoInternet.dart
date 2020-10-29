@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
 import 'package:iosrecal/screens/Recal/home/HomeScreen.dart';
 
 class NoInternetScreen extends StatelessWidget {
@@ -9,8 +10,9 @@ class NoInternetScreen extends StatelessWidget {
   NoInternetScreen({Key key, @required this.notifyParent}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    //final double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    UIUtility().updateScreenDimesion(width: width,height: height);
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -28,7 +30,7 @@ class NoInternetScreen extends StatelessWidget {
                     child: Text(
                       "NOT CONNECTED TO INTERNET",
                       style: TextStyle(
-                          fontSize: 25,
+                          fontSize: UIUtility().getProportionalWidth(width: 22,choice: 3),
                           fontWeight: FontWeight.bold,
                           color: const Color(0xff3AAFFA)),
                       textAlign: TextAlign.center,
@@ -54,7 +56,7 @@ class NoInternetScreen extends StatelessWidget {
                   child: FlatButton.icon(
                     color: const Color(0xff3AAFFA),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(9),
+                      borderRadius: BorderRadius.circular(UIUtility().getProportionalWidth(width: 9, choice: 1)),
                     ),
                     onPressed: () {
                       if (notifyParent != null) notifyParent();
@@ -67,7 +69,7 @@ class NoInternetScreen extends StatelessWidget {
                     label: Text("Refresh Page",
                         style: GoogleFonts.lato(
                           color: ColorGlobal.textColor,
-                          fontSize: 16,
+                          fontSize: UIUtility().getProportionalWidth(width: 16, choice: 1),
                           fontWeight: FontWeight.w700,
                         )),
                   ),

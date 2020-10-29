@@ -72,138 +72,145 @@ class _VolunteerCardState extends State<VolunteerCard> with WidgetsBindingObserv
       padding: EdgeInsets.all(UIUtility()
           .getProportionalHeight(
           height: 8)),
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(UIUtility()
-              .getProportionalHeight(
-              height: 15)),
-        ),
-        child: Container(
-          child: Padding(
-            padding: EdgeInsets.only(top: UIUtility()
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder:(context)=>
+          widget.status==2?Felicitations(widget.currEvent.event_id):Event(widget.isCompleted,widget.currEvent)));
+        },
+        child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(UIUtility()
                 .getProportionalHeight(
-                height: 2), right: UIUtility()
-                .getProportionalWidth(
-                width: 4),bottom:UIUtility()
-                .getProportionalHeight(
-                height: 6)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Container(
-                      child:
-                      widget.status!=2?Text( widget.currEvent.event_type!=null?(widget.currEvent.event_type):" ",
-                        maxLines: 1,
-                        style: TextStyle(
-                            color: ColorGlobal.color2,
-                            fontWeight: FontWeight.bold,
-                            fontSize: UIUtility()
-                                .getProportionalHeight(
-                                height: 16)),
-                      ): Text(
-                        getDate(),
-                        style: TextStyle(
-                            fontSize: UIUtility()
-                                .getProportionalHeight(
-                                height: 16),
-                            color: ColorGlobal.color2,
-                            fontWeight: FontWeight.bold),
-                      ),
-
-                      margin: EdgeInsets.only(
-                          left: UIUtility()
-                              .getProportionalWidth(
-                              width: 14), top: UIUtility()
-                          .getProportionalHeight(
-                          height: 6), right: UIUtility()
-                          .getProportionalWidth(
-                          width: 4), bottom: UIUtility()
-                          .getProportionalHeight(
-                          height: 2)),
-                    ),
-                    widget.isCompleted==true ?
-                    Container(
-                      margin: EdgeInsets.only(top: UIUtility()
-                          .getProportionalHeight(
-                          height: 6)),
-                      child:getAttendWidget(),
-                    ) : SizedBox(),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: UIUtility()
-                      .getProportionalHeight(
-                      height: 4)),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                height: 15)),
+          ),
+          child: Container(
+            child: Padding(
+              padding: EdgeInsets.only(top: UIUtility()
+                  .getProportionalHeight(
+                  height: 2), right: UIUtility()
+                  .getProportionalWidth(
+                  width: 4),bottom:UIUtility()
+                  .getProportionalHeight(
+                  height: 6)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Row(
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            margin:EdgeInsets.only(left: UIUtility()
-                                .getProportionalWidth(
-                                width: 10)),
-                            child: Icon(
-                              Icons.event_note,
-                              size: UIUtility()
+                      Container(
+                        child:
+                        widget.status!=2?Text( widget.currEvent.event_type!=null?(widget.currEvent.event_type):" ",
+                          maxLines: 1,
+                          style: TextStyle(
+                              color: ColorGlobal.color2,
+                              fontWeight: FontWeight.bold,
+                              fontSize: UIUtility()
                                   .getProportionalWidth(
-                                  width: 32),
-                              color: Colors.green,
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: UIUtility()
+                                  width: 16)),
+                        ): Text(
+                          getDate(),
+                          style: TextStyle(
+                              fontSize: UIUtility()
+                                  .getProportionalWidth(
+                                  width: 16),
+                              color: ColorGlobal.color2,
+                              fontWeight: FontWeight.bold),
+                        ),
+
+                        margin: EdgeInsets.only(
+                            left: UIUtility()
                                 .getProportionalWidth(
-                                width: 4)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Container(
+                                width: 14), top: UIUtility()
+                            .getProportionalHeight(
+                            height: 6), right: UIUtility()
+                            .getProportionalWidth(
+                            width: 4), bottom: UIUtility()
+                            .getProportionalHeight(
+                            height: 2)),
+                      ),
+                      widget.isCompleted==true ?
+                      Container(
+                        margin: EdgeInsets.only(top: UIUtility()
+                            .getProportionalHeight(
+                            height: 6)),
+                        child:getAttendWidget(),
+                      ) : SizedBox(),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: UIUtility()
+                        .getProportionalHeight(
+                        height: 4)),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              margin:EdgeInsets.only(left: UIUtility()
+                                  .getProportionalWidth(
+                                  width: 10)),
+                              child: Icon(
+                                Icons.event_note,
+                                size: UIUtility()
+                                    .getProportionalWidth(
+                                    width: 32),
+                                color: Colors.green,
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: UIUtility()
+                                  .getProportionalWidth(
+                                  width: 4)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
     width:UIUtility().getProportionalWidth(width: 200),
-                                  child: Text(
-                                    widget.status==2?(widget.currEvent.event_name!=null?widget.currEvent.event_name:" "):getDate(),
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: UIUtility()
-                                            .getProportionalHeight(
-                                            height: 16),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: UIUtility()
-                                      .getProportionalHeight(
-                                      height: 3)),
-                                  child: Text(
-                                    getTime(),
-                                    style: TextStyle(
-                                      color: Colors.black45,
+                                    child: Text(
+                                      widget.status==2?(widget.currEvent.event_name!=null?widget.currEvent.event_name:" "):getDate(),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: UIUtility()
+                                              .getProportionalWidth(
+                                              width: 16),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Container(
+                                    margin: EdgeInsets.only(top: UIUtility()
+                                        .getProportionalHeight(
+                                        height: 3)),
+                                    child: Text(
+                                      getTime(),
+                                      style: TextStyle(
+                                        color: Colors.black45,
+                                        fontSize: UIUtility().getProportionalWidth(width: 12,choice: 1),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Container(child: IconButton(icon:Icon(Icons.chevron_right,size: UIUtility()
-                          .getProportionalWidth(
-                          width: 22),),onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder:(context)=>
-                        widget.status==2?Felicitations(widget.currEvent.event_id):Event(widget.isCompleted,widget.currEvent)));
-                      },),margin: EdgeInsets.only(right: UIUtility()
-                          .getProportionalWidth(
-                          width: 8)),),
-                    ],
+                          ],
+                        ),
+                        Container(child: IconButton(icon:Icon(Icons.chevron_right,size: UIUtility()
+                            .getProportionalWidth(
+                            width: 22),),onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder:(context)=>
+                          widget.status==2?Felicitations(widget.currEvent.event_id):Event(widget.isCompleted,widget.currEvent)));
+                        },),margin: EdgeInsets.only(right: UIUtility()
+                            .getProportionalWidth(
+                            width: 8)),),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

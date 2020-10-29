@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
 import 'package:iosrecal/models/EventInfo.dart';
 import '../widgets/EventCard.dart';
 class UpcomingEvents extends StatefulWidget {
@@ -30,11 +31,17 @@ class _UpcomingEventsState extends State<UpcomingEvents> with TickerProviderStat
 
   Widget EmptyList(){
     return Center(
-      child: Text("No upcoming events",style: GoogleFonts.josefinSans(fontSize: 22,color: ColorGlobal.textColor)),
+      child: Text("No upcoming events",style: GoogleFonts.josefinSans(fontSize: UIUtility().getProportionalWidth(width: 22,choice: 0),color: ColorGlobal.textColor)),
     );
   }
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
+    UIUtility().updateScreenDimesion(
+        width: screenSize.width, height: screenSize.height);
+
     return eventList.isEmpty?EmptyList():Container(
       child: AnimatedList(
           key: animatedListKey,

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
 
 class Error8Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //final double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    UIUtility().updateScreenDimesion(width: width, height: height);
     return SafeArea(
       child: Scaffold(
         body: Container(
           color: Colors.white,
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 40.0),
+            padding: EdgeInsets.symmetric(vertical: UIUtility().getProportionalHeight(height: 40, choice: 3)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -23,7 +25,7 @@ class Error8Screen extends StatelessWidget {
                     child: Text(
                       "ERROR!!",
                       style: TextStyle(
-                          fontSize: 25,
+                          fontSize: UIUtility().getProportionalWidth(width: 25, choice: 3),
                           fontWeight: FontWeight.bold,
                           color: const Color(0xff3AAFFA)),
                       textAlign: TextAlign.center,
@@ -37,7 +39,7 @@ class Error8Screen extends StatelessWidget {
                     child: Text(
                       "Something went wrong :(",
                       style: TextStyle(
-                          fontSize: 25,
+                          fontSize: UIUtility().getProportionalWidth(width: 25, choice: 3),
                           fontWeight: FontWeight.bold,
                           color: const Color(0xff3AAFFA)),
                       textAlign: TextAlign.center,
@@ -59,7 +61,7 @@ class Error8Screen extends StatelessWidget {
                     //width: width / 1.5,
                   ),
                 ),
-                SizedBox(height: 12.0),
+                SizedBox(height: UIUtility().getProportionalHeight(height: 12, choice: 3)),
               ],
             ),
           ),

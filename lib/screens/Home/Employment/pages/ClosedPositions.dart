@@ -218,7 +218,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                                       color:
                                                           ColorGlobal.textColor,
                                                       fontWeight: FontWeight.w500,
-                                                      fontSize: getWidth(20,2)),
+                                                      fontSize: getWidth(18,2)),
                                               maxLines: 3,
                                               )
                                             ],
@@ -259,7 +259,7 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                                 style: TextStyle(
                                                     color: ColorGlobal.textColor,
                                                     fontWeight: FontWeight.w500,
-                                                    fontSize: getWidth(20,2)),
+                                                    fontSize: getWidth(18,2)),
                                             maxLines: 3,
                                             )
                                           ],
@@ -296,12 +296,16 @@ class _ClosedPositionsState extends State<ClosedPositions> {
                                                   fontSize: getWidth(13,2)),
                                               maxLines: 1,
                                             ),
-                                            AutoSizeText(closedPositions[index].description,
-                                              style: TextStyle(
-                                                  color: ColorGlobal.textColor,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: getWidth(20,2)),
-                                              maxLines: 7,
+                                            Container(
+                                              width: 67*width/100,
+                                              child: Text(closedPositions[index].description,
+                                                style: TextStyle(
+                                                    color: ColorGlobal.textColor,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: getWidth(18,2)),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 6,
+                                              ),
                                             )
                                           ],
                                         ),

@@ -550,42 +550,36 @@ class _HomeActivityState extends State<HomeActivity> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar:PreferredSize(
-          preferredSize: Size.fromHeight(getHeight(60, 1)),
-          child: AppBar(
-            backgroundColor: ColorGlobal.whiteColor,
-            centerTitle: true,
-            leading: Card(
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
+        appBar:AppBar(
+          backgroundColor: ColorGlobal.whiteColor,
+          centerTitle: true,
+          leading: Card(
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
                 radius: getWidth(60, 1),
-                child: Image.asset(
-                  'assets/images/recal_circle.png',
-                  fit: BoxFit.contain,
-                ),
+              child: Image.asset(
+                'assets/images/recal_circle.png',
+                fit: BoxFit.contain,
               ),
-              shape: RoundedRectangleBorder(
-                  borderRadius:
-                  new BorderRadius.circular(getHeight(60, 1))),
             ),
-            title:Text(
-              'RECAL UAE CHAPTER',
-              style: GoogleFonts.josefinSans(color: ColorGlobal.textColor, fontWeight: FontWeight.bold,fontSize: getWidth(20, 1)),
-            ),
-            actions: <Widget>[
-              IconButton(
-                padding: EdgeInsets.only(right: getWidth(20, 1)),
-                icon: Icon(
-                  Icons.exit_to_app,
-                  size: getWidth(35, 1),
-                  color: ColorGlobal.textColor,
-                ),
-                onPressed: () {
-                  _onLogoutPressed();
-                },
-              )
-            ],
           ),
+          title:Text(
+            'RECAL UAE CHAPTER',
+            style: GoogleFonts.josefinSans(color: ColorGlobal.textColor, fontWeight: FontWeight.bold,fontSize: getWidth(20, 1)),
+          ),
+          actions: <Widget>[
+            IconButton(
+              padding: EdgeInsets.only(right: getWidth(20, 1)),
+              icon: Icon(
+                Icons.exit_to_app,
+                size: getWidth(35, 1),
+                color: ColorGlobal.textColor,
+              ),
+              onPressed: () {
+                _onLogoutPressed();
+              },
+            )
+          ],
         ),
         body: internetConnection==false ? NoInternetScreen(notifyParent: refreshFull) :
             profile_pic_flag==0 ? Center(child: SpinKitSquareCircle(

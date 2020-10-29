@@ -249,7 +249,6 @@ class SurveyState extends State<SurveyScreen> {
                           fontSize: getWidth(10, 3),
                           color: ColorGlobal.textColor,
                           fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
                         ),
                         maxLines: 3,
                         textAlign: TextAlign.center,
