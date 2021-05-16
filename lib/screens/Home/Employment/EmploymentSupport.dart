@@ -1,10 +1,11 @@
+import 'dart:io' show Platform;
+
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'package:iosrecal/routes.dart';
-import 'dart:io' show Platform;
 import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:iosrecal/routes.dart';
 
 class EmploymentSupport extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
   UIUtility uiUtills = new UIUtility();
 
   @override
-  void initState(){
+  void initState() {
     uiUtills = new UIUtility();
   }
 
@@ -40,7 +41,9 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                   backgroundColor: ColorGlobal.whiteColor,
                   leading: IconButton(
                       icon: Icon(
-                        Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
+                        Platform.isAndroid
+                            ? Icons.arrow_back
+                            : Icons.arrow_back_ios,
                         color: ColorGlobal.textColor,
                       ),
                       onPressed: () {
@@ -68,9 +71,10 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                 height: height / 2.75,
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: AssetImage('assets/images/socialBusiness.jpg'),
-                                    ))))),
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(
+                                      'assets/images/socialBusiness.jpg'),
+                                ))))),
                     Column(children: <Widget>[
                       SizedBox(
                         height: height / 3.25,
@@ -84,7 +88,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                             width: width / 12,
                           ),
                           GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.pushNamed(context, OPEN_POSITIONS);
                               },
                               child: Column(
@@ -103,29 +107,29 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                     ),
                                     elevation: 5,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        new BorderRadius.circular(width / 10)),
+                                        borderRadius: new BorderRadius.circular(
+                                            width / 10)),
                                   ),
                                   SizedBox(height: 6.0),
                                   Container(
                                       child: Column(children: <Widget>[
-                                        AutoSizeText(
-                                          "Open",
-                                          style: TextStyle(
-                                              fontSize: getWidth(16, 2),
-                                              color: Color(0xFF433d3e),
-                                              fontWeight: FontWeight.w600),
-                                          maxLines: 1,
-                                        ),
-                                        AutoSizeText(
-                                          "Positions",
-                                          style: TextStyle(
-                                              fontSize: getWidth(16, 2),
-                                              color: Color(0xFF433d3e),
-                                              fontWeight: FontWeight.w600),
-                                          maxLines: 1,
-                                        ),
-                                      ])),
+                                    AutoSizeText(
+                                      "Open",
+                                      style: TextStyle(
+                                          fontSize: getWidth(16, 2),
+                                          color: Color(0xFF433d3e),
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                    AutoSizeText(
+                                      "Positions",
+                                      style: TextStyle(
+                                          fontSize: getWidth(16, 2),
+                                          color: Color(0xFF433d3e),
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                  ])),
                                 ],
                                 mainAxisAlignment: MainAxisAlignment.center,
                               )),
@@ -133,7 +137,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                             width: width / 12,
                           ),
                           GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.pushNamed(context, CLOSED_POSITIONS);
                               },
                               child: Column(
@@ -152,29 +156,29 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                     ),
                                     elevation: 5,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        new BorderRadius.circular(width / 10)),
+                                        borderRadius: new BorderRadius.circular(
+                                            width / 10)),
                                   ),
                                   SizedBox(height: 6.0),
                                   Container(
                                       child: Column(children: <Widget>[
-                                        AutoSizeText(
-                                          "Closed",
-                                          style: TextStyle(
-                                              fontSize: getWidth(16, 2),
-                                              color: Color(0xFF433d3e),
-                                              fontWeight: FontWeight.w600),
-                                          maxLines: 1,
-                                        ),
-                                        AutoSizeText(
-                                          "Positions",
-                                          style: TextStyle(
-                                              fontSize: getWidth(16, 2),
-                                              color: Color(0xFF433d3e),
-                                              fontWeight: FontWeight.w600),
-                                          maxLines: 1,
-                                        ),
-                                      ])),
+                                    AutoSizeText(
+                                      "Closed",
+                                      style: TextStyle(
+                                          fontSize: getWidth(16, 2),
+                                          color: Color(0xFF433d3e),
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                    AutoSizeText(
+                                      "Positions",
+                                      style: TextStyle(
+                                          fontSize: getWidth(16, 2),
+                                          color: Color(0xFF433d3e),
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                  ])),
                                 ],
                                 mainAxisAlignment: MainAxisAlignment.center,
                               )),
@@ -182,7 +186,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                             width: width / 12,
                           ),
                           GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.pushNamed(context, MEMBER_LINKEDIN);
                               },
                               child: Column(
@@ -190,36 +194,42 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                   Card(
                                     child: Container(
                                       child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        radius: width / 10,
-                                        child: Text("in",style: TextStyle(color: Color(int.parse("0xff0076b4")), fontWeight: FontWeight.bold, fontSize: width/10),)
-                                      ),
+                                          backgroundColor: Colors.white,
+                                          radius: width / 10,
+                                          child: Text(
+                                            "in",
+                                            style: TextStyle(
+                                                color: Color(
+                                                    int.parse("0xff0076b4")),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: width / 10),
+                                          )),
                                     ),
                                     elevation: 5,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        new BorderRadius.circular(width / 10)),
+                                        borderRadius: new BorderRadius.circular(
+                                            width / 10)),
                                   ),
                                   SizedBox(height: 6.0),
                                   Container(
                                       child: Column(children: <Widget>[
-                                        AutoSizeText(
-                                          "LinkedIn",
-                                          style: TextStyle(
-                                              fontSize: getWidth(16, 2),
-                                              color: Color(0xFF433d3e),
-                                              fontWeight: FontWeight.w600),
-                                          maxLines: 1,
-                                        ),
-                                        AutoSizeText(
-                                          "Profiles",
-                                          style: TextStyle(
-                                              fontSize: getWidth(16, 2),
-                                              color: Color(0xFF433d3e),
-                                              fontWeight: FontWeight.w600),
-                                          maxLines: 1,
-                                        ),
-                                      ])),
+                                    AutoSizeText(
+                                      "LinkedIn",
+                                      style: TextStyle(
+                                          fontSize: getWidth(16, 2),
+                                          color: Color(0xFF433d3e),
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                    AutoSizeText(
+                                      "Profiles",
+                                      style: TextStyle(
+                                          fontSize: getWidth(16, 2),
+                                          color: Color(0xFF433d3e),
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                  ])),
                                 ],
                                 mainAxisAlignment: MainAxisAlignment.center,
                               )),
@@ -236,7 +246,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                           width: width / 4,
                         ),
                         GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pushNamed(context, MARKET_SURVEY);
                             },
                             child: Column(
@@ -255,29 +265,29 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                   ),
                                   elevation: 5,
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      new BorderRadius.circular(width / 10)),
+                                      borderRadius: new BorderRadius.circular(
+                                          width / 10)),
                                 ),
                                 SizedBox(height: 6.0),
                                 Container(
                                     child: Column(children: <Widget>[
-                                      AutoSizeText(
-                                        "Market",
-                                        style: TextStyle(
-                                            fontSize: getWidth(16, 2),
-                                            color: Color(0xFF433d3e),
-                                            fontWeight: FontWeight.w600),
-                                        maxLines: 1,
-                                      ),
-                                      AutoSizeText(
-                                        "Survey",
-                                        style: TextStyle(
-                                            fontSize: getWidth(16, 2),
-                                            color: Color(0xFF433d3e),
-                                            fontWeight: FontWeight.w600),
-                                        maxLines: 1,
-                                      ),
-                                    ])),
+                                  AutoSizeText(
+                                    "Market",
+                                    style: TextStyle(
+                                        fontSize: getWidth(16, 2),
+                                        color: Color(0xFF433d3e),
+                                        fontWeight: FontWeight.w600),
+                                    maxLines: 1,
+                                  ),
+                                  AutoSizeText(
+                                    "Survey",
+                                    style: TextStyle(
+                                        fontSize: getWidth(16, 2),
+                                        color: Color(0xFF433d3e),
+                                        fontWeight: FontWeight.w600),
+                                    maxLines: 1,
+                                  ),
+                                ])),
                               ],
                               mainAxisAlignment: MainAxisAlignment.center,
                             )),
@@ -285,7 +295,7 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                           width: width / 12,
                         ),
                         GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pushNamed(context, WRITE_RESUME_SCREEN);
                             },
                             child: Column(
@@ -304,29 +314,29 @@ class EmploymentSupportState extends State<EmploymentSupport> {
                                   ),
                                   elevation: 5,
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      new BorderRadius.circular(width / 10)),
+                                      borderRadius: new BorderRadius.circular(
+                                          width / 10)),
                                 ),
                                 SizedBox(height: 6.0),
                                 Container(
                                     child: Column(children: <Widget>[
-                                      AutoSizeText(
-                                        "Write",
-                                        style: TextStyle(
-                                            fontSize: getWidth(16, 2),
-                                            color: Color(0xFF433d3e),
-                                            fontWeight: FontWeight.w600),
-                                        maxLines: 1,
-                                      ),
-                                      AutoSizeText(
-                                        "Resume",
-                                        style: TextStyle(
-                                            fontSize: getWidth(16, 2),
-                                            color: Color(0xFF433d3e),
-                                            fontWeight: FontWeight.w600),
-                                        maxLines: 1,
-                                      ),
-                                    ])),
+                                  AutoSizeText(
+                                    "Write",
+                                    style: TextStyle(
+                                        fontSize: getWidth(16, 2),
+                                        color: Color(0xFF433d3e),
+                                        fontWeight: FontWeight.w600),
+                                    maxLines: 1,
+                                  ),
+                                  AutoSizeText(
+                                    "Resume",
+                                    style: TextStyle(
+                                        fontSize: getWidth(16, 2),
+                                        color: Color(0xFF433d3e),
+                                        fontWeight: FontWeight.w600),
+                                    maxLines: 1,
+                                  ),
+                                ])),
                               ],
                               mainAxisAlignment: MainAxisAlignment.center,
                             )),
@@ -346,7 +356,7 @@ class ClippingClass2 extends CustomClipper<Path> {
     var path = Path();
     path.lineTo(0.0, size.height - size.height / 6);
     path.quadraticBezierTo(size.width - size.width / 4, size.height, size.width,
-        size.height - size.height /6);
+        size.height - size.height / 6);
 
     path.lineTo(size.width, 0.0);
     path.close();

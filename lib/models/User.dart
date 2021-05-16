@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class User  {
+class User {
   String email;
   String password;
   String name;
@@ -19,10 +18,22 @@ class User  {
   bool loggedIn;
   String profile_pic;
 
-  User({this.email, this.password, this.name, this.user_id, this.cookie,
-      this.year_of_graduation, this.mobile_no, this.organization, this.position,
-      this.gender, this.is_registered, this.linkedIn_link, this.branch,
-      this.emirate, this.loggedIn,
+  User(
+      {this.email,
+      this.password,
+      this.name,
+      this.user_id,
+      this.cookie,
+      this.year_of_graduation,
+      this.mobile_no,
+      this.organization,
+      this.position,
+      this.gender,
+      this.is_registered,
+      this.linkedIn_link,
+      this.branch,
+      this.emirate,
+      this.loggedIn,
       this.profile_pic});
 
   saveUserDetails() async {
@@ -37,14 +48,20 @@ class User  {
     print("login after name ${prefs.getString("name")}");
   }
 
-  Future<User> getUserDetails () async {
+  Future<User> getUserDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    this.name = prefs.getString("name") == null ? "+9,q" : prefs.getString("name");
-    this.email = prefs.getString("email") == null ? "+9,q" : prefs.getString("email");
-    this.cookie = prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
-    this.user_id = prefs.getString("user_id") == null ? -1 : int.parse(prefs.getString("user_id"));
+    this.name =
+        prefs.getString("name") == null ? "+9,q" : prefs.getString("name");
+    this.email =
+        prefs.getString("email") == null ? "+9,q" : prefs.getString("email");
+    this.cookie =
+        prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+    this.user_id = prefs.getString("user_id") == null
+        ? -1
+        : int.parse(prefs.getString("user_id"));
     return this;
   }
+
   factory User.fromLogin(Map<String, dynamic> json) {
     return User(
       name: json['name'],
@@ -52,6 +69,7 @@ class User  {
       user_id: json['user_id'],
     );
   }
+
   factory User.fromStorage(Map<String, dynamic> json) {
     return User(
       name: json['name'],
@@ -59,25 +77,28 @@ class User  {
       cookie: json['cookie'],
     );
   }
+
   factory User.fromCheckLogin(Map<String, dynamic> json) {
     return User(
       loggedIn: json['loggedIn'],
     );
   }
+
   factory User.fromNormal(Map<String, dynamic> json) {
     return User(
       name: json['name'],
       email: json['email'],
     );
   }
+
   factory User.fromProfile(Map<String, dynamic> json) {
     return User(
       name: json['name'],
       email: json['email'],
-      year_of_graduation : json['year_of_graduation'],
-      mobile_no : json['mobile_no'],
-      organization : json['organization'] ,
-      position : json['position'],
+      year_of_graduation: json['year_of_graduation'],
+      mobile_no: json['mobile_no'],
+      organization: json['organization'],
+      position: json['position'],
       gender: json['gender'],
       is_registered: json['is_registered'],
       linkedIn_link: json['linkedIn_link'],

@@ -1,12 +1,14 @@
 import 'dart:async';
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:folding_cell/folding_cell.dart';
 import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
 import 'package:iosrecal/screens/Home/Business/pages/BusinessNetworkList.dart';
 import 'package:iosrecal/screens/Home/Business/pages/DealsExecuted.dart';
+
 import 'pages/BusinessDashboard.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
-import 'dart:io' show Platform;
 
 class BusinessScreen extends StatefulWidget {
   @override
@@ -49,10 +51,12 @@ class _WaveHeaderState extends State<BusinessScreen> {
 
 class FoldingCellMultipleCardsDemo extends StatefulWidget {
   @override
-  _FoldingCellMultipleCardsDemoState createState() => _FoldingCellMultipleCardsDemoState();
+  _FoldingCellMultipleCardsDemoState createState() =>
+      _FoldingCellMultipleCardsDemoState();
 }
 
-class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsDemo> {
+class _FoldingCellMultipleCardsDemoState
+    extends State<FoldingCellMultipleCardsDemo> {
   final _foldingCellKey1 = GlobalKey<SimpleFoldingCellState>();
   final _foldingCellKey2 = GlobalKey<SimpleFoldingCellState>();
   final _foldingCellKey3 = GlobalKey<SimpleFoldingCellState>();
@@ -61,7 +65,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
   UIUtility uiUtills = new UIUtility();
 
   @override
-  void initState(){
+  void initState() {
     uiUtills = new UIUtility();
     Timer(Duration(milliseconds: 250), () {
       _foldingCellKey1?.currentState?.toggleFold();
@@ -82,18 +86,20 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
     return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
-  void _navigatePage(int num){
-    if(num==0)
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => DashBoard()));
-    else if(num==1)
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => BusinessDatabase()));
+  void _navigatePage(int num) {
+    if (num == 0)
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => DashBoard()));
+    else if (num == 1)
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => BusinessDatabase()));
     else
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => DealsExecuted()));
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => DealsExecuted()));
   }
 
   @override
   Widget build(BuildContext context) {
-
     options.add("Business Dashboard");
     options.add("Business Network List");
     options.add("Deals Executed");
@@ -112,7 +118,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
             key: _foldingCellKey1,
             frontWidget: _buildFrontWidget(_foldingCellKey1, 0),
             innerWidget: _buildInnerWidget(_foldingCellKey1, 0),
-            cellSize: Size(width, height/8),
+            cellSize: Size(width, height / 8),
             padding: EdgeInsets.all(15),
             animationDuration: Duration(milliseconds: 500),
             borderRadius: 10,
@@ -123,7 +129,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
             key: _foldingCellKey2,
             frontWidget: _buildFrontWidget(_foldingCellKey2, 1),
             innerWidget: _buildInnerWidget(_foldingCellKey2, 1),
-            cellSize: Size(width, height/8),
+            cellSize: Size(width, height / 8),
             padding: EdgeInsets.all(15),
             animationDuration: Duration(milliseconds: 500),
             borderRadius: 10,
@@ -134,7 +140,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
             key: _foldingCellKey3,
             frontWidget: _buildFrontWidget(_foldingCellKey3, 2),
             innerWidget: _buildInnerWidget(_foldingCellKey3, 2),
-            cellSize: Size(width, height/8),
+            cellSize: Size(width, height / 8),
             padding: EdgeInsets.all(15),
             animationDuration: Duration(milliseconds: 500),
             borderRadius: 10,
@@ -146,8 +152,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
     );
   }
 
-  Widget _buildFrontWidget(
-      GlobalKey<SimpleFoldingCellState> key, int num) {
+  Widget _buildFrontWidget(GlobalKey<SimpleFoldingCellState> key, int num) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -179,7 +184,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
     final double width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return new GestureDetector(
-      onTap: (){
+      onTap: () {
         _navigatePage(num);
       },
       child: Container(
@@ -191,14 +196,13 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
               width: width,
             ),
             Image(
-              height: height/10 ,
-              width: height/10 ,
+              height: height / 10,
+              width: height / 10,
               fit: BoxFit.cover,
-              image:
-              images[num],
+              image: images[num],
             ),
             SizedBox(
-              height: height/16,
+              height: height / 16,
             ),
             Text(
               options[num],
@@ -208,7 +212,6 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
                 fontWeight: FontWeight.w600,
               ),
             ),
-
           ],
         ),
       ),

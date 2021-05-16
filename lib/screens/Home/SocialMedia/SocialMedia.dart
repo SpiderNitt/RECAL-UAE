@@ -1,24 +1,21 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:ui';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:iosrecal/routes.dart';
-import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:http/http.dart' as http;
-import 'package:iosrecal/models/SocialMediaModel.dart';
-import 'dart:ui';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'dart:io';
-import 'dart:convert';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:iosrecal/constants/Api.dart';
-import '../../../widgets/Error.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:iosrecal/widgets/NoInternet.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
 import 'package:iosrecal/constants/UIUtility.dart';
 import 'package:iosrecal/models/ChapterModel.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:iosrecal/models/SocialMediaModel.dart';
+import 'package:iosrecal/routes.dart';
+import 'package:iosrecal/widgets/NoInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SocialMediaScreen extends StatefulWidget {
   @override

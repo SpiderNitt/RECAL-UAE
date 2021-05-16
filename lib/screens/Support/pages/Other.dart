@@ -1,21 +1,18 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:iosrecal/routes.dart';
-import 'package:iosrecal/bloc/KeyboardBloc.dart';
-import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:progress_dialog/progress_dialog.dart';
-import 'package:iosrecal/constants/Api.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:iosrecal/bloc/KeyboardBloc.dart';
+import 'package:iosrecal/constants/Api.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
 import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:iosrecal/routes.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OtherScreen extends StatefulWidget {
   @override
@@ -385,7 +382,6 @@ class OtherState extends State<OtherScreen> with TickerProviderStateMixin {
                                   color: const Color(0xff3AAFFA),
                                   fontWeight: FontWeight.bold),
                               maxLines: 1,
-
                             ),
                             SizedBox(height: height / 64),
                             Text(

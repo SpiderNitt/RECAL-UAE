@@ -1,5 +1,3 @@
-import 'package:iosrecal/models/SocialMediaModel.dart';
-
 class ChapterModel {
   final String mission;
   final String vision;
@@ -7,6 +5,7 @@ class ChapterModel {
   final String forgot_pass;
   final String welcome_back;
   final List<dynamic> social_media;
+
   ChapterModel(
       {this.mission,
       this.vision,

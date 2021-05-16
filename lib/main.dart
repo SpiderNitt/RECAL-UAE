@@ -1,41 +1,35 @@
-import 'dart:async';
-
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'screens/Home/Employment/pages/JobDetails.dart';
-import 'screens/Recal/IntroPage.dart';
-import 'screens/UserAuth/pages/PasswordReset.dart';
-import 'screens/Home/Business/pages/BusinessNetworkList.dart';
+
+import 'routes.dart';
 import 'screens/Home/Business/BusinessScreen.dart';
-import 'screens/Home/Employment/pages/ClosedPositions.dart';
+import 'screens/Home/Business/pages/BusinessNetworkList.dart';
 import 'screens/Home/Business/pages/DealsExecuted.dart';
+import 'screens/Home/Employment/EmploymentSupport.dart';
+import 'screens/Home/Employment/pages/ClosedPositions.dart';
+import 'screens/Home/Employment/pages/LinkedInProfiles.dart';
+import 'screens/Home/Employment/pages/MarketSurvey.dart';
+import 'screens/Home/Employment/pages/OpenPositions.dart';
+import 'screens/Home/Employment/pages/WriteResume.dart';
+import 'screens/Home/Mentorship/MentorGroups.dart';
+import 'screens/Home/Message/NotificationMenu.dart';
+import 'screens/Home/Social/SocialScreen.dart';
 import 'screens/Home/Social/pages/SocialNetworkList.dart';
 import 'screens/Home/SocialMedia/SocialMedia.dart';
-import 'screens/Home/Social/SocialScreen.dart';
-import 'screens/Recal/splash/ImageSplashScreen.dart';
-import 'screens/Support/pages/WriteToMentor.dart';
-import 'screens/Home/Employment/pages/OpenPositions.dart';
-import 'screens/Home/Message/NotificationMenu.dart';
-import 'screens/Profile/pages/EditProfile.dart';
-import 'screens/Support/pages/WriteAdmin.dart';
-import 'routes.dart';
-import 'routes.dart';
-import 'screens/Home/Employment/pages/MarketSurvey.dart';
-import 'screens/Home/Employment/pages/WriteResume.dart';
-import 'screens/Home/Employment/pages/LinkedInProfiles.dart';
-import 'screens/Home/Mentorship/MentorGroups.dart';
-import 'screens/Home/Employment/EmploymentSupport.dart';
 import 'screens/Profile/ProfileScreen.dart';
 import 'screens/Profile/pages/EditProfile.dart';
-import 'routes.dart';
+import 'screens/Recal/IntroPage.dart';
 import 'screens/Recal/home/HomePage.dart';
-import 'package:flutter/material.dart';
-import 'screens/UserAuth/Login.dart';
+import 'screens/Recal/splash/ImageSplashScreen.dart';
 import 'screens/Support/SupportScreen.dart';
+import 'screens/Support/pages/Feedback.dart';
+import 'screens/Support/pages/Other.dart';
 import 'screens/Support/pages/TechnicalSupport.dart';
 import 'screens/Support/pages/Volunteer.dart';
-import 'screens/Support/pages/Other.dart';
-import 'screens/Support/pages/Feedback.dart';
-
+import 'screens/Support/pages/WriteAdmin.dart';
+import 'screens/Support/pages/WriteToMentor.dart';
+import 'screens/UserAuth/Login.dart';
+import 'screens/UserAuth/pages/PasswordReset.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +42,6 @@ void main() {
           primarySwatch: Colors.blue,
         ),
         home: ImageSplashScreen(),
-
         routes: <String, WidgetBuilder>{
           INTRO_PAGE: (BuildContext context) => new IntroPage(),
           LOGIN_SCREEN: (BuildContext context) => new Login(),
@@ -56,7 +49,8 @@ void main() {
           HOME_SCREEN: (BuildContext context) => new HomeScreen(),
           IMAGE_SPLASH: (BuildContext context) => new ImageSplashScreen(),
           PROFILE_SCREEN: (BuildContext context) => new ProfileScreen(),
-          EDIT_PROFILE_SCREEN: (BuildContext context) => new EditProfileScreen(),
+          EDIT_PROFILE_SCREEN: (BuildContext context) =>
+              new EditProfileScreen(),
           SOCIAL: (BuildContext context) => new SocialScreen(),
           BUSINESS: (BuildContext context) => new BusinessScreen(),
           EMPLOYMENT_SUPPORT: (BuildContext context) => new EmploymentSupport(),

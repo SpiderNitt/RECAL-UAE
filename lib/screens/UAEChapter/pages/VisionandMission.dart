@@ -1,41 +1,42 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_fadein/flutter_fadein.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:iosrecal/routes.dart';
-import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:http/http.dart' as http;
-import 'package:iosrecal/models/ChapterModel.dart';
-import 'package:iosrecal/widgets/KeepAlive.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
 import 'dart:convert';
 import 'dart:io';
-import '../../../widgets/NoData.dart';
+
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:iosrecal/constants/Api.dart';
-import '../../../widgets/Error.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:iosrecal/widgets/NoInternet.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_fadein/flutter_fadein.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../constants/Api.dart';
+import '../../../constants/ColorGlobal.dart';
+import '../../../constants/UIUtility.dart';
+import '../../../models/ChapterModel.dart';
+import '../../../models/ResponseBody.dart';
+import '../../../routes.dart';
+import '../../../widgets/Error.dart';
+import '../../../widgets/KeepAlive.dart';
+import '../../../widgets/NoInternet.dart';
 
 class VisionMission extends StatefulWidget {
   @override
   _VisionMissionState createState() => _VisionMissionState();
 }
 
-class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveClientMixin<VisionMission> {
+class _VisionMissionState extends State<VisionMission>
+    with AutomaticKeepAliveClientMixin<VisionMission> {
   final int _numPages = 2;
-  final PageController _pageController = PageController(initialPage: 0,keepPage: true);
+  final PageController _pageController =
+      PageController(initialPage: 0, keepPage: true);
   int _currentPage = 0;
   String vision;
   String mission;
   var state = 0;
   int internet = 1;
   bool error = false;
+
   @override
   bool get wantKeepAlive => true;
 
@@ -74,8 +75,12 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
       if (responseBody.status_code == 200) {
         ChapterModel chapterDetails = ChapterModel.fromJson(responseBody.data);
         print(chapterDetails);
-        vision = chapterDetails.vision == null ? "No data available" : chapterDetails.vision;
-        mission = chapterDetails.mission ==null? "No data available" : chapterDetails.mission;
+        vision = chapterDetails.vision == null
+            ? "No data available"
+            : chapterDetails.vision;
+        mission = chapterDetails.mission == null
+            ? "No data available"
+            : chapterDetails.mission;
         if (vision != "" && mission != "") {
           setState(() {
             state = 1;
@@ -99,25 +104,25 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
 
   Future<bool> onTimeOut() {
     return showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => new AlertDialog(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: new Text('Session Timeout'),
-        content: new Text('Login to continue'),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () async {
-              navigateAndReload();
-            },
-            child: Text("OK"),
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: new Text('Session Timeout'),
+            content: new Text('Login to continue'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () async {
+                  navigateAndReload();
+                },
+                child: Text("OK"),
+              ),
+            ],
           ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 
@@ -148,7 +153,8 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
     } else if (state == 1 && error == false) {
       return SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all( UIUtility().getProportionalHeight(height: 10, choice: 1)),
+          padding: EdgeInsets.all(
+              UIUtility().getProportionalHeight(height: 10, choice: 1)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -176,29 +182,31 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
                 ),
                 //width: width / 1.5,
               ),
-              SizedBox(height:  UIUtility().getProportionalHeight(height: 12, choice: 1)),
+              SizedBox(
+                  height:
+                      UIUtility().getProportionalHeight(height: 12, choice: 1)),
               Center(
                   child: FadeIn(
                       child: AutoSizeText(
-                        vision,
-                        style: TextStyle(
-                          fontSize:
-                          UIUtility().getProportionalWidth(width: 15, choice: 1),
-                          color: ColorGlobal.textColor,
-                        ),
-                        maxLines: 50,
-                      )))
+                vision,
+                style: TextStyle(
+                  fontSize:
+                      UIUtility().getProportionalWidth(width: 15, choice: 1),
+                  color: ColorGlobal.textColor,
+                ),
+                maxLines: 50,
+              )))
             ],
           ),
         ),
       );
     } else if (state == 1 && error == true) {
       return Padding(
-        padding: EdgeInsets.all( UIUtility().getProportionalHeight(height: 10, choice: 1)),
+        padding: EdgeInsets.all(
+            UIUtility().getProportionalHeight(height: 10, choice: 1)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-
 //            Center(
 //              child: FadeIn(
 //                child: Text(
@@ -223,19 +231,21 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
               ),
               //width: width / 1.5,
             ),
-            SizedBox(height:  UIUtility().getProportionalHeight(height: 12, choice: 1)),
+            SizedBox(
+                height:
+                    UIUtility().getProportionalHeight(height: 12, choice: 1)),
             Center(
                 child: FadeIn(
                     child: AutoSizeText(
-                      "NO DATA AVAILABLE",
-                      style: TextStyle(
-                        fontSize:
-                        UIUtility().getProportionalWidth(width: 20, choice: 1),
-                        color: ColorGlobal.textColor,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 50,
-                    )))
+              "NO DATA AVAILABLE",
+              style: TextStyle(
+                fontSize:
+                    UIUtility().getProportionalWidth(width: 20, choice: 1),
+                color: ColorGlobal.textColor,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 50,
+            )))
           ],
         ),
       );
@@ -254,7 +264,8 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
     } else if (state == 1 && error == false) {
       return SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all( UIUtility().getProportionalHeight(height: 10, choice: 1)),
+          padding: EdgeInsets.all(
+              UIUtility().getProportionalHeight(height: 10, choice: 1)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -283,25 +294,28 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
                 ),
                 //width: width / 1.5,
               ),
-              SizedBox(height:  UIUtility().getProportionalHeight(height: 12, choice: 1)),
+              SizedBox(
+                  height:
+                      UIUtility().getProportionalHeight(height: 12, choice: 1)),
               Center(
                   child: FadeIn(
                       child: AutoSizeText(
-                        mission,
-                        style: TextStyle(
-                          fontSize:
-                          UIUtility().getProportionalWidth(width: 15, choice: 1),
-                          color: ColorGlobal.textColor,
-                        ),
-                        maxLines: 50,
-                      )))
+                mission,
+                style: TextStyle(
+                  fontSize:
+                      UIUtility().getProportionalWidth(width: 15, choice: 1),
+                  color: ColorGlobal.textColor,
+                ),
+                maxLines: 50,
+              )))
             ],
           ),
         ),
       );
     } else if (state == 1 && error == true) {
       return Padding(
-        padding: EdgeInsets.all( UIUtility().getProportionalHeight(height: 10, choice: 1)),
+        padding: EdgeInsets.all(
+            UIUtility().getProportionalHeight(height: 10, choice: 1)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -329,19 +343,21 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
               ),
               //width: width / 1.5,
             ),
-            SizedBox(height:  UIUtility().getProportionalHeight(height: 12, choice: 1)),
+            SizedBox(
+                height:
+                    UIUtility().getProportionalHeight(height: 12, choice: 1)),
             Center(
                 child: FadeIn(
                     child: AutoSizeText(
-                      "NO DATA AVAILABLE",
-                      style: TextStyle(
-                        fontSize:
-                        UIUtility().getProportionalWidth(width: 20, choice: 1),
-                        color: ColorGlobal.textColor,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 50,
-                    )))
+              "NO DATA AVAILABLE",
+              style: TextStyle(
+                fontSize:
+                    UIUtility().getProportionalWidth(width: 20, choice: 1),
+                color: ColorGlobal.textColor,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 50,
+            )))
           ],
         ),
       );
@@ -362,8 +378,9 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
   Widget _indicator(bool isActive) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
-      margin: EdgeInsets.symmetric(horizontal:  UIUtility().getProportionalWidth(width: 8, choice: 1)),
-      height:  UIUtility().getProportionalHeight(height:8, choice: 1),
+      margin: EdgeInsets.symmetric(
+          horizontal: UIUtility().getProportionalWidth(width: 8, choice: 1)),
+      height: UIUtility().getProportionalHeight(height: 8, choice: 1),
       width: isActive ? 24.0 : 16.0,
       decoration: BoxDecoration(
         color: isActive ? ColorGlobal.blueColor : Colors.grey,
@@ -376,7 +393,7 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    UIUtility().updateScreenDimesion(width: width,height: height);
+    UIUtility().updateScreenDimesion(width: width, height: height);
     print("${UIUtility().screenWidth} ${UIUtility().screenHeight}");
     return SafeArea(
       child: Scaffold(
@@ -384,57 +401,69 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
           backgroundColor: ColorGlobal.whiteColor,
           leading: (Platform.isAndroid)
               ? IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: ColorGlobal.textColor,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              })
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: ColorGlobal.textColor,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  })
               : IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: ColorGlobal.textColor,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: ColorGlobal.textColor,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
           title: Text(
             'Vision and Mission',
             style: TextStyle(color: ColorGlobal.textColor),
           ),
         ),
-        body: internet==0 ? NoInternetScreen(notifyParent: refresh,) :  SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                height: UIUtility().getProportionalHeight(height: height,choice: 1) - UIUtility().getProportionalHeight(height: 60, choice: 1),
-                child: PageView(
-                  physics: ClampingScrollPhysics(),
-                  controller: _pageController,
-                  onPageChanged: (int page) {
-                    setState(() {
-                      _currentPage = page;
-                    });
-                  },
-                  children: <Widget>[KeepAlivePage(child: getBody()), KeepAlivePage(child: getBody1())],
+        body: internet == 0
+            ? NoInternetScreen(
+                notifyParent: refresh,
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Container(
+                      height: UIUtility().getProportionalHeight(
+                              height: height, choice: 1) -
+                          UIUtility()
+                              .getProportionalHeight(height: 60, choice: 1),
+                      child: PageView(
+                        physics: ClampingScrollPhysics(),
+                        controller: _pageController,
+                        onPageChanged: (int page) {
+                          setState(() {
+                            _currentPage = page;
+                          });
+                        },
+                        children: <Widget>[
+                          KeepAlivePage(child: getBody()),
+                          KeepAlivePage(child: getBody1())
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: internet==0 ? SizedBox() :
-        Container(
-          height:  UIUtility().getProportionalHeight(height: 60, choice: 1),
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: _buildPageIndicator(),
-          ),
-        ),
+        bottomNavigationBar: internet == 0
+            ? SizedBox()
+            : Container(
+                height:
+                    UIUtility().getProportionalHeight(height: 60, choice: 1),
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: _buildPageIndicator(),
+                ),
+              ),
       ),
     );
   }

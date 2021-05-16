@@ -24,7 +24,8 @@ class Api {
   static final String marketSurvey = host + "employment/market_survey";
   static final String allUsers = host + "users/all_users/";
   static final String mentorGroups = host + "mentor_group/groups";
-  static final String getNotification = host + "notifications/get_notification?id=";
+  static final String getNotification =
+      host + "notifications/get_notification?id=";
   static final String getAllNotifications = host + "notifications/?id=";
   static final String getPosition = host + "employment/positions";
   static final String seekGuidance = host + "employment/seek_guidance";
@@ -39,6 +40,6 @@ class Api {
   static final String getFelicitations = host + "events/felicitations/";
   static final String getAllEvents = host + "events/all_events/";
   static final String getAttendees = host + "event/attendees/";
-  static final String getFile=host+"events/get_file/";
+  static final String getFile = host + "events/get_file/";
   static final String getSupport = host + 'employment/support';
 }

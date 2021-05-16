@@ -1,10 +1,25 @@
 class CoreCommModel {
-  final String president, vice_president, secretary, joint_secretary, treasurer, mentor1, mentor2,
-  date, tenure;
+  final String president,
+      vice_president,
+      secretary,
+      joint_secretary,
+      treasurer,
+      mentor1,
+      mentor2,
+      date,
+      tenure;
 
+  CoreCommModel(
+      {this.president,
+      this.vice_president,
+      this.secretary,
+      this.joint_secretary,
+      this.treasurer,
+      this.mentor1,
+      this.mentor2,
+      this.date,
+      this.tenure});
 
-  CoreCommModel({this.president,this.vice_president,this.secretary, this.joint_secretary,this.treasurer
-  ,this.mentor1,this.mentor2,this.date,this.tenure});
   factory CoreCommModel.fromJson(Map<String, dynamic> json) {
     return CoreCommModel(
       president: json["president"],

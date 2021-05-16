@@ -1,21 +1,21 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
-import 'package:iosrecal/routes.dart';
+import 'package:iosrecal/constants/Api.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
 import 'package:iosrecal/models/BusinessMemberModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/widgets/NoInternet.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:iosrecal/routes.dart';
 import 'package:iosrecal/widgets/Error.dart';
 import 'package:iosrecal/widgets/NoData.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'package:iosrecal/constants/Api.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
-
+import 'package:iosrecal/widgets/NoInternet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BusinessDatabase extends StatefulWidget {
   @override
@@ -34,7 +34,6 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
     super.initState();
     uiUtills = new UIUtility();
     _members();
-
   }
 
   double getHeight(double height, int choice) {
@@ -53,9 +52,7 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
       });
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http
-        .get(
-        Api.businessMembers, headers: {
+    var response = await http.get(Api.businessMembers, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
@@ -67,40 +64,39 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
       print(responseBody.status_code);
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
-        members = list.map((model) => BusinessMemberModel.fromJson(model)).toList();
+        members =
+            list.map((model) => BusinessMemberModel.fromJson(model)).toList();
         List names = List<String>();
         members.forEach((element) {
-          if(!names.contains(element.name)){
+          if (!names.contains(element.name)) {
             final_members.add(element);
             names.add(element.name);
           }
         });
-        final_members.sort((a,b)=> a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+        final_members.sort(
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         setState(() {
           state = 1;
         });
-      }else if(responseBody.status_code==401){
+      } else if (responseBody.status_code == 401) {
         onTimeOut();
-      }else{
+      } else {
         setState(() {
           _hasError = true;
         });
       }
       //return members;
-    }else{
+    } else {
       setState(() {
         _hasError = true;
       });
     }
   }
 
-  navigateAndReload(){
-    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
-        .then((value) {
+  navigateAndReload() {
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true).then((value) {
       Navigator.pop(context);
-      setState(() {
-
-      });
+      setState(() {});
       state = 0;
       _hasError = false;
       _internet = true;
@@ -108,45 +104,42 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
     });
   }
 
-  refresh(){
+  refresh() {
     print('hello');
-    setState(() {
-
-    });
+    setState(() {});
     state = 0;
     _hasError = false;
     _internet = true;
     _members();
   }
 
-
-  Future<bool> onTimeOut(){
+  Future<bool> onTimeOut() {
     return showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => new AlertDialog(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: Text('Session Timeout'),
-        content : Text('Login in continue'),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () => navigateAndReload(),
-            child: Text("OK"),
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text('Session Timeout'),
+            content: Text('Login in continue'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => navigateAndReload(),
+                child: Text("OK"),
+              ),
+            ],
           ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 
   Widget getBody() {
-    if(!_internet){
+    if (!_internet) {
       return Center(child: NoInternetScreen(notifyParent: refresh));
     }
-    if(_hasError){
+    if (_hasError) {
       return Center(child: Error8Screen());
     }
     if (state == 0) {
@@ -162,13 +155,13 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
         return ListTile(
           title: AutoSizeText(
             final_members[index].name,
-              style: TextStyle(
-                color: ColorGlobal.textColor,
-                fontWeight: FontWeight.w700,
-                fontSize: getWidth(18, 2),
-              ),
-            maxLines: 1,
+            style: TextStyle(
+              color: ColorGlobal.textColor,
+              fontWeight: FontWeight.w700,
+              fontSize: getWidth(18, 2),
             ),
+            maxLines: 1,
+          ),
           leading: CircleAvatar(
             backgroundColor: ColorGlobal.blueColor,
             child: Icon(
@@ -184,7 +177,6 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -212,9 +204,9 @@ class _BusinessDatabaseState extends State<BusinessDatabase> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: getBody(),
-            ),
           ),
         ),
+      ),
     );
   }
 }

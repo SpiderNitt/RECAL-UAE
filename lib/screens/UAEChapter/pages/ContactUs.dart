@@ -1,27 +1,27 @@
-import 'dart:io' show Platform;
 import 'dart:convert';
+import 'dart:io' show Platform;
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:iosrecal/constants/Api.dart';
-import 'package:iosrecal/routes.dart';
-
-import 'package:iosrecal/bloc/KeyboardBloc.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:progress_dialog/progress_dialog.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../bloc/KeyboardBloc.dart';
+import '../../../constants/Api.dart';
+import '../../../constants/ColorGlobal.dart';
+import '../../../constants/UIUtility.dart';
+import '../../../models/ResponseBody.dart';
+import '../../../routes.dart';
 
 class ContactUs extends StatefulWidget {
   @override
   _ContactUsState createState() => _ContactUsState();
 }
 
-class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
+class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin {
   String uri;
   final TextEditingController messageController = TextEditingController();
   final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
@@ -68,11 +68,11 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
       });
     });
   }
+
   void dispose() {
     _bloc.dispose();
     super.dispose();
   }
-  
 
   double getHeight(double height, int choice) {
     return uiUtills.getProportionalHeight(height: height, choice: choice);
@@ -82,10 +82,8 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
     return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
-
-  Widget animatedButton(){
+  Widget animatedButton() {
     return GestureDetector(
-
         onTap: () async {
           final String message = messageController.text;
           if (message != "") {
@@ -129,14 +127,14 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
               children: <Widget>[
                 (!sent)
                     ? AnimatedContainer(
-                  duration: Duration(milliseconds: 400),
-                  child: Icon(Icons.send, color: Colors.white),
-                  curve: Curves.fastOutSlowIn,
-                  transform: Matrix4.translationValues(
-                      _translateX, _translateY, 0)
-                    ..rotateZ(_rotate)
-                    ..scale(_scale),
-                )
+                        duration: Duration(milliseconds: 400),
+                        child: Icon(Icons.send, color: Colors.white),
+                        curve: Curves.fastOutSlowIn,
+                        transform: Matrix4.translationValues(
+                            _translateX, _translateY, 0)
+                          ..rotateZ(_rotate)
+                          ..scale(_scale),
+                      )
                     : Container(),
                 AnimatedSize(
                   vsync: this,
@@ -146,12 +144,19 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                 AnimatedSize(
                   vsync: this,
                   duration: Duration(milliseconds: 200),
-                  child: show ? Text("Send", style: TextStyle(color: Colors.white),) : Container(),
+                  child: show
+                      ? Text(
+                          "Send",
+                          style: TextStyle(color: Colors.white),
+                        )
+                      : Container(),
                 ),
                 AnimatedSize(
                   vsync: this,
                   duration: Duration(milliseconds: 200),
-                  child: sent ? Icon(Icons.done, color: Colors.white) : Container(),
+                  child: sent
+                      ? Icon(Icons.done, color: Colors.white)
+                      : Container(),
                 ),
                 AnimatedSize(
                   vsync: this,
@@ -162,50 +167,52 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                 AnimatedSize(
                   vsync: this,
                   duration: Duration(milliseconds: 200),
-                  child: sent ? Text("Done", style: TextStyle(color: Colors.white)) : Container(),
+                  child: sent
+                      ? Text("Done", style: TextStyle(color: Colors.white))
+                      : Container(),
                 ),
               ],
             )));
   }
 
-
-  Future<bool> _sendMessage(String body) async{
+  Future<bool> _sendMessage(String body) async {
     FocusScope.of(context).unfocus();
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       Fluttertoast.showToast(
-          msg: "Please connect to internet",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: getWidth(16, 2),
+        msg: "Please connect to internet",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: getWidth(16, 2),
       );
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String url = Api.getSupport;
     final response = await http.post(url, body: {
-      "user_id" : "${prefs.getString("user_id")}",
-      "body" : body,
-      "type" : "feedback",
+      "user_id": "${prefs.getString("user_id")}",
+      "body": body,
+      "type": "feedback",
     }, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
 
-    if(response.statusCode==200){
-      ResponseBody responseBody = ResponseBody.fromJson(
-          json.decode(response.body));
-      if (responseBody.status_code == 200){
+    if (response.statusCode == 200) {
+      ResponseBody responseBody =
+          ResponseBody.fromJson(json.decode(response.body));
+      if (responseBody.status_code == 200) {
         print("worked!");
         _animationController.forward();
         messageController.text = "";
-        Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
+        Future.delayed(
+            const Duration(seconds: 2), () => Navigator.pop(context));
         return true;
-      }else if(responseBody.status_code==401){
+      } else if (responseBody.status_code == 401) {
         onTimeOut();
-      }else {
+      } else {
         Fluttertoast.showToast(
           msg: "Error occurred. Please try again later.",
           toastLength: Toast.LENGTH_SHORT,
@@ -235,39 +242,38 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
     }
   }
 
-  navigateAndReload(){
-    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
-        .then((value) {
+  navigateAndReload() {
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true).then((value) {
       print("step 1");
       Navigator.pop(context);
-      });
+    });
   }
 
-  Future<bool> onTimeOut(){
+  Future<bool> onTimeOut() {
     return showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => new AlertDialog(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: Text('Session Timeout'),
-        content : Text('Login in continue'),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () => navigateAndReload(),
-            child: Text("OK"),
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text('Session Timeout'),
+            content: Text('Login in continue'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => navigateAndReload(),
+                child: Text("OK"),
+              ),
+            ],
           ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 
   _sendMail() async {
     // Android and iOS
-    if(Platform.isAndroid) {
+    if (Platform.isAndroid) {
       const uri =
           'mailto:recaluaechapter@gmail.com?subject=Recal UAE Chapter&body=Greetings';
       if (await canLaunch(uri)) {
@@ -288,7 +294,9 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
           appBar: AppBar(
             backgroundColor: ColorGlobal.whiteColor,
             leading: IconButton(
-              icon: Icon(Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios, color: ColorGlobal.textColor),
+              icon: Icon(
+                  Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
+                  color: ColorGlobal.textColor),
               onPressed: () => Navigator.of(context).pop(),
             ),
             title: Text(
@@ -312,7 +320,8 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
 //            height : height/2,
 //            color: const Color(0xFF2146A8),
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(0.0, getHeight(10, 2), getWidth(8, 2), 0.0),
+                      padding: EdgeInsets.fromLTRB(
+                          0.0, getHeight(10, 2), getWidth(8, 2), 0.0),
                       child: Column(
                         children: <Widget>[
                           Center(
@@ -334,18 +343,22 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                                       color: Colors.white,
                                     ),
                                   ),
-                                  Platform.isAndroid ?
-                                  GestureDetector(
-                                    child: Text("Email\nrecaluaechapter@gmail.com", style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                    )),
-                                    onTap: () async {
-                                      if(Platform.isAndroid)
-                                        await _sendMail();
-                                    },
-                                  ) :
-                                  CustomToolTip(text: 'Email\nrecaluaechapter@gmail.com'),
+                                  Platform.isAndroid
+                                      ? GestureDetector(
+                                          child: Text(
+                                              "Email\nrecaluaechapter@gmail.com",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w600,
+                                              )),
+                                          onTap: () async {
+                                            if (Platform.isAndroid)
+                                              await _sendMail();
+                                          },
+                                        )
+                                      : CustomToolTip(
+                                          text:
+                                              'Email\nrecaluaechapter@gmail.com'),
                                 ],
                               ),
                               Row(
@@ -356,7 +369,8 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                                       color: Colors.white,
                                     ),
                                   ),
-                                  CustomToolTip(text: 'WhatsApp\n+971-55-1086104'),
+                                  CustomToolTip(
+                                      text: 'WhatsApp\n+971-55-1086104'),
                                 ],
                               ),
                             ],
@@ -367,7 +381,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                     )),
                 Container(
                   transform:
-                  Matrix4.translationValues(0.0, -width / 6 + 12.0, 0.0),
+                      Matrix4.translationValues(0.0, -width / 6 + 12.0, 0.0),
                   child: Container(
                     width: width - 24,
                     height: width,
@@ -375,7 +389,8 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10.0)),
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(getWidth(16, 2), getHeight(10, 2), getWidth(16, 2), getHeight(10, 2)),
+                      padding: EdgeInsets.fromLTRB(getWidth(16, 2),
+                          getHeight(10, 2), getWidth(16, 2), getHeight(10, 2)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -398,35 +413,35 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
                               fillColor: Colors.white70,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(12.0)),
+                                    BorderRadius.all(Radius.circular(12.0)),
                                 borderSide: BorderSide(
                                     color: Color(0xFF3AAFFA), width: 2),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(12.0)),
+                                    BorderRadius.all(Radius.circular(12.0)),
                                 borderSide: BorderSide(
                                     color: Color(0xFF3AAFFA), width: 2),
                               ),
                             ),
                           ),
                           animatedButton(),
-                          ],
-                        ),
+                        ],
                       ),
                     ),
                   ),
+                ),
                 StreamBuilder<double>(
                     stream: _bloc.stream,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<double> snapshot) {
+                    builder:
+                        (BuildContext context, AsyncSnapshot<double> snapshot) {
                       print(
                           'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
-                              'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                          'Height: ${_bloc.keyboardUtils.keyboardHeight}');
                       return _bloc.keyboardUtils.isKeyboardOpen == true
                           ? SizedBox(
-                        height: _bloc.keyboardUtils.keyboardHeight,
-                      )
+                              height: _bloc.keyboardUtils.keyboardHeight,
+                            )
                           : SizedBox();
                     }),
               ],
@@ -435,8 +450,8 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
     );
   }
 }
-class CustomToolTip extends StatelessWidget {
 
+class CustomToolTip extends StatelessWidget {
   String text;
 
   CustomToolTip({this.text});
@@ -444,19 +459,29 @@ class CustomToolTip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new GestureDetector(
-      child: new Text(text, style: TextStyle(
-        color: Colors.white,
-        fontWeight: FontWeight.w600,
-      )),
+      child: new Text(text,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          )),
       onTap: () {
-        Fluttertoast.showToast(msg: text.contains("@") ?  "Copied Email Address" : "Copied WhatsApp number",textColor: Colors.white,backgroundColor: Colors.green);
+        Fluttertoast.showToast(
+            msg: text.contains("@")
+                ? "Copied Email Address"
+                : "Copied WhatsApp number",
+            textColor: Colors.white,
+            backgroundColor: Colors.green);
         Clipboard.setData(new ClipboardData(text: text.split('\n')[1]));
       },
       onLongPress: () {
-        Fluttertoast.showToast(msg: text.contains("@") ?  "Copied Email Address" : "Copied WhatsApp number",textColor: Colors.white,backgroundColor: Colors.green);
+        Fluttertoast.showToast(
+            msg: text.contains("@")
+                ? "Copied Email Address"
+                : "Copied WhatsApp number",
+            textColor: Colors.white,
+            backgroundColor: Colors.green);
         Clipboard.setData(new ClipboardData(text: text.split('\n')[1]));
       },
     );
   }
 }
-

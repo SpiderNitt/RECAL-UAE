@@ -1,23 +1,24 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:iosrecal/widgets/NoData.dart';
-import 'package:iosrecal/widgets/NoInternet.dart';
-import 'package:iosrecal/widgets/Error.dart';
+import 'package:http/http.dart' as http;
+import 'package:iosrecal/constants/Api.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:iosrecal/models/BusinessMemberModel.dart';
+import 'package:iosrecal/models/EventModel.dart';
 import 'package:iosrecal/models/MemberModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:iosrecal/routes.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/widgets/Error.dart';
+import 'package:iosrecal/widgets/NoData.dart';
+import 'package:iosrecal/widgets/NoInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'package:iosrecal/models/EventModel.dart';
-import 'package:iosrecal/models/BusinessMemberModel.dart';
-import 'package:iosrecal/constants/Api.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
 
 class DashBoard extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class DashBoard extends StatefulWidget {
 class _DashBoardState extends State<DashBoard> {
   List<charts.Series<Gender, String>> _seriesGenderPieData;
   List<charts.Series<SandB, String>> _seriesSAndBPieData;
-  var data =new Map<String, int>();
+  var data = new Map<String, int>();
   var events = new List<EventModel>();
   var members = new List<BusinessMemberModel>();
   var users = new List<MemberModel>();
@@ -45,7 +46,7 @@ class _DashBoardState extends State<DashBoard> {
     return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
-  Future<bool> _fetchEvents() async{
+  Future<bool> _fetchEvents() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
@@ -54,9 +55,7 @@ class _DashBoardState extends State<DashBoard> {
       });
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http
-        .get(
-        Api.getAllEvents, headers: {
+    var response = await http.get(Api.getAllEvents, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
@@ -67,50 +66,44 @@ class _DashBoardState extends State<DashBoard> {
         List list = responseBody.data;
         events = list.map((model) => EventModel.fromJson(model)).toList();
         data['All Events'] = events.length;
-        int social=0;
+        int social = 0;
         events.forEach((element) {
-          if(element.event_type=="Social"){
+          if (element.event_type == "Social") {
             social++;
           }
           data['Social Events'] = social;
           data['Business Events'] = events.length - social;
-
         });
 
-          state += 1;
-      }else if(responseBody.status_code==401){
+        state += 1;
+      } else if (responseBody.status_code == 401) {
         onTimeOut();
-      }else{
-          state+=1;
-          _hasError = true;
-      }
-    }else{
-        state+=1;
+      } else {
+        state += 1;
         _hasError = true;
+      }
+    } else {
+      state += 1;
+      _hasError = true;
     }
     return true;
   }
 
-  navigateAndReload(){
-    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
-        .then((value) {
+  navigateAndReload() {
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true).then((value) {
       Navigator.pop(context);
-      setState(() {
-
-      });
+      setState(() {});
       state = 0;
       _hasError = false;
       _internet = true;
       _fetchEvents();
       _fetchAllUsers();
       uiUtills = new UIUtility();
-        });
+    });
   }
 
-  refresh(){
-    setState(() {
-
-    });
+  refresh() {
+    setState(() {});
     state = 0;
     _hasError = false;
     _internet = true;
@@ -118,34 +111,31 @@ class _DashBoardState extends State<DashBoard> {
     _fetchAllUsers();
   }
 
-
-  Future<bool> onTimeOut(){
+  Future<bool> onTimeOut() {
     return showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => new AlertDialog(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: Text('Session Timeout'),
-        content : Text('Login in continue'),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () => navigateAndReload(),
-            child: Text("OK"),
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text('Session Timeout'),
+            content: Text('Login in continue'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => navigateAndReload(),
+                child: Text("OK"),
+              ),
+            ],
           ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 
-  _fetchSpecificUsers() async{
+  _fetchSpecificUsers() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http
-        .get(
-        Api.businessMembers, headers: {
+    var response = await http.get(Api.businessMembers, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
@@ -154,13 +144,14 @@ class _DashBoardState extends State<DashBoard> {
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
-        members = list.map((model) => BusinessMemberModel.fromJson(model)).toList();
-        int dealValue=0;
+        members =
+            list.map((model) => BusinessMemberModel.fromJson(model)).toList();
+        int dealValue = 0;
         List names = List<String>();
         members.forEach((element) {
-          if(int.tryParse(element.deal_value)!=null)
-          dealValue += int.parse(element.deal_value);
-          if(!names.contains(element.name)) {
+          if (int.tryParse(element.deal_value) != null)
+            dealValue += int.parse(element.deal_value);
+          if (!names.contains(element.name)) {
             final_members.add(element);
             names.add(element.name);
           }
@@ -170,22 +161,19 @@ class _DashBoardState extends State<DashBoard> {
         data['All Deals'] = members.length;
         data['Deals Value'] = dealValue;
         await _generatePieData();
-
-      }else{
-          state+=1;
-          _hasError = true;
-      }
-    }else{
-        state+=1;
+      } else {
+        state += 1;
         _hasError = true;
+      }
+    } else {
+      state += 1;
+      _hasError = true;
     }
   }
 
-  Future<bool> _fetchAllUsers() async{
+  Future<bool> _fetchAllUsers() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http
-        .get(
-        Api.allUsers, headers: {
+    var response = await http.get(Api.allUsers, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
@@ -198,34 +186,33 @@ class _DashBoardState extends State<DashBoard> {
         data['All Members'] = users.length;
         int male = 0;
         users.forEach((element) {
-          if(element.gender=="male"){
+          if (element.gender == "male") {
             //print(element.name);
             male++;
           }
-
         });
         data['Male'] = male;
         data['Female'] = users.length - male;
         await _fetchSpecificUsers();
-          state += 1;
-        }else{
-          state+=1;
-          _hasError = true;
-      }
-      }else{
-        state+=1;
+        state += 1;
+      } else {
+        state += 1;
         _hasError = true;
+      }
+    } else {
+      state += 1;
+      _hasError = true;
     }
     return true;
-    }
+  }
 
-  _generatePieData(){
-    var genderPieData =[
+  _generatePieData() {
+    var genderPieData = [
       new Gender('Male', data['Male'], Color(0xcc3399fe)),
       new Gender('Female', data['Female'], Color(0xccff3266)),
     ];
 
-    var sAndBPieData =[
+    var sAndBPieData = [
       new SandB('Social', data['Social Members'], Color(0xcc982ef0)),
       new SandB('Business', data['Business Members'], Color(0xcc26cb3c)),
     ];
@@ -254,9 +241,9 @@ class _DashBoardState extends State<DashBoard> {
         labelAccessorFn: (SandB row, _) => '${row.types}',
       ),
     );
-      print("reached pie chart");
-      print("state is : " + state.toString());
-      state+=1;
+    print("reached pie chart");
+    print("state is : " + state.toString());
+    state += 1;
   }
 
   Future<Map<String, int>> makeRequests() async {
@@ -267,7 +254,6 @@ class _DashBoardState extends State<DashBoard> {
     print("returning data");
     return data;
   }
-
 
   @override
   void initState() {
@@ -341,15 +327,24 @@ class _DashBoardState extends State<DashBoard> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>
-                    [
-                      Text('Total deals', style: TextStyle(color: Color(color))),
-                      Text(data['All Deals'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: getWidth(34, 2))),
+                    children: <Widget>[
+                      Text('Total deals',
+                          style: TextStyle(color: Color(color))),
+                      Text(data['All Deals'].toString(),
+                          style: TextStyle(
+                              color: ColorGlobal.textColor,
+                              fontWeight: FontWeight.w700,
+                              fontSize: getWidth(34, 2))),
                       SizedBox(
                         height: 24.0,
                       ),
-                      Text('Total value', style: TextStyle(color: Color(color))),
-                      Text(data['Deals Value'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: getWidth(34, 2))),
+                      Text('Total value',
+                          style: TextStyle(color: Color(color))),
+                      Text(data['Deals Value'].toString(),
+                          style: TextStyle(
+                              color: ColorGlobal.textColor,
+                              fontWeight: FontWeight.w700,
+                              fontSize: getWidth(34, 2))),
                     ],
                   ),
                   Material(
@@ -388,10 +383,14 @@ class _DashBoardState extends State<DashBoard> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>
-                    [
-                      Text('Total events', style: TextStyle(color: Color(color))),
-                      Text(data['All Events'].toString(), style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w700, fontSize: getWidth(34, 2))),
+                    children: <Widget>[
+                      Text('Total events',
+                          style: TextStyle(color: Color(color))),
+                      Text(data['All Events'].toString(),
+                          style: TextStyle(
+                              color: ColorGlobal.textColor,
+                              fontWeight: FontWeight.w700,
+                              fontSize: getWidth(34, 2))),
                     ],
                   ),
                   Material(
@@ -424,10 +423,11 @@ class _DashBoardState extends State<DashBoard> {
                     SizedBox(
                       height: getHeight(8, 2),
                     ),
-                    Text(
-                        data['Social Events'].toString(),
-                        style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w400, fontSize: getWidth(22, 2))
-                    ),
+                    Text(data['Social Events'].toString(),
+                        style: TextStyle(
+                            color: ColorGlobal.textColor,
+                            fontWeight: FontWeight.w400,
+                            fontSize: getWidth(22, 2))),
                   ],
                 ),
                 Column(
@@ -440,10 +440,11 @@ class _DashBoardState extends State<DashBoard> {
                     SizedBox(
                       height: getHeight(8, 2),
                     ),
-                    Text(
-                        data['Business Events'].toString(),
-                        style: TextStyle(color: ColorGlobal.textColor, fontWeight: FontWeight.w400, fontSize: getWidth(22, 2))
-                    ),
+                    Text(data['Business Events'].toString(),
+                        style: TextStyle(
+                            color: ColorGlobal.textColor,
+                            fontWeight: FontWeight.w400,
+                            fontSize: getWidth(22, 2))),
                   ],
                 ),
               ],
@@ -474,10 +475,14 @@ class _DashBoardState extends State<DashBoard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
-                    children: <Widget>
-                    [
-                      Text('Total members', style: TextStyle(color: Color(color))),
-                      Text(data['All Members'].toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: getWidth(34, 2))),
+                    children: <Widget>[
+                      Text('Total members',
+                          style: TextStyle(color: Color(color))),
+                      Text(data['All Members'].toString(),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: getWidth(34, 2))),
                     ],
                   ),
                   Material(
@@ -486,8 +491,8 @@ class _DashBoardState extends State<DashBoard> {
                       child: Center(
                           child: Padding(
                         padding: EdgeInsets.all(getWidth(16, 2)),
-                        child:
-                            Icon(Icons.group, color: Colors.white, size: getWidth(30, 2)),
+                        child: Icon(Icons.group,
+                            color: Colors.white, size: getWidth(30, 2)),
                       )))
                 ]),
             SizedBox(
@@ -560,12 +565,12 @@ class _DashBoardState extends State<DashBoard> {
     );
   }
 
-  getBody(int index){
-    if(index==0){
+  getBody(int index) {
+    if (index == 0) {
       return membersItem(0xfff4c83f);
-    }else if(index == 1){
+    } else if (index == 1) {
       return eventsItem(0xffed622b);
-    }else if(index==2){
+    } else if (index == 2) {
       return dealsItem(0xff7297ff);
     }
   }
@@ -594,8 +599,8 @@ class _DashBoardState extends State<DashBoard> {
         ),
         body: FutureBuilder(
           future: makeRequests(),
-          builder: (BuildContext context, AsyncSnapshot snapshot){
-            switch(snapshot.connectionState){
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            switch (snapshot.connectionState) {
               case ConnectionState.none:
                 print("no connection");
                 return Center(child: NoInternetScreen(notifyParent: refresh));
@@ -608,25 +613,28 @@ class _DashBoardState extends State<DashBoard> {
                   ),
                 );
               case ConnectionState.done:
-                if(snapshot.hasError){
-                  return _internet == true ? Center(child: Error8Screen()) : Center(child: NoInternetScreen(notifyParent: refresh));
-                }else{
-                  if(_hasError){
+                if (snapshot.hasError) {
+                  return _internet == true
+                      ? Center(child: Error8Screen())
+                      : Center(child: NoInternetScreen(notifyParent: refresh));
+                } else {
+                  if (_hasError) {
                     return Center(child: Error8Screen());
                   }
-                  if(data.length == 0){
+                  if (data.length == 0) {
                     return Center(child: NodataScreen());
                   }
-                  if(state<3){
-                    return Center(child: SpinKitDoubleBounce(
-                      color: ColorGlobal.blueColor,
-                    ),
+                  if (state < 3) {
+                    return Center(
+                      child: SpinKitDoubleBounce(
+                        color: ColorGlobal.blueColor,
+                      ),
                     );
                   }
                   return StaggeredGridView.countBuilder(
                     crossAxisCount: 2,
                     itemCount: 3,
-                    itemBuilder: (BuildContext context, int index){
+                    itemBuilder: (BuildContext context, int index) {
                       return getBody(index);
                     },
                     staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
@@ -634,7 +642,6 @@ class _DashBoardState extends State<DashBoard> {
                     mainAxisSpacing: getHeight(12, 2),
                   );
                 }
-
             }
             return Center(child: Text("Try Again!"));
           },

@@ -6,19 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iosrecal/widgets/CustomToolTip.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
-import 'package:iosrecal/constants/Api.dart';
+import 'package:http/http.dart' as http;
 import 'package:iosrecal/bloc/KeyboardBloc.dart';
+import 'package:iosrecal/constants/Api.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
 import 'package:iosrecal/models/LoginData.dart';
-
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:iosrecal/models/User.dart';
 import 'package:iosrecal/routes.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
 import 'package:iosrecal/widgets/TextField.dart';
-import 'package:http/http.dart' as http;
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,12 +35,10 @@ class LoginState extends State<Login> {
   bool args;
   KeyboardBloc _bloc = new KeyboardBloc();
   UIUtility uiUtills = new UIUtility();
-  bool internetConnection=true;
+  bool internetConnection = true;
 
-  TextEditingController email =
-      new TextEditingController(text: "");
-  TextEditingController password =
-      new TextEditingController(text: "");
+  TextEditingController email = new TextEditingController(text: "");
+  TextEditingController password = new TextEditingController(text: "");
 
   FocusNode emailFocus = new FocusNode();
   FocusNode passwordFocus = new FocusNode();
@@ -91,7 +87,7 @@ class LoginState extends State<Login> {
               borderRadius: BorderRadius.circular(20),
             ),
             title: Text('Are you sure?'),
-            content : Text('Do you want to exit the app?'),
+            content: Text('Do you want to exit the app?'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -199,9 +195,7 @@ class LoginState extends State<Login> {
         setState(() {
           internetConnection = true;
         });
-      }
-      else {
-
+      } else {
         setState(() {
           internetConnection = false;
         });
@@ -231,28 +225,20 @@ class LoginState extends State<Login> {
           print(json.encode(responseBody.data));
           if (responseBody.status_code == 200) {
             print(responseBody.data);
-            _loginDialog(
-                "Email has been sent",
-                "",
-                1);
-            Future.delayed(
-                Duration(
-                    milliseconds: 2000),
-                    () {
-                  Navigator
-                      .pushNamed(
-                      context, PASSWORD_RESET);
-                }).then((value) {
-                  setState(() {
-                    _deleteUserDetails();
-                    _initController();
-                    uiUtills = new UIUtility();
-                    internetConnection=false;
-                    changePassword = false;
-                    primaryButtonText = "SIGN IN";
-                    secondaryButtonText = "Change Password";
-                    pageTitle = "SIGN IN";
-                  });
+            _loginDialog("Email has been sent", "", 1);
+            Future.delayed(Duration(milliseconds: 2000), () {
+              Navigator.pushNamed(context, PASSWORD_RESET);
+            }).then((value) {
+              setState(() {
+                _deleteUserDetails();
+                _initController();
+                uiUtills = new UIUtility();
+                internetConnection = false;
+                changePassword = false;
+                primaryButtonText = "SIGN IN";
+                secondaryButtonText = "Change Password";
+                pageTitle = "SIGN IN";
+              });
             });
           } else {
             _loginDialog("Error Sending Email", "Try Again", 2);
@@ -266,67 +252,70 @@ class LoginState extends State<Login> {
         _loginDialog("Server Error", "Try Again", 2);
         print("server error catch");
       });
-    }
-    else {
+    } else {
       _loginDialog("No Internet Connection", "Try Again", 2);
     }
   }
+
   _emailDialog() {
-    return  showDialog(
+    return showDialog(
         context: context,
         builder: (_) => new AlertDialog(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          content : Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "Write an email to",
-                style: GoogleFonts.lato(
-                  color: ColorGlobal.textColor,
-                  fontSize: getWidth(18, 1),
-                  fontWeight: FontWeight.w700,
-                ),
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
-              GestureDetector(
-                child: Text(
-                  "recaluaechapter@gmail.com",
-                  style: GoogleFonts.lato(
-                    color: ColorGlobal.blueColor,
-                    decoration: TextDecoration.underline,
-                    fontSize: getWidth(18, 1),
-                    fontWeight: FontWeight.w700,
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Write an email to",
+                    style: GoogleFonts.lato(
+                      color: ColorGlobal.textColor,
+                      fontSize: getWidth(18, 1),
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-                onTap: () async {
-                  if(Platform.isAndroid)
-                    await _sendMail();
-                  else {
-                    Fluttertoast.showToast(msg: "Copied Email Address",textColor: Colors.white,backgroundColor: Colors.green);
-                    Clipboard.setData(new ClipboardData(text:"recaluaechapter@gmail.com"));
-                  }
-                },
+                  GestureDetector(
+                    child: Text(
+                      "recaluaechapter@gmail.com",
+                      style: GoogleFonts.lato(
+                        color: ColorGlobal.blueColor,
+                        decoration: TextDecoration.underline,
+                        fontSize: getWidth(18, 1),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    onTap: () async {
+                      if (Platform.isAndroid)
+                        await _sendMail();
+                      else {
+                        Fluttertoast.showToast(
+                            msg: "Copied Email Address",
+                            textColor: Colors.white,
+                            backgroundColor: Colors.green);
+                        Clipboard.setData(new ClipboardData(
+                            text: "recaluaechapter@gmail.com"));
+                      }
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
-          actions: [
-            FlatButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .pop(); // To close the dialog
-              },
-              child: Text("OK"),
-            ),
-          ],
-        ));
+              actions: [
+                FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // To close the dialog
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            ));
   }
+
   _sendMail() async {
     // Android and iOS
-    if(Platform.isAndroid) {
-      const uri =
-          'mailto:recaluaechapter@gmail.com?subject=Login Credentials';
+    if (Platform.isAndroid) {
+      const uri = 'mailto:recaluaechapter@gmail.com?subject=Login Credentials';
       if (await canLaunch(uri)) {
         await launch(uri);
       } else {
@@ -414,9 +403,9 @@ class LoginState extends State<Login> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                        top: getHeight(20, 1),
-                        left: getWidth(20, 1),
-                        right: getWidth(20, 1),
+                      top: getHeight(20, 1),
+                      left: getWidth(20, 1),
+                      right: getWidth(20, 1),
                       bottom: getHeight(20, 1),
                     ),
                     child: Card(
@@ -490,7 +479,9 @@ class LoginState extends State<Login> {
                                   builder: (context, loginData, child) {
                                     return InkWell(
                                       onTap: () async {
-                                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                                        SharedPreferences prefs =
+                                            await SharedPreferences
+                                                .getInstance();
                                         prefs.setInt("first", 10);
                                         if (changePassword == false) {
                                           if (email.text != "" &&
@@ -502,14 +493,13 @@ class LoginState extends State<Login> {
                                                   "Invalid Credentials",
                                                   "Try again",
                                                   2);
-                                            }
-                                            else if(loginData.user.user_id==-1) {
+                                            } else if (loginData.user.user_id ==
+                                                -1) {
                                               await _loginDialog(
                                                   "No Internet Connection",
                                                   "Try again",
                                                   2);
-                                            }
-                                            else {
+                                            } else {
                                               User user = loginData.user;
                                               await user.saveUserDetails();
                                               await _loginDialog(
@@ -644,4 +634,3 @@ class LoginState extends State<Login> {
     );
   }
 }
-

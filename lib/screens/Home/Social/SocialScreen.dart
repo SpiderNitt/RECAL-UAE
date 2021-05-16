@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
 import 'package:folding_cell/folding_cell.dart';
 import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
 import 'package:iosrecal/screens/Events/EventsScreen.dart';
 import 'package:iosrecal/screens/Home/Social/pages/SocialNetworkList.dart';
 
@@ -14,7 +14,6 @@ class SocialScreen extends StatefulWidget {
 }
 
 class _SocialScreenState extends State<SocialScreen> {
-
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
@@ -51,10 +50,12 @@ class _SocialScreenState extends State<SocialScreen> {
 
 class FoldingCellMultipleCardsDemo extends StatefulWidget {
   @override
-  _FoldingCellMultipleCardsDemoState createState() => _FoldingCellMultipleCardsDemoState();
+  _FoldingCellMultipleCardsDemoState createState() =>
+      _FoldingCellMultipleCardsDemoState();
 }
 
-class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsDemo> {
+class _FoldingCellMultipleCardsDemoState
+    extends State<FoldingCellMultipleCardsDemo> {
   final _foldingCellKey1 = GlobalKey<SimpleFoldingCellState>();
   final _foldingCellKey2 = GlobalKey<SimpleFoldingCellState>();
   List<String> options = List();
@@ -62,7 +63,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
   UIUtility uiUtills = new UIUtility();
 
   @override
-  void initState(){
+  void initState() {
     uiUtills = new UIUtility();
     Timer(Duration(milliseconds: 250), () {
       _foldingCellKey1?.currentState?.toggleFold();
@@ -72,7 +73,6 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
       _foldingCellKey2?.currentState?.toggleFold();
       print("Yeah, this line is printed after 2 seconds");
     });
-
   }
 
   double getHeight(double height, int choice) {
@@ -83,11 +83,13 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
     return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
-  void _navigatePage(int num){
-    if(num==0)
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => MemberDatabase()));
-    if(num==1)
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => EventsScreen(2)));
+  void _navigatePage(int num) {
+    if (num == 0)
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => MemberDatabase()));
+    if (num == 1)
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => EventsScreen(2)));
   }
 
   @override
@@ -107,13 +109,13 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
       child: Column(
         children: <Widget>[
           SizedBox(
-            height: height/8 + 10.0,
+            height: height / 8 + 10.0,
           ),
           SimpleFoldingCell.create(
             key: _foldingCellKey1,
             frontWidget: _buildFrontWidget(_foldingCellKey1, 0),
             innerWidget: _buildInnerWidget(_foldingCellKey1, 0),
-            cellSize: Size(width, height/8),
+            cellSize: Size(width, height / 8),
             padding: EdgeInsets.all(15),
             animationDuration: Duration(milliseconds: 500),
             borderRadius: 10,
@@ -124,7 +126,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
             key: _foldingCellKey2,
             frontWidget: _buildFrontWidget(_foldingCellKey2, 1),
             innerWidget: _buildInnerWidget(_foldingCellKey2, 1),
-            cellSize: Size(width, height/8),
+            cellSize: Size(width, height / 8),
             padding: EdgeInsets.all(15),
             animationDuration: Duration(milliseconds: 500),
             borderRadius: 10,
@@ -136,8 +138,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
     );
   }
 
-  Widget _buildFrontWidget(
-      GlobalKey<SimpleFoldingCellState> key, int num) {
+  Widget _buildFrontWidget(GlobalKey<SimpleFoldingCellState> key, int num) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -169,7 +170,7 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
     final double width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return new GestureDetector(
-      onTap: (){
+      onTap: () {
         _navigatePage(num);
       },
       child: Container(
@@ -181,14 +182,13 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
               width: width,
             ),
             Image(
-              height: height/10 ,
-              width: height/10 ,
+              height: height / 10,
+              width: height / 10,
               fit: BoxFit.cover,
-              image:
-              images[num],
+              image: images[num],
             ),
             SizedBox(
-              height: height/16,
+              height: height / 16,
             ),
             Text(
               options[num],
@@ -198,7 +198,6 @@ class _FoldingCellMultipleCardsDemoState extends State<FoldingCellMultipleCardsD
                 fontWeight: FontWeight.w600,
               ),
             ),
-
           ],
         ),
       ),

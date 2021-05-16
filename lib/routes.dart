@@ -1,5 +1,4 @@
-String
-    IMAGE_SPLASH = '/ImageSplashScreen',
+String IMAGE_SPLASH = '/ImageSplashScreen',
     INTRO_PAGE = '/IntroPage',
     LOGIN_SCREEN = '/Login',
     PASSWORD_RESET = '/Login/Reset',
