@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iosrecal/constants/Api.dart';
 import 'package:iosrecal/routes.dart';
 
 import 'package:iosrecal/bloc/KeyboardBloc.dart';
@@ -183,7 +184,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
       );
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String url = "https://delta.nitt.edu/recal-uae/api/employment/support";
+    final String url = Api.getSupport;
     final response = await http.post(url, body: {
       "user_id" : "${prefs.getString("user_id")}",
       "body" : body,
@@ -284,7 +285,6 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin{
     uiUtills.updateScreenDimesion(width: width, height: height);
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
           appBar: AppBar(
             backgroundColor: ColorGlobal.whiteColor,
             leading: IconButton(

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
-import 'package:iosrecal/screens/Recal/home/HomeScreen.dart';
+import '../constants/ColorGlobal.dart';
+import '../constants/UIUtility.dart';
 
 class NoInternetScreen extends StatelessWidget {
   final Function() notifyParent;
@@ -28,7 +27,7 @@ class NoInternetScreen extends StatelessWidget {
                 Center(
                   child: FadeIn(
                     child: Text(
-                      "NOT CONNECTED TO INTERNET",
+                      "No Connection",
                       style: TextStyle(
                           fontSize: UIUtility().getProportionalWidth(width: 22,choice: 3),
                           fontWeight: FontWeight.bold,
@@ -47,7 +46,7 @@ class NoInternetScreen extends StatelessWidget {
                     image: AssetImage(
                       'assets/images/no_internet.png',
                     ),
-                    height: height / 3,
+                    height: height / 4,
                     fit: BoxFit.cover,
                     //width: width / 1.5,
                   ),

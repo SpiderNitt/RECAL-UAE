@@ -695,7 +695,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return WillPopScope(
       child: SafeArea(
           child: Scaffold(
-              resizeToAvoidBottomPadding: false,
               resizeToAvoidBottomInset: true,
               appBar: AppBar(
                 backgroundColor: ColorGlobal.whiteColor,

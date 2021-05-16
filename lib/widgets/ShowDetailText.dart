@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
+import '../constants/UIUtility.dart';
 
 import '../constants/ColorGlobal.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
+import '../constants/ColorGlobal.dart';
+import '../constants/UIUtility.dart';
 
 class NodataScreen extends StatelessWidget {
   @override

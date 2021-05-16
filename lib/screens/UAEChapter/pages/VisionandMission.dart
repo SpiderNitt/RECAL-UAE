@@ -62,13 +62,11 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    print("hey1");
     var response = await http.get(Api.chapterVisionMission, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
     ResponseBody responseBody = new ResponseBody();
-    print("hey2");
     if (response.statusCode == 200) {
       print("success");
 //        updateCookie(_response);
@@ -289,7 +287,7 @@ class _VisionMissionState extends State<VisionMission> with AutomaticKeepAliveCl
               Center(
                   child: FadeIn(
                       child: AutoSizeText(
-                        vision,
+                        mission,
                         style: TextStyle(
                           fontSize:
                           UIUtility().getProportionalWidth(width: 15, choice: 1),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
+import '../constants/UIUtility.dart';
 
 class Error8Screen extends StatelessWidget {
   @override

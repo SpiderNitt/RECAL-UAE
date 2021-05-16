@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:iosrecal/screens/Recal/splash/ImageSplashScreen.dart';
-import 'package:iosrecal/screens/Home/Employment/pages/JobDetails.dart';
-import 'package:iosrecal/screens/Recal/IntroPage.dart';
-import 'package:iosrecal/screens/UserAuth/pages/PasswordReset.dart';
+import 'screens/Home/Employment/pages/JobDetails.dart';
+import 'screens/Recal/IntroPage.dart';
+import 'screens/UserAuth/pages/PasswordReset.dart';
 import 'screens/Home/Business/pages/BusinessNetworkList.dart';
 import 'screens/Home/Business/BusinessScreen.dart';
 import 'screens/Home/Employment/pages/ClosedPositions.dart';
@@ -12,6 +11,7 @@ import 'screens/Home/Business/pages/DealsExecuted.dart';
 import 'screens/Home/Social/pages/SocialNetworkList.dart';
 import 'screens/Home/SocialMedia/SocialMedia.dart';
 import 'screens/Home/Social/SocialScreen.dart';
+import 'screens/Recal/splash/ImageSplashScreen.dart';
 import 'screens/Support/pages/WriteToMentor.dart';
 import 'screens/Home/Employment/pages/OpenPositions.dart';
 import 'screens/Home/Message/NotificationMenu.dart';
