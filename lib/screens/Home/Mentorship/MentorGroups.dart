@@ -137,7 +137,26 @@ class _MentorGroupsState extends State<MentorGroups> {
       );
     }
     if (groups.length == 0) {
-      return Center(child: NodataScreen());
+      return SafeArea(
+          child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: ColorGlobal.whiteColor,
+                leading: IconButton(
+                    icon: Icon(
+                      Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
+                      color: ColorGlobal.textColor,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+                title: Text(
+                  'Mentor Groups',
+                  style: TextStyle(color: ColorGlobal.textColor),
+                ),
+              ),
+              body: Center(child: NodataScreen())
+          ),
+      );
     }
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;

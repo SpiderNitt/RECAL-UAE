@@ -115,7 +115,7 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         ChapterModel chapterDetails = ChapterModel.fromJson(responseBody.data);
-        print(chapterDetails);
+        print(chapterDetails.toString());
         List list = chapterDetails.social_media;
         links = list.map((model) => SocialMediaModel.fromJson(model)).toList();
         print(links);

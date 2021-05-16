@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
+import 'package:iosrecal/widgets/NoData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/Api.dart';
@@ -23,6 +24,7 @@ class AchievementsScreen extends StatefulWidget {
 
 class _AchievementsScreenState extends State<AchievementsScreen> {
   int _index = 0;
+  int length = 0;
   bool _hasInternet = true;
   var achievements = new List<AchievementModel>();
   UIUtility uiUtills = new UIUtility();
@@ -48,6 +50,9 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
             list.map((model) => AchievementModel.fromJson(model)).toList();
 
         print(achievements.length);
+        setState(() {
+          length = achievements.length;
+        });
         return achievements;
       } else if (responseBody.status_code == 401) {
         onTimeOut();
@@ -85,6 +90,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
   refresh() {
     setState(() {});
     _hasInternet = true;
+    length=0;
     _getAchievements();
   }
 
@@ -92,6 +98,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
     Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true).then((value) {
       Navigator.pop(context);
       setState(() {});
+      length = 0;
       _hasInternet = true;
       _getAchievements();
     });
@@ -138,7 +145,13 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                   color: ColorGlobal.blueColor,
                 ),
               );
-            } else {
+            }
+            else if (length==0) {
+              return (
+                  Center(child: NodataScreen())
+              );
+            }
+            else {
               return Container(
                 height: height,
                 width: width,
