@@ -29,7 +29,7 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   File _image;
   final picker = ImagePicker();
-  List<int> color = new List<int>.generate(9, (i) => 0);
+  List<int> color = new List<int>.generate(10, (i) => 0);
   User user;
   int flag = 0, getBranch = 0;
   int dialog = 0;
@@ -45,6 +45,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   TextEditingController name;
   TextEditingController email;
+  TextEditingController linkedIn;
   TextEditingController branch;
   TextEditingController year;
   TextEditingController phone;
@@ -176,6 +177,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   if (flag == 1) {
                     after = name.text +
                         email.text +
+                        linkedIn.text +
                         DropDown.branch +
                         DropDown.year.toString() +
                         phone.text +
@@ -299,6 +301,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     var array = [
       name.text,
       email.text,
+      linkedIn.text,
       branch.text,
       year.text,
       phone.text,
@@ -307,8 +310,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       emirate.text,
       gender.text,
     ];
-    for (var i = 0; i < 9; i++) {
-      if (array[i] == "")
+    for (var i = 0; i < array.length; i++) {
+      if (array[i] == "" || array[i]==null)
         list[i] = 0;
       else
         list[i] = 1;
@@ -400,6 +403,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             flag = 1;
             name = new TextEditingController(text: user.name);
             email = new TextEditingController(text: user.email);
+            linkedIn = new TextEditingController(text: user.linkedIn_link);
+            print(linkedIn.text);
             branch = new TextEditingController(text: user.branch);
             year =
                 new TextEditingController(text: "${user.year_of_graduation}");
@@ -418,6 +423,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
             previous = name.text +
                 email.text +
+                linkedIn.text +
                 branch.text +
                 year.text.toString() +
                 phone.text +
@@ -428,6 +434,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           });
           name.addListener(_nameListener);
           email.addListener(_nameListener);
+          linkedIn.addListener(_nameListener);
           branch.addListener(_nameListener);
           year.addListener(_nameListener);
           phone.addListener(_nameListener);
@@ -555,8 +562,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       "branch": DropDown.branch,
       "emirate": DropDown.emirate,
       "is_admin": "1",
-      "linkedIn": " ",
+      "linkedIn": linkedIn.text,
     };
+    print("Posted Data");
+    print(body);
     await http.post(
       url,
       body: body,
@@ -666,6 +675,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _bloc.dispose();
     name.dispose();
     email.dispose();
+    linkedIn.dispose();
     branch.dispose();
     year.dispose();
     phone.dispose();
@@ -715,6 +725,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         if (flag == 1) {
                           after = name.text +
                               email.text +
+                              linkedIn.text +
                               DropDown.branch +
                               DropDown.year.toString() +
                               phone.text +
@@ -863,7 +874,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 hintText: 'Email',
                                 controller: email,
                                 readOnly: true,
-                                color: color[4] == 0
+                                color: color[1] == 0
+                                    ? Colors.red
+                                    : ColorGlobal.blueColor,
+                              ),
+                              ShowDetailTextWidget(
+                                hintText: 'LinkedIn',
+                                controller: linkedIn,
+                                color: color[2] == 0
                                     ? Colors.red
                                     : ColorGlobal.blueColor,
                               ),
@@ -871,21 +889,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 hintText: 'Phone Number',
                                 controller: phone,
                                 type: 'phone',
-                                color: color[4] == 0
+                                color: color[5] == 0
                                     ? Colors.red
                                     : ColorGlobal.blueColor,
                               ),
                               ShowDetailTextWidget(
                                 hintText: 'Organization',
                                 controller: organization,
-                                color: color[5] == 0
+                                color: color[6] == 0
                                     ? Colors.red
                                     : ColorGlobal.blueColor,
                               ),
                               ShowDetailTextWidget(
                                 hintText: 'Position',
                                 controller: position,
-                                color: color[6] == 0
+                                color: color[7] == 0
                                     ? Colors.red
                                     : ColorGlobal.blueColor,
                               ),
@@ -998,24 +1016,16 @@ class _DropDownState extends State<DropDown> {
   List<Gender> gList = [
     Gender(
       index: 1,
-      name: "Male",
+      name: "male",
     ),
     Gender(
       index: 2,
-      name: "Female",
-    ),
-    Gender(
-      index: 3,
-      name: "Custom",
-    ),
-    Gender(
-      index: 4,
-      name: "Prefer Not to Say",
+      name: "female",
     ),
   ];
 
   getId(String value) {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < gList.length; i++) {
       if (gList[i].name == value) return gList[i].index;
     }
   }
@@ -1049,9 +1059,6 @@ class _DropDownState extends State<DropDown> {
 
   @override
   Widget build(BuildContext context) {
-//    print('${widget.select}\n');
-//    print(_branch);
-//    print(all);
     if (widget.select == 0) {
       return widget.branches != null
           ? DropdownButtonHideUnderline(
