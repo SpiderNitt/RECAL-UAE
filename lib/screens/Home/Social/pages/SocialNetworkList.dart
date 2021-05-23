@@ -252,8 +252,9 @@ class _MemberDatabaseState extends State<MemberDatabase> {
                                         ? ListTile(
                                             title: new GestureDetector(
                                                 child: new AutoSizeText(
-                                                  members[index].linkedIn_link,
+                                                  members[index].name,
                                                   style: TextStyle(
+                                                      color: Color(0XFF0077b5),
                                                       fontSize:
                                                           getWidth(16, 2)),
                                                   maxLines: 1,

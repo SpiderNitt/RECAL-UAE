@@ -304,7 +304,7 @@ class LinkedinState extends State<LinkedIn> {
                                 //"Link",
                                 style: TextStyle(
                                   fontSize: getWidth(12, 3),
-                                  color: ColorGlobal.textColor,
+                                  color: Color(0XFF0077b5),
                                   fontWeight: FontWeight.bold,
                                 ),
                                 maxLines: 2,
