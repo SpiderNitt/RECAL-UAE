@@ -102,7 +102,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                                       padding: EdgeInsets.all(getWidth(16, 2)),
                                       child: Icon(
                                         Icons.list,
-                                        size: getWidth(30, 2),
+                                        size: getWidth(24, 2),
                                         color: Colors.white,
                                       ),
                                     ))),
@@ -113,7 +113,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                                     style: TextStyle(
                                         color: ColorGlobal.textColor,
                                         fontWeight: FontWeight.w500,
-                                        fontSize: getWidth(20, 2))),
+                                        fontSize: getWidth(18, 2))),
                               ]),
                         ),
                       ),
@@ -147,7 +147,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                                     padding: EdgeInsets.all(getWidth(16, 2)),
                                     child: Icon(
                                       Icons.person,
-                                      size: getWidth(30, 2),
+                                      size: getWidth(24, 2),
                                       color: Colors.white,
                                     ),
                                   ))),
@@ -158,7 +158,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                                   style: TextStyle(
                                       color: ColorGlobal.textColor,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: getWidth(20, 2))),
+                                      fontSize: getWidth(18, 2))),
                             ],
                           ),
                         ),
@@ -192,7 +192,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                                     padding: EdgeInsets.all(getWidth(16, 2)),
                                     child: Icon(
                                       Icons.brightness_low,
-                                      size: getWidth(30, 2),
+                                      size: getWidth(24, 2),
                                       color: Colors.white,
                                     ),
                                   ),
@@ -205,7 +205,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                                   style: TextStyle(
                                       color: ColorGlobal.textColor,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: getWidth(20, 2))),
+                                      fontSize: getWidth(18, 2))),
                             ],
                           ),
                         ),
@@ -238,7 +238,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                                     padding: EdgeInsets.all(getWidth(16, 2)),
                                     child: Icon(
                                       Icons.credit_card,
-                                      size: getWidth(30, 2),
+                                      size: getWidth(24, 2),
                                       color: Colors.white,
                                     ),
                                   ),
@@ -258,7 +258,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                                       style: TextStyle(
                                           color: ColorGlobal.textColor,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: getWidth(20, 2)))
+                                          fontSize: getWidth(18, 2)))
                                 ],
                               ),
                             ],
@@ -293,7 +293,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                                     padding: EdgeInsets.all(getWidth(16, 2)),
                                     child: Icon(
                                       Icons.phone,
-                                      size: getWidth(30, 2),
+                                      size: getWidth(24, 2),
                                       color: Colors.white,
                                     ),
                                   ),
@@ -313,7 +313,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                                       style: TextStyle(
                                           color: ColorGlobal.textColor,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: getWidth(20, 2)))
+                                          fontSize: getWidth(18, 2)))
                                 ],
                               ),
                             ],

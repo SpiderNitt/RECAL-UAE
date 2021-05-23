@@ -1,21 +1,24 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:ui';
-
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:iosrecal/routes.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:http/http.dart' as http;
-import 'package:iosrecal/constants/Api.dart';
+import 'package:iosrecal/models/SocialMediaModel.dart';
+import 'dart:ui';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:iosrecal/constants/Api.dart';
+import '../../../widgets/Error.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:iosrecal/widgets/NoInternet.dart';
 import 'package:iosrecal/constants/UIUtility.dart';
 import 'package:iosrecal/models/ChapterModel.dart';
-import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/models/SocialMediaModel.dart';
-import 'package:iosrecal/routes.dart';
-import 'package:iosrecal/widgets/NoInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SocialMediaScreen extends StatefulWidget {
   @override
@@ -102,20 +105,18 @@ class SocialMediaScreenState extends State<SocialMediaScreen> {
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    print("hey1");
     var response = await http.get(Api.chapterVisionMission, headers: {
       "Accept": "application/json",
       "Cookie": "${prefs.getString("cookie")}",
     });
     ResponseBody responseBody = new ResponseBody();
-    print("hey2");
     if (response.statusCode == 200) {
       print("success");
 //        updateCookie(_response);
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         ChapterModel chapterDetails = ChapterModel.fromJson(responseBody.data);
-        print(chapterDetails.toString());
+        print(chapterDetails);
         List list = chapterDetails.social_media;
         links = list.map((model) => SocialMediaModel.fromJson(model)).toList();
         print(links);

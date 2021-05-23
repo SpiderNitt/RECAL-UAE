@@ -734,7 +734,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                           "Message",
                                           style: TextStyle(
                                               fontFamily: 'Pacifico',
-                                              fontSize: getWidth(15, 1),
+                                              fontSize: getWidth(14, 1),
                                               fontWeight: FontWeight.bold,
                                               color: ColorGlobal.whiteColor),
                                         ),
@@ -742,7 +742,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                           "View Messages",
                                           style: TextStyle(
                                               fontFamily: 'Pacifico',
-                                              fontSize: getWidth(13, 1),
+                                              fontSize: getWidth(11, 1),
                                               fontWeight: FontWeight.w600,
                                               color: ColorGlobal.whiteColor
                                                   .withOpacity(0.7)),
@@ -778,7 +778,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                           "Events",
                                           style: TextStyle(
                                               fontFamily: 'Pacifico',
-                                              fontSize: getWidth(15, 1),
+                                              fontSize: getWidth(14, 1),
                                               fontWeight: FontWeight.bold,
                                               color: ColorGlobal.whiteColor),
                                         ),
@@ -786,7 +786,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                           "Checkout Events",
                                           style: TextStyle(
                                               fontFamily: 'Pacifico',
-                                              fontSize: getWidth(13, 1),
+                                              fontSize: getWidth(11, 1),
                                               fontWeight: FontWeight.w600,
                                               color: ColorGlobal.whiteColor
                                                   .withOpacity(0.7)),
@@ -843,7 +843,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                               "Social Media",
                                               style: TextStyle(
                                                   fontFamily: 'Pacifico',
-                                                  fontSize: getWidth(15, 1),
+                                                  fontSize: getWidth(14, 1),
                                                   fontWeight: FontWeight.bold,
                                                   color: ColorGlobal.textColor),
                                             ),
@@ -851,7 +851,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                               "Social Network",
                                               style: TextStyle(
                                                   fontFamily: 'Pacifico',
-                                                  fontSize: getWidth(13, 1),
+                                                  fontSize: getWidth(11, 1),
                                                   fontWeight: FontWeight.w600,
                                                   color: ColorGlobal.textColor
                                                       .withOpacity(0.7)),
@@ -890,7 +890,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                               "Employment",
                                               style: TextStyle(
                                                   fontFamily: 'Pacifico',
-                                                  fontSize: getWidth(15, 1),
+                                                  fontSize: getWidth(14, 1),
                                                   fontWeight: FontWeight.bold,
                                                   color: ColorGlobal.textColor),
                                             ),
@@ -898,7 +898,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                               "Job Positions",
                                               style: TextStyle(
                                                   fontFamily: 'Pacifico',
-                                                  fontSize: getWidth(13, 1),
+                                                  fontSize: getWidth(11, 1),
                                                   fontWeight: FontWeight.w600,
                                                   color: ColorGlobal.textColor
                                                       .withOpacity(0.7)),
@@ -937,7 +937,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                               "Mentorship",
                                               style: TextStyle(
                                                   fontFamily: 'Pacifico',
-                                                  fontSize: getWidth(15, 1),
+                                                  fontSize: getWidth(14, 1),
                                                   fontWeight: FontWeight.bold,
                                                   color: ColorGlobal.textColor),
                                             ),
@@ -945,7 +945,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                               "Mentor Groups",
                                               style: TextStyle(
                                                   fontFamily: 'Pacifico',
-                                                  fontSize: getWidth(13, 1),
+                                                  fontSize: getWidth(11, 1),
                                                   fontWeight: FontWeight.w600,
                                                   color: ColorGlobal.textColor
                                                       .withOpacity(0.7)),
@@ -993,7 +993,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                                 "Social",
                                                 style: TextStyle(
                                                     fontFamily: 'Pacifico',
-                                                    fontSize: getWidth(15, 1),
+                                                    fontSize: getWidth(14, 1),
                                                     fontWeight: FontWeight.bold,
                                                     color:
                                                         ColorGlobal.textColor),
@@ -1002,7 +1002,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                                 "Go Social",
                                                 style: TextStyle(
                                                     fontFamily: 'Pacifico',
-                                                    fontSize: getWidth(13, 1),
+                                                    fontSize: getWidth(11, 1),
                                                     fontWeight: FontWeight.w600,
                                                     color: ColorGlobal.textColor
                                                         .withOpacity(0.7)),
@@ -1046,7 +1046,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                                 "Business",
                                                 style: TextStyle(
                                                     fontFamily: 'Pacifico',
-                                                    fontSize: getWidth(15, 1),
+                                                    fontSize: getWidth(14, 1),
                                                     fontWeight: FontWeight.bold,
                                                     color:
                                                         ColorGlobal.textColor),
@@ -1055,7 +1055,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                                 "Business Group",
                                                 style: TextStyle(
                                                     fontFamily: 'Pacifico',
-                                                    fontSize: getWidth(13, 1),
+                                                    fontSize: getWidth(11, 1),
                                                     fontWeight: FontWeight.w600,
                                                     color: ColorGlobal.textColor
                                                         .withOpacity(0.7)),

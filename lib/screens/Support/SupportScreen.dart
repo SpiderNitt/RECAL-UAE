@@ -30,7 +30,7 @@ class SupportScreenState extends State<SupportScreen> {
     print(width);
     print(height);
     UIUtility().updateScreenDimesion(width: width, height: height);
-    print(UIUtility().getProportionalWidth(width: 16, choice: 3));
+    print(UIUtility().getProportionalWidth(width: 14, choice: 1));
     return (WillPopScope(
         child: SafeArea(
             child: new Scaffold(
@@ -114,7 +114,7 @@ class SupportScreenState extends State<SupportScreen> {
                                   style: TextStyle(
                                       fontSize: UIUtility()
                                           .getProportionalWidth(
-                                              width: 16, choice: 3),
+                                              width: 14, choice: 1),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -124,7 +124,7 @@ class SupportScreenState extends State<SupportScreen> {
                                   style: TextStyle(
                                       fontSize: UIUtility()
                                           .getProportionalWidth(
-                                              width: 16, choice: 3),
+                                              width: 14, choice: 1),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -169,7 +169,7 @@ class SupportScreenState extends State<SupportScreen> {
                                   style: TextStyle(
                                       fontSize: UIUtility()
                                           .getProportionalWidth(
-                                              width: 16, choice: 3),
+                                              width: 14, choice: 1),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -179,7 +179,7 @@ class SupportScreenState extends State<SupportScreen> {
                                   style: TextStyle(
                                       fontSize: UIUtility()
                                           .getProportionalWidth(
-                                              width: 16, choice: 3),
+                                              width: 14, choice: 1),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -224,7 +224,7 @@ class SupportScreenState extends State<SupportScreen> {
                                   style: TextStyle(
                                       fontSize: UIUtility()
                                           .getProportionalWidth(
-                                              width: 16, choice: 3),
+                                              width: 14, choice: 1),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -234,7 +234,7 @@ class SupportScreenState extends State<SupportScreen> {
                                   style: TextStyle(
                                       fontSize: UIUtility()
                                           .getProportionalWidth(
-                                              width: 16, choice: 3),
+                                              width: 14, choice: 1),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -289,7 +289,7 @@ class SupportScreenState extends State<SupportScreen> {
                                   style: TextStyle(
                                       fontSize: UIUtility()
                                           .getProportionalWidth(
-                                              width: 16, choice: 3),
+                                              width: 14, choice: 1),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -334,7 +334,7 @@ class SupportScreenState extends State<SupportScreen> {
                                   style: TextStyle(
                                       fontSize: UIUtility()
                                           .getProportionalWidth(
-                                              width: 16, choice: 3),
+                                              width: 14, choice: 1),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
@@ -379,7 +379,7 @@ class SupportScreenState extends State<SupportScreen> {
                                   style: TextStyle(
                                       fontSize: UIUtility()
                                           .getProportionalWidth(
-                                              width: 16, choice: 3),
+                                              width: 14, choice: 1),
                                       color: Color(0xFF433d3e),
                                       fontWeight: FontWeight.w600),
                                   maxLines: 1,
