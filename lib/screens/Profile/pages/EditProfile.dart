@@ -549,7 +549,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     print("cookie profile: $cookie");
     print(
         "branch emirate year gender ${DropDown.branch} ${DropDown.emirate} ${DropDown.year.toString()} ${DropDown.gender}");
-    var url = Api.updateUser;
+    var url = Api.getUser;
     var body = {
       "id": user_id.toString(),
       "email": email.text,

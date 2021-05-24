@@ -191,8 +191,8 @@ class _VisionMissionState extends State<VisionMission>
                 vision,
                 style: TextStyle(
                   fontSize:
-                      UIUtility().getProportionalWidth(width: 16, choice: 1),
-                  color: ColorGlobal.textColor,
+                      UIUtility().getProportionalWidth(width: 18, choice: 1),
+                  color: ColorGlobal.color2,
                   fontWeight: FontWeight.bold
                 ),
                 maxLines: 50,
@@ -304,8 +304,8 @@ class _VisionMissionState extends State<VisionMission>
                 mission,
                 style: TextStyle(
                   fontSize:
-                      UIUtility().getProportionalWidth(width: 16, choice: 1),
-                  color: ColorGlobal.textColor,
+                      UIUtility().getProportionalWidth(width: 18, choice: 1),
+                  color: ColorGlobal.color2,
                   fontWeight: FontWeight.bold
                 ),
                 maxLines: 50,
