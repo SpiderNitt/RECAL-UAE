@@ -5,6 +5,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:iosrecal/widgets/NoData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,6 +27,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
   int _index = 0;
   int length = 0;
   bool _hasInternet = true;
+  bool _isError= false;
   var achievements = new List<AchievementModel>();
   UIUtility uiUtills = new UIUtility();
 
@@ -46,22 +48,23 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
           ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
-        achievements =
-            list.map((model) => AchievementModel.fromJson(model)).toList();
-
+        achievements = list.map((model) => AchievementModel.fromJson(model)).toList();
         print(achievements.length);
-        setState(() {
-          length = achievements.length;
-        });
         return achievements;
       } else if (responseBody.status_code == 401) {
         onTimeOut();
       } else {
         print(responseBody.data);
+      setState(() {
+        _isError=true;
+      });
       }
     } else {
       print(response.statusCode);
       print('Server error');
+      setState(() {
+        _isError=true;
+      });
     }
   }
 
@@ -138,15 +141,25 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
           builder: (BuildContext context, AsyncSnapshot projectSnap) {
             if (_hasInternet == false) {
               return Center(child: NoInternetScreen(notifyParent: refresh));
+            }else if(_isError){
+              return Center(
+                child: Text(
+                  "Error in loading\nPlease try again later",
+                    style: GoogleFonts.josefinSans(
+                        fontSize:
+                        UIUtility().getProportionalWidth(width: 25, choice: 3),
+                        color: ColorGlobal.textColor)
+                ),
+              );
             }
-            if (projectSnap.data == null) {
+            else if (projectSnap.data == null) {
               return Center(
                 child: SpinKitDoubleBounce(
                   color: ColorGlobal.blueColor,
                 ),
               );
             }
-            else if (length==0) {
+            else if (achievements.length==0) {
               return (
                   Center(child: NodataScreen())
               );

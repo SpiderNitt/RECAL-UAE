@@ -346,7 +346,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin {
                                   Platform.isAndroid
                                       ? GestureDetector(
                                           child: Text(
-                                              "Email\nrecaluaechapter@gmail.com",
+                                              "Email\ninfo@recaluaechapter.com",
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w600,

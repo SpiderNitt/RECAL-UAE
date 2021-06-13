@@ -673,7 +673,7 @@ class _HomeActivityState extends State<HomeActivity> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
+                              padding: const EdgeInsets.only(top: 35.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -963,7 +963,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                     ],
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
+                                    padding: const EdgeInsets.only(top: 25.0),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
