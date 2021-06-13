@@ -151,54 +151,56 @@ class _VisionMissionState extends State<VisionMission>
         color: ColorGlobal.blueColor,
       );
     } else if (state == 1 && error == false) {
-      return SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(
-              UIUtility().getProportionalHeight(height: 10, choice: 1)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-//            Center(
-//              child: FadeIn(
-//                child: Text(
-//                  "VISION",
-//                  style: TextStyle(
-//                    fontSize:
-//                        UIUtills().getProportionalHeight(height: 25, choice: 3),
-//                    fontWeight: FontWeight.bold,
-//                  ),
-//                  textAlign: TextAlign.center,
-//                ),
-//                // Optional paramaters
-//                duration: Duration(milliseconds: 2000),
-//                curve: Curves.easeIn,
-//              ),
-//            ),
-              Center(
-                child: Image.asset(
-                  'assets/images/visionbg.png',
-                  height: height / 3,
-                  fit: BoxFit.cover,
-                ),
-                //width: width / 1.5,
+      return Padding(
+        padding: EdgeInsets.all(
+            UIUtility().getProportionalHeight(height: 10, choice: 1)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+
+            Container(
+              color: ColorGlobal.color6,
+              child: Image.asset(
+                'assets/images/vision.png',
+                height: height / 2,
+                fit: BoxFit.cover,
               ),
-              SizedBox(
-                  height:
-                      UIUtility().getProportionalHeight(height: 12, choice: 1)),
-              Center(
-                  child: FadeIn(
-                      child: AutoSizeText(
-                vision,
+            ),
+            SizedBox(
+                height:
+                UIUtility().getProportionalHeight(height: 12, choice: 1)),
+            Center(
+              child: AutoSizeText(
+                'VISION',
                 style: TextStyle(
-                  fontSize:
-                      UIUtility().getProportionalWidth(width: 18, choice: 1),
-                  color: ColorGlobal.color2,
-                  fontWeight: FontWeight.bold
+                    fontSize:
+                    UIUtility().getProportionalWidth(width: 22, choice: 1),
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
                 ),
                 maxLines: 50,
-              )))
-            ],
-          ),
+              ),
+            ),
+            SizedBox(
+                height:
+                UIUtility().getProportionalHeight(height: 12, choice: 1)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+              child: FadeIn(
+                  child: AutoSizeText(
+                    '\" ' + vision + ' \"',
+                    style: TextStyle(
+                      fontSize:
+                      UIUtility().getProportionalWidth(width: 18, choice: 1),
+                      color: ColorGlobal.textColor,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    maxLines: 50,
+                    textAlign: TextAlign.center,
+                  )),
+            )
+          ],
         ),
       );
     } else if (state == 1 && error == true) {
@@ -208,45 +210,29 @@ class _VisionMissionState extends State<VisionMission>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-//            Center(
-//              child: FadeIn(
-//                child: Text(
-//                  "VISION",
-//                  style: TextStyle(
-//                    fontSize:
-//                        UIUtills().getProportionalHeight(height: 25, choice: 3),
-//                    fontWeight: FontWeight.bold,
-//                  ),
-//                  textAlign: TextAlign.center,
-//                ),
-//                // Optional paramaters
-//                duration: Duration(milliseconds: 2000),
-//                curve: Curves.easeIn,
-//              ),
-//            ),
             Center(
               child: Image.asset(
-                'assets/images/visionbg.png',
-                height: height / 3,
+                'assets/images/mission.png',
+                height: height / 2,
                 fit: BoxFit.cover,
               ),
               //width: width / 1.5,
             ),
             SizedBox(
                 height:
-                    UIUtility().getProportionalHeight(height: 12, choice: 1)),
+                UIUtility().getProportionalHeight(height: 12, choice: 1)),
             Center(
                 child: FadeIn(
                     child: AutoSizeText(
-              "NO DATA AVAILABLE",
-              style: TextStyle(
-                fontSize:
-                    UIUtility().getProportionalWidth(width: 20, choice: 1),
-                color: ColorGlobal.textColor,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 50,
-            )))
+                      "NO DATA AVAILABLE",
+                      style: TextStyle(
+                        fontSize:
+                        UIUtility().getProportionalWidth(width: 20, choice: 1),
+                        color: ColorGlobal.textColor,
+                      ),
+                      textAlign: TextAlign.center,
+                      maxLines: 50,
+                    )))
           ],
         ),
       );
@@ -263,55 +249,56 @@ class _VisionMissionState extends State<VisionMission>
         color: ColorGlobal.blueColor,
       );
     } else if (state == 1 && error == false) {
-      return SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(
-              UIUtility().getProportionalHeight(height: 10, choice: 1)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-//
-//            Center(
-//              child: FadeIn(
-//                child: Text(
-//                  "MISSION",
-//                  style: TextStyle(
-//                    fontSize:
-//                        UIUtills().getProportionalHeight(height: 25, choice: 3),
-//                    fontWeight: FontWeight.bold,
-//                  ),
-//                  textAlign: TextAlign.center,
-//                ),
-//                // Optional paramaters
-//                duration: Duration(milliseconds: 2000),
-//                curve: Curves.easeIn,
-//              ),
-//            ),
-              Center(
-                child: Image.asset(
-                  'assets/images/missionbg.png',
-                  height: height / 3,
-                  fit: BoxFit.cover,
-                ),
-                //width: width / 1.5,
+      return Padding(
+        padding: EdgeInsets.all(
+            UIUtility().getProportionalHeight(height: 10, choice: 1)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+
+            Container(
+              color: ColorGlobal.color6,
+              child: Image.asset(
+                'assets/images/mission.png',
+                height: height / 2,
+                fit: BoxFit.cover,
               ),
-              SizedBox(
-                  height:
-                      UIUtility().getProportionalHeight(height: 12, choice: 1)),
-              Center(
-                  child: FadeIn(
-                      child: AutoSizeText(
-                mission,
+            ),
+            SizedBox(
+                height:
+                UIUtility().getProportionalHeight(height: 12, choice: 1)),
+            Center(
+              child: AutoSizeText(
+                'MISSION',
                 style: TextStyle(
-                  fontSize:
-                      UIUtility().getProportionalWidth(width: 18, choice: 1),
-                  color: ColorGlobal.color2,
-                  fontWeight: FontWeight.bold
+                    fontSize:
+                    UIUtility().getProportionalWidth(width: 22, choice: 1),
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
                 ),
                 maxLines: 50,
-              )))
-            ],
-          ),
+              ),
+            ),
+            SizedBox(
+                height:
+                    UIUtility().getProportionalHeight(height: 12, choice: 1)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+              child: FadeIn(
+                  child: AutoSizeText(
+                '\" ' + mission + ' \"',
+                style: TextStyle(
+              fontSize:
+                  UIUtility().getProportionalWidth(width: 18, choice: 1),
+              color: ColorGlobal.textColor,
+                  fontStyle: FontStyle.italic,
+                ),
+                    maxLines: 50,
+                    textAlign: TextAlign.center,
+              )),
+            )
+          ],
         ),
       );
     } else if (state == 1 && error == true) {
@@ -321,26 +308,10 @@ class _VisionMissionState extends State<VisionMission>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-//            Center(
-//              child: FadeIn(
-//                child: Text(
-//                  "MISSION",
-//                  style: TextStyle(
-//                    fontSize:
-//                        UIUtills().getProportionalHeight(height: 25, choice: 3),
-//                    fontWeight: FontWeight.bold,
-//                  ),
-//                  textAlign: TextAlign.center,
-//                ),
-//                // Optional paramaters
-//                duration: Duration(milliseconds: 2000),
-//                curve: Curves.easeIn,
-//              ),
-//            ),
             Center(
               child: Image.asset(
-                'assets/images/missionbg.png',
-                height: height / 3,
+                'assets/images/mission.png',
+                height: height / 2,
                 fit: BoxFit.cover,
               ),
               //width: width / 1.5,
@@ -428,32 +399,32 @@ class _VisionMissionState extends State<VisionMission>
                 notifyParent: refresh,
               )
             : SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Container(
-                      height: UIUtility().getProportionalHeight(
-                              height: height, choice: 1) -
-                          UIUtility()
-                              .getProportionalHeight(height: 60, choice: 1),
-                      child: PageView(
-                        physics: ClampingScrollPhysics(),
-                        controller: _pageController,
-                        onPageChanged: (int page) {
-                          setState(() {
-                            _currentPage = page;
-                          });
-                        },
-                        children: <Widget>[
-                          KeepAlivePage(child: getBody()),
-                          KeepAlivePage(child: getBody1())
-                        ],
-                      ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Container(
+                    color: ColorGlobal.whiteColor,
+                    height: height -
+                        UIUtility()
+                            .getProportionalHeight(height: 100, choice: 1),
+                    child: PageView(
+                      physics: ClampingScrollPhysics(),
+                      controller: _pageController,
+                      onPageChanged: (int page) {
+                        setState(() {
+                          _currentPage = page;
+                        });
+                      },
+                      children: <Widget>[
+                        KeepAlivePage(child: getBody()),
+                        KeepAlivePage(child: getBody1())
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
         bottomNavigationBar: internet == 0
             ? SizedBox()
             : Container(
