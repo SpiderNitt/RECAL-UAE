@@ -222,7 +222,6 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                               ),
                             ),
                             SizedBox(height: getHeight(10, 1)),
-
                             achievements[i].category==null || achievements[i].category.toString()=="" ? Container() :
                             Card(
                               elevation: 2,
