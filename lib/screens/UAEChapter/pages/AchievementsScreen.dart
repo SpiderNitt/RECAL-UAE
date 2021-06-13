@@ -194,7 +194,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                 decoration: new BoxDecoration(
                                   color: ColorGlobal.whiteColor,
                                   image: new DecorationImage(
-                                    image: achievements[i].file==null || achievements[i].file.toString() == "" ?  AssetImage('assets/images/achievement.png') :  NetworkImage(
+                                    image: achievements[i].file==null || achievements[i].file.toString() == "" ?  AssetImage('assets/images/achievement.png') :
+                                    NetworkImage(
                                       Api.imageUrl +
                                           achievements[i].file.toString(),
                                     ),
@@ -221,6 +222,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                               ),
                             ),
                             SizedBox(height: getHeight(10, 1)),
+
                             achievements[i].category==null || achievements[i].category.toString()=="" ? Container() :
                             Card(
                               elevation: 2,
