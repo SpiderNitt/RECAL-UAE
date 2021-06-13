@@ -1,24 +1,25 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:iosrecal/routes.dart';
-import 'package:iosrecal/screens/Home/Employment/pages/MarketSurvey.dart';
-import 'package:iosrecal/widgets/Error.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'dart:convert';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:iosrecal/constants/Api.dart';
 import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:flip_card/flip_card.dart';
+import 'package:iosrecal/routes.dart';
+import 'package:iosrecal/widgets/Error.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import '../../../../widgets/NoData.dart';
 import '../../../../widgets/NoInternet.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:iosrecal/constants/Api.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
 
 class LinkedinModel {
   final int id;
@@ -65,6 +66,7 @@ class LinkedinState extends State<LinkedIn> {
     Colors.deepOrange,
     Colors.redAccent
   ];
+
   initState() {
     super.initState();
     _positions();
@@ -80,7 +82,6 @@ class LinkedinState extends State<LinkedIn> {
   }
 
   Future<String> _positions() async {
-
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
@@ -108,11 +109,13 @@ class LinkedinState extends State<LinkedIn> {
               list.map((model) => LinkedinModel.fromJson(model)).toList();
           positions.removeWhere((element) =>
               element.linkedin == null || element.linkedin.trim() == "");
-          positions.sort((a,b)=> a.user.toLowerCase().compareTo(b.user.toLowerCase()));
+          positions.sort(
+              (a, b) => a.user.toLowerCase().compareTo(b.user.toLowerCase()));
           fullList = positions.map((e) => e.user).toList();
           cardKey = List<GlobalKey<FlipCardState>>.generate(
               positions.length, (index) => new GlobalObjectKey(index));
-          saveColors = List<Color>.generate(positions.length, (index) =>  colorArray.elementAt(Random().nextInt(4)));
+          saveColors = List<Color>.generate(positions.length,
+              (index) => colorArray.elementAt(Random().nextInt(4)));
           print("Answer");
           print(positions.length);
           state = 1;
@@ -293,8 +296,7 @@ class LinkedinState extends State<LinkedIn> {
                             ),
                             GestureDetector(
                               onTap: () async {
-                                await _launchLinked(
-                                    positions[index].linkedin);
+                                await _launchLinked(positions[index].linkedin);
                                 cardKey[index].currentState.toggleCard();
                               },
                               child: AutoSizeText(
@@ -302,7 +304,7 @@ class LinkedinState extends State<LinkedIn> {
                                 //"Link",
                                 style: TextStyle(
                                   fontSize: getWidth(12, 3),
-                                  color: ColorGlobal.textColor,
+                                  color: Color(0XFF0077b5),
                                   fontWeight: FontWeight.bold,
                                 ),
                                 maxLines: 2,
@@ -349,8 +351,8 @@ class LinkedinState extends State<LinkedIn> {
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: IconButton(
-                onPressed: () =>
-                    showSearch(context: context, delegate: Search(positions,saveColors)),
+                onPressed: () => showSearch(
+                    context: context, delegate: Search(positions, saveColors)),
                 icon: Icon(
                   Icons.search,
                   color: ColorGlobal.textColor,
@@ -372,8 +374,10 @@ class LinkedinState extends State<LinkedIn> {
 class Search extends SearchDelegate {
   List<GlobalKey<FlipCardState>> cardKey;
   UIUtility uiUtills = new UIUtility();
+
   @override
   TextStyle get searchFieldStyle => TextStyle(fontSize: getWidth(18, 1));
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
@@ -404,6 +408,7 @@ class Search extends SearchDelegate {
   }
 
   String selectedResult = "";
+
   @override
   Widget buildResults(BuildContext context) {
     return Container(
@@ -418,6 +423,7 @@ class Search extends SearchDelegate {
 
   final List<LinkedinModel> listProfiles;
   final List<Color> saveColor;
+
   Search(this.listProfiles, this.saveColor);
 
   @override
@@ -431,7 +437,8 @@ class Search extends SearchDelegate {
               element.user.toLowerCase().contains(query.toLowerCase())));
     }
     cardKey = List<GlobalKey<FlipCardState>>.generate(
-        modelSuggestionList.length, (index) => new GlobalObjectKey(index + Random().nextInt(10000)));
+        modelSuggestionList.length,
+        (index) => new GlobalObjectKey(index + Random().nextInt(10000)));
 
     return Center(
       child: Padding(

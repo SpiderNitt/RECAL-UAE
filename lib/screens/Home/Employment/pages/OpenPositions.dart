@@ -1,25 +1,25 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:iosrecal/routes.dart';
+import 'package:iosrecal/constants/Api.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
 import 'package:iosrecal/models/PositionModel.dart';
 import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/widgets/NoInternet.dart';
+import 'package:iosrecal/routes.dart';
 import 'package:iosrecal/screens/Home/Employment/pages/JobDetails.dart';
 import 'package:iosrecal/widgets/Error.dart';
 import 'package:iosrecal/widgets/NoData.dart';
+import 'package:iosrecal/widgets/NoInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'package:iosrecal/constants/Api.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
-
 
 class OpenPositions extends StatefulWidget {
   @override
@@ -53,12 +53,10 @@ class _OpenPositionsState extends State<OpenPositions> {
       internet = 0;
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http.get(
-        Api.getPosition,
-        headers: {
-          "Accept": "application/json",
-          "Cookie": "${prefs.getString("cookie")}",
-        });
+    var response = await http.get(Api.getPosition, headers: {
+      "Accept": "application/json",
+      "Cookie": "${prefs.getString("cookie")}",
+    });
     ResponseBody responseBody = new ResponseBody();
 
     if (response.statusCode == 200) {
@@ -70,66 +68,59 @@ class _OpenPositionsState extends State<OpenPositions> {
 
         positions.forEach((element) {
           print(element.company);
-          if(element.open_until!=null) {
+          if (element.open_until != null) {
             if (!DateTime.now().isAfter(DateTime.parse(element.open_until))) {
               openPositions.add(element);
             }
           }
         });
-
-      } else if(responseBody.status_code==401){
+      } else if (responseBody.status_code == 401) {
         onTimeOut();
-      }else{
-        error =1;
+      } else {
+        error = 1;
       }
-
-    }else{
+    } else {
       error = 1;
     }
     return positions;
   }
 
-  navigateAndReload(){
-    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
-        .then((value) {
+  navigateAndReload() {
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true).then((value) {
       print("step 1");
       Navigator.pop(context);
-      setState(() {
-
-      });
+      setState(() {});
       print("step 2");
 
-      _positions();});
+      _positions();
+    });
   }
 
-  refresh(){
-    setState(() {
-
-    });
+  refresh() {
+    setState(() {});
     _positions;
   }
 
-  Future<bool> onTimeOut(){
+  Future<bool> onTimeOut() {
     return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: Text('Session Timeout'),
-        content : Text('Login in continue'),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () => navigateAndReload(),
-            child: Text("OK"),
+          context: context,
+          builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text('Session Timeout'),
+            content: Text('Login in continue'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => navigateAndReload(),
+                child: Text("OK"),
+              ),
+            ],
           ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -153,8 +144,8 @@ class _OpenPositionsState extends State<OpenPositions> {
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: IconButton(
-                onPressed: () =>
-                    showSearch(context: context, delegate: Search(openPositions)),
+                onPressed: () => showSearch(
+                    context: context, delegate: Search(openPositions)),
                 icon: Icon(
                   Icons.search,
                   color: ColorGlobal.textColor,
@@ -183,28 +174,36 @@ class _OpenPositionsState extends State<OpenPositions> {
                   );
                 case ConnectionState.done:
                   if (snapshot.hasError) {
-                    return internet == 1 ? Center(child: Error8Screen()) : Center(child: NoInternetScreen(notifyParent: refresh));
+                    return internet == 1
+                        ? Center(child: Error8Screen())
+                        : Center(
+                            child: NoInternetScreen(notifyParent: refresh));
                   } else {
-                    if(error==1){
+                    if (error == 1) {
                       return Center(child: Error8Screen());
                     }
-                    if(openPositions.length==0){
+                    if (openPositions.length == 0) {
                       return Center(child: NodataScreen());
                     }
                     return ListView.builder(
                       itemCount: openPositions.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () => Navigator.push(context, MaterialPageRoute( builder: (context) => JobDetail(openPositions[index]))),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      JobDetail(openPositions[index]))),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: width/25, vertical: width/50),
+                                horizontal: width / 25, vertical: width / 50),
                             child: Material(
                               color: Colors.white,
                               elevation: 5,
-                              borderRadius: BorderRadius.circular(3*width/50),
+                              borderRadius:
+                                  BorderRadius.circular(3 * width / 50),
                               child: Padding(
-                                padding: EdgeInsets.all(3*width/50),
+                                padding: EdgeInsets.all(3 * width / 50),
                                 child: Column(
                                   children: [
 //                                    openPositions[index].open_until!=null?
@@ -222,34 +221,36 @@ class _OpenPositionsState extends State<OpenPositions> {
                                     Row(
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Icon(
                                           Icons.business_center,
-                                          size: width/10,
+                                          size: width / 10,
                                           color: Color(0xcc982ef0),
                                         ),
                                         SizedBox(
-                                          width: 3*width/100,
+                                          width: 3 * width / 100,
                                         ),
                                         Container(
-                                          width: 67*width/100,
+                                          width: 67 * width / 100,
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              AutoSizeText('Position',
+                                              AutoSizeText(
+                                                'Position',
                                                 style: TextStyle(
                                                     color: Color(0xcc982ef0),
                                                     fontSize: getWidth(13, 2)),
                                                 maxLines: 1,
                                               ),
-                                              AutoSizeText(openPositions[index].position,
+                                              AutoSizeText(
+                                                openPositions[index].position,
                                                 style: TextStyle(
                                                     color:
-                                                    ColorGlobal.textColor,
+                                                        ColorGlobal.textColor,
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: getWidth(20, 2)),
                                                 maxLines: 3,
@@ -260,36 +261,40 @@ class _OpenPositionsState extends State<OpenPositions> {
                                       ],
                                     ),
                                     SizedBox(
-                                      height: 3*width/50,
+                                      height: 3 * width / 50,
                                     ),
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Icon(
                                           Icons.business,
-                                          size: width/10,
+                                          size: width / 10,
                                           color: Color(0xffed622b),
                                         ),
                                         SizedBox(
-                                          width: 3*width/100,
+                                          width: 3 * width / 100,
                                         ),
                                         Container(
-                                          width: 67*width/100,
+                                          width: 67 * width / 100,
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              AutoSizeText('Company',
+                                              AutoSizeText(
+                                                'Company',
                                                 style: TextStyle(
                                                     color: Color(0xffed622b),
                                                     fontSize: getHeight(13, 2)),
                                                 maxLines: 1,
                                               ),
-                                              AutoSizeText(openPositions[index].company,
+                                              AutoSizeText(
+                                                openPositions[index].company,
                                                 style: TextStyle(
-                                                    color: ColorGlobal.textColor,
+                                                    color:
+                                                        ColorGlobal.textColor,
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: getHeight(20, 2)),
                                                 maxLines: 3,
@@ -342,35 +347,39 @@ class _OpenPositionsState extends State<OpenPositions> {
 //                                      ],
 //                                    ),
                                     SizedBox(
-                                      height: 3*width/50,
+                                      height: 3 * width / 50,
                                     ),
                                     Row(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Icon(
                                           Icons.phone,
-                                          size: width/10,
+                                          size: width / 10,
                                           color: Color(0xcc26cb3c),
                                         ),
                                         SizedBox(
-                                          width: 3*width/100,
+                                          width: 3 * width / 100,
                                         ),
                                         Container(
-                                          width: 67*width/100,
+                                          width: 67 * width / 100,
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              AutoSizeText('Contact',
+                                              AutoSizeText(
+                                                'Contact',
                                                 style: TextStyle(
                                                     color: Color(0xcc26cb3c),
                                                     fontSize: getHeight(13, 2)),
                                                 maxLines: 1,
                                               ),
-                                              CustomToolTip(text: openPositions[index].contact,),
+                                              CustomToolTip(
+                                                text: openPositions[index]
+                                                    .contact,
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -394,16 +403,19 @@ class _OpenPositionsState extends State<OpenPositions> {
     );
   }
 }
+
 class Search extends SearchDelegate {
   UIUtility uiUtills = new UIUtility();
+
   @override
   String get searchFieldLabel => "Position, Companies";
+
   @override
   TextStyle get searchFieldStyle => TextStyle(fontSize: getWidth(18, 1));
+
   @override
   List<Widget> buildActions(BuildContext context) {
-    return <Widget>[
-    ];
+    return <Widget>[];
   }
 
   double getHeight(double height, int choice) {
@@ -426,6 +438,7 @@ class Search extends SearchDelegate {
   }
 
   String selectedResult = "";
+
   @override
   Widget buildResults(BuildContext context) {
     return Container(
@@ -439,6 +452,7 @@ class Search extends SearchDelegate {
   }
 
   final List<PositionModel> listPositions;
+
   Search(this.listPositions);
 
   @override
@@ -448,29 +462,39 @@ class Search extends SearchDelegate {
       modelSuggestionList = listPositions.map((e) => e).toList();
     } else {
       modelSuggestionList.addAll(listPositions.map((e) => e).toList().where(
-              (element) => (element.position + " " + element.description + " " + element.company).toLowerCase().contains(query.toLowerCase())));
+          (element) => (element.position +
+                  " " +
+                  element.description +
+                  " " +
+                  element.company)
+              .toLowerCase()
+              .contains(query.toLowerCase())));
     }
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     uiUtills.updateScreenDimesion(width: width, height: height);
 
-                return Center(
-                  child: ListView.builder(
-                    itemCount: modelSuggestionList.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () => Navigator.push(context, MaterialPageRoute( builder: (context) => JobDetail(modelSuggestionList[index]))),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: width/25, vertical: width/50),
-                          child: Material(
-                            color: Colors.white,
-                            elevation: 5,
-                            borderRadius: BorderRadius.circular(3*width/50),
-                            child: Padding(
-                              padding: EdgeInsets.all(3*width/50),
-                              child: Column(
-                                children: [
+    return Center(
+      child: ListView.builder(
+        itemCount: modelSuggestionList.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        JobDetail(modelSuggestionList[index]))),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: width / 25, vertical: width / 50),
+              child: Material(
+                color: Colors.white,
+                elevation: 5,
+                borderRadius: BorderRadius.circular(3 * width / 50),
+                child: Padding(
+                  padding: EdgeInsets.all(3 * width / 50),
+                  child: Column(
+                    children: [
 //                                    openPositions[index].open_until!=null?
 //                                    Row(
 //                                      mainAxisAlignment: MainAxisAlignment.end,
@@ -483,135 +507,132 @@ class Search extends SearchDelegate {
 //                                        ),
 //                                      ],
 //                                    ): SizedBox(),
-                                  Row(
-                                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.business_center,
-                                        size: width/10,
-                                        color: Color(0xcc982ef0),
-                                      ),
-                                      SizedBox(
-                                        width: 3*width/100,
-                                      ),
-                                      Container(
-                                        width: 67*width/100,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            AutoSizeText('Position',
-                                              style: TextStyle(
-                                                  color: Color(0xcc982ef0),
-                                                  fontSize: getWidth(13, 2)),
-                                              maxLines: 1,
-                                            ),
-                                            AutoSizeText(modelSuggestionList[index].position,
-                                              style: TextStyle(
-                                                  color:
-                                                  ColorGlobal.textColor,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: getWidth(20, 2)),
-                                              maxLines: 3,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 3*width/50,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        Icons.business,
-                                        size: width/10,
-                                        color: Color(0xffed622b),
-                                      ),
-                                      SizedBox(
-                                        width: 3*width/100,
-                                      ),
-                                      Container(
-                                        width: 67*width/100,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            AutoSizeText('Company',
-                                              style: TextStyle(
-                                                  color: Color(0xffed622b),
-                                                  fontSize: getHeight(13, 2)),
-                                              maxLines: 1,
-                                            ),
-                                            AutoSizeText(modelSuggestionList[index].company,
-                                              style: TextStyle(
-                                                  color: ColorGlobal.textColor,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: getHeight(20, 2)),
-                                              maxLines: 3,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 3*width/50,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        Icons.phone,
-                                        size: width/10,
-                                        color: Color(0xcc26cb3c),
-                                      ),
-                                      SizedBox(
-                                        width: 3*width/100,
-                                      ),
-                                      Container(
-                                        width: 67*width/100,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            AutoSizeText('Contact',
-                                              style: TextStyle(
-                                                  color: Color(0xcc26cb3c),
-                                                  fontSize: getHeight(13, 2)),
-                                              maxLines: 1,
-                                            ),
-                                            CustomToolTip(text: modelSuggestionList[index].contact,),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                      Row(
+                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(
+                            Icons.business_center,
+                            size: width / 10,
+                            color: Color(0xcc982ef0),
+                          ),
+                          SizedBox(
+                            width: 3 * width / 100,
+                          ),
+                          Container(
+                            width: 67 * width / 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                AutoSizeText(
+                                  'Position',
+                                  style: TextStyle(
+                                      color: Color(0xcc982ef0),
+                                      fontSize: getWidth(13, 2)),
+                                  maxLines: 1,
+                                ),
+                                AutoSizeText(
+                                  modelSuggestionList[index].position,
+                                  style: TextStyle(
+                                      color: ColorGlobal.textColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: getWidth(20, 2)),
+                                  maxLines: 3,
+                                )
+                              ],
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        ],
+                      ),
+                      SizedBox(
+                        height: 3 * width / 50,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.business,
+                            size: width / 10,
+                            color: Color(0xffed622b),
+                          ),
+                          SizedBox(
+                            width: 3 * width / 100,
+                          ),
+                          Container(
+                            width: 67 * width / 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                AutoSizeText(
+                                  'Company',
+                                  style: TextStyle(
+                                      color: Color(0xffed622b),
+                                      fontSize: getHeight(13, 2)),
+                                  maxLines: 1,
+                                ),
+                                AutoSizeText(
+                                  modelSuggestionList[index].company,
+                                  style: TextStyle(
+                                      color: ColorGlobal.textColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: getHeight(20, 2)),
+                                  maxLines: 3,
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 3 * width / 50,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.phone,
+                            size: width / 10,
+                            color: Color(0xcc26cb3c),
+                          ),
+                          SizedBox(
+                            width: 3 * width / 100,
+                          ),
+                          Container(
+                            width: 67 * width / 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                AutoSizeText(
+                                  'Contact',
+                                  style: TextStyle(
+                                      color: Color(0xcc26cb3c),
+                                      fontSize: getHeight(13, 2)),
+                                  maxLines: 1,
+                                ),
+                                CustomToolTip(
+                                  text: modelSuggestionList[index].contact,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                );
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 
 class CustomToolTip extends StatelessWidget {
-
   String text;
   UIUtility uiUtills = new UIUtility();
 
@@ -622,6 +643,7 @@ class CustomToolTip extends StatelessWidget {
   double getWidth(double width, int choice) {
     return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
+
   CustomToolTip({this.text});
 
   @override
@@ -630,7 +652,8 @@ class CustomToolTip extends StatelessWidget {
     final double height = MediaQuery.of(context).size.height;
     uiUtills.updateScreenDimesion(width: width, height: height);
     return new GestureDetector(
-      child: AutoSizeText(text,
+      child: AutoSizeText(
+        text,
         style: TextStyle(
             color: ColorGlobal.textColor,
             fontWeight: FontWeight.w500,
@@ -638,11 +661,17 @@ class CustomToolTip extends StatelessWidget {
         maxLines: 2,
       ),
       onTap: () {
-        Fluttertoast.showToast(msg: "Copied Contact Details",textColor: Colors.white,backgroundColor: Colors.green);
+        Fluttertoast.showToast(
+            msg: "Copied Contact Details",
+            textColor: Colors.white,
+            backgroundColor: Colors.green);
         Clipboard.setData(new ClipboardData(text: text));
       },
       onDoubleTap: () {
-        Fluttertoast.showToast(msg: "Copied Contact Details",textColor: Colors.white,backgroundColor: Colors.green);
+        Fluttertoast.showToast(
+            msg: "Copied Contact Details",
+            textColor: Colors.white,
+            backgroundColor: Colors.green);
         Clipboard.setData(new ClipboardData(text: text));
       },
     );

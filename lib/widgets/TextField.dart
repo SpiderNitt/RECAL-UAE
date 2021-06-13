@@ -4,16 +4,26 @@ import 'package:flutter/services.dart';
 import '../constants/ColorGlobal.dart';
 
 class TextFieldWidget extends StatefulWidget {
-   String hintText;
-   IconData prefixIconData;
-   IconData suffixIconData;
-   bool obscureText;
-   Function onChanged;
-   FocusNode focusNode;
-   TextEditingController textEditingController;
-   Color borderColor;
-   bool passwordVisible = false;
-   TextFieldWidget({this.hintText,this.prefixIconData,this.suffixIconData,this.obscureText,this.passwordVisible,this.onChanged,this.textEditingController,this.borderColor,this.focusNode});
+  String hintText;
+  IconData prefixIconData;
+  IconData suffixIconData;
+  bool obscureText;
+  Function onChanged;
+  FocusNode focusNode;
+  TextEditingController textEditingController;
+  Color borderColor;
+  bool passwordVisible = false;
+
+  TextFieldWidget(
+      {this.hintText,
+      this.prefixIconData,
+      this.suffixIconData,
+      this.obscureText,
+      this.passwordVisible,
+      this.onChanged,
+      this.textEditingController,
+      this.borderColor,
+      this.focusNode});
 
   @override
   _TextFieldWidgetState createState() => _TextFieldWidgetState();
@@ -27,8 +37,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       obscureText: !widget.passwordVisible,
       controller: widget.textEditingController,
       cursorColor: ColorGlobal.textColor,
-      focusNode:  widget.focusNode,
-      keyboardType: widget.hintText=='Email'? TextInputType.emailAddress : null,
+      focusNode: widget.focusNode,
+      keyboardType:
+          widget.hintText == 'Email' ? TextInputType.emailAddress : null,
       style: TextStyle(
         color: ColorGlobal.textColor,
         fontWeight: FontWeight.w600,
@@ -45,7 +56,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         filled: true,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: widget.borderColor==null ? ColorGlobal.textColor : widget.borderColor),
+          borderSide: BorderSide(
+              color: widget.borderColor == null
+                  ? ColorGlobal.textColor
+                  : widget.borderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
@@ -58,23 +72,23 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           size: 20,
           color: ColorGlobal.textColor,
         ),
-        suffixIcon: widget.hintText=="Password" ? IconButton(
-          icon: Icon(
-            widget.passwordVisible
-                ? Icons.visibility
-                : Icons.visibility_off,
-            size: 20,
-            color: Theme.of(context).primaryColorDark,
-          ),
-          onPressed: () {
-            setState(() {
-              widget.passwordVisible = !widget.passwordVisible;
-            });
-          },
-        ) : null,
+        suffixIcon: widget.hintText == "Password"
+            ? IconButton(
+                icon: Icon(
+                  widget.passwordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                  size: 20,
+                  color: Theme.of(context).primaryColorDark,
+                ),
+                onPressed: () {
+                  setState(() {
+                    widget.passwordVisible = !widget.passwordVisible;
+                  });
+                },
+              )
+            : null,
       ),
     );
   }
 }
-
-

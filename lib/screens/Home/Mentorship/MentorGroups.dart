@@ -1,21 +1,22 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:io' show Platform;
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart' as http;
+import 'package:iosrecal/constants/Api.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:iosrecal/models/MentorGroupModel.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/routes.dart';
+import 'package:iosrecal/widgets/Error.dart';
 import 'package:iosrecal/widgets/NoData.dart';
 import 'package:iosrecal/widgets/NoInternet.dart';
-import 'package:iosrecal/widgets/Error.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/models/MentorGroupModel.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'package:iosrecal/constants/Api.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
-import 'package:connectivity/connectivity.dart';
 
 class MentorGroups extends StatefulWidget {
   @override
@@ -35,10 +36,8 @@ class _MentorGroupsState extends State<MentorGroups> {
     _groups();
   }
 
-  refresh(){
-    setState(() {
-
-    });
+  refresh() {
+    setState(() {});
     state = 0;
     _hasError = false;
     _hasInternet = true;
@@ -55,13 +54,10 @@ class _MentorGroupsState extends State<MentorGroups> {
       return null;
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await http.get(
-        Api.mentorGroups,
-        headers: {
-          "Accept": "application/json",
-          "Cookie": "${prefs.getString("cookie")}",
-        }
-    );
+    var response = await http.get(Api.mentorGroups, headers: {
+      "Accept": "application/json",
+      "Cookie": "${prefs.getString("cookie")}",
+    });
     ResponseBody responseBody = new ResponseBody();
 
     if (response.statusCode == 200) {
@@ -69,12 +65,11 @@ class _MentorGroupsState extends State<MentorGroups> {
       responseBody = ResponseBody.fromJson(json.decode(response.body));
       if (responseBody.status_code == 200) {
         List list = responseBody.data;
-        groups =
-            list.map((model) => MentorGroupModel.fromJson(model)).toList();
+        groups = list.map((model) => MentorGroupModel.fromJson(model)).toList();
         setState(() {
           state = 1;
         });
-      }else if(responseBody.status_code==401){
+      } else if (responseBody.status_code == 401) {
         onTimeOut();
       } else {
         setState(() {
@@ -86,39 +81,37 @@ class _MentorGroupsState extends State<MentorGroups> {
     }
   }
 
-  Future<bool> onTimeOut(){
+  Future<bool> onTimeOut() {
     return showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => new AlertDialog(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: Text('Session Timeout'),
-        content : Text('Login in continue'),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () => navigateAndReload(),
-            child: Text("OK"),
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text('Session Timeout'),
+            content: Text('Login in continue'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => navigateAndReload(),
+                child: Text("OK"),
+              ),
+            ],
           ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 
-  navigateAndReload(){
-    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true)
-        .then((value) {
+  navigateAndReload() {
+    Navigator.pushNamed(context, LOGIN_SCREEN, arguments: true).then((value) {
       Navigator.pop(context);
-      setState(() {
-
-      });
+      setState(() {});
       state = 0;
       _hasError = false;
       _hasInternet = true;
-      _groups();});
+      _groups();
+    });
   }
 
   double getHeight(double height, int choice) {
@@ -129,36 +122,63 @@ class _MentorGroupsState extends State<MentorGroups> {
     return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
 
-  Widget getBody(){
-    if(_hasInternet== false){
+  Widget getBody() {
+    if (_hasInternet == false) {
       return Center(child: NoInternetScreen(notifyParent: refresh));
     }
-    if(_hasError){
+    if (_hasError) {
       return Center(child: Error8Screen());
-    }if(state==0){
+    }
+    if (state == 0) {
       return Center(
         child: SpinKitDoubleBounce(
           color: ColorGlobal.blueColor,
         ),
       );
     }
-    if(groups.length == 0){
-      return Center(child: NodataScreen());
+    if (groups.length == 0) {
+      return SafeArea(
+          child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: ColorGlobal.whiteColor,
+                leading: IconButton(
+                    icon: Icon(
+                      Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
+                      color: ColorGlobal.textColor,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+                title: Text(
+                  'Mentor Groups',
+                  style: TextStyle(color: ColorGlobal.textColor),
+                ),
+              ),
+              body: Center(child: NodataScreen())
+          ),
+      );
     }
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
-    uiUtills.updateScreenDimesion(width: width,height: height);
-    final List<Color> colorArray = [Colors.blue, Colors.purple, Colors.blueGrey, Colors.deepOrange, Colors.redAccent];
+    uiUtills.updateScreenDimesion(width: width, height: height);
+    final List<Color> colorArray = [
+      Colors.blue,
+      Colors.purple,
+      Colors.blueGrey,
+      Colors.deepOrange,
+      Colors.redAccent
+    ];
     return CustomScrollView(
       slivers: <Widget>[
         new SliverAppBar(
           leading: IconButton(
-              icon: Icon(Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios, color: ColorGlobal.textColor,
+              icon: Icon(
+                Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
+                color: ColorGlobal.textColor,
               ),
               onPressed: () {
                 Navigator.pop(context);
-              }
-          ),
+              }),
           brightness: Brightness.dark,
           centerTitle: true,
           expandedHeight: getHeight(250, 2),
@@ -169,8 +189,10 @@ class _MentorGroupsState extends State<MentorGroups> {
           backgroundColor: Colors.white,
           flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
-              title: Text('Mentor Groups',
-                style: TextStyle(color: ColorGlobal.textColor, fontSize: getHeight(20, 2)),
+              title: Text(
+                'Mentor Groups',
+                style: TextStyle(
+                    color: ColorGlobal.textColor, fontSize: getHeight(20, 2)),
               ),
               background: Hero(
                 tag: 'imageHero',
@@ -178,13 +200,11 @@ class _MentorGroupsState extends State<MentorGroups> {
                   "assets/images/mentor_groups.jpg",
                   fit: BoxFit.cover,
                 ),
-              )
-          ),
+              )),
         ),
-
         SliverList(
           delegate: SliverChildBuilderDelegate(
-                  (context, index) =>GestureDetector(
+              (context, index) => GestureDetector(
                     onTap: () => Navigator.pushNamed(context, WRITE_MENTOR),
                     child: Container(
                         height: height / 8,
@@ -202,15 +222,21 @@ class _MentorGroupsState extends State<MentorGroups> {
                                     width: width / 18,
                                   ),
                                   CircleAvatar(
-                                    radius: width/14,
-                                    backgroundColor: colorArray.elementAt(Random().nextInt(4)),
-                                    child: Text(groups[index].group.toUpperCase()[0],style: TextStyle(fontSize: width/14, color: ColorGlobal.whiteColor),),
+                                    radius: width / 14,
+                                    backgroundColor: colorArray
+                                        .elementAt(Random().nextInt(4)),
+                                    child: Text(
+                                      groups[index].group.toUpperCase()[0],
+                                      style: TextStyle(
+                                          fontSize: width / 14,
+                                          color: ColorGlobal.whiteColor),
+                                    ),
                                   ),
                                   SizedBox(
                                     width: width / 32,
                                   ),
                                   Container(
-                                    height: width/12,
+                                    height: width / 12,
                                     width: 1.0,
                                     color: Colors.grey[200],
                                   ),
@@ -219,10 +245,15 @@ class _MentorGroupsState extends State<MentorGroups> {
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
-                                        width: width - ( 13 + width/18 + width/7 + width/16),
+                                        width: width -
+                                            (13 +
+                                                width / 18 +
+                                                width / 7 +
+                                                width / 16),
                                         color: Colors.transparent,
                                         child: AutoSizeText(
                                           groups[index].group,
@@ -235,7 +266,11 @@ class _MentorGroupsState extends State<MentorGroups> {
                                         ),
                                       ),
                                       Container(
-                                        width: width - ( 13 + width/18 + width/7 + width/16),
+                                        width: width -
+                                            (13 +
+                                                width / 18 +
+                                                width / 7 +
+                                                width / 16),
                                         child: AutoSizeText(
                                           groups[index].leader,
                                           style: TextStyle(
@@ -261,9 +296,7 @@ class _MentorGroupsState extends State<MentorGroups> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-
-        body: getBody(),
+      body: getBody(),
     );
-
   }
 }

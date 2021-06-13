@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'package:iosrecal/routes.dart';
 import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:iosrecal/routes.dart';
+
 import 'widgets/Walkthrough.dart';
 
-
 class IntroPage extends StatefulWidget {
-
   final List<Walkthrough> walkthroughList = [
     Walkthrough(
       title: "Welcome to REC/NIT Trichy Alumni Association",
@@ -19,11 +18,11 @@ class IntroPage extends StatefulWidget {
     ),
     Walkthrough(
       title: "Events",
-      content: "Get details about upcoming networking events, felicitations and alumni achievements",
+      content:
+          "Get details about upcoming networking events, felicitations and alumni achievements",
       imageIcon: Icons.event,
       imagecolor: Colors.purple,
       asset: "assets/images/feed.png",
-
     ),
     Walkthrough(
       title: "Mentorship",
@@ -55,7 +54,7 @@ class IntroPageState extends State<IntroPage> {
   final PageController controller = new PageController();
   int currentPage = 0;
   bool lastPage = false;
-  bool firstPage=true;
+  bool firstPage = true;
   UIUtility uiUtills = new UIUtility();
 
   void _onPageChanged(int page) {
@@ -66,21 +65,24 @@ class IntroPageState extends State<IntroPage> {
       } else {
         lastPage = false;
       }
-      if(currentPage==0)
-        firstPage=true;
+      if (currentPage == 0)
+        firstPage = true;
       else
-        firstPage=false;
+        firstPage = false;
     });
   }
+
   Future<bool> _onBackPressed() {
     SystemNavigator.pop();
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     uiUtills = new UIUtility();
   }
+
   double getHeight(double height, int choice) {
     return uiUtills.getProportionalHeight(height: height, choice: choice);
   }
@@ -110,7 +112,7 @@ class IntroPageState extends State<IntroPage> {
               ),
               new Expanded(
                 flex: 3,
-                child: new PageView (
+                child: new PageView(
                   children: widget.walkthroughList,
                   controller: controller,
                   onPageChanged: _onPageChanged,
@@ -137,21 +139,26 @@ class IntroPageState extends State<IntroPage> {
 //                      ),
 //                      color: ColorGlobal.textColor,
 //                    ),
-                     firstPage ? Container() : FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(getHeight(10, 1))),
-                      color: ColorGlobal.textColor,
-                      child: new Text("BACK",
-                          style: new TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: getHeight(16, 1))),
-                      onPressed: () => controller.jumpToPage(currentPage-1),
-                    ),
+                    firstPage
+                        ? Container()
+                        : FlatButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(getHeight(10, 1))),
+                            color: ColorGlobal.textColor,
+                            child: new Text("BACK",
+                                style: new TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: getHeight(16, 1))),
+                            onPressed: () =>
+                                controller.jumpToPage(currentPage - 1),
+                          ),
 
                     new FlatButton(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(getHeight(10, 1))),
+                          borderRadius:
+                              BorderRadius.circular(getHeight(10, 1))),
                       color: ColorGlobal.textColor,
                       child: new Text(lastPage ? "LOGIN" : "NEXT",
                           style: new TextStyle(
@@ -161,8 +168,8 @@ class IntroPageState extends State<IntroPage> {
                       onPressed: () => lastPage
                           ? widget.skipPage(context)
                           : controller.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeIn),
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeIn),
                     ),
                   ],
                 ),

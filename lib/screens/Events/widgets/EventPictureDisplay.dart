@@ -1,15 +1,19 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:iosrecal/constants/ColorGlobal.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'dart:io' show Platform;
+
 class EventPictureDisplay extends StatelessWidget {
   String url;
+
   EventPictureDisplay(this.url);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar:AppBar(
+        appBar: AppBar(
           backgroundColor: Colors.transparent,
           iconTheme: IconThemeData(color: ColorGlobal.whiteColor),
           leading: IconButton(
@@ -22,7 +26,12 @@ class EventPictureDisplay extends StatelessWidget {
               }),
         ),
         backgroundColor: Colors.black,
-      body: Center(child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image:url,fit: BoxFit.cover,)),
+        body: Center(
+            child: FadeInImage.memoryNetwork(
+          placeholder: kTransparentImage,
+          image: url,
+          fit: BoxFit.cover,
+        )),
       ),
     );
   }

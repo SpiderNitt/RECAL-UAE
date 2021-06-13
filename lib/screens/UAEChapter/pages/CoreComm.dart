@@ -1,20 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:iosrecal/routes.dart';
-import 'package:iosrecal/models/CoreCommModel.dart';
-import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:iosrecal/widgets/NoData.dart';
-import 'package:iosrecal/widgets/Error.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'package:http/http.dart' as http;
-import 'package:iosrecal/constants/Api.dart';
+
 import 'package:connectivity/connectivity.dart';
-import 'package:iosrecal/widgets/NoInternet.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../constants/Api.dart';
+import '../../../constants/ColorGlobal.dart';
+import '../../../constants/UIUtility.dart';
+import '../../../models/CoreCommModel.dart';
+import '../../../models/ResponseBody.dart';
+import '../../../routes.dart';
+import '../../../widgets/Error.dart';
+import '../../../widgets/NoData.dart';
+import '../../../widgets/NoInternet.dart';
 
 class CoreComm extends StatefulWidget {
   @override

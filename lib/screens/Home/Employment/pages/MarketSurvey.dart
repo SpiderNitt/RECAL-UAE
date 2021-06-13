@@ -1,22 +1,23 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart' as http;
+import 'package:iosrecal/constants/Api.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
 import 'package:iosrecal/routes.dart';
 import 'package:iosrecal/widgets/Error.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:flip_card/flip_card.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import '../../../../widgets/NoData.dart';
 import '../../../../widgets/NoInternet.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:iosrecal/constants/Api.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
-import 'dart:io';
 
 int num = 0;
 
@@ -65,6 +66,7 @@ class SurveyState extends State<SurveyScreen> {
   int error = 0;
   List<GlobalKey<FlipCardState>> cardKey;
   UIUtility uiUtills = new UIUtility();
+
   @override
   void initState() {
     super.initState();

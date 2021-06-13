@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class UIUtility {
   factory UIUtility() {
     return _singleton;
@@ -43,7 +41,7 @@ class UIUtility {
   double getProportionalWidth({double width, int choice = 0}) {
 //    if (_screenWidth == null) return width;
     var w;
-    print("screen_width $screenWidth" );
+    print("screen_width $screenWidth");
     if (choice == 0)
       w = _screenWidth * width / _refrenceScreenWidth;
     else if (choice == 1)

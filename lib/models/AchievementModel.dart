@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
-
 class AchievementModel {
   final int id;
   final String name;
   final String description;
   final String category;
   final String file;
-  AchievementModel({this.id,this.name,this.description, this.category, this.file});
+
+  AchievementModel(
+      {this.id, this.name, this.description, this.category, this.file});
+
   factory AchievementModel.fromJson(Map<String, dynamic> json) {
     return AchievementModel(
       id: json['id'],

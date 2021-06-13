@@ -7,8 +7,18 @@ class BusinessMemberModel {
   final String deal_details;
   final String deal_value;
   final String name;
-  BusinessMemberModel({this.member_id, this.is_owner, this.industry, this.company_brief, this.business_type, this.deal_details, this.deal_value, this.name});
-  factory BusinessMemberModel.fromJson(Map<String, dynamic> json){
+
+  BusinessMemberModel(
+      {this.member_id,
+      this.is_owner,
+      this.industry,
+      this.company_brief,
+      this.business_type,
+      this.deal_details,
+      this.deal_value,
+      this.name});
+
+  factory BusinessMemberModel.fromJson(Map<String, dynamic> json) {
     return BusinessMemberModel(
       member_id: json['member_id'],
       is_owner: json['is_owner'],

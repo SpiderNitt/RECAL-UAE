@@ -3,17 +3,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iosrecal/constants/ColorGlobal.dart';
-import 'package:iosrecal/routes.dart';
-import 'package:iosrecal/widgets/TextField.dart';
-import 'package:iosrecal/constants/UIUtility.dart';
-import 'package:iosrecal/constants/Api.dart';
-import 'package:iosrecal/bloc/KeyboardBloc.dart';
-import 'package:iosrecal/models/ResponseBody.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:http/http.dart' as http;
-
-
+import 'package:iosrecal/bloc/KeyboardBloc.dart';
+import 'package:iosrecal/constants/Api.dart';
+import 'package:iosrecal/constants/ColorGlobal.dart';
+import 'package:iosrecal/constants/UIUtility.dart';
+import 'package:iosrecal/models/ResponseBody.dart';
+import 'package:iosrecal/widgets/TextField.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class PasswordReset extends StatefulWidget {
   @override
@@ -38,6 +35,7 @@ class _PasswordResetState extends State<PasswordReset> {
   double getWidth(double width, int choice) {
     return uiUtills.getProportionalWidth(width: width, choice: choice);
   }
+
   _disposeController() {
     token.clear();
     newPassword.clear();
@@ -47,6 +45,7 @@ class _PasswordResetState extends State<PasswordReset> {
     confirmPasswordFocus.unfocus();
     _bloc.dispose();
   }
+
   _passwordDialog(String show, String again, int flag) {
     if (progressDialog == null) {
       progressDialog = new ProgressDialog(
@@ -82,15 +81,15 @@ class _PasswordResetState extends State<PasswordReset> {
       Future.delayed(Duration(milliseconds: 1000)).then((value) {
         Widget prog = flag == 1
             ? Icon(
-          Icons.check_circle,
-          size: 50,
-          color: Colors.green,
-        )
+                Icons.check_circle,
+                size: 50,
+                color: Colors.green,
+              )
             : Icon(
-          Icons.close,
-          size: 50,
-          color: Colors.red,
-        );
+                Icons.close,
+                size: 50,
+                color: Colors.red,
+              );
         progressDialog.update(
             message: show.replaceAll("!", ""), progressWidget: prog);
       });
@@ -103,6 +102,7 @@ class _PasswordResetState extends State<PasswordReset> {
       });
     }
   }
+
   Future<dynamic> passwordUpdate(String token, String password) async {
     bool internetConnection = false;
     try {
@@ -113,7 +113,7 @@ class _PasswordResetState extends State<PasswordReset> {
     } on SocketException catch (_) {
       print('not connected');
     }
-    if(internetConnection==true) {
+    if (internetConnection == true) {
       var url = Api.passwordUpdate;
       var body = {
         'token': token,
@@ -133,125 +133,112 @@ class _PasswordResetState extends State<PasswordReset> {
           print(json.encode(responseBody.data));
           if (responseBody.status_code == 200) {
             print(responseBody.data);
-            await _passwordDialog(
-                "Update Successful",
-                "Proceed",
-                1);
-            Future.delayed(
-                Duration(
-                    milliseconds: 2000),
-                    () {
-                  Navigator.pop(context);
-                });
+            await _passwordDialog("Update Successful", "Proceed", 1);
+            Future.delayed(Duration(milliseconds: 2000), () {
+              Navigator.pop(context);
+            });
           } else {
             print(responseBody.data);
-            await _passwordDialog(
-                "Invalid Token",
-                "Try again",
-                2);
+            await _passwordDialog("Invalid Token", "Try again", 2);
           }
         } else {
-          await _passwordDialog(
-              "Server Error",
-              "Try again",
-              2);
+          await _passwordDialog("Server Error", "Try again", 2);
           print("server error");
         }
       }).catchError((onError) async {
-        await _passwordDialog(
-            "Server Error",
-            "Try again",
-            2);
+        await _passwordDialog("Server Error", "Try again", 2);
         print("server error");
       });
-    }
-    else {
+    } else {
       _passwordDialog("No Internet Connection", "Try Again", 2);
     }
   }
+
   Future<bool> _onBackPressed() {
     return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: Text('Are you sure?'),
-        content : Text('You will return to the login screen.'),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text("NO"),
+          context: context,
+          builder: (context) => new AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text('Are you sure?'),
+            content: Text('You will return to the login screen.'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text("NO"),
+              ),
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text("YES"),
+              )
+            ],
           ),
-          FlatButton(
-            onPressed: () =>
-                Navigator.of(context).pop(true),
-            child: Text("YES"),
-          )
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
- Future<bool> _onBackDialog() {
-    return  showDialog(
-        context: context,
-        builder: (_) => Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-          child: Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Center(
-                      child: Text(
-                        "Cannot go back at this stage",
-                        style: GoogleFonts.lato(
-                          color: ColorGlobal.textColor,
-                          fontSize: getWidth(20, 1),
-                          fontWeight: FontWeight.w700,
+
+  Future<bool> _onBackDialog() {
+    return showDialog(
+            context: context,
+            builder: (_) => Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  elevation: 0.0,
+                  backgroundColor: Colors.transparent,
+                  child: Card(
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Center(
+                              child: Text(
+                                "Cannot go back at this stage",
+                                style: GoogleFonts.lato(
+                                  color: ColorGlobal.textColor,
+                                  fontSize: getWidth(20, 1),
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: FlatButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // To close the dialog
+                                },
+                                child: Text("OK",
+                                    style: GoogleFonts.lato(
+                                      color: ColorGlobal.blueColor,
+                                      fontSize: getWidth(18, 1),
+                                      fontWeight: FontWeight.w700,
+                                    )),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: FlatButton(
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pop(); // To close the dialog
-                        },
-                        child: Text("OK",
-                            style: GoogleFonts.lato(
-                              color: ColorGlobal.blueColor,
-                              fontSize: getWidth(18, 1),
-                              fontWeight: FontWeight.w700,
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-        )) ?? false;
+                      )),
+                )) ??
+        false;
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     uiUtills = new UIUtility();
     _bloc.start();
-
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -261,7 +248,6 @@ class _PasswordResetState extends State<PasswordReset> {
 
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
     final width = size.width;
     final height = size.height;
@@ -282,13 +268,11 @@ class _PasswordResetState extends State<PasswordReset> {
                   child: Container(
                     width: width,
                     height: width * 0.35,
-                    padding:
-                    EdgeInsets.symmetric(horizontal: getWidth(20, 1)),
+                    padding: EdgeInsets.symmetric(horizontal: getWidth(20, 1)),
                     decoration: new BoxDecoration(
                         color: ColorGlobal.colorPrimaryDark,
                         image: new DecorationImage(
-                          image:
-                          new AssetImage('assets/images/recal_logo.jpg'),
+                          image: new AssetImage('assets/images/recal_logo.jpg'),
                           fit: BoxFit.fill,
                         ),
                         borderRadius: BorderRadius.circular(width * 0.1)),
@@ -353,7 +337,7 @@ class _PasswordResetState extends State<PasswordReset> {
                             ),
                           ),
                         ),
-                       Center(
+                        Center(
                           child: Padding(
                             padding: EdgeInsets.all(getWidth(10, 1)),
                             child: TextFieldWidget(
@@ -388,49 +372,48 @@ class _PasswordResetState extends State<PasswordReset> {
                               child: Container(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                      onTap: () async {
-                                        if(newPassword.text.trim()=="" || confirmPassword.text.trim()=="" || token.text.trim()=="") {
-                                          await _passwordDialog(
-                                              "Enter all fields",
-                                              "Try again",
-                                              2);
-                                        }
-                                        else if(newPassword.text.trim()!=confirmPassword.text.trim()) {
-                                          await _passwordDialog(
-                                              "Passwords don't match",
-                                              "Try again",
-                                              2);
-                                        }
-                                        else {
-                                          passwordUpdate(token.text.trim(), newPassword.text.trim());
-                                        }
-                                      },
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        padding:
-                                        EdgeInsets.all(getWidth(10, 1)),
-                                        decoration: BoxDecoration(
-                                          color: ColorGlobal.colorPrimary,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(
-                                              (getWidth(10, 1)),
-                                            ),
-                                          ),
-                                        ),
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          child:  Text(
-                                          "CHANGE PASSWORD",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: getWidth(18, 1),
-                                            color: ColorGlobal.whiteColor,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
+                                  onTap: () async {
+                                    if (newPassword.text.trim() == "" ||
+                                        confirmPassword.text.trim() == "" ||
+                                        token.text.trim() == "") {
+                                      await _passwordDialog(
+                                          "Enter all fields", "Try again", 2);
+                                    } else if (newPassword.text.trim() !=
+                                        confirmPassword.text.trim()) {
+                                      await _passwordDialog(
+                                          "Passwords don't match",
+                                          "Try again",
+                                          2);
+                                    } else {
+                                      passwordUpdate(token.text.trim(),
+                                          newPassword.text.trim());
+                                    }
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.all(getWidth(10, 1)),
+                                    decoration: BoxDecoration(
+                                      color: ColorGlobal.colorPrimary,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(
+                                          (getWidth(10, 1)),
                                         ),
                                       ),
                                     ),
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "CHANGE PASSWORD",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: getWidth(18, 1),
+                                          color: ColorGlobal.whiteColor,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -441,19 +424,19 @@ class _PasswordResetState extends State<PasswordReset> {
                 ),
                 StreamBuilder<double>(
                     stream: _bloc.stream,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<double> snapshot) {
+                    builder:
+                        (BuildContext context, AsyncSnapshot<double> snapshot) {
                       print(
                           'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
-                              'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                          'Height: ${_bloc.keyboardUtils.keyboardHeight}');
                       return _bloc.keyboardUtils.isKeyboardOpen == true
                           ? Container(
-                        height: _bloc.keyboardUtils.keyboardHeight,
-                      )
+                              height: _bloc.keyboardUtils.keyboardHeight,
+                            )
                           : Container(
-                        height: 0,
-                        width: 0,
-                      );
+                              height: 0,
+                              width: 0,
+                            );
                     }),
               ],
             ),
