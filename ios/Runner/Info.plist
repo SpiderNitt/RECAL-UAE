@@ -28,6 +28,16 @@
 	<string>Access camera and photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Access camera and photos</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Access camera and photos</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Access camera and photos</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Access camera and photos</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Access camera and photos</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Access camera and photos</string>		
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -35,15 +45,10 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
