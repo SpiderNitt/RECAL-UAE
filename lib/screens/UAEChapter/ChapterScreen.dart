@@ -218,61 +218,6 @@ class _ChapterScreenState extends State<ChapterScreen> {
                           Navigator.push(
                             context,
                             PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                duration: Duration(milliseconds: 300),
-                                child: PayPage()),
-                          );
-                        },
-                        child: Container(
-                          width: width,
-                          color: Colors.transparent,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Material(
-                                color: Color(0xccff3266),
-                                borderRadius:
-                                    BorderRadius.circular(getHeight(24, 2)),
-                                child: Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(getWidth(16, 2)),
-                                    child: Icon(
-                                      Icons.credit_card,
-                                      size: getWidth(24, 2),
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: getWidth(8, 2),
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-//                              Text('Email', style: TextStyle(
-//                                  color: Color(0xccff3266),
-//                                  fontSize: 13.0)),
-                                  Text('Pay',
-                                      style: TextStyle(
-                                          color: ColorGlobal.textColor,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: getWidth(18, 2)))
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: getHeight(24, 2),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            PageTransition(
                                 type: PageTransitionType.bottomToTop,
                                 duration: Duration(milliseconds: 300),
                                 child: ContactUs()),
