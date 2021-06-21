@@ -411,6 +411,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             phone = new TextEditingController(text: user.mobile_no);
             organization = new TextEditingController(text: user.organization);
             gender = new TextEditingController(text: user.gender);
+            gender.text = gender.text.toUpperCase();
             emirate = new TextEditingController(text: user.emirate);
             position = new TextEditingController(text: user.position);
             picture = user.profile_pic;
@@ -558,7 +559,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       "mobile_no": phone.text,
       "organization": organization.text,
       "position": position.text,
-      "gender": DropDown.gender,
+      "gender": DropDown.gender.toLowerCase(),
       "branch": DropDown.branch,
       "emirate": DropDown.emirate,
       "is_admin": "1",
@@ -1016,17 +1017,17 @@ class _DropDownState extends State<DropDown> {
   List<Gender> gList = [
     Gender(
       index: 1,
-      name: "male",
+      name: "MALE",
     ),
     Gender(
       index: 2,
-      name: "female",
+      name: "FEMALE",
     ),
   ];
 
   getId(String value) {
     for (int i = 0; i < gList.length; i++) {
-      if (gList[i].name == value) return gList[i].index;
+      if (gList[i].name.toLowerCase() == value.toLowerCase()) return gList[i].index;
     }
   }
 
@@ -1220,7 +1221,7 @@ class _DropDownState extends State<DropDown> {
               if (!mounted) return;
               setState(() {
                 _gender = newValue;
-                DropDown.gender = newValue;
+                DropDown.gender = newValue.toLowerCase();
               });
             },
             items: gList.map<DropdownMenuItem<String>>((Gender value) {
