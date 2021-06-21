@@ -89,7 +89,7 @@ class HomeScreenState extends State<HomeScreen> {
           bottomNavigationBar: CurvedNavigationBar(
             backgroundColor: ColorGlobal.whiteColor,
             color: Colors.black,
-            buttonBackgroundColor: const Color(0xFF6289ce),
+            buttonBackgroundColor: ColorGlobal.blueColor,
             height: 50,
             items: <Widget>[
               Icon(
