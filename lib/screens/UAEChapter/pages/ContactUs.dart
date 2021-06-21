@@ -275,7 +275,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin {
     // Android and iOS
     if (Platform.isAndroid) {
       const uri =
-          'mailto:recaluaechapter@gmail.com?subject=Recal UAE Chapter&body=Greetings';
+          'mailto:info@recaluaechapter.com';
       if (await canLaunch(uri)) {
         await launch(uri);
       } else {
@@ -358,7 +358,7 @@ class _ContactUsState extends State<ContactUs> with TickerProviderStateMixin {
                                         )
                                       : CustomToolTip(
                                           text:
-                                              'Email\nrecaluaechapter@gmail.com'),
+                                              'Email\ninfo@recaluaechapter.com'),
                                 ],
                               ),
                               Row(

@@ -278,7 +278,7 @@ class LoginState extends State<Login> {
                   ),
                   GestureDetector(
                     child: Text(
-                      "recaluaechapter@gmail.com",
+                      "info@recaluaechapter.com",
                       style: GoogleFonts.lato(
                         color: ColorGlobal.blueColor,
                         decoration: TextDecoration.underline,
@@ -295,7 +295,7 @@ class LoginState extends State<Login> {
                             textColor: Colors.white,
                             backgroundColor: Colors.green);
                         Clipboard.setData(new ClipboardData(
-                            text: "recaluaechapter@gmail.com"));
+                            text: "info@recaluaechapter.com"));
                       }
                     },
                   ),
@@ -315,7 +315,7 @@ class LoginState extends State<Login> {
   _sendMail() async {
     // Android and iOS
     if (Platform.isAndroid) {
-      const uri = 'mailto:recaluaechapter@gmail.com?subject=Login Credentials';
+      const uri = 'mailto:info@recaluaechapter.com';
       if (await canLaunch(uri)) {
         await launch(uri);
       } else {
