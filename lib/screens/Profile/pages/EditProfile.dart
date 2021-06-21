@@ -59,7 +59,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future getImageCamera() async {
     Map<Permission, PermissionStatus> permissions =
-        await [Permission.camera].request();
+    await [Permission.camera].request();
     if (permissions[Permission.camera] != PermissionStatus.granted) {
       openAppSettings();
       return;
@@ -77,7 +77,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<Null> getImageGallery() async {
     Map<Permission, PermissionStatus> permissions =
-        await [Permission.storage].request();
+    await [Permission.storage].request();
     if (permissions[Permission.storage] != PermissionStatus.granted) {
       openAppSettings();
       return;
@@ -159,51 +159,51 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<bool> _onBackPressed() {
     return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Save Changes?'),
-            content: new Text('Do you want to save the changes?'),
-            actions: <Widget>[
-              new GestureDetector(
-                onTap: () =>
-                    Navigator.of(context).pop(true), //save changes here
-                child: FlatButton(
-                  color: Colors.green,
-                  child: Text("NO"),
-                ),
-              ),
-              new GestureDetector(
-                onTap: () {
-                  if (flag == 1) {
-                    after = name.text +
-                        email.text +
-                        linkedIn.text +
-                        DropDown.branch +
-                        DropDown.year.toString() +
-                        phone.text +
-                        organization.text +
-                        position.text +
-                        DropDown.emirate +
-                        DropDown.gender;
-                    print(previous);
-                    print(after);
-                    if (previous == after)
-                      Navigator.of(context).pop();
-                    else {
-                      _postUserDetails();
-                    }
-                  } else {
-                    Navigator.pop(context);
-                  }
-                },
-                child: FlatButton(
-                  color: Colors.red,
-                  child: Text("YES"),
-                ),
-              ),
-            ],
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Save Changes?'),
+        content: new Text('Do you want to save the changes?'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () =>
+                Navigator.of(context).pop(true), //save changes here
+            child: FlatButton(
+              color: Colors.green,
+              child: Text("NO"),
+            ),
           ),
-        ) ??
+          new GestureDetector(
+            onTap: () {
+              if (flag == 1) {
+                after = name.text +
+                    email.text +
+                    linkedIn.text +
+                    DropDown.branch +
+                    DropDown.year.toString() +
+                    phone.text +
+                    organization.text +
+                    position.text +
+                    DropDown.emirate +
+                    DropDown.gender;
+                print(previous);
+                print(after);
+                if (previous == after)
+                  Navigator.of(context).pop();
+                else {
+                  _postUserDetails();
+                }
+              } else {
+                Navigator.pop(context);
+              }
+            },
+            child: FlatButton(
+              color: Colors.red,
+              child: Text("YES"),
+            ),
+          ),
+        ],
+      ),
+    ) ??
         false;
   }
 
@@ -215,25 +215,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<bool> onTimeOut() {
     return showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) => new AlertDialog(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: new Text('Session Timeout'),
-            content: new Text('Login to continue'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () async {
-                  navigateAndReload();
-                },
-                child: Text("OK"),
-              ),
-            ],
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: new Text('Session Timeout'),
+        content: new Text('Login to continue'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () async {
+              navigateAndReload();
+            },
+            child: Text("OK"),
           ),
-        ) ??
+        ],
+      ),
+    ) ??
         false;
   }
 
@@ -272,15 +272,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       Future.delayed(Duration(milliseconds: 1000)).then((value) {
         Widget prog = flag == 1
             ? Icon(
-                Icons.check_circle,
-                size: 50,
-                color: Colors.green,
-              )
+          Icons.check_circle,
+          size: 50,
+          color: Colors.green,
+        )
             : Icon(
-                Icons.close,
-                size: 50,
-                color: Colors.red,
-              );
+          Icons.close,
+          size: 50,
+          color: Colors.red,
+        );
         progressDialog.update(
             message: show.replaceAll("!", ""), progressWidget: prog);
       });
@@ -375,9 +375,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<dynamic> _getUserDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String user_id =
-        prefs.getString("user_id") == null ? -1 : prefs.getString("user_id");
+    prefs.getString("user_id") == null ? -1 : prefs.getString("user_id");
     String cookie =
-        prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+    prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
 
     print("USERID Profile: $user_id");
     print("cookie profile: $cookie");
@@ -391,7 +391,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       print(_response.body);
       if (_response.statusCode == 200) {
         ResponseBody responseBody =
-            ResponseBody.fromJson(json.decode(_response.body));
+        ResponseBody.fromJson(json.decode(_response.body));
         print(json.encode(responseBody.data));
         if (responseBody.status_code == 200) {
           user = User.fromProfile(json.decode(json.encode(responseBody.data)));
@@ -407,10 +407,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             print(linkedIn.text);
             branch = new TextEditingController(text: user.branch);
             year =
-                new TextEditingController(text: "${user.year_of_graduation}");
+            new TextEditingController(text: "${user.year_of_graduation}");
             phone = new TextEditingController(text: user.mobile_no);
             organization = new TextEditingController(text: user.organization);
             gender = new TextEditingController(text: user.gender);
+            gender.text = gender.text.toUpperCase();
             emirate = new TextEditingController(text: user.emirate);
             position = new TextEditingController(text: user.position);
             picture = user.profile_pic;
@@ -473,7 +474,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     var url = Api.getBranch;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String cookie =
-        prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+    prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
     await http.get(
       url,
       headers: {
@@ -541,7 +542,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ? "+9,q"
         : prefs.getString("user_id");
     String cookie =
-        prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
+    prefs.getString("cookie") == null ? "+9,q" : prefs.getString("cookie");
     prefs.setString("email", email.text);
     prefs.setString("name", name.text);
 
@@ -558,7 +559,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       "mobile_no": phone.text,
       "organization": organization.text,
       "position": position.text,
-      "gender": DropDown.gender,
+      "gender": DropDown.gender.toLowerCase(),
       "branch": DropDown.branch,
       "emirate": DropDown.emirate,
       "is_admin": "1",
@@ -594,7 +595,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             print(_response.body);
             if (_response.statusCode == 200) {
               ResponseBody responseBody =
-                  ResponseBody.fromJson(json.decode(_response.body));
+              ResponseBody.fromJson(json.decode(_response.body));
               print(json.encode(responseBody.data));
               if (responseBody.status_code == 200) {
                 User recal_user = User.fromProfile(
@@ -602,7 +603,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 String picture1 = recal_user.profile_pic;
                 if (picture1 != null) {
                   SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
+                  await SharedPreferences.getInstance();
                   prefs.setString("profile_picture", Api.imageUrl + picture1);
                 }
                 print("display picture get after upload: $picture1");
@@ -740,7 +741,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           else {
                             try {
                               final result =
-                                  await InternetAddress.lookup('google.com');
+                              await InternetAddress.lookup('google.com');
                               if (result.isNotEmpty &&
                                   result[0].rawAddress.isNotEmpty) {
                                 setState(() {
@@ -800,185 +801,185 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           body: (flag == 0 || getBranch == 0)
               ? Center(child: CircularProgressIndicator())
               : (flag == 2 || getBranch == 2)
-                  ? Center(
-                      child: Text(
-                          "Error fetching data \nPlease try after sometime",
-                          style: GoogleFonts.josefinSans(
-                              fontSize: 20, color: ColorGlobal.textColor)))
-                  : SingleChildScrollView(
-                      child: Container(
-                        margin: EdgeInsets.all(getWidth(16, 1)),
-                        alignment: Alignment.center,
-                        child: Form(
-                          key: _formkey,
-                          autovalidate: false,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              SizedBox(
-                                height: getHeight(10, 1),
-                              ),
-                              new GestureDetector(
-                                onTap: () {
-                                  _settingModalBottomSheet(context);
-                                },
-                                child: getPic == 0 && change_dp == 0
-                                    ? CircleAvatar(
-                                        radius: getWidth(60, 1),
-                                        backgroundColor: Colors.orange,
-                                        child: Text(
-                                          name.text.toUpperCase()[0],
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: getWidth(60, 1)),
-                                        ))
-                                    : new Container(
-                                        width: getWidth(120, 1),
-                                        height: getWidth(120, 1),
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                                color: ColorGlobal.textColor),
-                                            image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: _image == null &&
-                                                        change_dp == 0
-                                                    ? NetworkImage(picture)
-                                                    : FileImage(_image)))),
-                              ),
-                              SizedBox(
-                                height: getHeight(5, 1),
-                              ),
-                              Center(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _settingModalBottomSheet(context);
-                                  },
-                                  child: Text(
-                                    "Change Profile Photo",
-                                    style: TextStyle(
-                                        color: ColorGlobal.blueColor,
-                                        fontSize: getWidth(16, 1),
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-                              ),
-                              ShowDetailTextWidget(
-                                hintText: 'Name',
-                                controller: name,
-                                color: color[0] == 0
-                                    ? Colors.red
-                                    : ColorGlobal.blueColor,
-                              ),
-                              ShowDetailTextWidget(
-                                hintText: 'Email',
-                                controller: email,
-                                readOnly: true,
-                                color: color[1] == 0
-                                    ? Colors.red
-                                    : ColorGlobal.blueColor,
-                              ),
-                              ShowDetailTextWidget(
-                                hintText: 'LinkedIn',
-                                controller: linkedIn,
-                                color: color[2] == 0
-                                    ? Colors.red
-                                    : ColorGlobal.blueColor,
-                              ),
-                              ShowDetailTextWidget(
-                                hintText: 'Phone Number',
-                                controller: phone,
-                                type: 'phone',
-                                color: color[5] == 0
-                                    ? Colors.red
-                                    : ColorGlobal.blueColor,
-                              ),
-                              ShowDetailTextWidget(
-                                hintText: 'Organization',
-                                controller: organization,
-                                color: color[6] == 0
-                                    ? Colors.red
-                                    : ColorGlobal.blueColor,
-                              ),
-                              ShowDetailTextWidget(
-                                hintText: 'Position',
-                                controller: position,
-                                color: color[7] == 0
-                                    ? Colors.red
-                                    : ColorGlobal.blueColor,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Container(
-                                      child: DropDown(
-                                        select: 0,
-                                        hint: branch.text,
-                                        branches: allBranch,
-                                      ),
-                                    ),
-                                    flex: 2,
-                                  ),
-                                  Expanded(
-                                    child: Container(),
-                                    flex: 1,
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      child: DropDown(
-                                        select: 1,
-                                        hint: year.text,
-                                      ),
-                                    ),
-                                    flex: 2,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Container(
-                                      child: DropDown(
-                                        select: 2,
-                                        hint: emirate.text,
-                                      ),
-                                    ),
-                                    flex: 2,
-                                  ),
-                                  Expanded(
-                                    child: Container(),
-                                    flex: 1,
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      child: DropDown(
-                                        select: 3,
-                                        hint: gender.text,
-                                      ),
-                                    ),
-                                    flex: 2,
-                                  ),
-                                ],
-                              ),
-                              StreamBuilder<double>(
-                                  stream: _bloc.stream,
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot<double> snapshot) {
-                                    print(
-                                        'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
-                                        'Height: ${_bloc.keyboardUtils.keyboardHeight}');
-                                    return Container(
-                                      height:
-                                          _bloc.keyboardUtils.keyboardHeight,
-                                    );
-                                  }),
-                            ],
-                          ),
+              ? Center(
+              child: Text(
+                  "Error fetching data \nPlease try after sometime",
+                  style: GoogleFonts.josefinSans(
+                      fontSize: 20, color: ColorGlobal.textColor)))
+              : SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.all(getWidth(16, 1)),
+              alignment: Alignment.center,
+              child: Form(
+                key: _formkey,
+                autovalidate: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    SizedBox(
+                      height: getHeight(10, 1),
+                    ),
+                    new GestureDetector(
+                      onTap: () {
+                        _settingModalBottomSheet(context);
+                      },
+                      child: getPic == 0 && change_dp == 0
+                          ? CircleAvatar(
+                          radius: getWidth(60, 1),
+                          backgroundColor: Colors.orange,
+                          child: Text(
+                            name.text.toUpperCase()[0],
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: getWidth(60, 1)),
+                          ))
+                          : new Container(
+                          width: getWidth(120, 1),
+                          height: getWidth(120, 1),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                  color: ColorGlobal.textColor),
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: _image == null &&
+                                      change_dp == 0
+                                      ? NetworkImage(picture)
+                                      : FileImage(_image)))),
+                    ),
+                    SizedBox(
+                      height: getHeight(5, 1),
+                    ),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          _settingModalBottomSheet(context);
+                        },
+                        child: Text(
+                          "Change Profile Photo",
+                          style: TextStyle(
+                              color: ColorGlobal.blueColor,
+                              fontSize: getWidth(16, 1),
+                              fontWeight: FontWeight.w400),
                         ),
                       ),
                     ),
+                    ShowDetailTextWidget(
+                      hintText: 'Name',
+                      controller: name,
+                      color: color[0] == 0
+                          ? Colors.red
+                          : ColorGlobal.blueColor,
+                    ),
+                    ShowDetailTextWidget(
+                      hintText: 'Email',
+                      controller: email,
+                      readOnly: true,
+                      color: color[1] == 0
+                          ? Colors.red
+                          : ColorGlobal.blueColor,
+                    ),
+                    ShowDetailTextWidget(
+                      hintText: 'LinkedIn',
+                      controller: linkedIn,
+                      color: color[2] == 0
+                          ? Colors.red
+                          : ColorGlobal.blueColor,
+                    ),
+                    ShowDetailTextWidget(
+                      hintText: 'Phone Number',
+                      controller: phone,
+                      type: 'phone',
+                      color: color[5] == 0
+                          ? Colors.red
+                          : ColorGlobal.blueColor,
+                    ),
+                    ShowDetailTextWidget(
+                      hintText: 'Organization',
+                      controller: organization,
+                      color: color[6] == 0
+                          ? Colors.red
+                          : ColorGlobal.blueColor,
+                    ),
+                    ShowDetailTextWidget(
+                      hintText: 'Position',
+                      controller: position,
+                      color: color[7] == 0
+                          ? Colors.red
+                          : ColorGlobal.blueColor,
+                    ),
+                    Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            child: DropDown(
+                              select: 0,
+                              hint: branch.text,
+                              branches: allBranch,
+                            ),
+                          ),
+                          flex: 2,
+                        ),
+                        Expanded(
+                          child: Container(),
+                          flex: 1,
+                        ),
+                        Expanded(
+                          child: Container(
+                            child: DropDown(
+                              select: 1,
+                              hint: year.text,
+                            ),
+                          ),
+                          flex: 2,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            child: DropDown(
+                              select: 2,
+                              hint: emirate.text,
+                            ),
+                          ),
+                          flex: 2,
+                        ),
+                        Expanded(
+                          child: Container(),
+                          flex: 1,
+                        ),
+                        Expanded(
+                          child: Container(
+                            child: DropDown(
+                              select: 3,
+                              hint: gender.text,
+                            ),
+                          ),
+                          flex: 2,
+                        ),
+                      ],
+                    ),
+                    StreamBuilder<double>(
+                        stream: _bloc.stream,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<double> snapshot) {
+                          print(
+                              'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
+                                  'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                          return Container(
+                            height:
+                            _bloc.keyboardUtils.keyboardHeight,
+                          );
+                        }),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -1016,17 +1017,17 @@ class _DropDownState extends State<DropDown> {
   List<Gender> gList = [
     Gender(
       index: 1,
-      name: "male",
+      name: "MALE",
     ),
     Gender(
       index: 2,
-      name: "female",
+      name: "FEMALE",
     ),
   ];
 
   getId(String value) {
     for (int i = 0; i < gList.length; i++) {
-      if (gList[i].name == value) return gList[i].index;
+      if (gList[i].name.toLowerCase() == value.toLowerCase()) return gList[i].index;
     }
   }
 
@@ -1062,48 +1063,48 @@ class _DropDownState extends State<DropDown> {
     if (widget.select == 0) {
       return widget.branches != null
           ? DropdownButtonHideUnderline(
-              child: new InputDecorator(
-                decoration: InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue),
-                  ),
-                  border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                  labelText: "Branch",
-                  labelStyle: TextStyle(color: ColorGlobal.blueColor),
-                ),
-                child: DropdownButton<String>(
-                  hint: AutoSizeText(
-                    widget.hint,
-                    style: TextStyle(color: Colors.black, fontSize: 15.0),
-                  ),
-                  icon: Icon(Icons.arrow_drop_down),
-                  value: _branch,
-                  isExpanded: true,
-                  iconSize: 18,
-                  elevation: 10,
-                  style: TextStyle(color: Colors.black, fontSize: 15.0),
-                  onChanged: (String newValue) {
-                    if (!mounted) return;
-                    setState(() {
-                      _branch = newValue;
-                      DropDown.branch = newValue;
-                    });
-                  },
-                  items: widget.branches
-                      .map<DropdownMenuItem<String>>((dynamic value) {
-                    return DropdownMenuItem<String>(
-                      value: value.toString(),
-                      child: Text(value.toString()),
-                    );
-                  }).toList(),
-                ),
-              ),
-            )
+        child: new InputDecorator(
+          decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue),
+            ),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            labelText: "Branch",
+            labelStyle: TextStyle(color: ColorGlobal.blueColor),
+          ),
+          child: DropdownButton<String>(
+            hint: AutoSizeText(
+              widget.hint,
+              style: TextStyle(color: Colors.black, fontSize: 15.0),
+            ),
+            icon: Icon(Icons.arrow_drop_down),
+            value: _branch,
+            isExpanded: true,
+            iconSize: 18,
+            elevation: 10,
+            style: TextStyle(color: Colors.black, fontSize: 15.0),
+            onChanged: (String newValue) {
+              if (!mounted) return;
+              setState(() {
+                _branch = newValue;
+                DropDown.branch = newValue;
+              });
+            },
+            items: widget.branches
+                .map<DropdownMenuItem<String>>((dynamic value) {
+              return DropdownMenuItem<String>(
+                value: value.toString(),
+                child: Text(value.toString()),
+              );
+            }).toList(),
+          ),
+        ),
+      )
           : Text(DropDown.branch);
     } else if (widget.select == 1) {
       return DropdownButtonHideUnderline(
@@ -1220,7 +1221,7 @@ class _DropDownState extends State<DropDown> {
               if (!mounted) return;
               setState(() {
                 _gender = newValue;
-                DropDown.gender = newValue;
+                DropDown.gender = newValue.toLowerCase();
               });
             },
             items: gList.map<DropdownMenuItem<String>>((Gender value) {
