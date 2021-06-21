@@ -46,6 +46,7 @@ class LoginState extends State<Login> {
   bool changePassword = false;
   String primaryButtonText = "SIGN IN";
   String secondaryButtonText = "Change Password";
+  String haveTokenText = "Have a reset token?";
   String pageTitle = "SIGN IN";
 
   ProgressDialog progressDialog;
@@ -182,7 +183,19 @@ class LoginState extends State<Login> {
       style: TextStyle(
         fontSize: getWidth(16, 1),
         color: ColorGlobal.textColor.withOpacity(0.9),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget haveTokenWidget() {
+    return Text(
+      haveTokenText,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: getWidth(16, 1),
+        color: ColorGlobal.blueColor.withOpacity(0.9),
+        fontWeight: FontWeight.bold,
       ),
     );
   }
@@ -563,9 +576,32 @@ class LoginState extends State<Login> {
                               ),
                             ],
                           ),
-                          Padding(
+                          changePassword == true ? Padding(
                             padding: EdgeInsets.only(
                                 top: getHeight(20, 1),
+                                bottom: getHeight(10, 1)),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(context, PASSWORD_RESET)
+                                  .then((value) {
+                                    setState(() {
+                                      _deleteUserDetails();
+                                      _initController();
+                                      uiUtills = new UIUtility();
+                                      internetConnection = false;
+                                      changePassword = false;
+                                      primaryButtonText = "SIGN IN";
+                                      secondaryButtonText = "Change Password";
+                                      pageTitle = "SIGN IN";
+                                    });
+                                  });
+                              },
+                              child: haveTokenWidget(),
+                            ),
+                          ) : Container(),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: getHeight(10, 1),
                                 bottom: getHeight(10, 1)),
                             child: GestureDetector(
                               onTap: () {
@@ -589,7 +625,7 @@ class LoginState extends State<Login> {
                               child: secondaryWidget(),
                             ),
                           ),
-                          Padding(
+                          changePassword == false ? Padding(
                             padding: EdgeInsets.all(getWidth(10, 1)),
                             child: GestureDetector(
                               onTap: () => _emailDialog(),
@@ -604,7 +640,7 @@ class LoginState extends State<Login> {
                                 ),
                               ),
                             ),
-                          ),
+                          ) : Container(),
                         ],
                       ),
                     ),
