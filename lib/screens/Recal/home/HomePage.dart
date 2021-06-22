@@ -53,29 +53,29 @@ class HomeScreenState extends State<HomeScreen> {
 
   Future<bool> _onBackPressed() {
     return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: Text('Are you sure?'),
-            content: Text('Do you want to exit the app?'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text("NO"),
-              ),
-              new GestureDetector(
-                child: FlatButton(
-                  onPressed: () =>
-                      Navigator.of(context, rootNavigator: true).pop(true),
-                  child: Text("YES"),
-                ),
-              )
-            ],
+      context: context,
+      builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Are you sure?'),
+        content: Text('Do you want to exit the app?'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text("NO"),
           ),
-        ) ??
+          new GestureDetector(
+            child: FlatButton(
+              onPressed: () =>
+                  Navigator.of(context, rootNavigator: true).pop(true),
+              child: Text("YES"),
+            ),
+          )
+        ],
+      ),
+    ) ??
         false;
   }
 
@@ -89,7 +89,7 @@ class HomeScreenState extends State<HomeScreen> {
           bottomNavigationBar: CurvedNavigationBar(
             backgroundColor: ColorGlobal.whiteColor,
             color: Colors.black,
-            buttonBackgroundColor: const Color(0xFF6289ce),
+            buttonBackgroundColor: ColorGlobal.blueColor,
             height: 50,
             items: <Widget>[
               Icon(

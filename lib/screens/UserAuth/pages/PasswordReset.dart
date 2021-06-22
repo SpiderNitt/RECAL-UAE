@@ -81,15 +81,15 @@ class _PasswordResetState extends State<PasswordReset> {
       Future.delayed(Duration(milliseconds: 1000)).then((value) {
         Widget prog = flag == 1
             ? Icon(
-                Icons.check_circle,
-                size: 50,
-                color: Colors.green,
-              )
+          Icons.check_circle,
+          size: 50,
+          color: Colors.green,
+        )
             : Icon(
-                Icons.close,
-                size: 50,
-                color: Colors.red,
-              );
+          Icons.close,
+          size: 50,
+          color: Colors.red,
+        );
         progressDialog.update(
             message: show.replaceAll("!", ""), progressWidget: prog);
       });
@@ -156,80 +156,29 @@ class _PasswordResetState extends State<PasswordReset> {
 
   Future<bool> _onBackPressed() {
     return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: Text('Are you sure?'),
-            content: Text('You will return to the login screen.'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text("NO"),
-              ),
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text("YES"),
-              )
-            ],
+      context: context,
+      builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Are you sure?'),
+        content: Text('You will return to the login screen.'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text("NO"),
           ),
-        ) ??
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text("YES"),
+          )
+        ],
+      ),
+    ) ??
         false;
   }
 
-  Future<bool> _onBackDialog() {
-    return showDialog(
-            context: context,
-            builder: (_) => Dialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  elevation: 0.0,
-                  backgroundColor: Colors.transparent,
-                  child: Card(
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Center(
-                              child: Text(
-                                "Cannot go back at this stage",
-                                style: GoogleFonts.lato(
-                                  color: ColorGlobal.textColor,
-                                  fontSize: getWidth(20, 1),
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: FlatButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // To close the dialog
-                                },
-                                child: Text("OK",
-                                    style: GoogleFonts.lato(
-                                      color: ColorGlobal.blueColor,
-                                      fontSize: getWidth(18, 1),
-                                      fontWeight: FontWeight.w700,
-                                    )),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )),
-                )) ??
-        false;
-  }
 
   @override
   void initState() {
@@ -255,191 +204,188 @@ class _PasswordResetState extends State<PasswordReset> {
 
     return Scaffold(
       backgroundColor: ColorGlobal.whiteColor,
-      body: WillPopScope(
-        onWillPop: _onBackPressed,
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(0.05 * width),
-                  child: Container(
-                    width: width,
-                    height: width * 0.35,
-                    padding: EdgeInsets.symmetric(horizontal: getWidth(20, 1)),
-                    decoration: new BoxDecoration(
-                        color: ColorGlobal.colorPrimaryDark,
-                        image: new DecorationImage(
-                          image: new AssetImage('assets/images/recal_logo.jpg'),
-                          fit: BoxFit.fill,
-                        ),
-                        borderRadius: BorderRadius.circular(width * 0.1)),
-                  ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(0.05 * width),
+                child: Container(
+                  width: width,
+                  height: width * 0.35,
+                  padding: EdgeInsets.symmetric(horizontal: getWidth(20, 1)),
+                  decoration: new BoxDecoration(
+                      color: ColorGlobal.colorPrimaryDark,
+                      image: new DecorationImage(
+                        image: new AssetImage('assets/images/recal_logo.jpg'),
+                        fit: BoxFit.fill,
+                      ),
+                      borderRadius: BorderRadius.circular(width * 0.1)),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: getHeight(10, 1)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: getHeight(10, 1)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'RECAL UAE CHAPTER',
+                      style: GoogleFonts.lato(
+                        color: ColorGlobal.textColor,
+                        fontSize: getWidth(22, 1),
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  top: getHeight(20, 1),
+                  left: getWidth(20, 1),
+                  right: getWidth(20, 1),
+                  bottom: getHeight(20, 1),
+                ),
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: ColorGlobal.whiteColor.withOpacity(0.8),
+                          width: 0.5),
+                      borderRadius: BorderRadius.circular(getWidth(20, 1))),
+                  child: Column(
                     children: <Widget>[
-                      Text(
-                        'RECAL UAE CHAPTER',
-                        style: GoogleFonts.lato(
-                          color: ColorGlobal.textColor,
-                          fontSize: getWidth(22, 1),
-                          fontWeight: FontWeight.w900,
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: getHeight(20, 1)),
+                          child: Text(
+                            "CHANGE PASSWORD",
+                            style: GoogleFonts.josefinSans(
+                              color: ColorGlobal.textColor,
+                              fontSize: getWidth(18, 1),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(20, 1),
-                    left: getWidth(20, 1),
-                    right: getWidth(20, 1),
-                    bottom: getHeight(20, 1),
-                  ),
-                  child: Card(
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: ColorGlobal.whiteColor.withOpacity(0.8),
-                            width: 0.5),
-                        borderRadius: BorderRadius.circular(getWidth(20, 1))),
-                    child: Column(
-                      children: <Widget>[
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: getHeight(20, 1)),
-                            child: Text(
-                              "CHANGE PASSWORD",
-                              style: GoogleFonts.josefinSans(
-                                color: ColorGlobal.textColor,
-                                fontSize: getWidth(18, 1),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(getWidth(10, 1)),
+                          child: TextFieldWidget(
+                            hintText: 'Token',
+                            obscureText: false,
+                            prefixIconData: Icons.security,
+                            passwordVisible: true,
+                            textEditingController: token,
+                            focusNode: tokenFocus,
                           ),
                         ),
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(getWidth(10, 1)),
-                            child: TextFieldWidget(
-                              hintText: 'Token',
-                              obscureText: false,
-                              prefixIconData: Icons.security,
-                              passwordVisible: true,
-                              textEditingController: token,
-                              focusNode: tokenFocus,
-                            ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(getWidth(10, 1)),
+                          child: TextFieldWidget(
+                            hintText: "New Password",
+                            obscureText: true,
+                            prefixIconData: Icons.lock,
+                            passwordVisible: false,
+                            textEditingController: newPassword,
+                            focusNode: newPasswordFocus,
                           ),
                         ),
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(getWidth(10, 1)),
-                            child: TextFieldWidget(
-                              hintText: "New Password",
-                              obscureText: true,
-                              prefixIconData: Icons.lock,
-                              passwordVisible: false,
-                              textEditingController: newPassword,
-                              focusNode: newPasswordFocus,
-                            ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(getWidth(10, 1)),
+                          child: TextFieldWidget(
+                            hintText: "Confirm Password",
+                            obscureText: true,
+                            prefixIconData: Icons.lock,
+                            passwordVisible: false,
+                            textEditingController: confirmPassword,
+                            focusNode: confirmPasswordFocus,
                           ),
                         ),
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(getWidth(10, 1)),
-                            child: TextFieldWidget(
-                              hintText: "Confirm Password",
-                              obscureText: true,
-                              prefixIconData: Icons.lock,
-                              passwordVisible: false,
-                              textEditingController: confirmPassword,
-                              focusNode: confirmPasswordFocus,
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(getHeight(20, 1)),
-                              child: Container(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () async {
-                                    if (newPassword.text.trim() == "" ||
-                                        confirmPassword.text.trim() == "" ||
-                                        token.text.trim() == "") {
-                                      await _passwordDialog(
-                                          "Enter all fields", "Try again", 2);
-                                    } else if (newPassword.text.trim() !=
-                                        confirmPassword.text.trim()) {
-                                      await _passwordDialog(
-                                          "Passwords don't match",
-                                          "Try again",
-                                          2);
-                                    } else {
-                                      passwordUpdate(token.text.trim(),
-                                          newPassword.text.trim());
-                                    }
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    padding: EdgeInsets.all(getWidth(10, 1)),
-                                    decoration: BoxDecoration(
-                                      color: ColorGlobal.colorPrimary,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(
-                                          (getWidth(10, 1)),
-                                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(getHeight(20, 1)),
+                            child: Container(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () async {
+                                  if (newPassword.text.trim() == "" ||
+                                      confirmPassword.text.trim() == "" ||
+                                      token.text.trim() == "") {
+                                    await _passwordDialog(
+                                        "Enter all fields", "Try again", 2);
+                                  } else if (newPassword.text.trim() !=
+                                      confirmPassword.text.trim()) {
+                                    await _passwordDialog(
+                                        "Passwords don't match",
+                                        "Try again",
+                                        2);
+                                  } else {
+                                    passwordUpdate(token.text.trim(),
+                                        newPassword.text.trim());
+                                  }
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(getWidth(10, 1)),
+                                  decoration: BoxDecoration(
+                                    color: ColorGlobal.colorPrimary,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(
+                                        (getWidth(10, 1)),
                                       ),
                                     ),
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "CHANGE PASSWORD",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: getWidth(18, 1),
-                                          color: ColorGlobal.whiteColor,
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                  ),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "CHANGE PASSWORD",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: getWidth(18, 1),
+                                        color: ColorGlobal.whiteColor,
+                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ],
-                        )
-                      ],
-                    ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
-                StreamBuilder<double>(
-                    stream: _bloc.stream,
-                    builder:
-                        (BuildContext context, AsyncSnapshot<double> snapshot) {
-                      print(
-                          'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
-                          'Height: ${_bloc.keyboardUtils.keyboardHeight}');
-                      return _bloc.keyboardUtils.isKeyboardOpen == true
-                          ? Container(
-                              height: _bloc.keyboardUtils.keyboardHeight,
-                            )
-                          : Container(
-                              height: 0,
-                              width: 0,
-                            );
-                    }),
-              ],
-            ),
+              ),
+              StreamBuilder<double>(
+                  stream: _bloc.stream,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<double> snapshot) {
+                    print(
+                        'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
+                            'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                    return _bloc.keyboardUtils.isKeyboardOpen == true
+                        ? Container(
+                      height: _bloc.keyboardUtils.keyboardHeight,
+                    )
+                        : Container(
+                      height: 0,
+                      width: 0,
+                    );
+                  }),
+            ],
           ),
         ),
       ),

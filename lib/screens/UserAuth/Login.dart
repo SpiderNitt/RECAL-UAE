@@ -46,6 +46,7 @@ class LoginState extends State<Login> {
   bool changePassword = false;
   String primaryButtonText = "SIGN IN";
   String secondaryButtonText = "Change Password";
+  String haveTokenText = "Have a reset token?";
   String pageTitle = "SIGN IN";
 
   ProgressDialog progressDialog;
@@ -80,29 +81,29 @@ class LoginState extends State<Login> {
 
   Future<bool> _onBackPressed() {
     return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: Text('Are you sure?'),
-            content: Text('Do you want to exit the app?'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text("NO"),
-              ),
-              new GestureDetector(
-                child: FlatButton(
-                  onPressed: () =>
-                      Navigator.of(context, rootNavigator: true).pop(true),
-                  child: Text("YES"),
-                ),
-              )
-            ],
+      context: context,
+      builder: (context) => new AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text('Are you sure?'),
+        content: Text('Do you want to exit the app?'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text("NO"),
           ),
-        ) ??
+          new GestureDetector(
+            child: FlatButton(
+              onPressed: () =>
+                  Navigator.of(context, rootNavigator: true).pop(true),
+              child: Text("YES"),
+            ),
+          )
+        ],
+      ),
+    ) ??
         false;
   }
 
@@ -141,15 +142,15 @@ class LoginState extends State<Login> {
       Future.delayed(Duration(milliseconds: 1000)).then((value) {
         Widget progressWidget = flag == 1
             ? Icon(
-                Icons.check_circle,
-                size: 50,
-                color: Colors.green,
-              )
+          Icons.check_circle,
+          size: 50,
+          color: Colors.green,
+        )
             : Icon(
-                Icons.close,
-                size: 50,
-                color: Colors.red,
-              );
+          Icons.close,
+          size: 50,
+          color: Colors.red,
+        );
         progressDialog.update(
             message: show.replaceAll("!", ""), progressWidget: progressWidget);
       });
@@ -182,7 +183,19 @@ class LoginState extends State<Login> {
       style: TextStyle(
         fontSize: getWidth(16, 1),
         color: ColorGlobal.textColor.withOpacity(0.9),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget haveTokenWidget() {
+    return Text(
+      haveTokenText,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: getWidth(16, 1),
+        color: ColorGlobal.blueColor.withOpacity(0.9),
+        fontWeight: FontWeight.bold,
       ),
     );
   }
@@ -261,55 +274,55 @@ class LoginState extends State<Login> {
     return showDialog(
         context: context,
         builder: (_) => new AlertDialog(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Write an email to",
-                    style: GoogleFonts.lato(
-                      color: ColorGlobal.textColor,
-                      fontSize: getWidth(18, 1),
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  GestureDetector(
-                    child: Text(
-                      "info@recaluaechapter.com",
-                      style: GoogleFonts.lato(
-                        color: ColorGlobal.blueColor,
-                        decoration: TextDecoration.underline,
-                        fontSize: getWidth(18, 1),
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    onTap: () async {
-                      if (Platform.isAndroid)
-                        await _sendMail();
-                      else {
-                        Fluttertoast.showToast(
-                            msg: "Copied Email Address",
-                            textColor: Colors.white,
-                            backgroundColor: Colors.green);
-                        Clipboard.setData(new ClipboardData(
-                            text: "info@recaluaechapter.com"));
-                      }
-                    },
-                  ),
-                ],
-              ),
-              actions: [
-                FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // To close the dialog
-                  },
-                  child: Text("OK"),
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Write an email to",
+                style: GoogleFonts.lato(
+                  color: ColorGlobal.textColor,
+                  fontSize: getWidth(18, 1),
+                  fontWeight: FontWeight.w700,
                 ),
-              ],
-            ));
+              ),
+              GestureDetector(
+                child: Text(
+                  "info@recaluaechapter.com",
+                  style: GoogleFonts.lato(
+                    color: ColorGlobal.blueColor,
+                    decoration: TextDecoration.underline,
+                    fontSize: getWidth(18, 1),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                onTap: () async {
+                  if (Platform.isAndroid)
+                    await _sendMail();
+                  else {
+                    Fluttertoast.showToast(
+                        msg: "Copied Email Address",
+                        textColor: Colors.white,
+                        backgroundColor: Colors.green);
+                    Clipboard.setData(new ClipboardData(
+                        text: "info@recaluaechapter.com"));
+                  }
+                },
+              ),
+            ],
+          ),
+          actions: [
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // To close the dialog
+              },
+              child: Text("OK"),
+            ),
+          ],
+        ));
   }
 
   _sendMail() async {
@@ -374,12 +387,12 @@ class LoginState extends State<Login> {
                       width: width,
                       height: width * 0.35,
                       padding:
-                          EdgeInsets.symmetric(horizontal: getWidth(20, 1)),
+                      EdgeInsets.symmetric(horizontal: getWidth(20, 1)),
                       decoration: new BoxDecoration(
                           color: ColorGlobal.colorPrimaryDark,
                           image: new DecorationImage(
                             image:
-                                new AssetImage('assets/images/recal_logo.jpg'),
+                            new AssetImage('assets/images/recal_logo.jpg'),
                             fit: BoxFit.fill,
                           ),
                           borderRadius: BorderRadius.circular(width * 0.1)),
@@ -446,18 +459,18 @@ class LoginState extends State<Login> {
                           ),
                           changePassword == false
                               ? Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(getWidth(10, 1)),
-                                    child: TextFieldWidget(
-                                      hintText: "Password",
-                                      obscureText: true,
-                                      prefixIconData: Icons.lock,
-                                      passwordVisible: false,
-                                      textEditingController: password,
-                                      focusNode: passwordFocus,
-                                    ),
-                                  ),
-                                )
+                            child: Padding(
+                              padding: EdgeInsets.all(getWidth(10, 1)),
+                              child: TextFieldWidget(
+                                hintText: "Password",
+                                obscureText: true,
+                                prefixIconData: Icons.lock,
+                                passwordVisible: false,
+                                textEditingController: password,
+                                focusNode: passwordFocus,
+                              ),
+                            ),
+                          )
                               : Container(),
 //                          changePassword == true ?  Padding(
 //                            padding: const EdgeInsets.all(10),
@@ -480,8 +493,8 @@ class LoginState extends State<Login> {
                                     return InkWell(
                                       onTap: () async {
                                         SharedPreferences prefs =
-                                            await SharedPreferences
-                                                .getInstance();
+                                        await SharedPreferences
+                                            .getInstance();
                                         prefs.setInt("first", 10);
                                         if (changePassword == false) {
                                           if (email.text != "" &&
@@ -511,18 +524,18 @@ class LoginState extends State<Login> {
                                                 Future.delayed(
                                                     Duration(
                                                         milliseconds: 2000),
-                                                    () {
-                                                  Navigator.pop(context);
-                                                });
+                                                        () {
+                                                      Navigator.pop(context);
+                                                    });
                                               } else {
                                                 Future.delayed(
                                                     Duration(
                                                         milliseconds: 2000),
-                                                    () {
-                                                  Navigator
-                                                      .pushReplacementNamed(
+                                                        () {
+                                                      Navigator
+                                                          .pushReplacementNamed(
                                                           context, HOME_SCREEN);
-                                                });
+                                                    });
                                               }
                                             }
                                           } else {
@@ -543,7 +556,7 @@ class LoginState extends State<Login> {
                                       child: Container(
                                         alignment: Alignment.center,
                                         padding:
-                                            EdgeInsets.all(getWidth(10, 1)),
+                                        EdgeInsets.all(getWidth(10, 1)),
                                         decoration: BoxDecoration(
                                           color: ColorGlobal.colorPrimary,
                                           borderRadius: BorderRadius.all(
@@ -563,22 +576,45 @@ class LoginState extends State<Login> {
                               ),
                             ],
                           ),
-                          Padding(
+                          changePassword == true ? Padding(
                             padding: EdgeInsets.only(
                                 top: getHeight(20, 1),
+                                bottom: getHeight(10, 1)),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(context, PASSWORD_RESET)
+                                    .then((value) {
+                                  setState(() {
+                                    _deleteUserDetails();
+                                    _initController();
+                                    uiUtills = new UIUtility();
+                                    internetConnection = false;
+                                    changePassword = false;
+                                    primaryButtonText = "SIGN IN";
+                                    secondaryButtonText = "Change Password";
+                                    pageTitle = "SIGN IN";
+                                  });
+                                });
+                              },
+                              child: haveTokenWidget(),
+                            ),
+                          ) : Container(),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: getHeight(10, 1),
                                 bottom: getHeight(10, 1)),
                             child: GestureDetector(
                               onTap: () {
                                 setState(() {
                                   changePassword = !changePassword;
                                   primaryButtonText =
-                                      primaryButtonText == "SIGN IN"
-                                          ? "SUBMIT"
-                                          : "SIGN IN";
+                                  primaryButtonText == "SIGN IN"
+                                      ? "SUBMIT"
+                                      : "SIGN IN";
                                   secondaryButtonText =
-                                      secondaryButtonText == "Change Password"
-                                          ? "Return to Sign in"
-                                          : "Change Password";
+                                  secondaryButtonText == "Change Password"
+                                      ? "Return to Sign in"
+                                      : "Change Password";
                                   pageTitle = pageTitle == "SIGN IN"
                                       ? "CHANGE PASSWORD"
                                       : "SIGN IN";
@@ -589,7 +625,7 @@ class LoginState extends State<Login> {
                               child: secondaryWidget(),
                             ),
                           ),
-                          Padding(
+                          changePassword == false ? Padding(
                             padding: EdgeInsets.all(getWidth(10, 1)),
                             child: GestureDetector(
                               onTap: () => _emailDialog(),
@@ -604,7 +640,7 @@ class LoginState extends State<Login> {
                                 ),
                               ),
                             ),
-                          ),
+                          ) : Container(),
                         ],
                       ),
                     ),
@@ -615,15 +651,15 @@ class LoginState extends State<Login> {
                           AsyncSnapshot<double> snapshot) {
                         print(
                             'is keyboard open: ${_bloc.keyboardUtils.isKeyboardOpen}'
-                            'Height: ${_bloc.keyboardUtils.keyboardHeight}');
+                                'Height: ${_bloc.keyboardUtils.keyboardHeight}');
                         return _bloc.keyboardUtils.isKeyboardOpen == true
                             ? Container(
-                                height: _bloc.keyboardUtils.keyboardHeight,
-                              )
+                          height: _bloc.keyboardUtils.keyboardHeight,
+                        )
                             : Container(
-                                height: 0,
-                                width: 0,
-                              );
+                          height: 0,
+                          width: 0,
+                        );
                       }),
                 ],
               ),
